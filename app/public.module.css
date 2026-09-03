@@ -256,13 +256,18 @@
   color: var(--text-muted);
 }
 
-/* The design pins this absolutely inside its canvas frame; on a real scrolling
-   page the equivalent is fixed. */
+/* Per request: not a floating/sticky button — sits inline right after the
+   booking form instead, so it reads as "still need help? WhatsApp us"
+   rather than hovering over the page the whole time. */
+.whatsappWrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 24px 0;
+  display: flex;
+  justify-content: center;
+}
+
 .whatsappFloat {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 30;
   display: flex;
   align-items: center;
   gap: 10px;

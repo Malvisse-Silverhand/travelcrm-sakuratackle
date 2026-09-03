@@ -136,6 +136,12 @@ export default async function Home() {
         initialAvailability={(availability ?? []) as Availability[]}
       />
 
+      <div className={styles.whatsappWrap}>
+        <a href={waHref} className={styles.whatsappFloat} target="_blank" rel="noreferrer">
+          WhatsApp Kami
+        </a>
+      </div>
+
       <section id="harga" className={styles.pricingSection}>
         <h2 className={styles.sectionTitle}>Harga dan apa yang termasuk</h2>
         <p className={styles.sectionLead}>
@@ -196,10 +202,6 @@ export default async function Home() {
           <span className={styles.footerText}>{displayPhone}</span>
         </div>
       </footer>
-
-      <a href={waHref} className={styles.whatsappFloat} target="_blank" rel="noreferrer">
-        WhatsApp Kami
-      </a>
     </div>
   );
 }
