@@ -55,6 +55,7 @@ export default function CalendarManager({
   const [showBlock, setShowBlock] = useState(false);
   const [blockReason, setBlockReason] = useState("");
   const [blockBusy, setBlockBusy] = useState(false);
+  const [blockErr, setBlockErr] = useState<string | null>(null);
 
   const boat = boats.find((b) => b.id === boatId) ?? boats[0];
   const month = MONTHS[monthIdx];
@@ -170,21 +171,27 @@ export default function CalendarManager({
   const toggleBlock = async () => {
     if (!boat || !selected) return;
     setBlockBusy(true);
+    setBlockErr(null);
     const nowBlocked = !!selectedRow?.blocked;
-    const { error } = await supabase
+    // RLS lets this silently match zero rows with no error at all — .select()
+    // catches that instead of treating a no-op as success.
+    const { data, error } = await supabase
       .from("trip_nights")
       .update({
         blocked: !nowBlocked,
         blocked_reason: nowBlocked ? null : blockReason.trim() || "Disekat oleh operator",
       })
       .eq("boat_id", boat.id)
-      .eq("night_date", selected);
+      .eq("night_date", selected)
+      .select("id");
     setBlockBusy(false);
-    if (!error) {
-      setShowBlock(false);
-      setBlockReason("");
-      await refreshSelectedNight();
+    if (error || !data?.length) {
+      setBlockErr("Gagal simpan. Cuba lagi.");
+      return;
     }
+    setShowBlock(false);
+    setBlockReason("");
+    await refreshSelectedNight();
   };
 
   return (
@@ -348,6 +355,7 @@ export default function CalendarManager({
               <button type="button" className={styles.blockBtn} disabled={blockBusy} onClick={toggleBlock}>
                 {blockBusy ? "Menyimpan..." : "Sahkan sekat malam ini"}
               </button>
+              {blockErr && <span className={styles.formErr}>{blockErr}</span>}
             </div>
           )}
 
@@ -359,6 +367,7 @@ export default function CalendarManager({
               <button type="button" className={styles.blockBtn} disabled={blockBusy} onClick={toggleBlock}>
                 {blockBusy ? "Menyimpan..." : "Buka semula (unblock)"}
               </button>
+              {blockErr && <span className={styles.formErr}>{blockErr}</span>}
             </div>
           )}
         </div>

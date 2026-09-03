@@ -31,19 +31,31 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
 
   const [busy, setBusy] = useState(false);
   const [uploadMsg, setUploadMsg] = useState<string | null>(null);
+  const [actionErr, setActionErr] = useState<string | null>(null);
 
   const pct = b.depositPaid ? Math.round((b.depositAmount / b.totalAmount) * 100) : 0;
 
+  // RLS lets an UPDATE silently match zero rows with no error at all — checking
+  // only `error` would treat that as success. Requiring the row back via
+  // .select() catches it.
+  const NOT_UPDATED = "Tiada perubahan disimpan. Cuba muat semula halaman.";
+
   const markDepositReceived = async () => {
     setBusy(true);
+    setActionErr(null);
     const nextStatus =
       b.status === "pending" || b.status === "deposit_due" ? "confirmed" : b.status;
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("bookings")
       .update({ deposit_paid: true, deposit_paid_at: new Date().toISOString(), status: nextStatus })
-      .eq("id", b.id);
+      .eq("id", b.id)
+      .select("id");
     setBusy(false);
-    if (!error) router.refresh();
+    if (error || !data?.length) {
+      setActionErr(NOT_UPDATED);
+      return;
+    }
+    router.refresh();
   };
 
   const uploadReceipt = async (file: File) => {
@@ -58,12 +70,13 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
       setUploadMsg("Gagal muat naik. Cuba lagi.");
       return;
     }
-    const { error: updateError } = await supabase
+    const { data, error: updateError } = await supabase
       .from("bookings")
       .update({ receipt_url: path })
-      .eq("id", b.id);
+      .eq("id", b.id)
+      .select("id");
     setBusy(false);
-    if (updateError) {
+    if (updateError || !data?.length) {
       setUploadMsg("Resit dimuat naik tapi gagal simpan rujukan.");
       return;
     }
@@ -83,12 +96,18 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
   const cancelBooking = async () => {
     if (!window.confirm(`Batalkan tempahan ${b.ref}? Tindakan ini tidak boleh diundur.`)) return;
     setBusy(true);
-    const { error } = await supabase
+    setActionErr(null);
+    const { data, error } = await supabase
       .from("bookings")
       .update({ status: "cancelled" })
-      .eq("id", b.id);
+      .eq("id", b.id)
+      .select("id");
     setBusy(false);
-    if (!error) router.refresh();
+    if (error || !data?.length) {
+      setActionErr(NOT_UPDATED);
+      return;
+    }
+    router.refresh();
   };
 
   const waMessage = encodeURIComponent(
@@ -170,6 +189,8 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
           }}
         />
       </div>
+
+      {actionErr && <div className={styles.errorNote}>{actionErr}</div>}
 
       <a href={waHref} target="_blank" rel="noreferrer" className={styles.waCustomerBtn}>
         WhatsApp customer

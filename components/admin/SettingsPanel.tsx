@@ -48,6 +48,7 @@ export default function SettingsPanel({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ code: "", skipper_name: "", capacity: "" });
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [boatErr, setBoatErr] = useState<string | null>(null);
 
   const [showAddBoat, setShowAddBoat] = useState(false);
   const [addForm, setAddForm] = useState(BLANK_BOAT);
@@ -60,28 +61,45 @@ export default function SettingsPanel({
 
   const startEdit = (b: Boat) => {
     setEditingId(b.id);
+    setBoatErr(null);
     setEditForm({ code: b.code, skipper_name: b.skipper_name, capacity: String(b.capacity) });
   };
 
+  // RLS lets an UPDATE silently match zero rows with no error at all —
+  // requiring the row back via .select() catches that instead of treating a
+  // no-op as success.
   const saveEdit = async (id: string) => {
     setBusyId(id);
+    setBoatErr(null);
     const cap = Number(editForm.capacity);
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("boats")
       .update({ code: editForm.code, skipper_name: editForm.skipper_name, capacity: cap })
-      .eq("id", id);
+      .eq("id", id)
+      .select("id");
     setBusyId(null);
-    if (!error) {
-      setEditingId(null);
-      router.refresh();
+    if (error || !data?.length) {
+      setBoatErr(error?.code === "23505" ? "Kod bot ini sudah wujud." : "Gagal simpan. Cuba lagi.");
+      return;
     }
+    setEditingId(null);
+    router.refresh();
   };
 
   const toggleActive = async (b: Boat) => {
     setBusyId(b.id);
-    const { error } = await supabase.from("boats").update({ active: !b.active }).eq("id", b.id);
+    setBoatErr(null);
+    const { data, error } = await supabase
+      .from("boats")
+      .update({ active: !b.active })
+      .eq("id", b.id)
+      .select("id");
     setBusyId(null);
-    if (!error) router.refresh();
+    if (error || !data?.length) {
+      setBoatErr("Gagal simpan. Cuba lagi.");
+      return;
+    }
+    router.refresh();
   };
 
   const addBoat = async () => {
@@ -92,14 +110,17 @@ export default function SettingsPanel({
     }
     setAddBusy(true);
     setAddErr(null);
-    const { error } = await supabase.from("boats").insert({
-      code: addForm.code.trim(),
-      skipper_name: addForm.skipper_name.trim(),
-      capacity: cap,
-    });
+    const { data, error } = await supabase
+      .from("boats")
+      .insert({
+        code: addForm.code.trim(),
+        skipper_name: addForm.skipper_name.trim(),
+        capacity: cap,
+      })
+      .select("id");
     setAddBusy(false);
-    if (error) {
-      setAddErr(error.code === "23505" ? "Kod bot ini sudah wujud." : "Gagal simpan. Cuba lagi.");
+    if (error || !data?.length) {
+      setAddErr(error?.code === "23505" ? "Kod bot ini sudah wujud." : "Gagal simpan. Cuba lagi.");
       return;
     }
     setShowAddBoat(false);
@@ -110,9 +131,13 @@ export default function SettingsPanel({
   const saveWa = async () => {
     setWaBusy(true);
     setWaMsg(null);
-    const { error } = await supabase.from("org_settings").update({ whatsapp_number: wa }).eq("id", 1);
+    const { data, error } = await supabase
+      .from("org_settings")
+      .update({ whatsapp_number: wa })
+      .eq("id", 1)
+      .select("id");
     setWaBusy(false);
-    setWaMsg(error ? "Gagal simpan." : "Disimpan.");
+    setWaMsg(error || !data?.length ? "Gagal simpan." : "Disimpan.");
   };
 
   return (
@@ -172,6 +197,7 @@ export default function SettingsPanel({
                       &#10005;
                     </button>
                   </div>
+                  {boatErr && editingId === b.id && <span className={styles.formErr}>{boatErr}</span>}
                 </div>
               ) : (
                 <button type="button" className={styles.fleetRow} onClick={() => startEdit(b)}>

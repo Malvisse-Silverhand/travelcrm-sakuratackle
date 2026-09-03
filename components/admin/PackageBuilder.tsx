@@ -45,6 +45,7 @@ export default function PackageBuilder({ pkg }: { pkg: PackageData }) {
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
   const [uploadBusy, setUploadBusy] = useState(false);
+  const [coverErr, setCoverErr] = useState<string | null>(null);
 
   const dirty = useMemo(() => {
     return (
@@ -55,34 +56,45 @@ export default function PackageBuilder({ pkg }: { pkg: PackageData }) {
     );
   }, [title, subtitle, itinerary, faqs, pkg]);
 
+  // RLS lets an UPDATE silently match zero rows with no error at all —
+  // requiring the row back via .select() catches that instead of treating a
+  // no-op as success.
   const save = async () => {
     setSaving(true);
     setSaveMsg(null);
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("packages")
       .update({ title, subtitle, itinerary, faqs })
-      .eq("id", pkg.id);
+      .eq("id", pkg.id)
+      .select("id");
     setSaving(false);
-    setSaveMsg(error ? "Gagal simpan. Cuba lagi." : "Disimpan.");
+    setSaveMsg(error || !data?.length ? "Gagal simpan. Cuba lagi." : "Disimpan.");
   };
 
   const uploadCover = async (file: File) => {
     setUploadBusy(true);
+    setCoverErr(null);
     const path = `${pkg.id}/${Date.now()}-${file.name}`;
     const { error: uploadError } = await supabase.storage
       .from("package-covers")
       .upload(path, file, { upsert: true });
     if (uploadError) {
       setUploadBusy(false);
+      setCoverErr("Gagal muat naik. Cuba lagi.");
       return;
     }
     const { data: pub } = supabase.storage.from("package-covers").getPublicUrl(path);
-    const { error: updateError } = await supabase
+    const { data, error: updateError } = await supabase
       .from("packages")
       .update({ cover_image_url: pub.publicUrl })
-      .eq("id", pkg.id);
+      .eq("id", pkg.id)
+      .select("id");
     setUploadBusy(false);
-    if (!updateError) setCoverUrl(pub.publicUrl);
+    if (!updateError && data?.length) {
+      setCoverUrl(pub.publicUrl);
+    } else {
+      setCoverErr("Muat naik berjaya tapi gagal simpan rujukan.");
+    }
   };
 
   return (
@@ -148,7 +160,7 @@ export default function PackageBuilder({ pkg }: { pkg: PackageData }) {
                   disabled={uploadBusy}
                   onClick={() => fileInput.current?.click()}
                 >
-                  {uploadBusy ? "Memuat naik..." : "Cover image. Tekan untuk ganti."}
+                  {uploadBusy ? "Memuat naik..." : coverErr ?? "Cover image. Tekan untuk ganti."}
                 </button>
                 <input
                   ref={fileInput}

@@ -44,9 +44,11 @@ export default function PackagesList({ packages }: { packages: PackageRow[] }) {
   const supabase = createClient();
   const router = useRouter();
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [dupErrId, setDupErrId] = useState<string | null>(null);
 
   const duplicate = async (pkg: PackageRow) => {
     setBusyId(pkg.id);
+    setDupErrId(null);
     const { data: full, error: fetchError } = await supabase
       .from("packages")
       .select(
@@ -57,18 +59,28 @@ export default function PackagesList({ packages }: { packages: PackageRow[] }) {
 
     if (fetchError || !full) {
       setBusyId(null);
+      setDupErrId(pkg.id);
       return;
     }
 
-    const { error: insertError } = await supabase.from("packages").insert({
-      ...full,
-      title: `${full.title} (Salinan)`,
-      slug: `${pkg.slug}-salinan-${Date.now().toString(36)}`,
-      published: false,
-    });
+    // Insert failures under RLS do raise a real error (unlike a silently
+    // no-op UPDATE/DELETE), but .select() still confirms the row landed.
+    const { data: inserted, error: insertError } = await supabase
+      .from("packages")
+      .insert({
+        ...full,
+        title: `${full.title} (Salinan)`,
+        slug: `${pkg.slug}-salinan-${Date.now().toString(36)}`,
+        published: false,
+      })
+      .select("id");
 
     setBusyId(null);
-    if (!insertError) router.refresh();
+    if (insertError || !inserted?.length) {
+      setDupErrId(pkg.id);
+      return;
+    }
+    router.refresh();
   };
 
   if (packages.length === 0) {
@@ -108,7 +120,7 @@ export default function PackagesList({ packages }: { packages: PackageRow[] }) {
               disabled={busyId === p.id}
               onClick={() => duplicate(p)}
             >
-              {busyId === p.id ? "Menyalin..." : "Duplicate"}
+              {busyId === p.id ? "Menyalin..." : dupErrId === p.id ? "Gagal, cuba lagi" : "Duplicate"}
             </button>
           </div>
         </div>
