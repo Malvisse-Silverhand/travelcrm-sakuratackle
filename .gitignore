@@ -48,3 +48,6 @@ Sakura-Tackle-CRM-Build-Kit.zip
 /.agents/
 /.claude/
 skills-lock.json
+
+.vercel
+.env*

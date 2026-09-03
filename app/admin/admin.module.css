@@ -566,6 +566,253 @@
   color: var(--text-muted-2);
 }
 
+/* ================= calendar / slot manager (Screen 4) ================= */
+
+.calGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.adminCalPanel {
+  border-radius: 22px;
+  background: var(--purple);
+  padding: 22px;
+}
+
+.adminBoatChips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  padding-bottom: 4px;
+}
+
+.adminBoatChip {
+  flex: 0 0 auto;
+  cursor: pointer;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 650;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d6cdf5;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.adminBoatChipActive {
+  background: var(--gold);
+  color: var(--purple);
+  border-color: var(--gold);
+}
+
+.adminMonthNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.adminMonthLabel {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 650;
+  color: #ffffff;
+}
+
+.adminGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.adminDow {
+  text-align: center;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  color: #8b7dc4;
+  padding: 4px 0;
+  font-weight: 700;
+}
+
+.adminCell {
+  position: relative;
+  cursor: pointer;
+  height: 46px;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  color: inherit;
+}
+
+.adminCellPad {
+  visibility: hidden;
+  cursor: default;
+}
+
+.adminCellOpen {
+  background: var(--cell-open-bg);
+  color: var(--cell-open-fg);
+  border-color: var(--cell-open-bd);
+}
+
+.adminCellHold {
+  background: var(--cell-hold-bg);
+  color: var(--cell-hold-fg);
+  border-color: var(--cell-hold-bd);
+}
+
+.adminCellFull {
+  background: var(--cell-full-bg);
+  color: var(--cell-full-fg);
+  border-color: var(--cell-full-bd);
+}
+
+.adminCellSelected {
+  background: var(--gold);
+  color: var(--purple);
+  border-color: var(--gold);
+}
+
+.adminCellLoading {
+  background: rgba(255, 255, 255, 0.05);
+  color: #6f61a8;
+  border-color: rgba(255, 255, 255, 0.08);
+  cursor: default;
+}
+
+.adminHolidayDot {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 99px;
+  display: block;
+  background: var(--gold);
+}
+
+.calSide {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.selNightCard {
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid var(--border-mid);
+  padding: 20px;
+}
+
+.selNightLabel {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 7px 0 3px;
+}
+
+.selNightMeta {
+  font-size: 12.5px;
+  color: var(--text-muted-2);
+  margin-bottom: 16px;
+}
+
+.selNightActions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.assignBtn {
+  cursor: pointer;
+  border: 0;
+  padding: 11px 17px;
+  border-radius: 12px;
+  background: var(--gold);
+  color: var(--purple);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.assignBtn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.blockBtn {
+  cursor: pointer;
+  padding: 11px 17px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--purple);
+  font-size: 12.5px;
+  font-weight: 650;
+}
+
+.blockBtn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.inlineForm {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.formOk {
+  font-size: 12.5px;
+  color: var(--success-text);
+}
+
+.formErr {
+  font-size: 12.5px;
+  color: var(--danger-text);
+}
+
+.holidayCard {
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid var(--border-mid);
+  padding: 20px;
+}
+
+.adminHolidayChips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.adminHolidayChip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 184, 0, 0.18);
+  border: 1px solid rgba(255, 184, 0, 0.4);
+  font-size: 11.5px;
+  color: #8a6a00;
+  font-weight: 600;
+}
+
+.adminHolidayChip b {
+  font-family: var(--font-display);
+}
+
 /* ================= 820px container breakpoint ================= */
 
 @container (max-width: 820px) {
@@ -599,5 +846,9 @@
 
   .kpiGrid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .calGrid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
