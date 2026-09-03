@@ -1,69 +1,218 @@
-import Image from "next/image";
+import { createClient } from "@/lib/supabase/server";
+import BookingExperience, {
+  type Availability,
+} from "@/components/public/BookingExperience";
+import FaqAccordion, { type Faq } from "@/components/public/FaqAccordion";
+import { MONTHS, isoDate } from "@/lib/season";
+import styles from "./public.module.css";
 
-export default function Home() {
+const BANNER_SRC = "/images/banner-candat-sotong-2027.png";
+
+/** Group size the calendar opens on — matches the design's default state. */
+const DEFAULT_PAX = 10;
+
+type PackageRow = {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  cover_image_url: string | null;
+  price_per_pax: number;
+  deposit_per_boat: number;
+  includes: string[];
+  faqs: Faq[];
+};
+
+type OrgSettings = {
+  business_name: string;
+  location: string;
+  whatsapp_number: string;
+};
+
+export default async function Home() {
+  const supabase = await createClient();
+
+  const [{ data: pkg }, { data: org }, { data: availability }] = await Promise.all([
+    supabase
+      .from("packages")
+      .select(
+        "id,title,subtitle,cover_image_url,price_per_pax,deposit_per_boat,includes,faqs"
+      )
+      .eq("published", true)
+      .order("created_at")
+      .limit(1)
+      .maybeSingle<PackageRow>(),
+    supabase
+      .from("org_settings")
+      .select("business_name,location,whatsapp_number")
+      .eq("id", 1)
+      .maybeSingle<OrgSettings>(),
+    supabase.rpc("get_public_availability", {
+      p_from: isoDate(0, 1),
+      p_to: isoDate(0, MONTHS[0].days),
+      p_pax: DEFAULT_PAX,
+    }),
+  ]);
+
+  if (!pkg) {
+    return (
+      <div className={styles.shell}>
+        <main className={styles.hero}>
+          <div>
+            <h1 className={styles.heroTitle}>Trip belum dibuka</h1>
+            <p className={styles.heroLead}>
+              Tiada pakej trip yang diterbitkan buat masa ini. Sila cuba sebentar lagi
+              atau hubungi kami terus.
+            </p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  const waNumber = org?.whatsapp_number ?? "60193334821";
+  const waHref = `https://wa.me/${waNumber}`;
+  const displayPhone = formatMyPhone(waNumber);
+  const priceLabel = `RM ${Number(pkg.price_per_pax).toLocaleString("en-MY")}`;
+  const depositLabel = `RM ${Number(pkg.deposit_per_boat).toLocaleString("en-MY")}`;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className={styles.shell}>
+      <header className={styles.header}>
+        <div className={styles.headerInner}>
+          <div className={styles.brand}>
+            <div className={styles.logoMark}>CS</div>
+            <div className={styles.brandText}>
+              <span className={styles.brandName}>Candat Sotong</span>
+              <span className={styles.brandSub}>
+                {org?.business_name ?? "Sakura Tackle"}
+              </span>
+            </div>
+          </div>
+          <div className={styles.headerRight}>
+            <span className={styles.headerLocation}>
+              {org?.location ?? "Jeti Marang, Terengganu"}
+            </span>
+            <a href="#tempah" className={styles.headerCta}>
+              Tempah Slot
+            </a>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+      </header>
+
+      <section className={styles.hero}>
+        <div>
+          <div className={styles.eyebrow}>Trip Candat Paling Best di Terengganu</div>
+          <h1 className={styles.heroTitle}>{pkg.title}</h1>
+          <p className={styles.heroLead}>{pkg.subtitle}</p>
+          <div className={styles.heroActions}>
+            <a href="#tempah" className={styles.btnPrimary}>
+              Semak Tarikh Kosong
+              <span className={styles.btnPrimaryIcon}>&#8599;</span>
+            </a>
+            <a href="#harga" className={styles.btnGhost}>
+              Lihat Harga
+            </a>
+          </div>
+        </div>
+        <div className={styles.heroMediaFrame}>
+          {pkg.cover_image_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={pkg.cover_image_url}
+              alt={pkg.title}
+              className={styles.heroMedia}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ) : (
+            <div className={`${styles.heroMedia} ${styles.mediaPlaceholder}`}>
+              Foto bot candat waktu senja di Jeti Marang
+            </div>
+          )}
         </div>
-      </main>
+      </section>
+
+      <BookingExperience
+        packageId={pkg.id}
+        bannerSrc={BANNER_SRC}
+        initialAvailability={(availability ?? []) as Availability[]}
+      />
+
+      <section id="harga" className={styles.pricingSection}>
+        <h2 className={styles.sectionTitle}>Harga dan apa yang termasuk</h2>
+        <p className={styles.sectionLead}>
+          Harga sama untuk semua bot. Yang berbeza cuma kapasiti dan juragan.
+        </p>
+        <div className={styles.pricingGrid}>
+          <div className={styles.pricingMain}>
+            <div className={styles.pricingBody}>
+              <span className={styles.kicker}>Trip semalaman</span>
+              <div className={styles.price}>{priceLabel}</div>
+              <div className={styles.priceSub}>seorang, minimum 6 pax</div>
+              <div className={styles.includesList}>
+                {pkg.includes.map((item) => (
+                  <span key={item} className={styles.includeRow}>
+                    <i className={styles.includeTick}>&#10003;</i>
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className={`${styles.pricingMedia} ${styles.mediaPlaceholder}`}>
+              Foto lampu candat waktu malam
+            </div>
+          </div>
+          <div className={styles.pricingSide}>
+            <div className={styles.depositCard}>
+              <span className={styles.depositKicker}>Deposit</span>
+              <div className={styles.depositAmount}>{depositLabel}</div>
+              <p className={styles.depositNote}>
+                Satu bayaran per bot untuk kunci malam tersebut. Baki dijelaskan di jeti
+                sebelum bertolak.
+              </p>
+            </div>
+            <div className={styles.hoursCard}>
+              <span className={styles.hoursKicker}>Waktu trip</span>
+              <div className={styles.hoursValue}>7.00 malam hingga 6.00 pagi</div>
+              <p className={styles.hoursNote}>
+                Berkumpul di Jeti Marang pukul 6.30 petang. Trip dibatalkan penuh jika
+                cuaca tidak mengizinkan.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.faqSection}>
+        <div className={styles.faqGrid}>
+          <h2 className={styles.faqTitle}>Soalan lazim</h2>
+          <FaqAccordion faqs={pkg.faqs} />
+        </div>
+      </section>
+
+      <footer className={styles.footer}>
+        <div className={styles.footerInner}>
+          <span className={styles.footerText}>
+            {org?.business_name ?? "Sakura Tackle"}, {org?.location ?? "Jeti Marang, Terengganu"}
+          </span>
+          <span className={styles.footerText}>{displayPhone}</span>
+        </div>
+      </footer>
+
+      <a href={waHref} className={styles.whatsappFloat} target="_blank" rel="noreferrer">
+        WhatsApp Kami
+      </a>
     </div>
   );
+}
+
+/** 60193334821 -> 019-333 4821, matching the footer copy in the design. */
+function formatMyPhone(intl: string): string {
+  const digits = intl.replace(/[^0-9]/g, "");
+  const local = digits.startsWith("60") ? "0" + digits.slice(2) : digits;
+  if (local.length === 10) {
+    return `${local.slice(0, 3)}-${local.slice(3, 6)} ${local.slice(6)}`;
+  }
+  if (local.length === 11) {
+    return `${local.slice(0, 3)}-${local.slice(3, 7)} ${local.slice(7)}`;
+  }
+  return local;
 }

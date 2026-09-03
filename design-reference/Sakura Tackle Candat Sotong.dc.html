@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/fonts.css">
+<script src="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/_ds_bundle.js"></script>
+<style>
+  body { margin:0; background:#E7E1F7; -webkit-font-smoothing:antialiased; }
+  * { box-sizing:border-box; }
+  a { color:#2E1D6B; text-decoration:none; }
+  a:hover { color:#4A34A0; }
+</style>
+</helmet>
+
+<div style="min-height:100dvh; background:#E7E1F7; font-family:'Inter', system-ui, sans-serif; color:#1B1436; padding:56px 56px 96px; display:flex; flex-direction:column; gap:72px">
+
+  <div style="display:flex; flex-direction:column; gap:6px; max-width:820px">
+    <span style="font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Sakura Tackle, Candat Sotong 2027</span>
+    <h1 style="font-family:'Poppins',sans-serif; font-size:38px; font-weight:650; letter-spacing:-.03em; margin:6px 0 0">Booking system dan CRM</h1>
+    <p style="font-size:15px; line-height:1.6; color:#635A87; margin:8px 0 0">Empat skrin: laman tempahan awam dan konsol admin, setiap satu pada saiz desktop dan telefon. Semua skrin hidup dan boleh diklik.</p>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:18px">
+    <div style="display:flex; align-items:baseline; gap:14px">
+      <span style="font-family:'Poppins',sans-serif; font-size:22px; font-weight:650; letter-spacing:-.02em">01 Laman Tempahan, Desktop</span>
+      <span style="font-size:12.5px; color:#7A6FA0">1440 px</span>
+    </div>
+    <div style="width:1440px; border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.14); padding:10px; box-shadow:0 30px 70px rgba(46,29,107,.12)">
+      <div style="display:flex; align-items:center; gap:7px; padding:4px 8px 12px">
+        <i style="width:10px; height:10px; border-radius:99px; background:#E5D5F2; display:block"></i>
+        <i style="width:10px; height:10px; border-radius:99px; background:#E5D5F2; display:block"></i>
+        <i style="width:10px; height:10px; border-radius:99px; background:#E5D5F2; display:block"></i>
+        <span style="margin-left:12px; font-size:11.5px; color:#9C93BC">sakuratackle.com/candat-sotong</span>
+      </div>
+      <div style="height:1180px; overflow:auto; border-radius:12px; border:1px solid rgba(46,29,107,.10)">
+        <dc-import name="Laman Tempahan" hint-size="100%,1180px"></dc-import>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:18px">
+    <div style="display:flex; align-items:baseline; gap:14px">
+      <span style="font-family:'Poppins',sans-serif; font-size:22px; font-weight:650; letter-spacing:-.02em">02 Laman Tempahan, Mobile</span>
+      <span style="font-size:12.5px; color:#7A6FA0">390 px</span>
+    </div>
+    <div style="width:412px; border-radius:44px; background:#FFFFFF; border:1px solid rgba(46,29,107,.14); padding:11px; box-shadow:0 30px 70px rgba(46,29,107,.14)">
+      <div style="width:390px; height:844px; overflow:auto; border-radius:34px; border:1px solid rgba(46,29,107,.10)">
+        <dc-import name="Laman Tempahan" hint-size="390px,844px"></dc-import>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:18px">
+    <div style="display:flex; align-items:baseline; gap:14px">
+      <span style="font-family:'Poppins',sans-serif; font-size:22px; font-weight:650; letter-spacing:-.02em">03 Admin CRM, Desktop</span>
+      <span style="font-size:12.5px; color:#7A6FA0">1440 px, sidebar navigation</span>
+    </div>
+    <div style="width:1440px; border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.14); padding:10px; box-shadow:0 30px 70px rgba(46,29,107,.12)">
+      <div style="display:flex; align-items:center; gap:7px; padding:4px 8px 12px">
+        <i style="width:10px; height:10px; border-radius:99px; background:#E5D5F2; display:block"></i>
+        <i style="width:10px; height:10px; border-radius:99px; background:#E5D5F2; display:block"></i>
+        <i style="width:10px; height:10px; border-radius:99px; background:#E5D5F2; display:block"></i>
+        <span style="margin-left:12px; font-size:11.5px; color:#9C93BC">admin.sakuratackle.com</span>
+      </div>
+      <div style="height:920px; overflow:auto; border-radius:12px; border:1px solid rgba(46,29,107,.10)">
+        <dc-import name="Admin CRM" hint-size="100%,920px"></dc-import>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:18px">
+    <div style="display:flex; align-items:baseline; gap:14px">
+      <span style="font-family:'Poppins',sans-serif; font-size:22px; font-weight:650; letter-spacing:-.02em">04 Admin CRM, Mobile</span>
+      <span style="font-size:12.5px; color:#7A6FA0">390 px, bottom navigation</span>
+    </div>
+    <div style="display:flex; gap:26px; flex-wrap:wrap">
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <span style="font-size:12px; color:#7A6FA0; font-weight:600">Dashboard</span>
+        <div style="width:412px; border-radius:44px; background:#FFFFFF; border:1px solid rgba(46,29,107,.14); padding:11px; box-shadow:0 30px 70px rgba(46,29,107,.14)">
+          <div style="width:390px; height:844px; overflow:auto; border-radius:34px; border:1px solid rgba(46,29,107,.10)">
+            <dc-import name="Admin CRM" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <span style="font-size:12px; color:#7A6FA0; font-weight:600">Slot manager</span>
+        <div style="width:412px; border-radius:44px; background:#FFFFFF; border:1px solid rgba(46,29,107,.14); padding:11px; box-shadow:0 30px 70px rgba(46,29,107,.14)">
+          <div style="width:390px; height:844px; overflow:auto; border-radius:34px; border:1px solid rgba(46,29,107,.10)">
+            <dc-import name="Admin CRM" start-screen="calendar" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <span style="font-size:12px; color:#7A6FA0; font-weight:600">Booking detail</span>
+        <div style="width:412px; border-radius:44px; background:#FFFFFF; border:1px solid rgba(46,29,107,.14); padding:11px; box-shadow:0 30px 70px rgba(46,29,107,.14)">
+          <div style="width:390px; height:844px; overflow:auto; border-radius:34px; border:1px solid rgba(46,29,107,.10)">
+            <dc-import name="Admin CRM" start-screen="detail" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <span style="font-size:12px; color:#7A6FA0; font-weight:600">Operator sign in</span>
+        <div style="width:412px; border-radius:44px; background:#FFFFFF; border:1px solid rgba(46,29,107,.14); padding:11px; box-shadow:0 30px 70px rgba(46,29,107,.14)">
+          <div style="width:390px; height:844px; overflow:auto; border-radius:34px; border:1px solid rgba(46,29,107,.10)">
+            <dc-import name="Admin CRM" start-logged-out="{{ yes }}" hint-size="390px,844px"></dc-import>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return { yes: true };
+  }
+}
+</script>
+</body>
+</html>

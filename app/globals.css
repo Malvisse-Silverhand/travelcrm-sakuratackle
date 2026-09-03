@@ -1,26 +1,98 @@
 @import "tailwindcss";
 
+/* Design tokens — values taken verbatim from CRM_MASTER_BUILD_PROMPT.md §2,
+   cross-checked against the inline styles in design-reference/*.dc.html.
+   Do not tweak these to "look better"; the .dc.html files are the source of truth. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Colors */
+  --purple: #2e1d6b;
+  --purple-hover: #4a34a0;
+  --ink: #1b1436;
+  --gold: #ffb800;
+  --gold-dark: #f08a00;
+  --gold-dark-2: #e8890b;
+  --bg-page: #f5f2fe;
+  --bg-canvas: #e7e1f7;
+  --surface-tint: #ede7fb;
+  --input-bg: #f7f5fe;
+  --text-muted: #7a6fa0;
+  --text-muted-2: #635a87;
+  --text-on-dark: #b7abe0;
+  --text-on-dark-2: #9c8ed0;
+  --border: rgba(46, 29, 107, 0.1);
+  --border-mid: rgba(46, 29, 107, 0.14);
+  --border-strong: rgba(46, 29, 107, 0.22);
+  --success: #2fbf71;
+  --success-text: #137a47;
+  --warn-bg: #ffb800;
+  --warn-text: #8a6a00;
+  --warn-text-2: #b07800;
+  --danger-bg: #ef4444;
+  --danger-text: #c22b2b;
+  --whatsapp: #1fa855;
+
+  /* Calendar cell tones (from the STATUS constant in both .dc.html files) */
+  --cell-open-bg: rgba(47, 191, 113, 0.16);
+  --cell-open-fg: #7ceeb0;
+  --cell-open-bd: rgba(47, 191, 113, 0.38);
+  --cell-hold-bg: rgba(255, 184, 0, 0.16);
+  --cell-hold-fg: #ffd36b;
+  --cell-hold-bd: rgba(255, 184, 0, 0.4);
+  --cell-full-bg: rgba(239, 68, 68, 0.14);
+  --cell-full-fg: #ff9c9c;
+  --cell-full-bd: rgba(239, 68, 68, 0.34);
+
+  /* Shape & elevation */
+  --shadow-card: 0 18px 46px rgba(46, 29, 107, 0.07);
+  --shadow-gold: 0 14px 30px rgba(255, 184, 0, 0.32);
+  --shadow-whatsapp: 0 16px 36px rgba(31, 168, 85, 0.34);
+
+  /* Fonts — wired to next/font in app/layout.tsx */
+  --font-display: var(--font-poppins), "Poppins", sans-serif;
+  --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-page);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+a {
+  color: var(--purple);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--purple-hover);
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: var(--font-body);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(255, 184, 0, 0.7);
+  outline-offset: 1px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(255, 184, 0, 0.7);
+  outline-offset: 1px;
 }

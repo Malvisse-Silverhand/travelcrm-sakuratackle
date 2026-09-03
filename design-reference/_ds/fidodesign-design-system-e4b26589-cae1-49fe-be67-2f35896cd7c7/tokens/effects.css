@@ -1,0 +1,10 @@
+:root{
+--radius-sm:8px;--radius-md:14px;--radius-lg:20px;--radius-pill:999px;
+--shadow-card:0 1px 0 rgba(255,255,255,.04) inset,0 20px 40px -20px rgba(0,0,0,.6);
+--glow-indigo:0 0 0 1px rgba(86,97,206,.4),0 8px 24px -4px rgba(86,97,206,.45);
+--glow-lime:0 0 24px -4px rgba(198,241,53,.35);
+--blur-scrim:blur(14px); /* @kind other */
+--ease-standard:cubic-bezier(.4,0,.2,1); /* @kind other */
+--duration-fast:150ms; /* @kind other */
+--duration-base:240ms; /* @kind other */
+}
