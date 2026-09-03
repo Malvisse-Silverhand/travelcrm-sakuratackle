@@ -1,5 +1,3 @@
-@import "tailwindcss";
-
 /* Design tokens — values taken verbatim from CRM_MASTER_BUILD_PROMPT.md §2,
    cross-checked against the inline styles in design-reference/*.dc.html.
    Do not tweak these to "look better"; the .dc.html files are the source of truth. */
