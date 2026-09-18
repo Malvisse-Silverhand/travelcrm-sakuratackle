@@ -8,7 +8,6 @@ import {
   MONTHS,
   PAX_CHIPS,
   PAX_OPTIONS,
-  SEASON_YEAR,
   formatLongDate,
   isoDate,
   monthLabel,
@@ -34,6 +33,9 @@ type CheckResult = {
 type Props = {
   packageId: string;
   bannerSrc: string;
+  /** First month with sellable nights — the season spans two years now, so
+   *  index 0 is already in the past. */
+  initialMonthIdx: number;
   initialAvailability: Availability[];
 };
 
@@ -62,11 +64,12 @@ const STATUS_LABEL: Record<string, string> = {
 export default function BookingExperience({
   packageId,
   bannerSrc,
+  initialMonthIdx,
   initialAvailability,
 }: Props) {
   const supabase = useMemo(() => createClient(), []);
 
-  const [monthIdx, setMonthIdx] = useState(0);
+  const [monthIdx, setMonthIdx] = useState(initialMonthIdx);
   const [pax, setPax] = useState(10);
   const [availability, setAvailability] = useState<Availability[]>(initialAvailability);
   const [loadingCal, setLoadingCal] = useState(false);
@@ -142,7 +145,7 @@ export default function BookingExperience({
 
   const cells = useMemo(() => {
     // Monday-first lead padding, matching the design's `(first + 6) % 7`.
-    const first = new Date(SEASON_YEAR, month.m, 1).getDay();
+    const first = new Date(month.year, month.m, 1).getDay();
     const lead = (first + 6) % 7;
     const out: Array<{ key: string; day: number | null; iso: string | null }> = [];
     for (let i = 0; i < lead; i++) out.push({ key: `pad-${i}`, day: null, iso: null });
@@ -285,8 +288,8 @@ export default function BookingExperience({
               <button
                 type="button"
                 className={styles.monthBtn}
-                onClick={() => setMonthIdx((i) => Math.max(0, i - 1))}
-                disabled={monthIdx === 0}
+                onClick={() => setMonthIdx((i) => Math.max(initialMonthIdx, i - 1))}
+                disabled={monthIdx === initialMonthIdx}
                 aria-label="Bulan sebelum"
               >
                 &#8592;

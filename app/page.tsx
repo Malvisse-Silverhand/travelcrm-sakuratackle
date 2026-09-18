@@ -3,7 +3,8 @@ import BookingExperience, {
   type Availability,
 } from "@/components/public/BookingExperience";
 import FaqAccordion, { type Faq } from "@/components/public/FaqAccordion";
-import { MONTHS, isoDate } from "@/lib/season";
+import { MONTHS, PAX_CHIPS, currentMonthIdx, isoDate } from "@/lib/season";
+import { todayISO } from "@/lib/date";
 import styles from "./public.module.css";
 
 const BANNER_SRC = "/images/banner-candat-sotong-2027.png";
@@ -31,6 +32,10 @@ type OrgSettings = {
 export default async function Home() {
   const supabase = await createClient();
 
+  // The season now spans Mac 2026 → Sep 2027, so index 0 is a month already
+  // in the past. Open on the first month that still has sellable nights.
+  const openMonthIdx = currentMonthIdx(todayISO());
+
   const [{ data: pkg }, { data: org }, { data: availability }] = await Promise.all([
     supabase
       .from("packages")
@@ -47,8 +52,8 @@ export default async function Home() {
       .eq("id", 1)
       .maybeSingle<OrgSettings>(),
     supabase.rpc("get_public_availability", {
-      p_from: isoDate(0, 1),
-      p_to: isoDate(0, MONTHS[0].days),
+      p_from: isoDate(openMonthIdx, 1),
+      p_to: isoDate(openMonthIdx, MONTHS[openMonthIdx].days),
       p_pax: DEFAULT_PAX,
     }),
   ]);
@@ -133,6 +138,7 @@ export default async function Home() {
       <BookingExperience
         packageId={pkg.id}
         bannerSrc={BANNER_SRC}
+        initialMonthIdx={openMonthIdx}
         initialAvailability={(availability ?? []) as Availability[]}
       />
 
@@ -152,7 +158,7 @@ export default async function Home() {
             <div className={styles.pricingBody}>
               <span className={styles.kicker}>Trip semalaman</span>
               <div className={styles.price}>{priceLabel}</div>
-              <div className={styles.priceSub}>seorang, minimum 6 pax</div>
+              <div className={styles.priceSub}>seorang, minimum {PAX_CHIPS[0]} pax</div>
               <div className={styles.includesList}>
                 {pkg.includes.map((item) => (
                   <span key={item} className={styles.includeRow}>

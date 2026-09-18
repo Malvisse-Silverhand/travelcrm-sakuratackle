@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { MONTHS } from "@/lib/season";
+import { MONTHS, PAX_CHIPS } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import styles from "../../app/admin/admin.module.css";
 
@@ -37,7 +37,7 @@ function seasonRange(start: string | null, end: string | null): string {
   const startYear = start.slice(0, 4);
   const endYear = end.slice(0, 4);
   const range = startYear === endYear ? monthName(start) : `${monthName(start)} ${startYear}`;
-  return `${range}–${monthName(end)} ${endYear}, min 6 pax`;
+  return `${range}–${monthName(end)} ${endYear}, min ${PAX_CHIPS[0]} pax`;
 }
 
 export default function PackagesList({ packages }: { packages: PackageRow[] }) {

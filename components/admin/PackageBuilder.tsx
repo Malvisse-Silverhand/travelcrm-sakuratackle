@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { SEASON_YEAR } from "@/lib/season";
+import { SEASON_YEARS } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import styles from "../../app/admin/admin.module.css";
 
@@ -316,7 +316,9 @@ export default function PackageBuilder({ pkg }: { pkg: PackageData }) {
             <div className={styles.previewImgPlaceholder}>Tiada foto kulit</div>
           )}
           <div className={styles.previewBody}>
-            <span className={styles.previewKicker}>Musim {SEASON_YEAR}</span>
+            <span className={styles.previewKicker}>
+              Musim {SEASON_YEARS[0]}&ndash;{SEASON_YEARS[SEASON_YEARS.length - 1]}
+            </span>
             <h4 className={styles.previewTitle}>{title}</h4>
             <p className={styles.previewSub}>{subtitle}</p>
             <div className={styles.previewPriceRow}>

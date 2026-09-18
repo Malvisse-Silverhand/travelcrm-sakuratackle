@@ -6,7 +6,6 @@ import {
   DOW_LABELS,
   HOLIDAYS,
   MONTHS,
-  SEASON_YEAR,
   formatLongDate,
   isoDate,
   monthLabel,
@@ -92,7 +91,7 @@ export default function CalendarManager({
   }, [supabase, boatId, monthIdx, month.days]);
 
   const cells = useMemo(() => {
-    const first = new Date(SEASON_YEAR, month.m, 1).getDay();
+    const first = new Date(month.year, month.m, 1).getDay();
     const lead = (first + 6) % 7;
     const out: Array<{ key: string; day: number | null; iso: string | null }> = [];
     for (let i = 0; i < lead; i++) out.push({ key: `pad-${i}`, day: null, iso: null });
