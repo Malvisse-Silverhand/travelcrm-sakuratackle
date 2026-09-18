@@ -101,3 +101,21 @@ export function formatLongDate(iso: string): string {
   const month = MONTH_WINDOW.find((x) => x.m === m - 1);
   return `${d} ${month ? month.name : m} ${y}`;
 }
+
+/** Month index that an ISO date falls in, or null when the date sits outside
+ *  the season entirely (October to February, or a year we do not sell).
+ *  The hero's date picker uses this to jump the calendar to the month the
+ *  visitor typed, and to reject dates that have no trip nights at all. */
+export function monthIdxForISO(iso: string): number | null {
+  const prefix = iso.slice(0, 7);
+  const idx = MONTHS.findIndex(
+    (m) => `${m.year}-${String(m.m + 1).padStart(2, "0")}` === prefix
+  );
+  return idx === -1 ? null : idx;
+}
+
+/** Bounds for the date picker's `min`/`max`, so the native calendar cannot
+ *  offer a date the season does not cover. The window still has closed gaps
+ *  inside it (every October to February), which monthIdxForISO catches. */
+export const SEASON_FIRST_DAY = isoDate(0, 1);
+export const SEASON_LAST_DAY = isoDate(MONTHS.length - 1, MONTHS[MONTHS.length - 1].days);

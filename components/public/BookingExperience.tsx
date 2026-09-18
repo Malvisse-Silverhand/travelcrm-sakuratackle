@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useBooking } from "./BookingState";
+import PaymentPanel from "./PaymentPanel";
 import {
   DOW_LABELS,
   HOLIDAYS,
@@ -32,12 +34,12 @@ type CheckResult = {
 
 type Props = {
   packageId: string;
-  bannerSrc: string;
-  /** First month with sellable nights — the season spans two years now, so
-   *  index 0 is already in the past. */
-  initialMonthIdx: number;
+  pricePerPax: number;
+  depositPerBoat: number;
   initialAvailability: Availability[];
 };
+
+type Tab = "form" | "pay" | "check";
 
 const STATUS_WORD: Record<string, string> = {
   open: "Available",
@@ -63,24 +65,26 @@ const STATUS_LABEL: Record<string, string> = {
 
 export default function BookingExperience({
   packageId,
-  bannerSrc,
-  initialMonthIdx,
+  pricePerPax,
+  depositPerBoat,
   initialAvailability,
 }: Props) {
   const supabase = useMemo(() => createClient(), []);
+  const { pax, setPax, selected, setSelected, monthIdx, setMonthIdx, firstMonthIdx } =
+    useBooking();
 
-  const [monthIdx, setMonthIdx] = useState(initialMonthIdx);
-  const [pax, setPax] = useState(10);
   const [availability, setAvailability] = useState<Availability[]>(initialAvailability);
   const [loadingCal, setLoadingCal] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
 
-  const [tab, setTab] = useState<"form" | "check">("form");
+  const [tab, setTab] = useState<Tab>("form");
 
   const [form, setForm] = useState({ name: "", phone: "", email: "", note: "" });
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [newRef, setNewRef] = useState<string | null>(null);
+  /** Phone the booking was made with — prefills the Pembayaran tab so the
+   *  customer does not retype it straight after booking. */
+  const [bookedPhone, setBookedPhone] = useState("");
 
   const [checkPhone, setCheckPhone] = useState("");
   const [checking, setChecking] = useState(false);
@@ -120,20 +124,23 @@ export default function BookingExperience({
     };
   }, [supabase, monthIdx, pax, month.days]);
 
-  /** Keep the selection valid: drop it if that night can no longer take the group. */
+  /** Keep the selection valid: drop it if that night can no longer take the
+   *  group, and fall back to the first night that can. */
   useEffect(() => {
     if (loadingCal) return;
-    const stillOk =
-      selected &&
-      byDate.get(selected) &&
-      byDate.get(selected)!.status !== "full" &&
-      byDate.get(selected)!.status !== "blocked";
+    const row = selected ? byDate.get(selected) : undefined;
+    const stillOk = row && row.status !== "full" && row.status !== "blocked";
     if (stillOk) return;
+
+    // A selection in another month is not stale — the calendar simply is not
+    // showing it — so leave it alone rather than stealing the choice back.
+    if (selected && !byDate.has(selected)) return;
+
     const firstOpen = availability.find(
       (r) => r.status === "open" || r.status === "selling_fast"
     );
     setSelected(firstOpen ? firstOpen.night_date : null);
-  }, [availability, byDate, selected, loadingCal]);
+  }, [availability, byDate, selected, loadingCal, setSelected]);
 
   const selectedRow = selected ? byDate.get(selected) : undefined;
 
@@ -185,13 +192,15 @@ export default function BookingExperience({
       return;
     }
 
+    const phone = form.phone.replace(/[^0-9]/g, "");
+
     setSubmitting(true);
     const { data, error } = await supabase.rpc("create_public_booking", {
       p_package_id: packageId,
       p_boat_id: selectedRow.suggested_boat_id,
       p_night_date: selectedRow.night_date,
       p_full_name: form.name.trim(),
-      p_phone: form.phone.replace(/[^0-9]/g, ""),
+      p_phone: phone,
       p_email: form.email.trim() || null,
       p_pax: pax,
       p_note: form.note.trim() || null,
@@ -207,6 +216,7 @@ export default function BookingExperience({
 
     const ref = Array.isArray(data) ? data[0].ref : (data as { ref: string }).ref;
     setNewRef(ref);
+    setBookedPhone(phone);
     setForm({ name: "", phone: "", email: "", note: "" });
   };
 
@@ -231,15 +241,6 @@ export default function BookingExperience({
       <section id="tempah" className={styles.calSection}>
         <div className={styles.calFrame}>
           <div className={styles.calPanel}>
-            <div className={styles.banner}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={bannerSrc}
-                alt="Candat Sotong 2027, Marang Terengganu"
-                className={styles.bannerImg}
-              />
-            </div>
-
             <div className={styles.calHead}>
               <div>
                 <h2 className={styles.calTitle}>Ready Untuk Candat?</h2>
@@ -284,83 +285,116 @@ export default function BookingExperience({
               ))}
             </div>
 
-            <div className={styles.monthNav}>
-              <button
-                type="button"
-                className={styles.monthBtn}
-                onClick={() => setMonthIdx((i) => Math.max(initialMonthIdx, i - 1))}
-                disabled={monthIdx === initialMonthIdx}
-                aria-label="Bulan sebelum"
-              >
-                &#8592;
-              </button>
-              <span className={styles.monthLabel}>{monthLabel(monthIdx)}</span>
-              <button
-                type="button"
-                className={styles.monthBtn}
-                onClick={() => setMonthIdx((i) => Math.min(MONTHS.length - 1, i + 1))}
-                disabled={monthIdx === MONTHS.length - 1}
-                aria-label="Bulan seterusnya"
-              >
-                &#8594;
-              </button>
-            </div>
-
-            <div className={styles.grid}>
-              {DOW_LABELS.map((d) => (
-                <div key={d} className={styles.dow}>
-                  {d}
-                </div>
-              ))}
-              {cells.map((c) => {
-                if (!c.day || !c.iso) {
-                  return <button key={c.key} className={`${styles.cell} ${styles.cellPad}`} />;
-                }
-                const row = byDate.get(c.iso);
-                const disabled =
-                  loadingCal || !row || row.status === "full" || row.status === "blocked";
-                const isHoliday = holidayDays.includes(c.day);
-                return (
+            <div className={styles.calBody}>
+              <div className={styles.calLeft}>
+                <div className={styles.monthNav}>
                   <button
-                    key={c.key}
                     type="button"
-                    className={cellClass(c.iso)}
-                    disabled={disabled}
-                    onClick={() => {
-                      setSelected(c.iso);
-                      setNewRef(null);
-                    }}
-                    aria-label={`${c.day} ${monthLabel(monthIdx)}${
-                      row ? ` — ${STATUS_WORD[row.status]}` : ""
-                    }`}
+                    className={styles.monthBtn}
+                    onClick={() => setMonthIdx((i) => Math.max(firstMonthIdx, i - 1))}
+                    disabled={monthIdx === firstMonthIdx}
+                    aria-label="Bulan sebelum"
                   >
-                    {c.day}
-                    {isHoliday && (
-                      <i
-                        className={`${styles.holidayDot} ${
-                          c.iso === selected ? styles.holidayDotSelected : ""
-                        }`}
-                      />
-                    )}
+                    &#8592;
                   </button>
-                );
-              })}
-            </div>
-
-            <div className={styles.holidayFooter}>
-              <span className={styles.panelLabel}>Cuti umum {monthLabel(monthIdx)}</span>
-              {holidays.length > 0 ? (
-                <div className={styles.holidayChips}>
-                  {holidays.map((h, i) => (
-                    <span key={`${h.d}-${i}`} className={styles.holidayChip}>
-                      <b>{h.d}</b>
-                      {h.n}
-                    </span>
-                  ))}
+                  <span className={styles.monthLabel}>{monthLabel(monthIdx)}</span>
+                  <button
+                    type="button"
+                    className={styles.monthBtn}
+                    onClick={() => setMonthIdx((i) => Math.min(MONTHS.length - 1, i + 1))}
+                    disabled={monthIdx === MONTHS.length - 1}
+                    aria-label="Bulan seterusnya"
+                  >
+                    &#8594;
+                  </button>
                 </div>
-              ) : (
-                <span className={styles.holidayEmpty}>Tiada cuti umum bulan ini.</span>
-              )}
+
+                <div className={styles.grid}>
+                  {DOW_LABELS.map((d) => (
+                    <div key={d} className={styles.dow}>
+                      {d}
+                    </div>
+                  ))}
+                  {cells.map((c) => {
+                    if (!c.day || !c.iso) {
+                      return (
+                        <button
+                          key={c.key}
+                          className={`${styles.cell} ${styles.cellPad}`}
+                        />
+                      );
+                    }
+                    const row = byDate.get(c.iso);
+                    const disabled =
+                      loadingCal ||
+                      !row ||
+                      row.status === "full" ||
+                      row.status === "blocked";
+                    const isHoliday = holidayDays.includes(c.day);
+                    return (
+                      <button
+                        key={c.key}
+                        type="button"
+                        className={cellClass(c.iso)}
+                        disabled={disabled}
+                        onClick={() => {
+                          setSelected(c.iso);
+                          setNewRef(null);
+                        }}
+                        aria-label={`${c.day} ${monthLabel(monthIdx)}${
+                          row ? ` — ${STATUS_WORD[row.status]}` : ""
+                        }`}
+                      >
+                        {c.day}
+                        {isHoliday && (
+                          <i
+                            className={`${styles.holidayDot} ${
+                              c.iso === selected ? styles.holidayDotSelected : ""
+                            }`}
+                          />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className={styles.calSide}>
+                <span className={styles.panelLabel}>
+                  Cuti umum {monthLabel(monthIdx)}
+                </span>
+                {holidays.length > 0 ? (
+                  <div className={styles.holidayChips}>
+                    {holidays.map((h, i) => (
+                      <span key={`${h.d}-${i}`} className={styles.holidayChip}>
+                        <b>{h.d}</b>
+                        {h.n}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <span className={styles.holidayEmpty}>Tiada cuti umum bulan ini.</span>
+                )}
+
+                <div className={styles.slotCard}>
+                  <span className={styles.panelLabel}>Slot dipilih</span>
+                  <div className={styles.slotCardValue}>{selectionLabel}</div>
+                  <div className={styles.slotCardNote}>
+                    Bertolak selepas Waktu Asar. Pulang 7:00 pagi keesokannya.
+                  </div>
+                </div>
+
+                <div className={styles.depositCard}>
+                  <span className={styles.depositKicker}>Deposit</span>
+                  <div className={styles.depositAmount}>
+                    RM {depositPerBoat.toLocaleString("en-MY")}
+                  </div>
+                  <p className={styles.depositNote}>
+                    Satu bayaran per bot untuk kunci malam tersebut. Baki dijelaskan di
+                    jeti sebelum bertolak.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -378,6 +412,13 @@ export default function BookingExperience({
             </button>
             <button
               type="button"
+              onClick={() => setTab("pay")}
+              className={`${styles.tab} ${tab === "pay" ? styles.tabActive : ""}`}
+            >
+              Pembayaran
+            </button>
+            <button
+              type="button"
               onClick={() => setTab("check")}
               className={`${styles.tab} ${tab === "check" ? styles.tabActive : ""}`}
             >
@@ -385,7 +426,7 @@ export default function BookingExperience({
             </button>
           </div>
 
-          {tab === "form" ? (
+          {tab === "form" && (
             <div>
               <div className={styles.slotBanner}>
                 <span className={styles.slotLabel}>Slot dipilih</span>
@@ -462,12 +503,33 @@ export default function BookingExperience({
 
               {newRef && (
                 <div className={styles.successNote}>
-                  Tempahan diterima. Rujukan {newRef}.
+                  Tempahan diterima. Rujukan {newRef}. Sila jelaskan deposit RM{" "}
+                  {depositPerBoat.toLocaleString("en-MY")} di tab{" "}
+                  <button
+                    type="button"
+                    className={styles.inlineLink}
+                    onClick={() => setTab("pay")}
+                  >
+                    Pembayaran
+                  </button>
+                  .
                 </div>
               )}
               {formError && <div className={styles.failNote}>{formError}</div>}
             </div>
-          ) : (
+          )}
+
+          {tab === "pay" && (
+            <PaymentPanel
+              pricePerPax={pricePerPax}
+              depositPerBoat={depositPerBoat}
+              initialRef={newRef ?? ""}
+              initialPhone={bookedPhone}
+              fallbackPax={pax}
+            />
+          )}
+
+          {tab === "check" && (
             <div>
               <p className={styles.checkLead}>
                 Masukkan nombor telefon yang digunakan semasa tempahan untuk semak status
@@ -496,14 +558,14 @@ export default function BookingExperience({
 
               {checkError && <div className={styles.failNote}>{checkError}</div>}
 
-              {checked && !checkError && results.length > 0 &&
+              {checked &&
+                !checkError &&
+                results.length > 0 &&
                 results.map((r) => (
                   <div key={r.ref} className={styles.resultCard}>
                     <div className={styles.resultHead}>
                       <span className={styles.resultRef}>{r.ref}</span>
-                      <span
-                        className={`${styles.statusPill} ${statusPillClass(r.status)}`}
-                      >
+                      <span className={`${styles.statusPill} ${statusPillClass(r.status)}`}>
                         {STATUS_LABEL[r.status] ?? r.status}
                       </span>
                     </div>
