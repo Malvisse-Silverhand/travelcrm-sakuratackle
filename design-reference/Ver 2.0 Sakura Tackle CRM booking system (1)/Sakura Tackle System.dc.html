@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/typography.css">
+<script src="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/_ds_bundle.js"></script>
+<script src="image-slot.js"></script>
+<style>
+  * { box-sizing:border-box; }
+  a { color:#2E1D6B; text-decoration:none; }
+  a:hover { color:#4A34A0; }
+  input, select, textarea, button { font-family:'Inter', system-ui, sans-serif; }
+  input:focus, select:focus, textarea:focus { outline:2px solid rgba(255,184,0,.7); outline-offset:1px; }
+  .masonry { column-count:4; column-gap:12px; }
+  .masonry img { width:100%; height:auto; display:block; border-radius:14px; margin-bottom:12px; break-inside:avoid; }
+  .masonry-m { column-count:2; column-gap:8px; }
+  .masonry-m img { width:100%; height:auto; display:block; border-radius:10px; margin-bottom:8px; break-inside:avoid; }
+</style>
+</helmet>
+
+<div style="background:#E4DFF4; color:#1B1436; font-family:'Inter', system-ui, sans-serif; padding:56px 64px 96px; min-width:min-content">
+
+  <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:40px; margin-bottom:12px">
+    <div>
+      <div style="font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:#7A6FA0">Sakura Tackle &middot; Candat Sotong &middot; Marang, Terengganu</div>
+      <h1 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:40px; letter-spacing:-.03em; margin:10px 0 0">Booking System v2.0 &mdash; Semua Skrin</h1>
+      <p style="font-size:14.5px; color:#4A3F6E; margin:10px 0 0; max-width:72ch">Laman tempahan pelanggan (desktop &amp; mobile) dan konsol admin dalam satu papan. Deposit RM200 per bot. Kalendar, borang, tab pembayaran dan FAQ boleh diklik terus di dalam frame.</p>
+    </div>
+    <div style="display:flex; gap:22px; flex:0 0 auto; padding-bottom:6px">
+      <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#4A3F6E"><i style="width:10px; height:10px; border-radius:3px; background:#2FBF71; display:block"></i>Available</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#4A3F6E"><i style="width:10px; height:10px; border-radius:3px; background:#FFB800; display:block"></i>Selling Fast</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#4A3F6E"><i style="width:10px; height:10px; border-radius:3px; background:#EF4444; display:block"></i>Full</div>
+    </div>
+  </div>
+
+  <div style="height:1px; background:rgba(46,29,107,.16); margin:32px 0 30px"></div>
+  <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:20px; letter-spacing:-.02em; margin-bottom:22px">A. Laman Tempahan &mdash; Desktop 1280</div>
+
+  <div style="display:flex; gap:56px; align-items:flex-start">
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#2E1D6B; color:#FFD36B; font-size:11px; font-weight:700; letter-spacing:.06em">P1</span>
+        <span style="font-size:13.5px; font-weight:650">Hero &amp; carian slot</span>
+        <span style="font-size:11.5px; color:#7A6FA0">1280 &times; auto</span>
+      </div>
+      <div data-screen-label="P1 Hero" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16)">
+
+        <div style="background:rgba(245,242,254,.96); border-bottom:1px solid rgba(46,29,107,.10); padding:14px 32px; display:flex; align-items:center; justify-content:space-between; gap:20px">
+          <div style="display:flex; align-items:center; gap:11px">
+            <div style="width:34px; height:34px; border-radius:11px; background:linear-gradient(145deg,#FFB800,#F08A00); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:700; font-size:14px; color:#2E1D6B">CS</div>
+            <div style="display:flex; flex-direction:column; line-height:1.15">
+              <span style="font-family:'Poppins',sans-serif; font-weight:600; font-size:15px">Candat Sotong</span>
+              <span style="font-size:11px; color:#7A6FA0; letter-spacing:.04em">Sakura Tackle</span>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:26px; font-size:13px; color:#635A87">
+            <span>Armada</span><span>Kalendar</span><span>Galeri</span><span>FAQ</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px">
+            <span style="font-size:12.5px; color:#7A6FA0">Jeti Marang, Terengganu</span>
+            <span style="padding:9px 18px; border-radius:14px; background:#FFB800; color:#2E1D6B; font-size:12.5px; font-weight:700">Tempah Slot</span>
+          </div>
+        </div>
+
+        <div style="padding:28px 32px 36px">
+          <div style="position:relative; border-radius:26px; overflow:hidden; background:#241A4D">
+            <img src="https://sakuratackle.com/wp-content/uploads/2026/02/restored_night_fishing_4k_v2-scaled.png" alt="Aktiviti candat sotong waktu malam di perairan Pulau Kapas" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55">
+            <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(27,20,54,.5) 0%, rgba(27,20,54,.84) 100%)"></div>
+            <div style="position:relative; padding:72px 56px 80px; text-align:center">
+              <span style="display:inline-block; padding:6px 14px; border-radius:999px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28); color:#FFE39A; font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase">Musim Candat 2026 Telah Dibuka</span>
+              <h2 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:54px; line-height:1.06; letter-spacing:-.03em; color:#FFFFFF; margin:22px auto 0; max-width:20ch">Pakej Trip Candat Sotong Otai Pulau Kapas-Marang</h2>
+              <p style="font-size:17px; line-height:1.6; color:#EDE8FF; max-width:54ch; margin:20px auto 0">&ldquo;Tak perlu skil tinggi, janji ada hati. Kami bawa anda ke lubuk rahsia kapten otai kami.&rdquo;</p>
+            </div>
+          </div>
+
+          <div role="search" aria-label="Cari slot trip" style="position:relative; margin:-38px auto 0; max-width:900px; background:#FFFFFF; border:1px solid rgba(46,29,107,.10); border-radius:22px; box-shadow:0 22px 50px rgba(46,29,107,.14); padding:16px 18px; display:grid; grid-template-columns:1.15fr auto 1fr auto; gap:16px; align-items:center">
+            <label style="display:block">
+              <span style="display:block; font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0">Tarikh nak bercandat</span>
+              <input type="date" value="{{ pubDate }}" onChange="{{ onPubDate }}" aria-label="Tarikh trip" style="margin-top:6px; width:100%; border:0; background:transparent; font-size:15px; font-weight:600; color:#1B1436; padding:0">
+            </label>
+            <div style="width:1px; height:36px; background:rgba(46,29,107,.12)"></div>
+            <label style="display:block">
+              <span style="display:block; font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0">Berapa orang</span>
+              <select value="{{ pax }}" onChange="{{ onPax }}" aria-label="Bilangan pax" style="margin-top:6px; width:100%; border:0; background:transparent; font-size:15px; font-weight:600; color:#1B1436; padding:0">
+                <sc-for list="{{ paxOptions }}" as="o" hint-placeholder-count="6">
+                  <option value="{{ o.v }}">{{ o.t }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <span style="display:flex; align-items:center; justify-content:center; padding:15px 26px; border-radius:16px; background:#FFB800; color:#2E1D6B; font-size:14.5px; font-weight:700; box-shadow:0 12px 26px rgba(255,184,0,.34)">Cari Bot Kosong</span>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:30px; margin-top:26px; font-size:12.5px; color:#635A87">
+            <span>5 bot dalam armada</span><span>Kapasiti 8&ndash;15 pax</span><span>Deposit RM200 untuk lock slot</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#2E1D6B; color:#FFD36B; font-size:11px; font-weight:700; letter-spacing:.06em">P2</span>
+        <span style="font-size:13.5px; font-weight:650">Armada &amp; fasiliti on-board</span>
+        <span style="font-size:11.5px; color:#7A6FA0">tapis ikut pax</span>
+      </div>
+      <div data-screen-label="P2 Armada" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); padding:36px 32px 40px">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px">
+          <div>
+            <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Armada &amp; Kemudi Kami</span>
+            <h2 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:34px; letter-spacing:-.025em; margin:10px 0 0">Bot yang sesuai untuk {{ pax }} pax</h2>
+          </div>
+          <span style="font-size:13px; color:#7A6FA0">{{ resultLabel }}</span>
+        </div>
+
+        <div style="margin-top:28px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px">
+          <sc-for list="{{ fleet }}" as="boat" hint-placeholder-count="4">
+            <article style="background:#FFFFFF; border:1px solid rgba(46,29,107,.09); border-radius:22px; overflow:hidden; box-shadow:0 10px 30px rgba(46,29,107,.07); display:flex; flex-direction:column">
+              <div style="position:relative; height:190px; background:#E9E3FB">
+                <image-slot id="{{ boat.slotId }}" placeholder="{{ boat.slotHint }}" shape="rect" style="position:absolute; inset:0"></image-slot>
+                <span style="position:absolute; top:13px; left:13px; z-index:2; padding:6px 12px; border-radius:999px; background:rgba(27,20,54,.82); color:#FFE39A; font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase">{{ boat.kind }}</span>
+              </div>
+              <div style="padding:20px; display:flex; flex-direction:column; gap:14px; flex:1">
+                <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px">
+                  <h3 style="font-family:'Poppins',sans-serif; font-weight:600; font-size:18px; letter-spacing:-.02em; margin:0">{{ boat.name }}</h3>
+                  <div style="text-align:right; white-space:nowrap">
+                    <div style="font-family:'Poppins',sans-serif; font-weight:650; font-size:18px; color:#2E1D6B">{{ boat.rate }}</div>
+                    <div style="font-size:11px; color:#8A7FB0">sewa harian</div>
+                  </div>
+                </div>
+                <p style="font-size:13px; line-height:1.6; color:#635A87; margin:0">{{ boat.desc }}</p>
+                <div style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; padding-top:13px; border-top:1px solid rgba(46,29,107,.09)">
+                  <div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7FB0">Panjang</div><div style="font-size:13px; font-weight:600; margin-top:3px">{{ boat.length }}</div></div>
+                  <div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7FB0">Lebar</div><div style="font-size:13px; font-weight:600; margin-top:3px">{{ boat.beam }}</div></div>
+                  <div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7FB0">Kapasiti</div><div style="font-size:13px; font-weight:600; margin-top:3px">{{ boat.cap }}</div></div>
+                  <div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7FB0">Material</div><div style="font-size:13px; font-weight:600; margin-top:3px">{{ boat.material }}</div></div>
+                </div>
+                <div style="margin-top:auto; display:flex; align-items:center; gap:12px">
+                  <span style="padding:11px 20px; border-radius:14px; background:#2E1D6B; color:#FFFFFF; font-size:13px; font-weight:700">Pilih Bot Ini</span>
+                  <span style="font-size:12.5px; color:#7A6FA0">{{ boat.availability }}</span>
+                </div>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+        <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:20px; padding:24px; border:1px dashed rgba(46,29,107,.22); border-radius:18px; text-align:center; font-size:14px; color:#635A87">Tiada bot untuk saiz group ini. WhatsApp kami &mdash; kami boleh gabung dua bot untuk group besar.</div>
+        </sc-if>
+
+        <div style="margin-top:34px; padding-top:30px; border-top:1px solid rgba(46,29,107,.12)">
+          <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Kelengkapan Bot</span>
+          <h3 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:26px; letter-spacing:-.025em; margin:10px 0 4px">Fasiliti On-Board</h3>
+          <p style="font-size:14px; color:#635A87; margin:0 0 20px">Keselesaan anda, keutamaan kami</p>
+          <div style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:rgba(46,29,107,.10); border:1px solid rgba(46,29,107,.10); border-radius:18px; overflow:hidden">
+            <sc-for list="{{ facilities }}" as="f" hint-placeholder-count="8">
+              <div style="background:#FFFFFF; padding:20px">
+                <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:14.5px">{{ f.title }}</div>
+                <div style="font-size:12.5px; line-height:1.55; color:#635A87; margin-top:7px">{{ f.body }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#2E1D6B; color:#FFD36B; font-size:11px; font-weight:700; letter-spacing:.06em">P3</span>
+        <span style="font-size:13.5px; font-weight:650">Kalendar slot, borang &amp; pembayaran</span>
+        <span style="font-size:11.5px; color:#7A6FA0">interaktif</span>
+      </div>
+      <div data-screen-label="P3 Kalendar" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); padding:32px">
+
+        <div style="border-radius:24px; background:#2E1D6B; padding:26px">
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:20px">
+            <div>
+              <h2 style="font-family:'Poppins',sans-serif; font-size:25px; font-weight:650; letter-spacing:-.02em; margin:0; color:#FFFFFF">Ready Untuk Candat?</h2>
+              <p style="font-size:13.5px; color:#B7ABE0; margin:7px 0 0">Semak kelendar trip. Satu bot, satu trip semalaman. Tekan tarikh untuk tempah.</p>
+            </div>
+            <div style="display:flex; gap:16px; font-size:11.5px; color:#B7ABE0">
+              <span style="display:flex; align-items:center; gap:7px"><i style="width:9px; height:9px; border-radius:3px; background:#2FBF71; display:block"></i>Available</span>
+              <span style="display:flex; align-items:center; gap:7px"><i style="width:9px; height:9px; border-radius:3px; background:#FFB800; display:block"></i>Selling Fast</span>
+              <span style="display:flex; align-items:center; gap:7px"><i style="width:9px; height:9px; border-radius:3px; background:#EF4444; display:block"></i>Full</span>
+            </div>
+          </div>
+
+          <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#9C8ED0; font-weight:700; margin-bottom:10px">Berapa orang dalam kumpulan anda?</span>
+          <div style="display:flex; gap:9px; margin-bottom:20px">
+            <sc-for list="{{ paxChips }}" as="p" hint-placeholder-count="6">
+              <button onClick="{{ p.onPick }}" style="flex:0 0 auto; cursor:pointer; padding:11px 20px; border-radius:14px; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; background:{{ p.bg }}; color:{{ p.fg }}; border:1px solid {{ p.bd }}">{{ p.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:24px; align-items:start">
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px">
+                <button onClick="{{ prevMonth }}" style="cursor:pointer; padding:8px 15px; border-radius:12px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:12.5px">&#8592;</button>
+                <span style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:650; color:#FFFFFF">{{ monthLabel }}</span>
+                <button onClick="{{ nextMonth }}" style="cursor:pointer; padding:8px 15px; border-radius:12px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:12.5px">&#8594;</button>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:6px">
+                <sc-for list="{{ dowLabels }}" as="d" hint-placeholder-count="7">
+                  <div style="text-align:center; font-size:10px; letter-spacing:.12em; color:#8B7DC4; padding:6px 0 4px; font-weight:700">{{ d }}</div>
+                </sc-for>
+                <sc-for list="{{ cells }}" as="c" hint-placeholder-count="35">
+                  <button onClick="{{ c.onPick }}" style="position:relative; cursor:{{ c.cursor }}; height:52px; border-radius:13px; font-size:14.5px; font-weight:650; font-family:'Poppins',sans-serif; display:flex; align-items:center; justify-content:center; background:{{ c.bg }}; color:{{ c.fg }}; border:1px solid {{ c.bd }}; visibility:{{ c.vis }}">{{ c.day }}
+                    <i style="position:absolute; top:5px; right:6px; width:6px; height:6px; border-radius:99px; background:{{ c.holidayDot }}; display:block"></i>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+            <div>
+              <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#9C8ED0; font-weight:700; margin-bottom:10px">Cuti umum {{ monthLabel }}</span>
+              <div style="display:flex; gap:9px; flex-wrap:wrap">
+                <sc-for list="{{ holidays }}" as="h" hint-placeholder-count="2">
+                  <span style="display:flex; align-items:center; gap:8px; padding:7px 13px; border-radius:999px; background:rgba(255,184,0,.14); border:1px solid rgba(255,184,0,.34); font-size:12px; color:#FFD36B"><b style="font-family:'Poppins',sans-serif; color:#FFB800">{{ h.d }}</b>{{ h.n }}</span>
+                </sc-for>
+              </div>
+              <sc-if value="{{ noHoliday }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:12.5px; color:#8B7DC4">Tiada cuti umum bulan ini.</span>
+              </sc-if>
+              <div style="margin-top:20px; padding:18px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14)">
+                <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#9C8ED0; font-weight:700">Slot dipilih</span>
+                <div style="font-family:'Poppins',sans-serif; font-size:19px; font-weight:650; color:#FFFFFF; margin-top:8px">{{ selectionLabel }}</div>
+                <div style="font-size:12.5px; color:#B7ABE0; margin-top:6px">Bertolak selepas Waktu Asar. Pulang 7:00 pagi keesokannya.</div>
+              </div>
+              <div style="margin-top:14px; padding:18px; border-radius:16px; background:linear-gradient(160deg,#FFB800,#E8890B); color:#2E1D6B">
+                <span style="font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; opacity:.74">Deposit</span>
+                <div style="font-family:'Poppins',sans-serif; font-size:32px; font-weight:700; letter-spacing:-.03em; margin:8px 0 4px">RM 200</div>
+                <p style="margin:0; font-size:12.5px; line-height:1.5; opacity:.86">Satu bayaran per bot untuk kunci malam tersebut. Baki dijelaskan di jeti sebelum bertolak.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:22px; border-radius:24px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:26px; box-shadow:0 18px 46px rgba(46,29,107,.07)">
+          <div style="display:flex; justify-content:center; gap:8px; padding:5px; border-radius:999px; background:#F0ECFC; width:fit-content; margin:0 auto 24px">
+            <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+              <button onClick="{{ t.onPick }}" style="cursor:pointer; border:0; padding:10px 22px; border-radius:999px; font-size:13.5px; font-weight:650; background:{{ t.bg }}; color:{{ t.fg }}">{{ t.label }}</button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:14px; background:rgba(255,184,0,.16); border:1px solid rgba(255,184,0,.42); margin-bottom:20px">
+              <span style="font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8A6A00; font-weight:700">Slot dipilih</span>
+              <span style="font-size:14px; font-weight:650">{{ selectionLabel }}</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px">
+              <label style="display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Nama penuh</span>
+                <input value="{{ fName }}" onChange="{{ setName }}" placeholder="Nama seperti dalam IC" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:14px"></label>
+              <label style="display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">No. telefon / WhatsApp</span>
+                <input value="{{ fPhone }}" onChange="{{ setPhone }}" placeholder="0123456789" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:14px"></label>
+              <label style="display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Bilangan pax</span>
+                <select value="{{ pax }}" onChange="{{ onPax }}" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:14px">
+                  <sc-for list="{{ paxOptions }}" as="o" hint-placeholder-count="6">
+                    <option value="{{ o.v }}">{{ o.t }}</option>
+                  </sc-for>
+                </select></label>
+              <label style="display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Email (pilihan)</span>
+                <input value="{{ fEmail }}" onChange="{{ setEmail }}" placeholder="email@anda.com" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:14px"></label>
+              <label style="grid-column:1 / -1; display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Nota atau permintaan khas</span>
+                <textarea value="{{ fNote }}" onChange="{{ setNote }}" rows="3" placeholder="Contoh: perlukan jaket keselamatan saiz kanak-kanak" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:14px; resize:vertical"></textarea></label>
+            </div>
+            <button onClick="{{ submitBooking }}" style="cursor:pointer; border:0; width:100%; margin-top:22px; padding:16px; border-radius:999px; background:#FFB800; color:#2E1D6B; font-size:15.5px; font-weight:700; font-family:'Poppins',sans-serif; box-shadow:0 14px 30px rgba(255,184,0,.3)">Saya Ready Book Trip</button>
+            <p style="text-align:center; font-size:12.5px; color:#7A6FA0; margin:14px 0 0">Kami akan hubungi anda dalam masa 24 jam via WhatsApp.</p>
+            <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px; padding:14px 16px; border-radius:13px; background:rgba(47,191,113,.12); border:1px solid rgba(47,191,113,.36); color:#137A47; font-size:13.5px; text-align:center">Tempahan diterima. Rujukan {{ newRef }}. Sila jelaskan deposit RM200 di tab Pembayaran.</div>
+            </sc-if>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ showPay }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.9fr); gap:22px; align-items:start">
+            <div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px">
+                <div style="padding:18px; border-radius:16px; background:#F7F5FE; border:1px solid rgba(46,29,107,.12)">
+                  <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Deposit perlu dibayar</span>
+                  <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:700; letter-spacing:-.03em; color:#B07800; margin-top:8px">RM 200</div>
+                  <span style="font-size:12px; color:#635A87">Satu bayaran per bot</span>
+                </div>
+                <div style="padding:18px; border-radius:16px; background:#F7F5FE; border:1px solid rgba(46,29,107,.12)">
+                  <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Baki di jeti</span>
+                  <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:700; letter-spacing:-.03em; margin-top:8px">{{ balanceLabel }}</div>
+                  <span style="font-size:12px; color:#635A87">{{ pax }} pax &times; RM180, tolak deposit</span>
+                </div>
+              </div>
+              <div style="padding:18px; border-radius:16px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12)">
+                <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Pindahan bank</span>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; font-size:13.5px">
+                  <div><span style="display:block; font-size:11px; color:#7A6FA0">Bank</span><b style="font-weight:650">Maybank Islamic</b></div>
+                  <div><span style="display:block; font-size:11px; color:#7A6FA0">Nama akaun</span><b style="font-weight:650">Sakura Tackle Enterprise</b></div>
+                  <div><span style="display:block; font-size:11px; color:#7A6FA0">No. akaun</span><b style="font-weight:650">5624 1188 3097</b></div>
+                  <div><span style="display:block; font-size:11px; color:#7A6FA0">Rujukan</span><b style="font-weight:650">{{ newRef }}</b></div>
+                </div>
+              </div>
+              <div style="margin-top:14px; padding:18px; border-radius:16px; border:1px dashed rgba(46,29,107,.24); background:#F7F5FE">
+                <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Muat naik resit</span>
+                <div style="position:relative; height:130px; border-radius:12px; overflow:hidden; background:#EFEAFD">
+                  <image-slot id="cs2-resit" placeholder="Tangkap skrin resit pindahan deposit" shape="rect" style="position:absolute; inset:0"></image-slot>
+                </div>
+                <span style="display:block; font-size:12px; color:#635A87; margin-top:10px">JPG atau PNG, maksimum 5MB. Kami sahkan dalam 24 jam.</span>
+              </div>
+            </div>
+            <div style="padding:20px; border-radius:16px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12)">
+              <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:14px">Senarai pax ({{ pax }})</span>
+              <div style="display:flex; flex-direction:column; gap:9px">
+                <sc-for list="{{ paxRows }}" as="p" hint-placeholder-count="8">
+                  <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:11px; background:#F7F5FE; border:1px solid rgba(46,29,107,.10)">
+                    <span style="width:22px; font-size:11.5px; color:#8A7FB0; font-weight:700">{{ p.n }}</span>
+                    <span style="font-size:13px; color:#3B3160">{{ p.label }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <button onClick="{{ noop }}" style="cursor:pointer; width:100%; margin-top:14px; padding:13px; border-radius:13px; background:#2E1D6B; color:#FFFFFF; font-size:13.5px; font-weight:700; border:0">Hantar untuk pengesahan</button>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ showCheck }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <p style="font-size:14px; color:#635A87; margin:0 0 16px; max-width:56ch">Masukkan nombor telefon yang digunakan semasa tempahan untuk semak status booking anda.</p>
+            <div style="display:flex; gap:12px; max-width:520px">
+              <input value="{{ checkPhone }}" onChange="{{ setCheckPhone }}" placeholder="Nombor telefon (cth: 0193334821)" style="flex:1; padding:14px 16px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:14px">
+              <button onClick="{{ runCheck }}" style="cursor:pointer; border:0; padding:14px 26px; border-radius:13px; background:#2E1D6B; color:#FFFFFF; font-size:14px; font-weight:650">Semak</button>
+            </div>
+            <sc-if value="{{ hasResult }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:20px; border-radius:16px; background:#F7F5FE; border:1px solid rgba(46,29,107,.12); overflow:hidden">
+                <div style="padding:16px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10)">
+                  <span style="font-family:'Poppins',sans-serif; font-weight:650; font-size:15px">{{ resRef }}</span>
+                  <span style="padding:5px 12px; border-radius:999px; font-size:11.5px; font-weight:700; background:{{ resBg }}; color:{{ resFg }}">{{ resStatus }}</span>
+                </div>
+                <div style="padding:18px; display:grid; grid-template-columns:repeat(4,1fr); gap:18px">
+                  <div><span style="display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:5px">Bot</span><span style="font-size:14px; font-weight:650">{{ resBoat }}</span></div>
+                  <div><span style="display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:5px">Tarikh</span><span style="font-size:14px; font-weight:650">{{ resDate }}</span></div>
+                  <div><span style="display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:5px">Pax</span><span style="font-size:14px; font-weight:650">{{ resPax }}</span></div>
+                  <div><span style="display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:5px">Baki</span><span style="font-size:14px; font-weight:650; color:#B07800">{{ resBalance }}</span></div>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noResult }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:20px; padding:22px; border-radius:16px; background:#F7F5FE; border:1px dashed rgba(46,29,107,.22); text-align:center">
+                <p style="margin:0 0 4px; font-size:14.5px; font-weight:650">Tiada tempahan untuk nombor itu</p>
+                <p style="margin:0; font-size:13px; color:#635A87">Cuba nombor lain, atau WhatsApp kami dan kami semak manual.</p>
+              </div>
+            </sc-if>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#2E1D6B; color:#FFD36B; font-size:11px; font-weight:700; letter-spacing:.06em">P4</span>
+        <span style="font-size:13.5px; font-weight:650">Galeri tangkapan &amp; testimoni</span>
+        <span style="font-size:11.5px; color:#7A6FA0">masonry</span>
+      </div>
+      <div data-screen-label="P4 Galeri" style="width:1280px; background:#EFEAFD; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); padding:36px 32px 40px">
+        <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Momento Lubuk Emas</span>
+        <h2 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:34px; letter-spacing:-.025em; margin:10px 0 22px">Galeri Tangkapan</h2>
+        <div class="masonry">
+          <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="8">
+            <img src="{{ g.src }}" alt="{{ g.alt }}" loading="lazy">
+          </sc-for>
+        </div>
+        <div style="margin-top:34px; padding-top:30px; border-top:1px solid rgba(46,29,107,.12)">
+          <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Apa Kata Otai Kita?</span>
+          <h3 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:26px; letter-spacing:-.025em; margin:10px 0 4px">Testimoni pelanggan, seperti yang dihantar</h3>
+          <p style="font-size:13.5px; color:#7A6FA0; margin:0 0 18px">Tangkap skrin perbualan WhatsApp daripada pelanggan trip kami.</p>
+          <div style="display:flex; gap:14px; overflow-x:auto; padding-bottom:10px">
+            <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="6">
+              <img src="{{ t.src }}" alt="{{ t.alt }}" loading="lazy" style="flex:0 0 auto; width:208px; border-radius:16px; border:1px solid rgba(46,29,107,.10); background:#FFFFFF; display:block">
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#2E1D6B; color:#FFD36B; font-size:11px; font-weight:700; letter-spacing:.06em">P5</span>
+        <span style="font-size:13.5px; font-weight:650">Langkah tempahan, FAQ, lokasi &amp; footer</span>
+      </div>
+      <div data-screen-label="P5 FAQ" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16)">
+        <div style="padding:36px 32px 8px; display:grid; grid-template-columns:.85fr minmax(0,1.15fr); gap:44px; align-items:start">
+          <div>
+            <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Perjalanan Sepanjang Trip Candat</span>
+            <h2 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:32px; letter-spacing:-.025em; margin:10px 0 0">Dari jeti ke lubuk, langkah demi langkah</h2>
+            <div style="margin-top:20px; padding:20px 22px; border-radius:18px; background:rgba(255,184,0,.14); border:1px solid rgba(255,184,0,.4)">
+              <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:15px">Peringatan Penting!</div>
+              <p style="font-size:13.5px; line-height:1.6; color:#4A3F6E; margin:8px 0 0">Musim candat biasanya sangat &lsquo;full&rsquo;. Kami sarankan tempahan dibuat sekurang-kurangnya 1 bulan awal terutamanya untuk malam hujung minggu.</p>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px">
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+              <div style="display:grid; grid-template-columns:auto minmax(0,1fr); gap:16px; align-items:start; background:#FFFFFF; border:1px solid rgba(46,29,107,.09); border-radius:18px; padding:18px 20px">
+                <div style="width:32px; height:32px; border-radius:11px; background:#2E1D6B; color:#FFE39A; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px">{{ s.n }}</div>
+                <div>
+                  <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:15px">{{ s.title }}</div>
+                  <div style="font-size:13px; line-height:1.6; color:#635A87; margin-top:5px">{{ s.body }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:34px 32px 0; display:grid; grid-template-columns:.8fr minmax(0,1.2fr); gap:44px; align-items:start">
+          <h2 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:32px; letter-spacing:-.025em; margin:0">Soalan lazim</h2>
+          <div style="display:flex; flex-direction:column; gap:10px">
+            <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="4">
+              <div style="background:#FFFFFF; border:1px solid rgba(46,29,107,.09); border-radius:16px; overflow:hidden">
+                <button type="button" onClick="{{ q.toggle }}" aria-expanded="{{ q.openStr }}" style="width:100%; text-align:left; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:17px 20px; background:transparent; border:0; cursor:pointer; font-family:'Poppins',sans-serif; font-weight:600; font-size:15px; color:#1B1436">{{ q.q }}
+                  <span style="flex:0 0 auto; width:24px; height:24px; border-radius:8px; background:rgba(46,29,107,.08); display:flex; align-items:center; justify-content:center; font-size:14px; color:#2E1D6B">{{ q.sign }}</span>
+                </button>
+                <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:0 20px 18px; font-size:13.5px; line-height:1.65; color:#635A87">{{ q.a }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:34px 32px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:40px; align-items:center">
+          <div>
+            <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Lokasi Jeti</span>
+            <h2 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:30px; letter-spacing:-.025em; margin:10px 0 0">Lubok Candat Power Terengganu</h2>
+            <p style="font-size:15px; line-height:1.65; color:#635A87; margin:14px 0 0; max-width:48ch">Kami beroperasi dari Jeti Marang, Terengganu. Parking luas dan selamat disediakan untuk pelanggan kami.</p>
+            <div style="margin-top:16px; font-size:14px; font-weight:600">ILKM Marang, Marang 21600, Terengganu</div>
+            <a href="https://share.google/I6FXPp5XXL3HwNEeq" target="_blank" rel="noopener" style="display:inline-block; margin-top:18px; padding:12px 22px; border-radius:14px; border:1px solid rgba(46,29,107,.22); font-size:13.5px; font-weight:700; color:#2E1D6B">Buka Google Maps</a>
+          </div>
+          <div style="position:relative; height:260px; border-radius:20px; overflow:hidden; background:#EFEAFD; border:1px solid rgba(46,29,107,.10)">
+            <image-slot id="cs2-map" placeholder="Tangkap skrin peta Jeti Marang / ILKM Marang" shape="rect" style="position:absolute; inset:0"></image-slot>
+          </div>
+        </div>
+
+        <div style="padding:0 32px 32px">
+          <div style="border-radius:22px; background:#2E1D6B; padding:40px; text-align:center">
+            <h2 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:32px; letter-spacing:-.025em; color:#FFFFFF; margin:0">Dah Sedia Nak Mengail?</h2>
+            <p style="font-size:15.5px; color:#D8CFFF; margin:12px auto 0; max-width:44ch">Hubungi kami terus melalui WhatsApp untuk mendapatkan maklum balas pantas. Kami sedia membantu 7 hari seminggu.</p>
+            <a href="{{ waLink }}" style="display:inline-block; margin-top:22px; padding:14px 30px; border-radius:16px; background:#FFB800; color:#2E1D6B; font-size:15px; font-weight:700">WhatsApp Kami</a>
+          </div>
+        </div>
+
+        <div style="background:#1B1436; color:#CFC7EC; padding:36px 32px 26px">
+          <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:32px">
+            <div>
+              <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:17px; color:#FFFFFF">Sakura Tackle</div>
+              <p style="font-size:13px; line-height:1.65; margin:10px 0 0; max-width:42ch">Pengalaman candat sotong terbaik di perairan Pulau Kapas, Terengganu. Dipandu oleh kapten berpengalaman dengan lubuk-lubuk rahsia terbaik.</p>
+            </div>
+            <div>
+              <div style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Menu</div>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px; font-size:13px">
+                <a href="https://sakuratackle.com/" target="_blank" rel="noopener" style="color:#CFC7EC">Home</a>
+                <a href="https://sakuratackle.com/shop/" target="_blank" rel="noopener" style="color:#CFC7EC">Shop</a>
+                <span>Armada</span><span>FAQ</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Hubungi Kami</div>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px; font-size:13px">
+                <a href="tel:+601153598055" style="color:#CFC7EC">60 11-5359 8055</a>
+                <span>Kompleks LKIM Marang, Jeti Marang, Terengganu</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:26px; padding-top:18px; border-top:1px solid rgba(255,255,255,.12); font-size:12px; color:#9A8FC4">&copy; 2026 Sakura Tackle. Hak Cipta Terpelihara. | Jeti Marang, Terengganu, Malaysia</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:1px; background:rgba(46,29,107,.16); margin:44px 0 30px"></div>
+  <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:20px; letter-spacing:-.02em; margin-bottom:22px">B. Laman Tempahan &mdash; Mobile 390</div>
+
+  <div style="display:flex; gap:44px; align-items:flex-start">
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#2E1D6B; color:#FFD36B; font-size:11px; font-weight:700">M1</span>
+        <span style="font-size:13.5px; font-weight:650">Hero &amp; carian</span>
+      </div>
+      <div data-screen-label="M1 Hero" style="width:390px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:24px; overflow:hidden; box-shadow:0 26px 60px rgba(46,29,107,.16)">
+        <div style="padding:12px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10); background:rgba(245,242,254,.96)">
+          <div style="display:flex; align-items:center; gap:9px">
+            <div style="width:30px; height:30px; border-radius:10px; background:linear-gradient(145deg,#FFB800,#F08A00); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:700; font-size:12.5px; color:#2E1D6B">CS</div>
+            <span style="font-family:'Poppins',sans-serif; font-weight:600; font-size:13.5px">Candat Sotong</span>
+          </div>
+          <span style="padding:8px 14px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:11.5px; font-weight:700">Tempah</span>
+        </div>
+        <div style="padding:16px">
+          <div style="position:relative; border-radius:20px; overflow:hidden; background:#241A4D">
+            <img src="https://sakuratackle.com/wp-content/uploads/2026/02/restored_boat_group_4k_v3-scaled.png" alt="Kumpulan pelanggan di atas bot candat" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.5">
+            <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(27,20,54,.5), rgba(27,20,54,.88))"></div>
+            <div style="position:relative; padding:28px 20px 32px">
+              <span style="display:inline-block; padding:5px 11px; border-radius:999px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.26); color:#FFE39A; font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase">Musim Candat 2026 Dibuka</span>
+              <h2 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:27px; line-height:1.1; letter-spacing:-.03em; color:#FFFFFF; margin:14px 0 0">Pakej Trip Candat Sotong Otai Pulau Kapas-Marang</h2>
+              <p style="font-size:13.5px; line-height:1.6; color:#EDE8FF; margin:12px 0 0">&ldquo;Tak perlu skil tinggi, janji ada hati. Kami bawa anda ke lubuk rahsia kapten otai kami.&rdquo;</p>
+            </div>
+          </div>
+          <div style="margin-top:14px; background:#FFFFFF; border:1px solid rgba(46,29,107,.10); border-radius:18px; padding:14px; box-shadow:0 14px 34px rgba(46,29,107,.12); display:flex; flex-direction:column; gap:12px">
+            <label style="display:block">
+              <span style="display:block; font-size:9.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0">Tarikh</span>
+              <input type="date" value="{{ pubDate }}" onChange="{{ onPubDate }}" style="margin-top:5px; width:100%; border:0; background:transparent; font-size:14.5px; font-weight:600; padding:0">
+            </label>
+            <div style="height:1px; background:rgba(46,29,107,.10)"></div>
+            <label style="display:block">
+              <span style="display:block; font-size:9.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0">Berapa orang</span>
+              <select value="{{ pax }}" onChange="{{ onPax }}" style="margin-top:5px; width:100%; border:0; background:transparent; font-size:14.5px; font-weight:600; padding:0">
+                <sc-for list="{{ paxOptions }}" as="o" hint-placeholder-count="6">
+                  <option value="{{ o.v }}">{{ o.t }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <span style="display:block; text-align:center; padding:14px; border-radius:14px; background:#FFB800; color:#2E1D6B; font-size:14px; font-weight:700">Cari Bot Kosong</span>
+          </div>
+          <div style="margin-top:14px; padding:14px 16px; border-radius:14px; background:#FFFFFF; border:1px solid rgba(46,29,107,.10); font-size:12.5px; color:#635A87; display:flex; flex-direction:column; gap:6px">
+            <span>5 bot dalam armada, kapasiti 8&ndash;15 pax</span>
+            <span>Deposit RM200 untuk lock slot</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid rgba(46,29,107,.12); background:#FFFFFF; padding:9px 8px 14px">
+          <div style="text-align:center; font-size:9.5px; font-weight:700; color:#2E1D6B">Utama</div>
+          <div style="text-align:center; font-size:9.5px; font-weight:700; color:#9C93BC">Armada</div>
+          <div style="text-align:center; font-size:9.5px; font-weight:700; color:#9C93BC">Galeri</div>
+          <div style="text-align:center; font-size:9.5px; font-weight:700; color:#9C93BC">FAQ</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#2E1D6B; color:#FFD36B; font-size:11px; font-weight:700">M2</span>
+        <span style="font-size:13.5px; font-weight:650">Kalendar &amp; deposit</span>
+      </div>
+      <div data-screen-label="M2 Kalendar" style="width:390px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:24px; overflow:hidden; box-shadow:0 26px 60px rgba(46,29,107,.16); padding:16px">
+        <div style="border-radius:20px; background:#2E1D6B; padding:16px">
+          <h3 style="font-family:'Poppins',sans-serif; font-size:19px; font-weight:650; color:#FFFFFF; margin:0">Ready Untuk Candat?</h3>
+          <p style="font-size:12px; color:#B7ABE0; margin:6px 0 14px">Tekan tarikh untuk tempah. Satu bot, satu trip semalaman.</p>
+          <div style="display:flex; gap:7px; overflow-x:auto; padding-bottom:4px; margin-bottom:14px">
+            <sc-for list="{{ paxChips }}" as="p" hint-placeholder-count="6">
+              <button onClick="{{ p.onPick }}" style="flex:0 0 auto; cursor:pointer; padding:9px 15px; border-radius:12px; font-family:'Poppins',sans-serif; font-weight:650; font-size:12.5px; background:{{ p.bg }}; color:{{ p.fg }}; border:1px solid {{ p.bd }}">{{ p.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px">
+            <button onClick="{{ prevMonth }}" style="cursor:pointer; padding:6px 12px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:11.5px">&#8592;</button>
+            <span style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:650; color:#FFFFFF">{{ monthLabel }}</span>
+            <button onClick="{{ nextMonth }}" style="cursor:pointer; padding:6px 12px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:11.5px">&#8594;</button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px">
+            <sc-for list="{{ dowLabels }}" as="d" hint-placeholder-count="7">
+              <div style="text-align:center; font-size:8.5px; letter-spacing:.08em; color:#8B7DC4; padding:4px 0; font-weight:700">{{ d }}</div>
+            </sc-for>
+            <sc-for list="{{ cells }}" as="c" hint-placeholder-count="35">
+              <button onClick="{{ c.onPick }}" style="position:relative; cursor:{{ c.cursor }}; height:40px; border-radius:10px; font-size:12.5px; font-weight:650; font-family:'Poppins',sans-serif; display:flex; align-items:center; justify-content:center; background:{{ c.bg }}; color:{{ c.fg }}; border:1px solid {{ c.bd }}; visibility:{{ c.vis }}">{{ c.day }}
+                <i style="position:absolute; top:3px; right:4px; width:5px; height:5px; border-radius:99px; background:{{ c.holidayDot }}; display:block"></i>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="margin-top:12px; padding:14px 16px; border-radius:16px; background:rgba(255,184,0,.16); border:1px solid rgba(255,184,0,.42)">
+          <span style="display:block; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:#8A6A00; font-weight:700">Slot dipilih</span>
+          <span style="display:block; font-size:14px; font-weight:650; margin-top:5px">{{ selectionLabel }}</span>
+        </div>
+        <div style="margin-top:12px; padding:16px; border-radius:16px; background:linear-gradient(160deg,#FFB800,#E8890B); color:#2E1D6B">
+          <span style="font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; opacity:.74">Deposit</span>
+          <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:700; letter-spacing:-.03em; margin:6px 0 4px">RM 200</div>
+          <p style="margin:0; font-size:12px; line-height:1.5; opacity:.86">Satu bayaran per bot. Baki dijelaskan di jeti sebelum bertolak.</p>
+        </div>
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px; padding:16px; border-radius:16px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12)">
+          <input value="{{ fName }}" onChange="{{ setName }}" placeholder="Nama penuh" style="padding:12px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:13.5px">
+          <input value="{{ fPhone }}" onChange="{{ setPhone }}" placeholder="No. WhatsApp" style="padding:12px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:13.5px">
+          <button onClick="{{ submitBooking }}" style="cursor:pointer; border:0; padding:14px; border-radius:999px; background:#FFB800; color:#2E1D6B; font-size:14px; font-weight:700; font-family:'Poppins',sans-serif">Saya Ready Book Trip</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#2E1D6B; color:#FFD36B; font-size:11px; font-weight:700">M3</span>
+        <span style="font-size:13.5px; font-weight:650">Galeri masonry &amp; FAQ</span>
+      </div>
+      <div data-screen-label="M3 Galeri" style="width:390px; background:#EFEAFD; border:1px solid rgba(46,29,107,.16); border-radius:24px; overflow:hidden; box-shadow:0 26px 60px rgba(46,29,107,.16); padding:16px">
+        <span style="font-size:9.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Momento Lubuk Emas</span>
+        <h3 style="font-family:'Poppins',sans-serif; font-weight:650; font-size:23px; letter-spacing:-.025em; margin:8px 0 14px">Galeri Tangkapan</h3>
+        <div class="masonry-m">
+          <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="8">
+            <img src="{{ g.src }}" alt="{{ g.alt }}" loading="lazy">
+          </sc-for>
+        </div>
+        <div style="margin-top:18px; display:flex; flex-direction:column; gap:9px">
+          <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="4">
+            <div style="background:#FFFFFF; border:1px solid rgba(46,29,107,.09); border-radius:14px; overflow:hidden">
+              <button type="button" onClick="{{ q.toggle }}" aria-expanded="{{ q.openStr }}" style="width:100%; text-align:left; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; background:transparent; border:0; cursor:pointer; font-family:'Poppins',sans-serif; font-weight:600; font-size:13.5px; color:#1B1436">{{ q.q }}
+                <span style="flex:0 0 auto; font-size:14px; color:#2E1D6B">{{ q.sign }}</span>
+              </button>
+              <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6; color:#635A87">{{ q.a }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:1px; background:rgba(46,29,107,.16); margin:44px 0 30px"></div>
+  <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:20px; letter-spacing:-.02em; margin-bottom:22px">C. Admin CRM &mdash; Konsol Operator 1280</div>
+
+  <div style="display:flex; gap:56px; align-items:flex-start">
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#1B1436; color:#FFD36B; font-size:11px; font-weight:700">A1</span>
+        <span style="font-size:13.5px; font-weight:650">Operator sign in</span>
+      </div>
+      <div data-screen-label="A1 Sign in" style="width:1280px; height:620px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); display:flex; align-items:center; justify-content:center">
+        <div style="width:400px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); border-radius:26px; padding:34px; box-shadow:0 24px 60px rgba(46,29,107,.10)">
+          <div style="width:50px; height:50px; border-radius:16px; background:linear-gradient(145deg,#FFB800,#F08A00); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:700; font-size:18px; color:#2E1D6B; margin-bottom:22px">CS</div>
+          <h2 style="font-family:'Poppins',sans-serif; font-size:26px; font-weight:650; letter-spacing:-.025em; margin:0 0 6px">Operator sign in</h2>
+          <p style="font-size:13.5px; color:#635A87; margin:0 0 24px">Sakura Tackle booking console</p>
+          <label style="display:flex; flex-direction:column; gap:7px; margin-bottom:14px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Phone or email</span>
+            <input placeholder="operator@sakuratackle.com" style="padding:14px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:14px"></label>
+          <label style="display:flex; flex-direction:column; gap:7px; margin-bottom:22px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Password</span>
+            <input type="password" placeholder="Kata laluan" style="padding:14px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:14px"></label>
+          <span style="display:block; text-align:center; padding:15px; border-radius:14px; background:#FFB800; color:#2E1D6B; font-size:14.5px; font-weight:700">Sign in</span>
+          <p style="text-align:center; font-size:12.5px; color:#7A6FA0; margin:16px 0 0">Access is limited to registered boat operators.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#1B1436; color:#FFD36B; font-size:11px; font-weight:700">A2</span>
+        <span style="font-size:13.5px; font-weight:650">Dashboard &mdash; Tonight</span>
+      </div>
+      <div data-screen-label="A2 Dashboard" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); display:grid; grid-template-columns:236px minmax(0,1fr)">
+        <aside style="background:#2E1D6B; padding:22px 16px; display:flex; flex-direction:column; gap:4px">
+          <div style="display:flex; align-items:center; gap:11px; padding:0 8px 20px">
+            <div style="width:32px; height:32px; border-radius:10px; background:linear-gradient(145deg,#FFB800,#F08A00); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:700; font-size:13px; color:#2E1D6B">CS</div>
+            <div style="display:flex; flex-direction:column; line-height:1.15">
+              <span style="font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; color:#FFFFFF">Sakura Tackle</span>
+              <span style="font-size:10.5px; color:#9C8ED0">Booking console</span>
+            </div>
+          </div>
+          <sc-for list="{{ navDash }}" as="n" hint-placeholder-count="8">
+            <div style="padding:11px 13px; border-radius:12px; font-size:13.5px; font-weight:{{ n.w }}; background:{{ n.bg }}; color:{{ n.fg }}; display:flex; align-items:center; gap:11px"><span style="font-size:14px; width:18px">{{ n.icon }}</span>{{ n.label }}</div>
+          </sc-for>
+        </aside>
+        <div>
+          <div style="padding:20px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10); background:#FFFFFF">
+            <div style="display:flex; flex-direction:column; line-height:1.25">
+              <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">Tonight</span>
+              <span style="font-size:12.5px; color:#7A6FA0">Rabu 17 Mac 2027</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px">
+              <span style="padding:10px 18px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:13px; font-weight:700">New booking</span>
+              <div style="width:36px; height:36px; border-radius:12px; background:rgba(46,29,107,.08); border:1px solid rgba(46,29,107,.14); display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; color:#2E1D6B">AZ</div>
+            </div>
+          </div>
+          <div style="padding:26px 28px 32px">
+            <div style="display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:16px; margin-bottom:18px">
+              <div style="border-radius:22px; background:linear-gradient(150deg,#2E1D6B,#4A34A0); color:#FFFFFF; padding:24px">
+                <span style="font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:#C6BAF0">Sailing tonight</span>
+                <div style="font-family:'Poppins',sans-serif; font-size:38px; font-weight:700; letter-spacing:-.03em; margin:8px 0 2px">3 boats</div>
+                <div style="font-size:13.5px; color:#C6BAF0">26 pax total. Last check-in 18:30 at Jeti Marang.</div>
+              </div>
+              <div style="border-radius:22px; background:linear-gradient(150deg,#FFB800,#E8890B); color:#2E1D6B; padding:24px">
+                <span style="font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; opacity:.72">Deposit outstanding</span>
+                <div style="font-family:'Poppins',sans-serif; font-size:38px; font-weight:700; letter-spacing:-.03em; margin:8px 0 2px">RM 800</div>
+                <div style="font-size:13.5px; opacity:.82">4 bookings waiting on RM 200 each.</div>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:24px">
+              <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+                <div style="border-radius:18px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:17px">
+                  <span style="display:block; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:#7A6FA0; font-weight:700">{{ k.label }}</span>
+                  <span style="display:block; font-family:'Poppins',sans-serif; font-size:24px; font-weight:700; letter-spacing:-.02em; margin-top:7px; color:{{ k.color }}">{{ k.value }}</span>
+                  <span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:3px">{{ k.note }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <span style="display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Tonight's manifest</span>
+            <div style="display:flex; flex-direction:column; gap:10px">
+              <sc-for list="{{ tonight }}" as="t" hint-placeholder-count="3">
+                <div style="border:1px solid rgba(46,29,107,.12); background:#FFFFFF; border-radius:16px; padding:15px; display:flex; align-items:center; gap:14px">
+                  <div style="width:46px; height:46px; border-radius:14px; background:rgba(46,29,107,.07); display:flex; flex-direction:column; align-items:center; justify-content:center; flex:0 0 auto">
+                    <span style="font-size:9px; letter-spacing:.1em; color:#7A6FA0">BOT</span>
+                    <span style="font-size:11px; font-weight:700; color:#2E1D6B">{{ t.short }}</span>
+                  </div>
+                  <div style="flex:1; min-width:0">
+                    <span style="display:block; font-size:14.5px; font-weight:650">{{ t.name }}</span>
+                    <span style="display:block; font-size:12px; color:#7A6FA0; margin-top:2px">{{ t.meta }}</span>
+                  </div>
+                  <span style="padding:5px 11px; border-radius:999px; font-size:10.5px; font-weight:700; background:{{ t.bg }}; color:{{ t.fg }}">{{ t.status }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#1B1436; color:#FFD36B; font-size:11px; font-weight:700">A3</span>
+        <span style="font-size:13.5px; font-weight:650">Slot manager</span>
+      </div>
+      <div data-screen-label="A3 Slot manager" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); display:grid; grid-template-columns:236px minmax(0,1fr)">
+        <aside style="background:#2E1D6B; padding:22px 16px; display:flex; flex-direction:column; gap:4px">
+          <div style="padding:0 8px 20px; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; color:#FFFFFF">Sakura Tackle</div>
+          <sc-for list="{{ navCal }}" as="n" hint-placeholder-count="8">
+            <div style="padding:11px 13px; border-radius:12px; font-size:13.5px; font-weight:{{ n.w }}; background:{{ n.bg }}; color:{{ n.fg }}; display:flex; align-items:center; gap:11px"><span style="font-size:14px; width:18px">{{ n.icon }}</span>{{ n.label }}</div>
+          </sc-for>
+        </aside>
+        <div>
+          <div style="padding:20px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10); background:#FFFFFF">
+            <div style="display:flex; flex-direction:column; line-height:1.25">
+              <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">Slot manager</span>
+              <span style="font-size:12.5px; color:#7A6FA0">{{ adminBoatLabel }} availability</span>
+            </div>
+            <span style="padding:10px 18px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:13px; font-weight:700">New booking</span>
+          </div>
+          <div style="padding:26px 28px 32px; display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:18px; align-items:start">
+            <div style="border-radius:22px; background:#2E1D6B; padding:22px">
+              <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap">
+                <sc-for list="{{ adminBoatChips }}" as="b" hint-placeholder-count="5">
+                  <button onClick="{{ b.onPick }}" style="cursor:pointer; padding:9px 16px; border-radius:999px; font-size:12.5px; font-weight:650; background:{{ b.bg }}; color:{{ b.fg }}; border:1px solid {{ b.bd }}">{{ b.code }}</button>
+                </sc-for>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
+                <button onClick="{{ prevMonth }}" style="cursor:pointer; padding:7px 13px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:12px">&#8592;</button>
+                <span style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:650; color:#FFFFFF">{{ monthLabel }}</span>
+                <button onClick="{{ nextMonth }}" style="cursor:pointer; padding:7px 13px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:12px">&#8594;</button>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:5px">
+                <sc-for list="{{ dowLabels }}" as="d" hint-placeholder-count="7">
+                  <div style="text-align:center; font-size:9.5px; letter-spacing:.1em; color:#8B7DC4; padding:4px 0; font-weight:700">{{ d }}</div>
+                </sc-for>
+                <sc-for list="{{ adminCells }}" as="c" hint-placeholder-count="35">
+                  <button onClick="{{ c.onPick }}" style="position:relative; cursor:{{ c.cursor }}; height:46px; border-radius:11px; font-size:13px; font-weight:650; display:flex; align-items:center; justify-content:center; background:{{ c.bg }}; color:{{ c.fg }}; border:1px solid {{ c.bd }}; visibility:{{ c.vis }}">{{ c.day }}
+                    <i style="position:absolute; top:4px; right:5px; width:5px; height:5px; border-radius:99px; background:{{ c.holidayDot }}; display:block"></i>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:14px">
+              <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:20px">
+                <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Selected night</span>
+                <div style="font-family:'Poppins',sans-serif; font-size:20px; font-weight:650; letter-spacing:-.02em; margin:7px 0 3px">{{ adminSelLabel }}</div>
+                <div style="font-size:12.5px; color:#635A87; margin-bottom:16px">{{ adminSelMeta }}</div>
+                <div style="display:flex; gap:9px; flex-wrap:wrap">
+                  <span style="padding:11px 17px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:12.5px; font-weight:700">Assign booking</span>
+                  <span style="padding:11px 17px; border-radius:12px; border:1px solid rgba(46,29,107,.2); color:#2E1D6B; font-size:12.5px; font-weight:650">Block night</span>
+                </div>
+              </div>
+              <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:20px">
+                <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Cuti umum {{ monthLabel }}</span>
+                <div style="display:flex; gap:8px; flex-wrap:wrap">
+                  <sc-for list="{{ holidays }}" as="h" hint-placeholder-count="2">
+                    <span style="display:flex; align-items:center; gap:7px; padding:6px 12px; border-radius:999px; background:rgba(255,184,0,.18); border:1px solid rgba(255,184,0,.4); font-size:11.5px; color:#8A6A00; font-weight:600"><b style="font-family:'Poppins',sans-serif">{{ h.d }}</b>{{ h.n }}</span>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ noHoliday }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size:12.5px; color:#7A6FA0">Tiada cuti umum bulan ini.</span>
+                </sc-if>
+              </div>
+              <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:20px">
+                <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:10px">Deposit rule</span>
+                <div style="font-family:'Poppins',sans-serif; font-size:22px; font-weight:700; color:#B07800">RM 200 / bot</div>
+                <p style="margin:6px 0 0; font-size:12.5px; color:#635A87; line-height:1.55">Slot ditahan 48 jam sementara menunggu resit deposit.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#1B1436; color:#FFD36B; font-size:11px; font-weight:700">A4</span>
+        <span style="font-size:13.5px; font-weight:650">Bookings</span>
+      </div>
+      <div data-screen-label="A4 Bookings" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); display:grid; grid-template-columns:236px minmax(0,1fr)">
+        <aside style="background:#2E1D6B; padding:22px 16px; display:flex; flex-direction:column; gap:4px">
+          <div style="padding:0 8px 20px; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; color:#FFFFFF">Sakura Tackle</div>
+          <sc-for list="{{ navBook }}" as="n" hint-placeholder-count="8">
+            <div style="padding:11px 13px; border-radius:12px; font-size:13.5px; font-weight:{{ n.w }}; background:{{ n.bg }}; color:{{ n.fg }}; display:flex; align-items:center; gap:11px"><span style="font-size:14px; width:18px">{{ n.icon }}</span>{{ n.label }}</div>
+          </sc-for>
+        </aside>
+        <div>
+          <div style="padding:20px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10); background:#FFFFFF">
+            <div style="display:flex; flex-direction:column; line-height:1.25">
+              <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">Bookings</span>
+              <span style="font-size:12.5px; color:#7A6FA0">{{ bookingCountLabel }}</span>
+            </div>
+            <span style="padding:10px 18px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:13px; font-weight:700">New booking</span>
+          </div>
+          <div style="padding:26px 28px 32px">
+            <div style="display:flex; gap:7px; margin-bottom:16px">
+              <sc-for list="{{ bookingFilters }}" as="f" hint-placeholder-count="4">
+                <button onClick="{{ f.onPick }}" style="cursor:pointer; padding:9px 15px; border-radius:999px; font-size:12.5px; font-weight:650; background:{{ f.bg }}; color:{{ f.fg }}; border:1px solid {{ f.bd }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+              <sc-for list="{{ bookingRows }}" as="b" hint-placeholder-count="6">
+                <div style="border:1px solid rgba(46,29,107,.12); background:#FFFFFF; border-radius:16px; padding:16px">
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+                    <span style="font-size:14.5px; font-weight:650">{{ b.name }}</span>
+                    <span style="padding:4px 10px; border-radius:999px; font-size:10.5px; font-weight:700; background:{{ b.bg }}; color:{{ b.fg }}">{{ b.status }}</span>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px; margin-top:7px; font-size:12px; color:#7A6FA0">
+                    <span>{{ b.ref }}</span><i style="width:3px; height:3px; border-radius:2px; background:#B7ABE0; display:block"></i><span>{{ b.boat }}</span><i style="width:3px; height:3px; border-radius:2px; background:#B7ABE0; display:block"></i><span>{{ b.date }}</span>
+                  </div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px solid rgba(46,29,107,.09)">
+                    <span style="font-size:12px; color:#635A87">{{ b.pax }} pax &middot; baki {{ b.balance }}</span>
+                    <span style="font-size:13.5px; font-weight:700; color:{{ b.amtColor }}">{{ b.amount }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#1B1436; color:#FFD36B; font-size:11px; font-weight:700">A5</span>
+        <span style="font-size:13.5px; font-weight:650">Booking detail</span>
+      </div>
+      <div data-screen-label="A5 Booking detail" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); display:grid; grid-template-columns:236px minmax(0,1fr)">
+        <aside style="background:#2E1D6B; padding:22px 16px; display:flex; flex-direction:column; gap:4px">
+          <div style="padding:0 8px 20px; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; color:#FFFFFF">Sakura Tackle</div>
+          <sc-for list="{{ navDetail }}" as="n" hint-placeholder-count="8">
+            <div style="padding:11px 13px; border-radius:12px; font-size:13.5px; font-weight:{{ n.w }}; background:{{ n.bg }}; color:{{ n.fg }}; display:flex; align-items:center; gap:11px"><span style="font-size:14px; width:18px">{{ n.icon }}</span>{{ n.label }}</div>
+          </sc-for>
+        </aside>
+        <div>
+          <div style="padding:20px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10); background:#FFFFFF">
+            <div style="display:flex; flex-direction:column; line-height:1.25">
+              <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">Booking</span>
+              <span style="font-size:12.5px; color:#7A6FA0">{{ dRef }}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px">
+              <span style="padding:10px 18px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:13px; font-weight:700">WhatsApp customer</span>
+            </div>
+          </div>
+          <div style="padding:26px 28px 32px; display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:16px; align-items:start">
+            <div>
+              <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px; margin-bottom:14px">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+                  <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">{{ dName }}</span>
+                  <span style="padding:5px 12px; border-radius:999px; font-size:10.5px; font-weight:700; background:{{ dBg }}; color:{{ dFg }}">{{ dStatus }}</span>
+                </div>
+                <div style="font-size:12.5px; color:#7A6FA0; margin-top:5px">{{ dRef }} &middot; booked 04 Feb 2027</div>
+                <div style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-top:18px; padding-top:16px; border-top:1px solid rgba(46,29,107,.10)">
+                  <div><span style="display:block; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:4px">Boat</span><span style="font-size:13.5px; font-weight:650">{{ dBoat }}</span></div>
+                  <div><span style="display:block; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:4px">Night</span><span style="font-size:13.5px; font-weight:650">{{ dDate }}</span></div>
+                  <div><span style="display:block; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:4px">Phone</span><span style="font-size:13.5px; font-weight:650">{{ dPhone }}</span></div>
+                  <div><span style="display:block; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:4px">Weather</span><span style="font-size:13.5px; font-weight:650; color:#137A47">{{ dWeather }}</span></div>
+                </div>
+              </div>
+              <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px; margin-bottom:14px">
+                <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Pax list ({{ dPaxCount }})</span>
+                <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px 14px">
+                  <sc-for list="{{ dPaxList }}" as="p" hint-placeholder-count="8">
+                    <span style="font-size:12.5px; color:#3B3160">{{ p }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px">
+                <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:10px">Skipper note</span>
+                <p style="margin:0; font-size:13.5px; line-height:1.6; color:#3B3160">{{ dNote }}</p>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:14px">
+              <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px">
+                <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:14px">Payment</span>
+                <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:14px">
+                  <div><span style="display:block; font-size:11.5px; color:#635A87; margin-bottom:3px">Deposit received</span><span style="font-family:'Poppins',sans-serif; font-size:23px; font-weight:700; color:#137A47">RM 200</span></div>
+                  <div style="text-align:right"><span style="display:block; font-size:11.5px; color:#635A87; margin-bottom:3px">Balance at jetty</span><span style="font-family:'Poppins',sans-serif; font-size:23px; font-weight:700; color:#B07800">{{ dBalance }}</span></div>
+                </div>
+                <div style="height:6px; border-radius:999px; overflow:hidden; background:rgba(46,29,107,.10); display:flex"><div style="width:{{ dPct }}; background:#2FBF71"></div></div>
+                <div style="display:flex; align-items:center; gap:12px; margin-top:16px; padding:12px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.10)">
+                  <div style="width:42px; height:52px; border-radius:8px; flex:0 0 auto; background:rgba(255,184,0,.20); border:1px solid rgba(255,184,0,.42); display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:700; color:#8A6A00">JPG</div>
+                  <div style="flex:1; min-width:0"><span style="display:block; font-size:12.5px; font-weight:650">resit-deposit-014.jpg</span><span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:2px">Uploaded 04 Feb, 21:14</span></div>
+                  <span style="font-size:11.5px; font-weight:700; color:#2E1D6B">View</span>
+                </div>
+              </div>
+              <span style="text-align:center; padding:14px; border-radius:14px; background:#FFB800; color:#2E1D6B; font-size:13.5px; font-weight:700">Mark deposit received</span>
+              <span style="text-align:center; padding:14px; border-radius:14px; border:1px solid rgba(239,68,68,.4); color:#C22B2B; font-size:13.5px; font-weight:650">Cancel booking</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#1B1436; color:#FFD36B; font-size:11px; font-weight:700">A6</span>
+        <span style="font-size:13.5px; font-weight:650">Packages &amp; pricing</span>
+      </div>
+      <div data-screen-label="A6 Packages" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); display:grid; grid-template-columns:236px minmax(0,1fr)">
+        <aside style="background:#2E1D6B; padding:22px 16px; display:flex; flex-direction:column; gap:4px">
+          <div style="padding:0 8px 20px; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; color:#FFFFFF">Sakura Tackle</div>
+          <sc-for list="{{ navPkg }}" as="n" hint-placeholder-count="8">
+            <div style="padding:11px 13px; border-radius:12px; font-size:13.5px; font-weight:{{ n.w }}; background:{{ n.bg }}; color:{{ n.fg }}; display:flex; align-items:center; gap:11px"><span style="font-size:14px; width:18px">{{ n.icon }}</span>{{ n.label }}</div>
+          </sc-for>
+        </aside>
+        <div>
+          <div style="padding:20px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10); background:#FFFFFF">
+            <div style="display:flex; flex-direction:column; line-height:1.25">
+              <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">Packages and pricing</span>
+              <span style="font-size:12.5px; color:#7A6FA0">3 published trips &middot; deposit RM200</span>
+            </div>
+            <span style="padding:10px 18px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:13px; font-weight:700">New package</span>
+          </div>
+          <div style="padding:26px 28px 32px; display:grid; grid-template-columns:1fr 1fr; gap:14px">
+            <sc-for list="{{ packages }}" as="p" hint-placeholder-count="3">
+              <div style="border-radius:18px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); overflow:hidden">
+                <div style="display:flex; gap:14px; padding:16px">
+                  <div style="width:64px; height:64px; border-radius:14px; flex:0 0 auto; background:rgba(46,29,107,.07); border:1px solid rgba(46,29,107,.12); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-size:15px; font-weight:700; color:#2E1D6B">{{ p.tag }}</div>
+                  <div style="flex:1; min-width:0">
+                    <span style="display:block; font-size:14.5px; font-weight:650">{{ p.name }}</span>
+                    <span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:3px">{{ p.meta }}</span>
+                    <span style="display:inline-block; margin-top:8px; font-family:'Poppins',sans-serif; font-size:16px; font-weight:700; color:#B07800">{{ p.price }}</span>
+                  </div>
+                </div>
+                <div style="padding:0 16px 14px; display:flex; flex-direction:column; gap:7px">
+                  <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="4">
+                    <span style="display:flex; gap:9px; font-size:12.5px; color:#3B3160"><i style="color:#B07800; font-style:normal">&#10003;</i>{{ it }}</span>
+                  </sc-for>
+                </div>
+                <div style="display:flex; border-top:1px solid rgba(46,29,107,.09)">
+                  <span style="flex:1; text-align:center; padding:12px; color:#2E1D6B; font-size:12.5px; font-weight:700">Edit page</span>
+                  <div style="width:1px; background:rgba(46,29,107,.09)"></div>
+                  <span style="flex:1; text-align:center; padding:12px; color:#7A6FA0; font-size:12.5px; font-weight:650">Duplicate</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#1B1436; color:#FFD36B; font-size:11px; font-weight:700">A7</span>
+        <span style="font-size:13.5px; font-weight:650">Page builder</span>
+      </div>
+      <div data-screen-label="A7 Page builder" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); display:grid; grid-template-columns:236px minmax(0,1fr)">
+        <aside style="background:#2E1D6B; padding:22px 16px; display:flex; flex-direction:column; gap:4px">
+          <div style="padding:0 8px 20px; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; color:#FFFFFF">Sakura Tackle</div>
+          <sc-for list="{{ navBuild }}" as="n" hint-placeholder-count="8">
+            <div style="padding:11px 13px; border-radius:12px; font-size:13.5px; font-weight:{{ n.w }}; background:{{ n.bg }}; color:{{ n.fg }}; display:flex; align-items:center; gap:11px"><span style="font-size:14px; width:18px">{{ n.icon }}</span>{{ n.label }}</div>
+          </sc-for>
+        </aside>
+        <div>
+          <div style="padding:20px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10); background:#FFFFFF">
+            <div style="display:flex; flex-direction:column; line-height:1.25">
+              <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">Page builder</span>
+              <span style="font-size:12.5px; color:#7A6FA0">{{ pbTitle }}</span>
+            </div>
+            <span style="padding:10px 18px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:13px; font-weight:700">Publish</span>
+          </div>
+          <div style="padding:26px 28px 32px">
+            <div style="display:flex; gap:6px; margin-bottom:18px">
+              <sc-for list="{{ pbTabs }}" as="t" hint-placeholder-count="5">
+                <button onClick="{{ t.onPick }}" style="cursor:pointer; padding:9px 16px; border-radius:999px; font-size:12.5px; font-weight:650; background:{{ t.bg }}; color:{{ t.fg }}; border:1px solid {{ t.bd }}">{{ t.label }}</button>
+              </sc-for>
+            </div>
+            <div style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:18px; align-items:start">
+              <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px">
+                <sc-if value="{{ pbOverview }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; flex-direction:column; gap:14px">
+                  <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Page title</span>
+                    <input value="{{ pbTitle }}" onChange="{{ setPbTitle }}" style="padding:13px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:13.5px"></label>
+                  <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Sub-headline</span>
+                    <textarea value="{{ pbSub }}" onChange="{{ setPbSub }}" rows="3" style="padding:13px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:13.5px; resize:vertical"></textarea></label>
+                  <div style="border-radius:14px; border:1px dashed rgba(46,29,107,.22); padding:16px; text-align:center">
+                    <div style="position:relative; height:120px; border-radius:10px; overflow:hidden; background:#EFEAFD; margin-bottom:12px">
+                      <image-slot id="cs2-pb-cover" placeholder="Cover pakej" shape="rect" style="position:absolute; inset:0"></image-slot>
+                    </div>
+                    <span style="font-size:12.5px; color:#635A87">Cover image. Drop a photo to replace.</span>
+                  </div>
+                </div>
+                </sc-if>
+                <sc-if value="{{ pbItin }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:10px">
+                  <sc-for list="{{ itinerary }}" as="it" hint-placeholder-count="5">
+                    <div style="display:flex; gap:13px; padding:14px; border-radius:14px; background:#F7F5FE; border:1px solid rgba(46,29,107,.10)">
+                      <span style="flex:0 0 auto; font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#B07800; width:52px">{{ it.time }}</span>
+                      <div style="flex:1; min-width:0">
+                        <span style="display:block; font-size:13.5px; font-weight:650">{{ it.title }}</span>
+                        <span style="display:block; font-size:12px; color:#7A6FA0; margin-top:3px; line-height:1.5">{{ it.body }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+                </sc-if>
+                <sc-if value="{{ pbPricing }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:14px">
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+                    <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Price per pax</span>
+                      <input value="RM 180" readonly="true" style="padding:13px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:13.5px"></label>
+                    <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Deposit per boat</span>
+                      <input value="RM 200" readonly="true" style="padding:13px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:13.5px"></label>
+                  </div>
+                  <div style="border-radius:16px; background:#F7F5FE; border:1px solid rgba(46,29,107,.10); padding:16px">
+                    <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Included in price</span>
+                    <div style="display:flex; flex-direction:column; gap:9px">
+                      <sc-for list="{{ includes }}" as="i" hint-placeholder-count="5">
+                        <span style="display:flex; gap:9px; font-size:12.5px; color:#3B3160"><i style="color:#B07800; font-style:normal">&#10003;</i>{{ i }}</span>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+                </sc-if>
+                <sc-if value="{{ pbFaq }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:10px">
+                  <sc-for list="{{ faqRows }}" as="f" hint-placeholder-count="4">
+                    <div style="padding:14px; border-radius:14px; background:#F7F5FE; border:1px solid rgba(46,29,107,.10)">
+                      <span style="display:block; font-size:13.5px; font-weight:650">{{ f.q }}</span>
+                      <span style="display:block; font-size:12px; color:#7A6FA0; margin-top:5px; line-height:1.55">{{ f.a }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                </sc-if>
+                <sc-if value="{{ pbPreview }}" hint-placeholder-val="{{ false }}">
+                <p style="margin:0; font-size:13.5px; color:#635A87">Pratonton dipaparkan di sebelah kanan. Tekan tab lain untuk terus edit.</p>
+                </sc-if>
+              </div>
+              <div style="border-radius:20px; overflow:hidden; border:1px solid rgba(46,29,107,.14); background:#F5F2FE">
+                <div style="padding:10px 14px; border-bottom:1px solid rgba(46,29,107,.10); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Live preview</div>
+                <img src="https://sakuratackle.com/wp-content/uploads/2026/02/Speedboat.jpeg" alt="Speedboat Sakura Tackle di Jeti Marang" style="width:100%; height:150px; object-fit:cover; display:block">
+                <div style="padding:18px">
+                  <span style="font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:#8A6A00; font-weight:700">Musim 2026</span>
+                  <h4 style="font-family:'Poppins',sans-serif; font-size:19px; font-weight:650; letter-spacing:-.02em; margin:8px 0 6px">{{ pbTitle }}</h4>
+                  <p style="margin:0 0 14px; font-size:12.5px; line-height:1.6; color:#635A87">{{ pbSub }}</p>
+                  <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-radius:12px; background:rgba(255,184,0,.16); border:1px solid rgba(255,184,0,.4)">
+                    <span style="font-size:12px; color:#8A6A00; font-weight:600">Dari</span>
+                    <span style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:700; color:#B07800">RM 180 / pax</span>
+                  </div>
+                  <span style="display:block; text-align:center; margin-top:12px; padding:13px; border-radius:999px; background:#FFB800; color:#2E1D6B; font-size:13.5px; font-weight:700">Saya Ready Book Trip</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#1B1436; color:#FFD36B; font-size:11px; font-weight:700">A8</span>
+        <span style="font-size:13.5px; font-weight:650">Reports</span>
+      </div>
+      <div data-screen-label="A8 Reports" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); display:grid; grid-template-columns:236px minmax(0,1fr)">
+        <aside style="background:#2E1D6B; padding:22px 16px; display:flex; flex-direction:column; gap:4px">
+          <div style="padding:0 8px 20px; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; color:#FFFFFF">Sakura Tackle</div>
+          <sc-for list="{{ navRep }}" as="n" hint-placeholder-count="8">
+            <div style="padding:11px 13px; border-radius:12px; font-size:13.5px; font-weight:{{ n.w }}; background:{{ n.bg }}; color:{{ n.fg }}; display:flex; align-items:center; gap:11px"><span style="font-size:14px; width:18px">{{ n.icon }}</span>{{ n.label }}</div>
+          </sc-for>
+        </aside>
+        <div>
+          <div style="padding:20px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10); background:#FFFFFF">
+            <div style="display:flex; flex-direction:column; line-height:1.25">
+              <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">Reports</span>
+              <span style="font-size:12.5px; color:#7A6FA0">Season 2027 to date</span>
+            </div>
+            <span style="padding:10px 18px; border-radius:12px; border:1px solid rgba(46,29,107,.2); color:#2E1D6B; font-size:13px; font-weight:650">Export CSV</span>
+          </div>
+          <div style="padding:26px 28px 32px; display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:16px; align-items:start">
+            <div style="border-radius:22px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px">
+              <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Collected this season</span>
+              <div style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:700; letter-spacing:-.03em; margin:8px 0 3px; color:#2E1D6B">RM 84,310</div>
+              <span style="font-size:12.5px; color:#7A6FA0">Across 5 boats, 132 nights sold</span>
+              <div style="display:flex; align-items:flex-end; gap:10px; height:130px; margin-top:24px">
+                <sc-for list="{{ chart }}" as="c" hint-placeholder-count="7">
+                  <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end">
+                    <div style="width:100%; border-radius:6px 6px 0 0; background:{{ c.color }}; height:{{ c.h }}"></div>
+                    <span style="font-size:9.5px; color:#7A6FA0; letter-spacing:.04em; font-weight:600">{{ c.label }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="border-radius:22px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); overflow:hidden">
+              <div style="padding:16px 18px 10px; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">By boat</div>
+              <sc-for list="{{ boatRevenue }}" as="r" hint-placeholder-count="5">
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-top:1px solid rgba(46,29,107,.08)">
+                  <div><span style="display:block; font-size:13.5px; font-weight:650">{{ r.code }}</span><span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:2px">{{ r.nights }} nights</span></div>
+                  <span style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:700">{{ r.amount }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="padding:4px 10px; border-radius:7px; background:#1B1436; color:#FFD36B; font-size:11px; font-weight:700">A9</span>
+        <span style="font-size:13.5px; font-weight:650">Settings</span>
+      </div>
+      <div data-screen-label="A9 Settings" style="width:1280px; background:#F5F2FE; border:1px solid rgba(46,29,107,.16); border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(46,29,107,.16); display:grid; grid-template-columns:236px minmax(0,1fr)">
+        <aside style="background:#2E1D6B; padding:22px 16px; display:flex; flex-direction:column; gap:4px">
+          <div style="padding:0 8px 20px; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; color:#FFFFFF">Sakura Tackle</div>
+          <sc-for list="{{ navSet }}" as="n" hint-placeholder-count="8">
+            <div style="padding:11px 13px; border-radius:12px; font-size:13.5px; font-weight:{{ n.w }}; background:{{ n.bg }}; color:{{ n.fg }}; display:flex; align-items:center; gap:11px"><span style="font-size:14px; width:18px">{{ n.icon }}</span>{{ n.label }}</div>
+          </sc-for>
+        </aside>
+        <div>
+          <div style="padding:20px 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(46,29,107,.10); background:#FFFFFF">
+            <div style="display:flex; flex-direction:column; line-height:1.25">
+              <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">Settings</span>
+              <span style="font-size:12.5px; color:#7A6FA0">Sakura Tackle operator</span>
+            </div>
+            <span style="padding:10px 18px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:13px; font-weight:700">Save changes</span>
+          </div>
+          <div style="padding:26px 28px 32px; display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start">
+            <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:20px">
+              <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:14px">Fleet</span>
+              <div style="display:flex; flex-direction:column; gap:12px">
+                <sc-for list="{{ fleetRows }}" as="b" hint-placeholder-count="5">
+                  <div style="display:flex; align-items:center; justify-content:space-between">
+                    <div><span style="display:block; font-size:13.5px; font-weight:650">{{ b.code }}</span><span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:2px">{{ b.meta }}</span></div>
+                    <span style="font-size:12px; color:#635A87; font-weight:600">{{ b.cap }} pax</span>
+                  </div>
+                </sc-for>
+              </div>
+              <span style="display:block; text-align:center; width:100%; margin-top:16px; padding:12px; border-radius:12px; border:1px dashed rgba(46,29,107,.24); color:#635A87; font-size:12.5px; font-weight:650">Add boat</span>
+            </div>
+            <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:20px; display:flex; flex-direction:column; gap:14px">
+              <span style="font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Booking rules</span>
+              <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:12px; color:#635A87">Deposit per boat</span>
+                <input value="RM 200" readonly="true" style="padding:12px 14px; border-radius:11px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:13.5px"></label>
+              <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:12px; color:#635A87">WhatsApp number</span>
+                <input value="{{ waNumber }}" onChange="{{ setWa }}" style="padding:12px 14px; border-radius:11px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); font-size:13.5px"></label>
+              <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:12px; color:#635A87">Jeti</span>
+                <input value="ILKM Marang, Marang 21600, Terengganu" readonly="true" style="padding:12px 14px; border-radius:11px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#635A87; font-size:13.5px"></label>
+              <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:12px; color:#635A87">Season</span>
+                <input value="Mac 2027 - September 2027" readonly="true" style="padding:12px 14px; border-radius:11px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#635A87; font-size:13.5px"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:44px; padding:24px 28px; border-radius:18px; background:#FFFFFF; border:1px solid rgba(46,29,107,.14); max-width:1280px">
+    <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:16px; margin-bottom:10px">Nota aset gambar</div>
+    <p style="font-size:13.5px; line-height:1.65; color:#635A87; margin:0">Galeri, hero dan testimoni guna gambar sebenar dari sakuratackle.com. Lima kad bot, peta jeti, cover pakej dan resit deposit masih placeholder &mdash; boleh drop gambar terus ke dalam kotak tersebut. Saya tidak boleh menjana gambar AI di sini; untuk imej OpenArt, prompt yang dicadangkan: &ldquo;Malaysian Malay fishermen from Terengganu on a wooden cengal squid-fishing boat at night, green LED squid lights, Pulau Kapas waters, documentary photography&rdquo;.</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1600,&quot;height&quot;:1000}}">
+const AMBER = '#FFB800';
+const PURPLE = '#2E1D6B';
+const MONTHS = [
+  { name: 'Mac', m: 2, days: 31 }, { name: 'April', m: 3, days: 30 },
+  { name: 'Mei', m: 4, days: 31 }, { name: 'Jun', m: 5, days: 30 },
+  { name: 'Julai', m: 6, days: 31 }, { name: 'Ogos', m: 7, days: 31 },
+  { name: 'September', m: 8, days: 30 }
+];
+const HOLIDAYS = {
+  0: [{ d: 9, n: 'Hari Raya Aidilfitri' }, { d: 10, n: 'Hari Raya Aidilfitri' }],
+  1: [],
+  2: [{ d: 1, n: 'Hari Pekerja' }, { d: 17, n: 'Hari Raya Aidiladha' }, { d: 20, n: 'Hari Wesak' }],
+  3: [{ d: 7, n: 'Keputeraan Agong' }, { d: 29, n: 'Awal Muharram' }],
+  4: [],
+  5: [{ d: 31, n: 'Hari Kebangsaan' }],
+  6: [{ d: 6, n: 'Maulidur Rasul' }, { d: 16, n: 'Hari Malaysia' }]
+};
+const STATUS = {
+  open: { bg: 'rgba(47,191,113,.16)', fg: '#7CEEB0', bd: 'rgba(47,191,113,.38)' },
+  hold: { bg: 'rgba(255,184,0,.16)', fg: '#FFD36B', bd: 'rgba(255,184,0,.40)' },
+  full: { bg: 'rgba(239,68,68,.14)', fg: '#FF9C9C', bd: 'rgba(239,68,68,.34)' }
+};
+const DEPOSIT = 200;
+const PER_PAX = 180;
+const BOATS = [
+  { name: 'SpeedBoat "Putera Kapas"', code: 'Putera Kapas', kind: 'Speedboat', len: 42, beam: '10 Kaki', capN: 8, cap: 'Max 8 Pax', material: 'Fiber Glass', rate: 'RM2000', skipper: 'Fiberglass, Marang', slot: 'cs2-boat-putera', hint: 'Foto SpeedBoat Putera Kapas',
+    desc: 'Antara speedboat yang kami kendali. Diperbuat daripada fiberglass buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut, memastikan anda selesa sepanjang malam.' },
+  { name: 'KNF 6241', code: 'KNF 6241', kind: 'Kapal Tradisional', len: 63, beam: '16.5 Kaki', capN: 15, cap: 'Max 15 Pax', material: 'Kayu Cengal, Fiberglass', rate: 'RM2300', skipper: 'Kayu cengal + fiberglass', slot: 'cs2-boat-knf6241', hint: 'Foto bot KNF 6241',
+    desc: 'Bot candat terpanjang dalam armada kami. Diperbuat daripada kayu cengal buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut untuk memastikan kumpulan anda selesa sepanjang malam.' },
+  { name: 'TRF 1005', code: 'TRF 1005', kind: 'Kapal Tradisional', len: 56, beam: '15 Kaki', capN: 15, cap: 'Max 15 Pax', material: 'Kayu Cengal', rate: 'RM2300', skipper: 'Kayu cengal', slot: 'cs2-boat-trf1005', hint: 'Foto bot TRF 1005',
+    desc: 'Bot candat terpanjang dalam armada kami. Diperbuat daripada kayu cengal buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut untuk memastikan kumpulan anda selesa sepanjang malam.' },
+  { name: 'TRF 92', code: 'TRF 92', kind: 'Kapal Tradisional', len: 51, beam: '14 Kaki', capN: 10, cap: 'Max 10 Pax', material: 'Kayu Cengal', rate: 'RM1500', skipper: 'Kayu cengal', slot: 'cs2-boat-trf92', hint: 'Foto bot TRF 92',
+    desc: 'Bot candat saiz sederhana dalam armada kami. Diperbuat daripada kayu cengal buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut untuk memastikan kumpulan anda selesa sepanjang malam.' },
+  { name: 'TRA 1539', code: 'TRA 1539', kind: 'Kapal Tradisional', len: 51, beam: '14 Kaki', capN: 10, cap: 'Max 10 Pax', material: 'Kayu Cengal', rate: 'RM1500', skipper: 'Kayu cengal', slot: 'cs2-boat-tra1539', hint: 'Foto bot TRA 1539',
+    desc: 'Bot candat saiz sederhana dalam armada kami. Diperbuat daripada kayu cengal buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut untuk memastikan kumpulan anda selesa sepanjang malam.' }
+];
+const BOOKINGS = [
+  { ref: 'CS-2703-014', name: 'Hafiz Ramli', phone: '019-333 4821', dig: '0193334821', boat: 'TRF 92', date: '17 Mac 2027', pax: 8, status: 'Confirmed', tone: 'open', pct: '14%',
+    pax_list: ['Hafiz Ramli', 'Zubir Hashim', 'Amirul Nasri', 'Khairul Anwar', 'Faridah Yaacob', 'Nik Suhaimi', 'Rosli Deraman', 'Azman Kadir'],
+    note: 'Dua orang first timer. Sediakan jaket tambahan dan air panas.' },
+  { ref: 'CS-2704-021', name: 'Nurul Aina Zulkifli', phone: '012-664 7310', dig: '0126647310', boat: 'KNF 6241', date: '02 April 2027', pax: 12, status: 'Deposit due', tone: 'hold', pct: '9%',
+    pax_list: ['Nurul Aina Zulkifli', 'Sofia Adriana', 'Iqbal Faris', 'Danish Haziq', 'Nabila Roslan', 'Zafran Idris', 'Aina Sofea', 'Hakim Zulkarnain', 'Liyana Farhah', 'Adam Rayyan', 'Syafiq Naim', 'Farah Adilla'],
+    note: 'Rombongan pejabat. Minta bot berlabuh dekat tukun buatan.' },
+  { ref: 'CS-2704-026', name: 'Tan Wei Sheng', phone: '017-552 9044', dig: '0175529044', boat: 'TRA 1539', date: '11 April 2027', pax: 6, status: 'Confirmed', tone: 'open', pct: '19%',
+    pax_list: ['Tan Wei Sheng', 'Lim Jia Xin', 'Chong Kah Meng', 'Ho Yee Ling', 'Ng Zhi Hao', 'Teoh Sin Yee'],
+    note: 'Bawa kamera bawah air. Nak berlabuh awal sikit.' },
+  { ref: 'CS-2705-033', name: 'Mohd Faizal Osman', phone: '013-990 2187', dig: '0139902187', boat: 'TRF 92', date: '06 Mei 2027', pax: 9, status: 'Weather hold', tone: 'full', pct: '12%',
+    pax_list: ['Mohd Faizal Osman', 'Shahrul Nizam', 'Muhaimin Zaki', 'Rizal Hakimi', 'Zulhelmi Awang', 'Fauzi Mat Yusof', 'Kamal Aziz', 'Syed Naufal', 'Redzuan Ismail'],
+    note: 'Angin monsun berpatah balik. Pantau ramalan dua hari sebelum.' },
+  { ref: 'CS-2705-041', name: 'Sivaneswaran Munusamy', phone: '016-447 8205', dig: '0164478205', boat: 'TRF 1005', date: '22 Mei 2027', pax: 14, status: 'Deposit due', tone: 'hold', pct: '8%',
+    pax_list: ['Sivaneswaran Munusamy', 'Prakash Devan', 'Kavitha Rajan', 'Sathish Kumaran', 'Meena Letchumi', 'Bala Krishnan', 'Ravi Chandran', 'Suria Devi', 'Thines Waran', 'Anand Raj', 'Mohana Priya', 'Dinesh Rao', 'Vimala Devi', 'Arun Segaran'],
+    note: 'Semua makanan vegetarian. Tiada udang atau ikan untuk umpan sampingan.' },
+  { ref: 'CS-2706-048', name: 'Aiman Zulhilmi', phone: '011-228 6630', dig: '0112286630', boat: 'KNF 6241', date: '13 Jun 2027', pax: 10, status: 'Confirmed', tone: 'open', pct: '11%',
+    pax_list: ['Aiman Zulhilmi', 'Haziq Danial', 'Luqman Hakim', 'Irfan Syazwan', 'Naufal Aiman', 'Zaim Firdaus', 'Aqil Hanif', 'Rayyan Iskandar', 'Harith Zafran', 'Nabil Ariff'],
+    note: 'Trip ulang tahun. Bawa kek, minta juragan berhenti sekejap pukul 12 malam.' }
+];
+const FAQS = [
+  { q: 'Boleh ke saya nak datang trip candat sorang-sorang?', a: 'Buat masa sekarang trip candat Sakura Tackle tak buka trip solo. Tetapi kami akan buka.' },
+  { q: 'Pukul berapa perlu berkumpul di Jeti?', a: 'Bertolak selepas Waktu Asar dari Jeti Marang. Pulang pukul 7:00 pagi keesokannya.' },
+  { q: 'Berapa deposit untuk lock slot?', a: 'Deposit RM200 per bot untuk lock slot. Baki dijelaskan di jeti sebelum bertolak.' },
+  { q: 'Perlu bawa pancing sendiri?', a: 'Boleh disewa dari pihak Sakura Tackle sekiranya tiada. Umpan/candat boleh beli di vending machine di jeti sekiranya tiada.' },
+  { q: 'Kalau hujan atau angin kuat?', a: 'Kami pantau ramalan cuaca dua hari sebelum trip. Jika trip dibatalkan atas sebab cuaca, deposit dipulangkan penuh atau ditukar ke tarikh lain.' }
+];
+const ITIN = [
+  { time: '16:30', title: 'Berkumpul di Jeti Marang', body: 'Parkir disediakan berdekatan dengan jeti. Taklimat keselamatan dan pembahagian jaket.' },
+  { time: '17:00', title: 'Bertolak ke lubuk', body: 'Bertolak selepas Waktu Asar. Perjalanan ke kawasan tukun.' },
+  { time: '20:00', title: 'Mula candat', body: 'Lampu LED hijau dipasang. Juragan tunjuk teknik untuk yang baru.' },
+  { time: '01:00', title: 'Rehat dan makan', body: 'Makan dan minum disediakan (2 kali).' },
+  { time: '07:00', title: 'Balik ke jeti', body: 'Pulang pukul 7:00 pagi keesokannya. Hasil ditimbang dan dibahagi.' }
+];
+const GAL = 'https://sakuratackle.com/wp-content/uploads/';
+const GALLERY = [
+  '2026/04/WhatsApp-Image-2026-04-10-at-00.36.46-1.jpeg',
+  '2026/02/TRF-1005.jpeg',
+  '2026/02/restored_boat_group_4k_v3-scaled.png',
+  '2026/04/WhatsApp-Image-2026-04-10-at-00.36.46.jpeg',
+  '2026/02/Speedboat.jpeg',
+  '2026/02/ChatGPT-Image-Feb-25-2026-06_18_39-PM.png',
+  '2026/04/WhatsApp-Image-2026-04-10-at-00.36.47-1.jpeg',
+  '2026/02/restored_night_fishing_4k_v2-scaled.png'
+];
+
+class Component extends DCLogic {
+  state = {
+    pax: '8', pubDate: '2027-03-17', monthIdx: 0, paxIdx: 2, selDay: 17,
+    tab: 'form', submitted: false, openFaq: 0,
+    form: { name: '', phone: '', email: '', note: '' },
+    checkPhone: '', checked: false,
+    boat: 0, filter: 'All', pbTab: 'overview',
+    pbTitle: 'Pakej Trip Candat Sotong Otai Pulau Kapas-Marang',
+    pbSub: 'Tak perlu skil tinggi, janji ada hati. Kami bawa anda ke lubuk rahsia kapten otai kami.',
+    waNumber: '011-5359 8055'
+  };
+
+  statusFor(a, m, d) {
+    const h = (a * 61 + m * 137 + d * 29) % 11;
+    return h < 6 ? 'open' : h < 9 ? 'hold' : 'full';
+  }
+  chip(active) {
+    return active ? { bg: AMBER, fg: PURPLE, bd: AMBER }
+      : { bg: 'rgba(255,255,255,.06)', fg: '#D6CDF5', bd: 'rgba(255,255,255,.16)' };
+  }
+  lightChip(active) {
+    return active ? { bg: PURPLE, fg: '#FFFFFF', bd: PURPLE }
+      : { bg: '#FFFFFF', fg: '#635A87', bd: 'rgba(46,29,107,.16)' };
+  }
+  tone(t) {
+    if (t === 'open') return { bg: 'rgba(47,191,113,.16)', fg: '#137A47' };
+    if (t === 'hold') return { bg: 'rgba(255,184,0,.22)', fg: '#8A6A00' };
+    return { bg: 'rgba(239,68,68,.14)', fg: '#C22B2B' };
+  }
+  nav(active) {
+    const items = [
+      ['dashboard', 'Dashboard', '\u25C9'], ['calendar', 'Slot manager', '\u25A6'],
+      ['bookings', 'Bookings', '\u2261'], ['detail', 'Booking detail', '\u25A3'],
+      ['packages', 'Packages', '\u25C8'], ['builder', 'Page builder', '\u2637'],
+      ['reports', 'Reports', '\u25E7'], ['settings', 'Settings', '\u2699']
+    ];
+    return items.map(([k, label, icon]) => ({
+      label, icon,
+      bg: k === active ? 'rgba(255,184,0,.18)' : 'transparent',
+      fg: k === active ? '#FFD36B' : '#B7ABE0',
+      w: k === active ? '650' : '500'
+    }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const paxN = parseInt(s.pax, 10);
+    const capacities = [4, 6, 8, 10, 12, 15];
+    const mo = MONTHS[s.monthIdx];
+    const monthLabel = mo.name + ' 2027';
+    const hols = HOLIDAYS[s.monthIdx] || [];
+    const holDays = hols.map(h => h.d);
+
+    const buildCells = (seed, sel, onPick) => {
+      const first = new Date(2027, mo.m, 1).getDay();
+      const lead = (first + 6) % 7;
+      const out = [];
+      for (let i = 0; i < lead; i++) out.push({ day: '', vis: 'hidden', cursor: 'default', bg: 'transparent', fg: 'transparent', bd: 'transparent', holidayDot: 'transparent', onPick: () => {} });
+      for (let d = 1; d <= mo.days; d++) {
+        const st = this.statusFor(seed, s.monthIdx, d);
+        const isSel = d === sel;
+        const c = STATUS[st];
+        out.push({
+          day: String(d), vis: 'visible', cursor: 'pointer',
+          bg: isSel ? AMBER : c.bg, fg: isSel ? PURPLE : c.fg, bd: isSel ? AMBER : c.bd,
+          holidayDot: holDays.indexOf(d) >= 0 ? (isSel ? PURPLE : AMBER) : 'transparent',
+          onPick: () => onPick(d)
+        });
+      }
+      return out;
+    };
+
+    const st = this.statusFor(s.paxIdx, s.monthIdx, s.selDay);
+    const word = st === 'open' ? 'Available' : st === 'hold' ? 'Selling Fast' : 'Full';
+    const avail = ['Slot terbuka', 'Tinggal sedikit', 'Slot terbuka'];
+    const fleet = BOATS.filter(b => b.capN >= paxN).map((b, i) => ({
+      name: b.name, kind: b.kind, desc: b.desc, rate: b.rate, material: b.material,
+      cap: b.cap, beam: b.beam, length: b.len + ' Kaki', slotId: b.slot, slotHint: b.hint,
+      availability: avail[i % 3]
+    }));
+
+    const det = BOOKINGS[0];
+    const dt = this.tone(det.tone);
+    const filters = ['All', 'Confirmed', 'Deposit due', 'Weather hold'];
+    const rows = BOOKINGS.filter(b => s.filter === 'All' || b.status === s.filter);
+    const found = BOOKINGS.find(b => b.dig === s.checkPhone.replace(/[^0-9]/g, ''));
+    const balance = Math.max(0, paxN * PER_PAX - DEPOSIT);
+
+    return {
+      pax: s.pax,
+      pubDate: s.pubDate,
+      onPubDate: e => this.setState({ pubDate: e.target.value }),
+      onPax: e => this.setState({ pax: e.target.value, paxIdx: Math.max(0, capacities.indexOf(parseInt(e.target.value, 10))) }),
+      paxOptions: capacities.map(c => ({ v: String(c), t: c + ' pax' })),
+      waLink: 'https://api.whatsapp.com/send?phone=601153598055&text=Saya%20berminat%20trip%20candat%20sotong',
+      noop: () => {},
+
+      fleet,
+      noResults: fleet.length === 0,
+      resultLabel: fleet.length + ' bot sesuai \u00b7 ' + s.pubDate,
+      facilities: [
+        { title: 'GPS Fish Finder', body: 'Sonar kesan lubuk candat.' },
+        { title: 'Makan Malam', body: 'Makan dan minum disediakan (2 kali). *ais disediakan' },
+        { title: 'Kapasiti', body: '8\u201315 Pax' },
+        { title: 'Ais & Kotak', body: 'Simpan tangkapan segar.' },
+        { title: 'Safety Gear', body: 'Life jacket.' },
+        { title: 'Lampu Candat', body: 'LED Hijau High-Power untuk mudahkan aktiviti mencandat.' },
+        { title: 'Umpan/Candat', body: 'Boleh beli di vending machine di jeti sekiranya tiada.' },
+        { title: 'Bilik Rehat & Tandas', body: 'Bilik rehat dan tandas yang selesa di atas bot.' }
+      ],
+      steps: [
+        { n: '1', title: 'Pilih tarikh & saiz group', body: 'Semak tarikh dan bilangan pax, kemudian pilih bot yang sesuai dari armada kami.' },
+        { n: '2', title: 'Lock slot dengan deposit RM200', body: 'Satu bayaran per bot. Baki dijelaskan sebelum bertolak.' },
+        { n: '3', title: 'Berlabuh dari Jeti Marang', body: 'Parkir disediakan berdekatan dengan jeti.' },
+        { n: '4', title: 'Bertolak & pulang', body: 'Bertolak selepas Waktu Asar. Pulang pukul 7:00 pagi keesokannya.' },
+        { n: '5', title: 'Persediaan sebelum turun ke laut', body: 'Ubat mabuk laut 30 minit sebelum naik bot, baju sejuk atau windbreaker, dan plastik untuk bawa balik sotong.' }
+      ],
+      gallery: GALLERY.map((p, i) => ({ src: GAL + p, alt: 'Galeri tangkapan candat sotong Sakura Tackle ' + (i + 1) })),
+      testimonials: [1, 2, 3, 7, 8, 9, 10, 11, 12, 13].map(n => ({
+        src: GAL + '2026/02/Koleksi-Testimoni-Candat-' + n + '.jpg',
+        alt: 'Testimoni pelanggan trip candat Sakura Tackle ' + n
+      })),
+
+      monthLabel,
+      dowLabels: ['ISN', 'SEL', 'RAB', 'KHA', 'JUM', 'SAB', 'AHD'],
+      prevMonth: () => this.setState(x => ({ monthIdx: Math.max(0, x.monthIdx - 1) })),
+      nextMonth: () => this.setState(x => ({ monthIdx: Math.min(MONTHS.length - 1, x.monthIdx + 1) })),
+      cells: buildCells(s.paxIdx, s.selDay, d => this.setState({ selDay: d, submitted: false })),
+      holidays: hols,
+      noHoliday: hols.length === 0,
+      paxChips: capacities.map((c, i) => Object.assign({
+        label: c + ' pax',
+        onPick: () => this.setState({ paxIdx: i, pax: String(c) })
+      }, this.chip(i === s.paxIdx))),
+      selectionLabel: s.selDay + ' ' + monthLabel + ', ' + s.pax + ' pax (' + word + ')',
+
+      tabs: [['form', 'Borang Tempahan'], ['pay', 'Pembayaran'], ['check', 'Semak Booking Saya']].map(([k, label]) => ({
+        label,
+        onPick: () => this.setState({ tab: k }),
+        bg: s.tab === k ? AMBER : 'transparent',
+        fg: s.tab === k ? '#1B1436' : '#635A87'
+      })),
+      showForm: s.tab === 'form',
+      showPay: s.tab === 'pay',
+      showCheck: s.tab === 'check',
+
+      fName: s.form.name, fPhone: s.form.phone, fEmail: s.form.email, fNote: s.form.note,
+      setName: e => this.setState({ form: Object.assign({}, s.form, { name: e.target.value }) }),
+      setPhone: e => this.setState({ form: Object.assign({}, s.form, { phone: e.target.value }) }),
+      setEmail: e => this.setState({ form: Object.assign({}, s.form, { email: e.target.value }) }),
+      setNote: e => this.setState({ form: Object.assign({}, s.form, { note: e.target.value }) }),
+      submitBooking: () => this.setState({ submitted: true, tab: 'pay' }),
+      submitted: s.submitted,
+      newRef: 'CS-' + String(mo.m + 1).padStart(2, '0') + String(s.selDay).padStart(2, '0') + '-057',
+      balanceLabel: 'RM ' + balance.toLocaleString(),
+      paxRows: Array.from({ length: paxN }, (_, i) => ({
+        n: String(i + 1),
+        label: i === 0 ? (s.form.name || 'Nama ketua kumpulan') : 'Nama pax ' + (i + 1)
+      })),
+
+      checkPhone: s.checkPhone,
+      setCheckPhone: e => this.setState({ checkPhone: e.target.value, checked: false }),
+      runCheck: () => this.setState({ checked: true }),
+      hasResult: s.checked && !!found,
+      noResult: s.checked && !found,
+      resRef: found ? found.ref : '',
+      resBoat: found ? found.boat : '',
+      resDate: found ? found.date : '',
+      resPax: found ? found.pax + ' orang' : '',
+      resBalance: found ? 'RM ' + (found.pax * PER_PAX - DEPOSIT).toLocaleString() : '',
+      resStatus: found ? found.status : '',
+      resBg: found ? this.tone(found.tone).bg : '',
+      resFg: found ? this.tone(found.tone).fg : '',
+
+      faqs: FAQS.map((f, i) => ({
+        q: f.q, a: f.a,
+        open: s.openFaq === i,
+        openStr: s.openFaq === i ? 'true' : 'false',
+        sign: s.openFaq === i ? '\u2212' : '+',
+        toggle: () => this.setState(x => ({ openFaq: x.openFaq === i ? -1 : i }))
+      })),
+
+      navDash: this.nav('dashboard'), navCal: this.nav('calendar'), navBook: this.nav('bookings'),
+      navDetail: this.nav('detail'), navPkg: this.nav('packages'), navBuild: this.nav('builder'),
+      navRep: this.nav('reports'), navSet: this.nav('settings'),
+
+      kpis: [
+        { label: 'Deposit due', value: '4', note: 'RM 800 outstanding', color: '#B07800' },
+        { label: 'This week', value: '11', note: 'nights sold', color: '#1B1436' },
+        { label: 'Collected MTD', value: 'RM 12.4k', note: 'up from RM 9.8k', color: '#137A47' },
+        { label: 'Open slots', value: '19', note: 'next 30 nights', color: '#1B1436' }
+      ],
+      tonight: BOOKINGS.slice(0, 3).map(b => Object.assign({
+        short: b.boat.split(' ')[0], name: b.name,
+        meta: b.boat + ', ' + b.pax + ' pax, RM ' + (b.pax * PER_PAX).toLocaleString(),
+        status: b.status
+      }, this.tone(b.tone))),
+
+      adminBoatChips: BOATS.map((b, i) => Object.assign({
+        code: b.code, onPick: () => this.setState({ boat: i })
+      }, this.chip(i === s.boat))),
+      adminBoatLabel: BOATS[s.boat].code,
+      adminCells: buildCells(s.boat + 3, s.selDay, d => this.setState({ selDay: d })),
+      adminSelLabel: s.selDay + ' ' + monthLabel,
+      adminSelMeta: (() => {
+        const t = this.statusFor(s.boat + 3, s.monthIdx, s.selDay);
+        const code = BOATS[s.boat].code;
+        if (t === 'open') return code + ' is open. No booking held.';
+        if (t === 'hold') return code + ' held for deposit. Expires in 48 hours.';
+        return code + ' fully booked. Charter confirmed.';
+      })(),
+
+      bookingFilters: filters.map(f => Object.assign({
+        label: f, onPick: () => this.setState({ filter: f })
+      }, this.lightChip(f === s.filter))),
+      bookingCountLabel: rows.length + ' of ' + BOOKINGS.length + ' shown',
+      bookingRows: rows.map(b => Object.assign({
+        ref: b.ref, name: b.name, boat: b.boat, date: b.date, pax: b.pax, status: b.status,
+        amount: 'RM ' + (b.pax * PER_PAX).toLocaleString(),
+        balance: 'RM ' + (b.pax * PER_PAX - DEPOSIT).toLocaleString(),
+        amtColor: b.tone === 'hold' ? '#B07800' : '#1B1436'
+      }, this.tone(b.tone))),
+
+      dName: det.name, dRef: det.ref, dBoat: det.boat, dDate: det.date, dPhone: det.phone,
+      dStatus: det.status, dBg: dt.bg, dFg: dt.fg,
+      dWeather: det.tone === 'full' ? 'Monitoring' : 'Clear',
+      dPaxCount: det.pax, dPaxList: det.pax_list, dNote: det.note,
+      dBalance: 'RM ' + (det.pax * PER_PAX - DEPOSIT).toLocaleString(), dPct: det.pct,
+
+      packages: [
+        { name: 'Pakej Group Trip Speedboat', meta: 'Trip 4:30 petang - 7:30 pagi', price: 'RM 2000 / hari', tag: 'SPD',
+          items: ['Makan Malam (Nasi Bungkus)', 'Ais & Ice Box', 'Umpan & candat boleh dibeli di jeti', 'Deposit RM200'] },
+        { name: 'Pakej Private Trip', meta: 'Satu bot untuk group, max 10 pax', price: 'RM 1500 / hari', tag: 'PRV',
+          items: ['Bot 45 kaki selesa', 'Sonar & GPS Garmin', 'Kitchenette on-board', 'Life jackets & insurance'] },
+        { name: 'Pakej Group Besar', meta: 'Trip 6 petang - 6 pagi', price: 'RM 2500 / hari', tag: 'GRP',
+          items: ['Sesuai untuk join group', 'Makan Malam (Nasi Bungkus)', 'Ais & Ice Box', 'Umpan & candat di jeti'] }
+      ],
+
+      pbTabs: [['overview', 'Overview'], ['itinerary', 'Itinerary'], ['pricing', 'Pricing'], ['faq', 'FAQ'], ['preview', 'Preview']].map(([k, label]) => Object.assign({
+        label, onPick: () => this.setState({ pbTab: k })
+      }, this.lightChip(k === s.pbTab))),
+      pbOverview: s.pbTab === 'overview',
+      pbItin: s.pbTab === 'itinerary',
+      pbPricing: s.pbTab === 'pricing',
+      pbFaq: s.pbTab === 'faq',
+      pbPreview: s.pbTab === 'preview',
+      pbTitle: s.pbTitle, pbSub: s.pbSub,
+      setPbTitle: e => this.setState({ pbTitle: e.target.value }),
+      setPbSub: e => this.setState({ pbSub: e.target.value }),
+      itinerary: ITIN,
+      faqRows: FAQS.slice(0, 4),
+      includes: ['Makan dan minum (2 kali)', 'Ais & ice box', 'Lampu candat LED hijau', 'Life jacket bersijil', 'GPS fish finder & sonar'],
+
+      chart: [42, 61, 78, 95, 70, 55, 38].map((v, i) => ({
+        label: ['MAC', 'APR', 'MEI', 'JUN', 'JUL', 'OGO', 'SEP'][i],
+        h: v + '%', color: i === 3 ? AMBER : 'rgba(46,29,107,.22)'
+      })),
+      boatRevenue: [
+        { code: 'KNF 6241', nights: 41, amount: 'RM 24,880' },
+        { code: 'TRF 1005', nights: 38, amount: 'RM 22,140' },
+        { code: 'TRF 92', nights: 29, amount: 'RM 17,470' },
+        { code: 'TRA 1539', nights: 24, amount: 'RM 13,820' },
+        { code: 'Putera Kapas', nights: 18, amount: 'RM 6,000' }
+      ],
+      fleetRows: BOATS.map(b => ({ code: b.code, meta: b.skipper, cap: b.capN })),
+      waNumber: s.waNumber,
+      setWa: e => this.setState({ waNumber: e.target.value })
+    };
+  }
+}
+</script>
+</body>
+</html>

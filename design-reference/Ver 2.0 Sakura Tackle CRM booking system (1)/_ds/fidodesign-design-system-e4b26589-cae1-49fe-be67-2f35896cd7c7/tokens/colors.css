@@ -1,0 +1,11 @@
+:root{
+--void:#030308;--surface:#0c0c16;--surface-2:#14141f;--surface-3:#1b1b29;
+--ink-1:#e7e6f5;--ink-2:#9a9bc0;--ink-3:#5c5d78;
+--indigo:#5661ce;--indigo-hover:#6c77e0;--indigo-soft:#838aef;
+--lime:#c6f135;--lime-dim:#8fae2b;
+--border-subtle:rgba(255,255,255,.08);--border-badge:rgba(255,255,255,.14);
+--overlay-scrim:rgba(3,3,8,.72);
+--bg-canvas:var(--void);--surface-card:var(--surface);--surface-card-hover:var(--surface-2);
+--text-heading:var(--ink-1);--text-body:var(--ink-2);--text-faint:var(--ink-3);
+--accent-primary:var(--indigo);--accent-primary-hover:var(--indigo-hover);--accent-secondary:var(--lime);
+}

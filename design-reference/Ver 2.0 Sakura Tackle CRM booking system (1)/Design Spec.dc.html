@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/fonts.css">
+<script src="./doc-page.js"></script>
+<style>
+  doc-page:not(:defined) { visibility:hidden; }
+  h1,h2,h3 { font-family:'Poppins', system-ui, sans-serif; letter-spacing:-.02em; margin:0; }
+  p, td, th, li { font-family:'Inter', system-ui, sans-serif; }
+  table { width:100%; border-collapse:collapse; font-size:10.5pt; }
+  th { text-align:left; font-weight:600; color:#2E1D6B; border-bottom:1.5px solid rgba(46,29,107,.25); padding:7px 8px; }
+  td { border-bottom:1px solid rgba(46,29,107,.12); padding:7px 8px; color:#2B2450; vertical-align:top; }
+  code { font-family:ui-monospace, Menlo, monospace; font-size:9.5pt; background:rgba(46,29,107,.07); padding:1px 5px; border-radius:4px; }
+  pre { font-family:ui-monospace, Menlo, monospace; font-size:9pt; line-height:1.55; background:#F5F2FE; border:1px solid rgba(46,29,107,.14); border-radius:8px; padding:12px 14px; overflow-x:auto; break-inside:avoid; }
+  .sw { display:inline-block; width:16px; height:16px; border-radius:4px; border:1px solid rgba(0,0,0,.14); vertical-align:-3px; margin-right:8px; }
+</style>
+</helmet>
+
+<doc-page margin="0.85in">
+  <div slot="header" style="display:flex; justify-content:space-between; align-items:baseline; font-family:'Inter',sans-serif; font-size:8.5pt; color:#7A6FA0; border-bottom:1px solid rgba(46,29,107,.14); padding-bottom:6px">
+    <span>Sakura Tackle &mdash; Candat Sotong Booking Landing Page</span>
+    <span>Design Specification v2.0</span>
+  </div>
+
+  <h1 style="font-size:26pt; font-weight:650; color:#1B1436">Booking Landing Page Design Specification</h1>
+  <p style="font-size:11.5pt; line-height:1.6; color:#4A3F6E; margin-top:10px">Reference implementation: <code>Laman Tempahan v2.dc.html</code>. This document records the design tokens, component rules, responsive behaviour and accessibility requirements a developer needs to implement the page in WordPress (Breakdance or Elementor) without re-deriving decisions.</p>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:26px">1. Design intent</h2>
+  <p style="font-size:10.5pt; line-height:1.65; color:#2B2450; margin-top:8px">The page borrows two proven patterns from the global travel-booking market and adapts them to a single-operator Malaysian fishing charter. From Booking.com: a search control placed immediately below the hero, overlapping it, so the first interaction is always "when and how many". From Airbnb: inventory presented as cards with real specifications, photography and price, filtered by the search rather than hidden behind a multi-step funnel. Content is reproduced verbatim from sakuratackle.com in Bahasa Malaysia; the interface chrome carries the visual system already established in the admin CRM, so the public page and the back office read as one product.</p>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:24px">2. Colour palette</h2>
+  <table style="margin-top:10px">
+    <thead><tr><th>Token</th><th>Hex</th><th>Role</th><th>Contrast</th></tr></thead>
+    <tbody>
+      <tr><td>Background</td><td><span class="sw" style="background:#F5F2FE"></span>#F5F2FE</td><td>Page canvas</td><td>&mdash;</td></tr>
+      <tr><td>Surface</td><td><span class="sw" style="background:#FFFFFF"></span>#FFFFFF</td><td>Cards, search bar, facilities grid</td><td>&mdash;</td></tr>
+      <tr><td>Surface alt</td><td><span class="sw" style="background:#EFEAFD"></span>#EFEAFD</td><td>Gallery band, map frame</td><td>&mdash;</td></tr>
+      <tr><td>Ink</td><td><span class="sw" style="background:#1B1436"></span>#1B1436</td><td>Headings, footer background</td><td>13.9:1 on #F5F2FE</td></tr>
+      <tr><td>Navy (primary)</td><td><span class="sw" style="background:#2E1D6B"></span>#2E1D6B</td><td>Secondary buttons, CTA band, links</td><td>9.8:1 on #FFFFFF</td></tr>
+      <tr><td>Body text</td><td><span class="sw" style="background:#635A87"></span>#635A87</td><td>Paragraphs, card descriptions</td><td>5.2:1 on #FFFFFF</td></tr>
+      <tr><td>Muted</td><td><span class="sw" style="background:#7A6FA0"></span>#7A6FA0</td><td>Field labels, captions (&ge;12.5px only)</td><td>4.6:1 on #FFFFFF</td></tr>
+      <tr><td>Amber (accent)</td><td><span class="sw" style="background:#FFB800"></span>#FFB800</td><td>Primary CTA fill &mdash; always with navy text</td><td>7.2:1 navy on amber</td></tr>
+      <tr><td>Amber deep</td><td><span class="sw" style="background:#F08A00"></span>#F08A00</td><td>Logo gradient end only</td><td>&mdash;</td></tr>
+      <tr><td>Amber light</td><td><span class="sw" style="background:#FFE39A"></span>#FFE39A</td><td>Eyebrow text on navy/dark photography</td><td>9.1:1 on #2E1D6B</td></tr>
+      <tr><td>WhatsApp</td><td><span class="sw" style="background:#128C7E"></span>#128C7E</td><td>Floating contact button only</td><td>4.6:1 white on fill</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:9.5pt; line-height:1.55; color:#635A87; margin-top:9px">Amber is never used for text on light backgrounds and never as a large background behind body copy. Two background tints maximum per viewport height.</p>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:24px">3. Typography</h2>
+  <table style="margin-top:10px">
+    <thead><tr><th>Element</th><th>Family / weight</th><th>Desktop</th><th>Mobile</th></tr></thead>
+    <tbody>
+      <tr><td>H1 hero</td><td>Poppins 650</td><td><code>clamp(34px, 4.6cqw, 58px)</code>, line-height 1.06</td><td>34px</td></tr>
+      <tr><td>H2 section</td><td>Poppins 650</td><td><code>clamp(26px, 2.8cqw, 36px)</code></td><td>26px</td></tr>
+      <tr><td>H3 card title</td><td>Poppins 600</td><td>19px</td><td>18px</td></tr>
+      <tr><td>Lead paragraph</td><td>Inter 400</td><td>17px / 1.6</td><td>16px</td></tr>
+      <tr><td>Body</td><td>Inter 400</td><td>13.5&ndash;15.5px / 1.65</td><td>13.5px</td></tr>
+      <tr><td>Field value</td><td>Inter 600</td><td>15px</td><td>15px</td></tr>
+      <tr><td>Eyebrow / tag</td><td>Inter 700, uppercase, <code>0.14em</code></td><td>10.5px</td><td>10.5px</td></tr>
+      <tr><td>Spec label</td><td>Inter 400, uppercase, <code>0.1em</code></td><td>10px</td><td>10px</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:9.5pt; line-height:1.55; color:#635A87; margin-top:9px">Headings use negative tracking (&minus;0.025em to &minus;0.03em). Measure is capped at 20ch for the H1, 44&ndash;54ch for paragraphs. <code>text-wrap: pretty</code> on all body copy. No all-caps display type.</p>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:24px">4. Spacing, radius and elevation</h2>
+  <table style="margin-top:10px">
+    <thead><tr><th>Property</th><th>Value</th><th>Applied to</th></tr></thead>
+    <tbody>
+      <tr><td>Base scale</td><td>4px steps; used: 6, 10, 12, 14, 16, 22, 24, 34, 48, 56, 80</td><td>All gaps and padding</td></tr>
+      <tr><td>Section rhythm</td><td>80px desktop / 52px mobile vertical</td><td><code>[data-sec]</code></td></tr>
+      <tr><td>Container</td><td><code>max-width: 1200px</code>, 24px gutter / 16px mobile</td><td>All sections</td></tr>
+      <tr><td>Radius</td><td>Buttons 14&ndash;16px; cards 18&ndash;24px; hero 28px; pills 999px</td><td>&mdash;</td></tr>
+      <tr><td>Card shadow</td><td><code>0 10px 30px rgba(46,29,107,.07)</code></td><td>Fleet cards</td></tr>
+      <tr><td>Search bar shadow</td><td><code>0 22px 50px rgba(46,29,107,.14)</code>, offset <code>-40px</code> into hero</td><td>Search control</td></tr>
+      <tr><td>CTA glow</td><td><code>0 12px 26px rgba(255,184,0,.34)</code></td><td>Amber buttons</td></tr>
+      <tr><td>Hairline</td><td><code>1px solid rgba(46,29,107,.09&ndash;.12)</code></td><td>Cards, dividers, header</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:24px">5. Buttons</h2>
+  <table style="margin-top:10px">
+    <thead><tr><th>Variant</th><th>Fill</th><th>Text</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td>Primary</td><td>#FFB800 + amber glow</td><td>#2E1D6B, 700</td><td>Cari Bot Kosong; WhatsApp Kami; Tempah Slot</td></tr>
+      <tr><td>Secondary</td><td>#2E1D6B</td><td>#FFFFFF, 700</td><td>Pilih Bot Ini (per card)</td></tr>
+      <tr><td>Outline</td><td>Transparent, 1px <code>rgba(46,29,107,.22)</code></td><td>#2E1D6B, 700</td><td>Buka Google Maps</td></tr>
+      <tr><td>Contact float</td><td>#128C7E</td><td>#FFFFFF, 700</td><td>Fixed bottom-right WhatsApp</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:9.5pt; line-height:1.55; color:#635A87; margin-top:9px">One primary button per section. Minimum hit area 44&times;44px; the primary CTA is 15px padding on 14.5px type (approx. 48px tall). Hover lifts 1px; no colour-darken.</p>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:24px">6. Page structure and behaviour</h2>
+  <table style="margin-top:10px">
+    <thead><tr><th>#</th><th>Section</th><th>Behaviour</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Sticky header</td><td>Blurred translucent background, nav hidden below 980px, amber CTA persists at all widths</td></tr>
+      <tr><td>2</td><td>Hero</td><td>Full-bleed night-fishing photograph at 55% opacity under a navy vertical gradient; centred H1 capped at 20ch to hold two to three lines</td></tr>
+      <tr><td>3</td><td>Search control</td><td>Date + pax only. Overlaps the hero by 40px. Submitting scrolls to the fleet; pax filters the card list live and rewrites the section heading</td></tr>
+      <tr><td>4</td><td>Trust strip</td><td>Three facts: fleet size, capacity range, deposit floor</td></tr>
+      <tr><td>5</td><td>Fleet</td><td>Two-column card grid, one column below 980px. Cards carry photo slot, class tag, verbatim description, four specs, daily rate, availability note</td></tr>
+      <tr><td>6</td><td>Facilities</td><td>Eight-cell hairline grid (4 &rarr; 2 &rarr; 1 columns)</td></tr>
+      <tr><td>7</td><td>Booking flow</td><td>Five numbered steps beside a sticky-tone warning about peak-season availability</td></tr>
+      <tr><td>8</td><td>Gallery</td><td>Dense 4-column masonry using <code>grid-auto-flow: dense</code>; spans collapse to a uniform 2-column grid on mobile</td></tr>
+      <tr><td>9</td><td>Testimonials</td><td>Horizontal scroll row of customer WhatsApp screenshots, 230px wide</td></tr>
+      <tr><td>10</td><td>Jetty location</td><td>Address, map image slot, external Google Maps link</td></tr>
+      <tr><td>11</td><td>FAQ</td><td>Single-open accordion, first item expanded by default</td></tr>
+      <tr><td>12</td><td>Closing CTA + footer</td><td>Navy band, then dark footer with menu, phone and address</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:24px">7. Responsive rules</h2>
+  <p style="font-size:10.5pt; line-height:1.65; color:#2B2450; margin-top:8px">Layout is driven by container queries on the page root, not viewport media queries, so the page behaves correctly inside a page builder canvas or a preview frame.</p>
+  <pre>@container (max-width: 980px)  /* tablet and below */
+  [data-split]   &rarr; single column
+  [data-search]  &rarr; stacked fields, dividers hidden
+  [data-fleet]   &rarr; 1 column
+  [data-grid3]   &rarr; 2 columns
+  [data-gallery] &rarr; 2 columns, spans reset, rows 150px
+  [data-sec]     &rarr; 52px vertical padding
+  [data-pad]     &rarr; 16px gutter
+
+@container (max-width: 620px)  /* phone */
+  [data-grid3]   &rarr; 1 column
+  [data-specs]   &rarr; 2 columns</pre>
+  <p style="font-size:10.5pt; line-height:1.65; color:#2B2450; margin-top:8px">Verified at 1440px, 1024px, 768px and 390px. No fixed widths or <code>white-space: nowrap</code> on text containers; every grid track uses <code>minmax(0, 1fr)</code> so long boat names and BM strings cannot force horizontal overflow.</p>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:24px">8. Accessibility</h2>
+  <table style="margin-top:10px">
+    <thead><tr><th>Requirement</th><th>Implementation</th></tr></thead>
+    <tbody>
+      <tr><td>Contrast &ge;4.5:1</td><td>All text pairings listed in &sect;2; muted #7A6FA0 restricted to 12.5px+ captions at 4.6:1</td></tr>
+      <tr><td>Semantic structure</td><td><code>header</code>, <code>nav</code>, <code>section</code>, <code>article</code> per boat, <code>figure</code> per gallery image, <code>footer</code>; one H1, sections open with H2</td></tr>
+      <tr><td>Labelled controls</td><td>Date and pax use real <code>label</code> elements plus <code>aria-label</code>; search wrapper is <code>role="search"</code> with <code>aria-label</code></td></tr>
+      <tr><td>Accordion state</td><td>Native <code>button</code> with <code>aria-expanded</code> reflecting open state</td></tr>
+      <tr><td>Focus visibility</td><td>2px amber outline at 1px offset on all inputs and selects</td></tr>
+      <tr><td>Image alternatives</td><td>Descriptive BM alt text on hero, gallery and testimonial images; decorative gradients are empty divs</td></tr>
+      <tr><td>Icon-free interface</td><td>No icon fonts; labels are text, so screen readers and 200% zoom both hold</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:24px">9. Performance</h2>
+  <p style="font-size:10.5pt; line-height:1.65; color:#2B2450; margin-top:8px">Two webfont families, four weights total. No icon library, no illustration assets, no third-party embed above the fold (the map is a static image linking out to Google Maps rather than an iframe). Gallery and testimonial images carry <code>loading="lazy"</code>; the hero image is the only eager request. Before launch, re-encode the source uploads as WebP at 1600px maximum width and add explicit <code>width</code>/<code>height</code> attributes to eliminate layout shift; the current build points at the live WordPress uploads, several of which are full-size PNG screenshots exceeding 1MB.</p>
+
+  <h2 style="font-size:15pt; font-weight:600; color:#1B1436; margin-top:24px">10. Developer checklist</h2>
+  <table style="margin-top:10px">
+    <thead><tr><th></th><th>Item</th></tr></thead>
+    <tbody>
+      <tr><td>&#9744;</td><td>Palette and type tokens registered as Breakdance/Elementor global styles, matching &sect;2 and &sect;3 exactly</td></tr>
+      <tr><td>&#9744;</td><td>Hero H1 renders in two to three lines at 1440px, 1024px and 390px</td></tr>
+      <tr><td>&#9744;</td><td>Search bar overlaps the hero on desktop and stacks cleanly on mobile without clipping</td></tr>
+      <tr><td>&#9744;</td><td>Pax selection filters the fleet list and updates the section heading and result count</td></tr>
+      <tr><td>&#9744;</td><td>Zero-result state renders the combine-two-boats message with a WhatsApp route</td></tr>
+      <tr><td>&#9744;</td><td>All five boats carry correct length, beam, capacity, material and daily rate</td></tr>
+      <tr><td>&#9744;</td><td>Real boat photography replaces the five image placeholders and the map placeholder</td></tr>
+      <tr><td>&#9744;</td><td>Gallery grid has no empty cells at any breakpoint</td></tr>
+      <tr><td>&#9744;</td><td>FAQ accordion is keyboard operable; <code>aria-expanded</code> updates</td></tr>
+      <tr><td>&#9744;</td><td>WhatsApp number and prefilled message verified on a live handset</td></tr>
+      <tr><td>&#9744;</td><td>Booking submissions land in the admin CRM slot manager with the selected date and pax</td></tr>
+      <tr><td>&#9744;</td><td>Images converted to WebP with dimensions declared; Lighthouse performance &ge;90 on mobile</td></tr>
+      <tr><td>&#9744;</td><td>No horizontal scroll at 320px</td></tr>
+      <tr><td>&#9744;</td><td>FAQ second answer and any remaining placeholder copy confirmed with the operator before publishing</td></tr>
+    </tbody>
+  </table>
+</doc-page>
+</x-dc>
+</body>
+</html>

@@ -27,7 +27,14 @@
   --warn-text-2: #b07800;
   --danger-bg: #ef4444;
   --danger-text: #c22b2b;
-  --whatsapp: #1fa855;
+
+  /* v2 additions — Design Spec.dc.html §2. The v2 booking page uses a
+     different WhatsApp green and adds two tints the v1 palette lacked. */
+  --surface-alt: #efeafd;      /* gallery band, map frame */
+  --amber-light: #ffe39a;      /* eyebrow text on navy/dark photography */
+  --muted-2: #8a7fb0;          /* spec labels, section eyebrows */
+  --whatsapp: #128c7e;         /* v2: was #1fa855 */
+  --hero-ink: #241a4d;         /* hero photo backdrop */
 
   /* Calendar cell tones (from the STATUS constant in both .dc.html files) */
   --cell-open-bg: rgba(47, 191, 113, 0.16);
@@ -43,7 +50,15 @@
   /* Shape & elevation */
   --shadow-card: 0 18px 46px rgba(46, 29, 107, 0.07);
   --shadow-gold: 0 14px 30px rgba(255, 184, 0, 0.32);
-  --shadow-whatsapp: 0 16px 36px rgba(31, 168, 85, 0.34);
+
+  /* v2 elevation — Design Spec.dc.html §4 */
+  --shadow-fleet-card: 0 10px 30px rgba(46, 29, 107, 0.07);
+  --shadow-search: 0 22px 50px rgba(46, 29, 107, 0.14);
+  --shadow-cta-glow: 0 12px 26px rgba(255, 184, 0, 0.34);
+  --shadow-whatsapp: 0 14px 30px rgba(18, 140, 126, 0.35);
+
+  /* v2 layout — container widens 1180 -> 1200, breakpoints move to 980/620 */
+  --container: 1200px;
 
   /* Fonts — wired to next/font in app/layout.tsx */
   --font-display: var(--font-poppins), "Poppins", sans-serif;

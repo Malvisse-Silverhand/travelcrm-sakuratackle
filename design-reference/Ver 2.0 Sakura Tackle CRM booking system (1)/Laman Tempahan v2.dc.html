@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/typography.css">
+<script src="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/_ds_bundle.js"></script>
+<script src="image-slot.js"></script>
+<style>
+  * { box-sizing:border-box; }
+  a { color:#2E1D6B; text-decoration:none; }
+  a:hover { color:#4A34A0; }
+  input, select, button { font-family:'Inter', system-ui, sans-serif; }
+  input:focus, select:focus { outline:2px solid rgba(255,184,0,.75); outline-offset:1px; }
+  @container (max-width: 980px) {
+    [data-split] { grid-template-columns:minmax(0,1fr) !important; gap:26px !important; }
+    [data-search] { grid-template-columns:minmax(0,1fr) !important; padding:14px !important; gap:12px !important; }
+    [data-search-div] { display:none !important; }
+    [data-fleet] { grid-template-columns:minmax(0,1fr) !important; }
+    [data-grid3] { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+    [data-gallery] { grid-template-columns:repeat(2,minmax(0,1fr)) !important; grid-auto-rows:150px !important; }
+    [data-gallery] > * { grid-column:auto !important; grid-row:auto !important; }
+    [data-pad] { padding-left:16px !important; padding-right:16px !important; }
+    [data-sec] { padding-top:52px !important; padding-bottom:52px !important; }
+    [data-hide-sm] { display:none !important; }
+    [data-h1] { font-size:34px !important; }
+    [data-h2] { font-size:26px !important; }
+  }
+  @container (max-width: 620px) {
+    [data-grid3] { grid-template-columns:minmax(0,1fr) !important; }
+    [data-specs] { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  }
+</style>
+</helmet>
+
+<div style="container-type:inline-size; background:#F5F2FE; color:#1B1436; font-family:'Inter', system-ui, sans-serif; min-height:100%">
+
+  <header style="position:sticky; top:0; z-index:40; background:rgba(245,242,254,.94); backdrop-filter:blur(16px); border-bottom:1px solid rgba(46,29,107,.10)">
+    <div data-pad="true" style="max-width:1200px; margin:0 auto; padding:13px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px">
+      <a href="#atas" style="display:flex; align-items:center; gap:11px">
+        <div style="width:34px; height:34px; border-radius:11px; background:linear-gradient(145deg,#FFB800,#F08A00); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:700; font-size:14px; color:#2E1D6B">CS</div>
+        <div style="display:flex; flex-direction:column; line-height:1.15">
+          <span style="font-family:'Poppins',sans-serif; font-weight:600; font-size:15px; letter-spacing:-.01em; color:#1B1436">Candat Sotong</span>
+          <span style="font-size:11px; color:#7A6FA0; letter-spacing:.04em">Sakura Tackle</span>
+        </div>
+      </a>
+      <nav data-hide-sm="true" aria-label="Menu utama" style="display:flex; align-items:center; gap:26px; font-size:13px; color:#635A87">
+        <a href="#armada" style="color:#635A87">Armada</a>
+        <a href="#fasiliti" style="color:#635A87">Fasiliti</a>
+        <a href="#galeri" style="color:#635A87">Galeri</a>
+        <a href="#faq" style="color:#635A87">FAQ</a>
+      </nav>
+      <div style="display:flex; align-items:center; gap:12px">
+        <span data-hide-sm="true" style="font-size:12.5px; color:#7A6FA0">Jeti Marang, Terengganu</span>
+        <a href="#armada" style="padding:9px 18px; border-radius:14px; background:#FFB800; color:#2E1D6B; font-size:12.5px; font-weight:700">Tempah Slot</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="atas" data-pad="true" data-sec="true" style="max-width:1200px; margin:0 auto; padding:56px 24px 0">
+    <div style="position:relative; border-radius:28px; overflow:hidden; background:#241A4D">
+      <img src="https://sakuratackle.com/wp-content/uploads/2026/02/restored_night_fishing_4k_v2-scaled.png" alt="Aktiviti candat sotong pada waktu malam di perairan Pulau Kapas" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55">
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(27,20,54,.55) 0%, rgba(27,20,54,.82) 100%)"></div>
+      <div style="position:relative; padding:76px 48px 88px; text-align:center">
+        <div style="display:inline-block; padding:6px 14px; border-radius:999px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28); color:#FFE39A; font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase">Musim Candat 2026 Telah Dibuka</div>
+        <h1 data-h1="true" style="font-family:'Poppins',sans-serif; font-weight:650; font-size:clamp(34px,4.6cqw,58px); line-height:1.06; letter-spacing:-.03em; color:#FFFFFF; margin:22px auto 0; max-width:20ch">Pakej Trip Candat Sotong Otai Pulau Kapas-Marang</h1>
+        <p style="font-size:17px; line-height:1.6; color:#EDE8FF; max-width:54ch; margin:20px auto 0; text-wrap:pretty">&ldquo;Tak perlu skil tinggi, janji ada hati. Kami bawa anda ke lubuk rahsia kapten otai kami.&rdquo;</p>
+      </div>
+    </div>
+
+    <div data-search="true" role="search" aria-label="Cari slot trip" style="position:relative; margin:-40px auto 0; max-width:940px; background:#FFFFFF; border:1px solid rgba(46,29,107,.10); border-radius:22px; box-shadow:0 22px 50px rgba(46,29,107,.14); padding:16px 18px; display:grid; grid-template-columns:1.15fr auto 1fr auto; gap:16px; align-items:center">
+      <label style="display:block">
+        <span style="display:block; font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0">Tarikh nak bercandat</span>
+        <input type="date" value="{{ date }}" onChange="{{ onDate }}" aria-label="Tarikh trip" style="margin-top:6px; width:100%; border:0; background:transparent; font-size:15px; font-weight:600; color:#1B1436; padding:0">
+      </label>
+      <div data-search-div="true" style="width:1px; height:36px; background:rgba(46,29,107,.12)"></div>
+      <label style="display:block">
+        <span style="display:block; font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0">Berapa orang</span>
+        <select value="{{ pax }}" onChange="{{ onPax }}" aria-label="Bilangan pax" style="margin-top:6px; width:100%; border:0; background:transparent; font-size:15px; font-weight:600; color:#1B1436; padding:0">
+          <option value="4">4 pax</option>
+          <option value="6">6 pax</option>
+          <option value="8">8 pax</option>
+          <option value="10">10 pax</option>
+          <option value="12">12 pax</option>
+          <option value="15">15 pax</option>
+        </select>
+      </label>
+      <a href="#armada" style="display:flex; align-items:center; justify-content:center; gap:10px; padding:15px 26px; border-radius:16px; background:#FFB800; color:#2E1D6B; font-size:14.5px; font-weight:700; box-shadow:0 12px 26px rgba(255,184,0,.34)">Cari Bot Kosong</a>
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:28px; flex-wrap:wrap; margin-top:26px; font-size:12.5px; color:#635A87">
+      <span>5 bot dalam armada</span>
+      <span>Kapasiti 8&ndash;15 pax</span>
+      <span>Deposit serendah RM50/pax untuk lock slot</span>
+    </div>
+  </section>
+
+  <section id="armada" data-pad="true" data-sec="true" style="max-width:1200px; margin:0 auto; padding:80px 24px">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap">
+      <div>
+        <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Armada &amp; Kemudi Kami</span>
+        <h2 data-h2="true" style="font-family:'Poppins',sans-serif; font-weight:650; font-size:clamp(26px,2.8cqw,36px); letter-spacing:-.025em; margin:10px 0 0">Bot yang sesuai untuk {{ pax }} pax</h2>
+      </div>
+      <span style="font-size:13px; color:#7A6FA0">{{ resultLabel }}</span>
+    </div>
+
+    <div data-fleet="true" style="margin-top:32px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px">
+      <sc-for list="{{ fleet }}" as="boat" hint-placeholder-count="4">
+        <article style="background:#FFFFFF; border:1px solid rgba(46,29,107,.09); border-radius:24px; overflow:hidden; box-shadow:0 10px 30px rgba(46,29,107,.07); display:flex; flex-direction:column">
+          <div style="position:relative; height:200px; background:#E9E3FB">
+            <image-slot id="{{ boat.slotId }}" placeholder="{{ boat.slotHint }}" shape="rect" style="position:absolute; inset:0"></image-slot>
+            <span style="position:absolute; top:14px; left:14px; z-index:2; padding:6px 12px; border-radius:999px; background:rgba(27,20,54,.82); color:#FFE39A; font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase">{{ boat.kind }}</span>
+          </div>
+          <div style="padding:22px; display:flex; flex-direction:column; gap:16px; flex:1">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px">
+              <h3 style="font-family:'Poppins',sans-serif; font-weight:600; font-size:19px; letter-spacing:-.02em; margin:0">{{ boat.name }}</h3>
+              <div style="text-align:right; white-space:nowrap">
+                <div style="font-family:'Poppins',sans-serif; font-weight:650; font-size:19px; color:#2E1D6B">{{ boat.rate }}</div>
+                <div style="font-size:11px; color:#8A7FB0">sewa harian</div>
+              </div>
+            </div>
+            <p style="font-size:13.5px; line-height:1.6; color:#635A87; margin:0; text-wrap:pretty">{{ boat.desc }}</p>
+            <div data-specs="true" style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; padding:14px 0 0; border-top:1px solid rgba(46,29,107,.09)">
+              <div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7FB0">Panjang</div><div style="font-size:13.5px; font-weight:600; margin-top:3px">{{ boat.length }}</div></div>
+              <div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7FB0">Lebar</div><div style="font-size:13.5px; font-weight:600; margin-top:3px">{{ boat.beam }}</div></div>
+              <div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7FB0">Kapasiti</div><div style="font-size:13.5px; font-weight:600; margin-top:3px">{{ boat.cap }}</div></div>
+              <div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#8A7FB0">Material</div><div style="font-size:13.5px; font-weight:600; margin-top:3px">{{ boat.material }}</div></div>
+            </div>
+            <div style="margin-top:auto; display:flex; align-items:center; gap:12px; flex-wrap:wrap">
+              <a href="{{ waLink }}" style="padding:12px 22px; border-radius:14px; background:#2E1D6B; color:#FFFFFF; font-size:13.5px; font-weight:700">Pilih Bot Ini</a>
+              <span style="font-size:12.5px; color:#7A6FA0">{{ boat.availability }}</span>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:22px; padding:26px; border:1px dashed rgba(46,29,107,.22); border-radius:20px; text-align:center; font-size:14px; color:#635A87">Tiada bot untuk saiz group ini. WhatsApp kami &mdash; kami boleh gabung dua bot untuk group besar.</div>
+    </sc-if>
+  </section>
+
+  <section id="fasiliti" data-pad="true" data-sec="true" style="background:#FFFFFF; border-top:1px solid rgba(46,29,107,.08); border-bottom:1px solid rgba(46,29,107,.08); padding:80px 24px">
+    <div style="max-width:1200px; margin:0 auto">
+      <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Kelengkapan Bot</span>
+      <h2 data-h2="true" style="font-family:'Poppins',sans-serif; font-weight:650; font-size:clamp(26px,2.8cqw,36px); letter-spacing:-.025em; margin:10px 0 0">Fasiliti On-Board</h2>
+      <p style="font-size:15px; color:#635A87; margin:12px 0 0">Keselesaan anda, keutamaan kami</p>
+      <div data-grid3="true" style="margin-top:34px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:rgba(46,29,107,.10); border:1px solid rgba(46,29,107,.10); border-radius:20px; overflow:hidden">
+        <sc-for list="{{ facilities }}" as="f" hint-placeholder-count="8">
+          <div style="background:#FFFFFF; padding:24px">
+            <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:15px; letter-spacing:-.01em">{{ f.title }}</div>
+            <div style="font-size:13px; line-height:1.55; color:#635A87; margin-top:8px; text-wrap:pretty">{{ f.body }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-pad="true" data-sec="true" style="max-width:1200px; margin:0 auto; padding:80px 24px">
+    <div data-split="true" style="display:grid; grid-template-columns:.85fr minmax(0,1.15fr); gap:56px; align-items:start">
+      <div>
+        <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Perjalanan Sepanjang Trip Candat</span>
+        <h2 data-h2="true" style="font-family:'Poppins',sans-serif; font-weight:650; font-size:clamp(26px,2.8cqw,36px); letter-spacing:-.025em; margin:10px 0 0">Dari jeti ke lubuk, langkah demi langkah</h2>
+        <div style="margin-top:22px; padding:20px 22px; border-radius:18px; background:rgba(255,184,0,.14); border:1px solid rgba(255,184,0,.4)">
+          <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:15px">Peringatan Penting!</div>
+          <p style="font-size:13.5px; line-height:1.6; color:#4A3F6E; margin:8px 0 0; text-wrap:pretty">Musim candat biasanya sangat &lsquo;full&rsquo;. Kami sarankan tempahan dibuat sekurang-kurangnya 1 bulan awal terutamanya untuk malam hujung minggu.</p>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+          <div style="display:grid; grid-template-columns:auto minmax(0,1fr); gap:18px; align-items:start; background:#FFFFFF; border:1px solid rgba(46,29,107,.09); border-radius:18px; padding:20px 22px">
+            <div style="width:34px; height:34px; border-radius:11px; background:#2E1D6B; color:#FFE39A; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px">{{ s.n }}</div>
+            <div>
+              <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:15.5px; letter-spacing:-.01em">{{ s.title }}</div>
+              <div style="font-size:13.5px; line-height:1.6; color:#635A87; margin-top:6px; text-wrap:pretty">{{ s.body }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="galeri" data-pad="true" data-sec="true" style="padding:80px 24px; background:#EFEAFD">
+    <div style="max-width:1200px; margin:0 auto">
+      <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Momento Lubuk Emas</span>
+      <h2 data-h2="true" style="font-family:'Poppins',sans-serif; font-weight:650; font-size:clamp(26px,2.8cqw,36px); letter-spacing:-.025em; margin:10px 0 24px">Galeri Tangkapan</h2>
+      <div data-gallery="true" style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:170px; gap:12px; grid-auto-flow:dense">
+        <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="8">
+          <figure style="margin:0; grid-column:{{ g.col }}; grid-row:{{ g.row }}; border-radius:16px; overflow:hidden; background:#DCD4F5">
+            <img src="{{ g.src }}" alt="{{ g.alt }}" loading="lazy" style="width:100%; height:100%; object-fit:cover; display:block"></figure>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-pad="true" data-sec="true" style="max-width:1200px; margin:0 auto; padding:80px 24px">
+    <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Apa Kata Otai Kita?</span>
+    <h2 data-h2="true" style="font-family:'Poppins',sans-serif; font-weight:650; font-size:clamp(26px,2.8cqw,36px); letter-spacing:-.025em; margin:10px 0 4px">Testimoni pelanggan, seperti yang dihantar</h2>
+    <p style="font-size:14px; color:#7A6FA0; margin:0 0 24px">Tangkap skrin perbualan WhatsApp daripada pelanggan trip kami.</p>
+    <div style="display:flex; gap:16px; overflow-x:auto; padding-bottom:10px">
+      <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="6">
+        <img src="{{ t.src }}" alt="{{ t.alt }}" loading="lazy" style="flex:0 0 auto; width:230px; border-radius:18px; border:1px solid rgba(46,29,107,.10); background:#FFFFFF; display:block"></sc-for>
+    </div>
+  </section>
+
+  <section id="lokasi" data-pad="true" data-sec="true" style="padding:80px 24px; background:#FFFFFF; border-top:1px solid rgba(46,29,107,.08)">
+    <div data-split="true" style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:48px; align-items:center">
+      <div>
+        <span style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Lokasi Jeti</span>
+        <h2 data-h2="true" style="font-family:'Poppins',sans-serif; font-weight:650; font-size:clamp(26px,2.8cqw,36px); letter-spacing:-.025em; margin:10px 0 0">Lubok Candat Power Terengganu</h2>
+        <p style="font-size:15.5px; line-height:1.65; color:#635A87; margin:16px 0 0; max-width:48ch; text-wrap:pretty">Kami beroperasi dari Jeti Marang, Terengganu. Parking luas dan selamat disediakan untuk pelanggan kami.</p>
+        <div style="margin-top:20px; font-size:14px; color:#1B1436; font-weight:600">ILKM Marang, Marang 21600, Terengganu</div>
+        <a href="https://share.google/I6FXPp5XXL3HwNEeq" target="_blank" rel="noopener" style="display:inline-block; margin-top:20px; padding:12px 22px; border-radius:14px; border:1px solid rgba(46,29,107,.22); font-size:13.5px; font-weight:700; color:#2E1D6B">Buka Google Maps</a>
+      </div>
+      <div style="position:relative; height:320px; border-radius:22px; overflow:hidden; background:#EFEAFD; border:1px solid rgba(46,29,107,.10)">
+        <image-slot id="ct-map" placeholder="Tangkap skrin peta Jeti Marang / ILKM Marang" shape="rect" style="position:absolute; inset:0"></image-slot>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" data-pad="true" data-sec="true" style="max-width:820px; margin:0 auto; padding:80px 24px">
+    <h2 data-h2="true" style="font-family:'Poppins',sans-serif; font-weight:650; font-size:clamp(26px,2.8cqw,36px); letter-spacing:-.025em; margin:0 0 24px">FAQ</h2>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="4">
+        <div style="background:#FFFFFF; border:1px solid rgba(46,29,107,.09); border-radius:18px; overflow:hidden">
+          <button type="button" onClick="{{ q.toggle }}" aria-expanded="{{ q.openStr }}" style="width:100%; text-align:left; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 22px; background:transparent; border:0; cursor:pointer; font-family:'Poppins',sans-serif; font-weight:600; font-size:15.5px; color:#1B1436">
+            {{ q.q }}
+            <span style="flex:0 0 auto; width:24px; height:24px; border-radius:8px; background:rgba(46,29,107,.08); display:flex; align-items:center; justify-content:center; font-size:14px; color:#2E1D6B">{{ q.sign }}</span>
+          </button>
+          <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:0 22px 20px; font-size:14px; line-height:1.65; color:#635A87; text-wrap:pretty">{{ q.a }}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-pad="true" style="max-width:1200px; margin:0 auto; padding:0 24px 80px">
+    <div style="border-radius:26px; background:#2E1D6B; padding:52px 44px; text-align:center">
+      <h2 data-h2="true" style="font-family:'Poppins',sans-serif; font-weight:650; font-size:clamp(26px,3cqw,38px); letter-spacing:-.025em; color:#FFFFFF; margin:0">Dah Sedia Nak Mengail?</h2>
+      <p style="font-size:16px; color:#D8CFFF; margin:14px auto 0; max-width:44ch">Hubungi kami terus melalui WhatsApp untuk mendapatkan maklum balas pantas. Kami sedia membantu 7 hari seminggu.</p>
+      <a href="{{ waLink }}" style="display:inline-block; margin-top:26px; padding:15px 32px; border-radius:16px; background:#FFB800; color:#2E1D6B; font-size:15px; font-weight:700; box-shadow:0 14px 32px rgba(255,184,0,.28)">WhatsApp Kami</a>
+    </div>
+  </section>
+
+  <footer style="background:#1B1436; color:#CFC7EC; padding:56px 24px 34px">
+    <div data-grid3="true" style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:36px">
+      <div>
+        <div style="font-family:'Poppins',sans-serif; font-weight:600; font-size:17px; color:#FFFFFF">Sakura Tackle</div>
+        <p style="font-size:13.5px; line-height:1.65; margin:12px 0 0; max-width:42ch; text-wrap:pretty">Pengalaman candat sotong terbaik di perairan Pulau Kapas, Terengganu. Dipandu oleh kapten berpengalaman dengan lubuk-lubuk rahsia terbaik.</p>
+      </div>
+      <div>
+        <div style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Menu</div>
+        <div style="display:flex; flex-direction:column; gap:9px; margin-top:14px; font-size:13.5px">
+          <a href="https://sakuratackle.com/" target="_blank" rel="noopener" style="color:#CFC7EC">Home</a>
+          <a href="https://sakuratackle.com/shop/" target="_blank" rel="noopener" style="color:#CFC7EC">Shop</a>
+          <a href="#armada" style="color:#CFC7EC">Armada</a>
+          <a href="#faq" style="color:#CFC7EC">FAQ</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A7FB0">Hubungi Kami</div>
+        <div style="display:flex; flex-direction:column; gap:9px; margin-top:14px; font-size:13.5px">
+          <a href="tel:+601153598055" style="color:#CFC7EC">60 11-5359 8055</a>
+          <span>Kompleks LKIM Marang, Jeti Marang, Terengganu</span>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1200px; margin:34px auto 0; padding-top:20px; border-top:1px solid rgba(255,255,255,.12); font-size:12px; color:#9A8FC4">&copy; 2026 Sakura Tackle. Hak Cipta Terpelihara. | Jeti Marang, Terengganu, Malaysia</div>
+  </footer>
+
+  <a href="{{ waLink }}" aria-label="WhatsApp Sakura Tackle" style="position:fixed; right:22px; bottom:22px; z-index:60; display:flex; align-items:center; gap:10px; padding:13px 20px; border-radius:999px; background:#128C7E; color:#FFFFFF; font-size:13.5px; font-weight:700; box-shadow:0 14px 30px rgba(18,140,126,.35)">WhatsApp Kami</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;whatsappNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;601153598055&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Kontak&quot;}}">
+class Component extends DCLogic {
+  state = { pax: "8", date: "2026-10-03", open: 0 };
+
+  boats() {
+    return [
+      { name: 'SpeedBoat "Putera Kapas"', kind: "Speedboat", len: 42, beam: "10 Kaki", capN: 8, cap: "Max 8 Pax", material: "Fiber Glass", rate: "RM2000", slot: "ct-boat-putera", hint: "Foto SpeedBoat Putera Kapas",
+        desc: "Antara speedboat yang kami kendali. Diperbuat daripada fiberglass buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut, memastikan anda selesa sepanjang malam." },
+      { name: "KNF 6241", kind: "Kapal Tradisional", len: 63, beam: "16.5 Kaki", capN: 15, cap: "Max 15 Pax", material: "Kayu Cengal, Fiberglass", rate: "RM2300", slot: "ct-boat-knf6241", hint: "Foto bot KNF 6241",
+        desc: "Bot candat terpanjang dalam armada kami. Diperbuat daripada kayu cengal buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut untuk memastikan kumpulan anda selesa sepanjang malam." },
+      { name: "TRF 1005", kind: "Kapal Tradisional", len: 56, beam: "15 Kaki", capN: 15, cap: "Max 15 Pax", material: "Kayu Cengal", rate: "RM2300", slot: "ct-boat-trf1005", hint: "Foto bot TRF 1005",
+        desc: "Bot candat terpanjang dalam armada kami. Diperbuat daripada kayu cengal buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut untuk memastikan kumpulan anda selesa sepanjang malam." },
+      { name: "TRF 92", kind: "Kapal Tradisional", len: 51, beam: "14 Kaki", capN: 10, cap: "Max 10 Pax", material: "Kayu Cengal", rate: "RM1500", slot: "ct-boat-trf92", hint: "Foto bot TRF 92",
+        desc: "Bot candat saiz sederhana dalam armada kami. Diperbuat daripada kayu cengal buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut untuk memastikan kumpulan anda selesa sepanjang malam." },
+      { name: "TRA 1539", kind: "Kapal Tradisional", len: 51, beam: "14 Kaki", capN: 10, cap: "Max 10 Pax", material: "Kayu Cengal", rate: "RM1500", slot: "ct-boat-tra1539", hint: "Foto bot TRA 1539",
+        desc: "Bot candat saiz sederhana dalam armada kami. Diperbuat daripada kayu cengal buatan tangan orang Marang. Bot ini direka khas untuk kestabilan maksimum di tengah laut untuk memastikan kumpulan anda selesa sepanjang malam." }
+    ];
+  }
+
+  renderVals() {
+    const pax = parseInt(this.state.pax, 10);
+    const avail = ["Slot terbuka", "Tinggal sedikit", "Slot terbuka"];
+    const fleet = this.boats().filter(b => b.capN >= pax).map((b, i) => ({
+      name: b.name, kind: b.kind, desc: b.desc, rate: b.rate, material: b.material, cap: b.cap, beam: b.beam,
+      length: b.len + " Kaki", slotId: b.slot, slotHint: b.hint, availability: avail[i % 3]
+    }));
+
+    const faqSrc = [
+      { q: "Boleh ke saya nak datang trip candat sorang-sorang?", a: "Buat masa sekarang trip candat Sakura Tackle tak buka trip solo. Tetapi kami akan buka." },
+      { q: "Pukul berapa perlu berkumpul di Jeti?", a: "Bertolak selepas Waktu Asar dari Jeti Marang. Pulang pukul 7:00 pagi keesokannya." },
+      { q: "Berapa deposit untuk lock slot?", a: "Deposit serendah RM50/pax untuk lock slot." },
+      { q: "Umpan dan candat disediakan?", a: "Umpan/candat boleh beli di vending machine di jeti sekiranya tiada." }
+    ];
+
+    const g = "https://sakuratackle.com/wp-content/uploads/";
+    const galleryImgs = [
+      [g + "2026/04/WhatsApp-Image-2026-04-10-at-00.36.46-1.jpeg", "span 2", "span 2"],
+      [g + "2026/04/WhatsApp-Image-2026-04-10-at-00.36.46.jpeg", "auto", "auto"],
+      [g + "2026/02/ChatGPT-Image-Feb-25-2026-06_18_39-PM.png", "auto", "auto"],
+      [g + "2026/02/restored_boat_group_4k_v3-scaled.png", "span 2", "auto"],
+      [g + "2026/02/TRF-1005.jpeg", "auto", "auto"],
+      [g + "2026/02/Speedboat.jpeg", "auto", "auto"],
+      [g + "2026/04/WhatsApp-Image-2026-04-10-at-00.36.47-1.jpeg", "span 2", "auto"],
+      [g + "2026/02/restored_night_fishing_4k_v2-scaled.png", "span 2", "auto"]
+    ];
+
+    return {
+      pax: this.state.pax,
+      date: this.state.date,
+      waLink: "https://api.whatsapp.com/send?phone=" + (this.props.whatsappNumber || "601153598055") + "&text=Saya%20berminat%20trip%20candat%20sotong",
+      onPax: e => this.setState({ pax: e.target.value }),
+      onDate: e => this.setState({ date: e.target.value }),
+      fleet,
+      noResults: fleet.length === 0,
+      resultLabel: fleet.length + " bot sesuai \u00b7 " + this.state.date,
+      facilities: [
+        { title: "GPS Fish Finder", body: "Sonar kesan lubuk candat." },
+        { title: "Makan Malam", body: "Makan dan minum disediakan (2 kali). *ais disediakan" },
+        { title: "Kapasiti", body: "8\u201315 Pax" },
+        { title: "Ais & Kotak", body: "Simpan tangkapan segar." },
+        { title: "Safety Gear", body: "Life jacket." },
+        { title: "Lampu Candat", body: "LED Hijau High-Power untuk mudahkan aktiviti mencandat." },
+        { title: "Umpan/Candat", body: "Boleh beli di vending machine di jeti sekiranya tiada." },
+        { title: "Bilik Rehat & Tandas", body: "Bilik rehat dan tandas yang selesa di atas bot." }
+      ],
+      steps: [
+        { n: "1", title: "Pilih tarikh & saiz group", body: "Semak tarikh dan bilangan pax, kemudian pilih bot yang sesuai dari armada kami." },
+        { n: "2", title: "Lock slot dengan deposit", body: "Deposit serendah RM50/pax untuk lock slot. Baki dijelaskan sebelum bertolak." },
+        { n: "3", title: "Berlabuh dari Jeti Marang", body: "Parkir disediakan berdekatan dengan jeti." },
+        { n: "4", title: "Bertolak & pulang", body: "Bertolak selepas Waktu Asar. Pulang pukul 7:00 pagi keesokannya." },
+        { n: "5", title: "Persediaan sebelum turun ke laut", body: "Ubat mabuk laut 30 minit sebelum naik bot, baju sejuk atau windbreaker, dan plastik untuk bawa balik sotong." }
+      ],
+      gallery: galleryImgs.map((x, i) => ({ src: x[0], col: x[1], row: x[2], alt: "Galeri tangkapan candat sotong Sakura Tackle " + (i + 1) })),
+      testimonials: [1,2,3,7,8,9,10,11,12,13].map(n => ({
+        src: g + "2026/02/Koleksi-Testimoni-Candat-" + n + ".jpg",
+        alt: "Testimoni pelanggan trip candat Sakura Tackle " + n
+      })),
+      faqs: faqSrc.map((f, i) => ({
+        q: f.q, a: f.a,
+        open: this.state.open === i,
+        openStr: this.state.open === i ? "true" : "false",
+        sign: this.state.open === i ? "\u2212" : "+",
+        toggle: () => this.setState(s => ({ open: s.open === i ? -1 : i }))
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

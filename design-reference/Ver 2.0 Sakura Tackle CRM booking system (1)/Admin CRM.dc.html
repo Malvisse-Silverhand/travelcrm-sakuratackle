@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/typography.css">
+<script src="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/_ds_bundle.js"></script>
+<script src="image-slot.js"></script>
+<style>
+  * { box-sizing:border-box; }
+  a { color:#2E1D6B; text-decoration:none; }
+  a:hover { color:#4A34A0; }
+  input, select, textarea, button { font-family:'Inter', system-ui, sans-serif; }
+  input:focus, select:focus, textarea:focus { outline:2px solid rgba(255,184,0,.7); outline-offset:1px; }
+  [data-mob] { display:none; }
+  @container (max-width: 820px) {
+    [data-desk] { display:none !important; }
+    [data-mob] { display:flex !important; }
+    [data-shell] { grid-template-columns:minmax(0,1fr) !important; }
+    [data-two] { grid-template-columns:minmax(0,1fr) !important; }
+    [data-kpi] { grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important; }
+    [data-main] { padding:16px 16px 88px !important; }
+    [data-wide] { grid-template-columns:minmax(0,1fr) !important; }
+  }
+</style>
+</helmet>
+
+<div style="container-type:inline-size; position:relative; min-height:100%; background:#F5F2FE; color:#1B1436; font-family:'Inter', system-ui, sans-serif">
+
+  <sc-if value="{{ showLogin }}" hint-placeholder-val="{{ false }}">
+  <div style="min-height:100%; display:flex; align-items:center; justify-content:center; padding:60px 24px">
+    <div style="width:100%; max-width:400px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); border-radius:26px; padding:34px; box-shadow:0 24px 60px rgba(46,29,107,.10)">
+      <div style="width:50px; height:50px; border-radius:16px; background:linear-gradient(145deg,#FFB800,#F08A00); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:700; font-size:18px; color:#2E1D6B; margin-bottom:24px">CS</div>
+      <h2 style="font-family:'Poppins',sans-serif; font-size:26px; font-weight:650; letter-spacing:-.025em; margin:0 0 6px">Operator sign in</h2>
+      <p style="font-size:13.5px; color:#635A87; margin:0 0 26px">Sakura Tackle booking console</p>
+      <label style="display:flex; flex-direction:column; gap:7px; margin-bottom:14px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Phone or email</span>
+        <input value="{{ loginUser }}" onChange="{{ setLoginUser }}" placeholder="operator@sakuratackle.com" style="padding:14px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:14px"></label>
+      <label style="display:flex; flex-direction:column; gap:7px; margin-bottom:24px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Password</span>
+        <input type="password" value="{{ loginPass }}" onChange="{{ setLoginPass }}" placeholder="Kata laluan" style="padding:14px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:14px"></label>
+      <button onClick="{{ doLogin }}" style="cursor:pointer; border:0; width:100%; padding:15px; border-radius:14px; background:#FFB800; color:#2E1D6B; font-size:14.5px; font-weight:700">Sign in</button>
+      <p style="text-align:center; font-size:12.5px; color:#7A6FA0; margin:16px 0 0">Access is limited to registered boat operators.</p>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showApp }}" hint-placeholder-val="{{ true }}">
+  <div data-shell="true" style="display:grid; grid-template-columns:236px minmax(0,1fr); min-height:100%">
+
+    <aside data-desk="true" style="background:#2E1D6B; padding:22px 16px; display:flex; flex-direction:column; gap:4px">
+      <div style="display:flex; align-items:center; gap:11px; padding:0 8px 22px">
+        <div style="width:32px; height:32px; border-radius:10px; background:linear-gradient(145deg,#FFB800,#F08A00); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:700; font-size:13px; color:#2E1D6B">CS</div>
+        <div style="display:flex; flex-direction:column; line-height:1.15">
+          <span style="font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; color:#FFFFFF">Sakura Tackle</span>
+          <span style="font-size:10.5px; color:#9C8ED0">Booking console</span>
+        </div>
+      </div>
+      <sc-for list="{{ sideNav }}" as="n" hint-placeholder-count="8">
+        <button onClick="{{ n.onPick }}" style="cursor:pointer; border:0; text-align:left; padding:11px 13px; border-radius:12px; font-size:13.5px; font-weight:{{ n.w }}; background:{{ n.bg }}; color:{{ n.fg }}; display:flex; align-items:center; gap:11px">
+          <span style="font-size:14px; width:18px; display:inline-block">{{ n.icon }}</span>{{ n.label }}</button>
+      </sc-for>
+      <div style="flex:1"></div>
+      <button onClick="{{ doLogout }}" style="cursor:pointer; text-align:left; padding:11px 13px; border-radius:12px; font-size:13px; font-weight:600; background:transparent; border:1px solid rgba(255,255,255,.18); color:#D6CDF5">Sign out</button>
+    </aside>
+
+    <div style="display:flex; flex-direction:column; min-width:0">
+
+      <div style="flex:0 0 auto; padding:20px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; border-bottom:1px solid rgba(46,29,107,.10); background:#FFFFFF">
+        <div style="display:flex; flex-direction:column; line-height:1.25; min-width:0">
+          <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">{{ adminTitle }}</span>
+          <span style="font-size:12.5px; color:#7A6FA0">{{ adminSubtitle }}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px">
+          <button data-desk="true" onClick="{{ noop }}" style="cursor:pointer; border:0; padding:10px 18px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:13px; font-weight:700">New booking</button>
+          <div style="width:36px; height:36px; border-radius:12px; background:rgba(46,29,107,.08); border:1px solid rgba(46,29,107,.14); display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; color:#2E1D6B">AZ</div>
+        </div>
+      </div>
+
+      <div data-main="true" style="flex:1; overflow-y:auto; padding:26px 28px 40px">
+
+        <sc-if value="{{ scDash }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div data-two="true" style="display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:16px; margin-bottom:18px">
+            <div style="border-radius:22px; background:linear-gradient(150deg,#2E1D6B,#4A34A0); color:#FFFFFF; padding:24px">
+              <span style="font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:#C6BAF0">Sailing tonight</span>
+              <div style="font-family:'Poppins',sans-serif; font-size:38px; font-weight:700; letter-spacing:-.03em; margin:8px 0 2px">3 boats</div>
+              <div style="font-size:13.5px; color:#C6BAF0">26 pax total. Last check-in 18:30 at Jeti Marang.</div>
+            </div>
+            <div style="border-radius:22px; background:linear-gradient(150deg,#FFB800,#E8890B); color:#2E1D6B; padding:24px">
+              <span style="font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; opacity:.72">Deposit outstanding</span>
+              <div style="font-family:'Poppins',sans-serif; font-size:38px; font-weight:700; letter-spacing:-.03em; margin:8px 0 2px">RM 1,000</div>
+              <div style="font-size:13.5px; opacity:.82">4 bookings waiting on RM 250 each.</div>
+            </div>
+          </div>
+          <div data-kpi="true" style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:26px">
+            <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+              <div style="border-radius:18px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:17px">
+                <span style="display:block; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:#7A6FA0; font-weight:700">{{ k.label }}</span>
+                <span style="display:block; font-family:'Poppins',sans-serif; font-size:24px; font-weight:700; letter-spacing:-.02em; margin-top:7px; color:{{ k.color }}">{{ k.value }}</span>
+                <span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:3px">{{ k.note }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <span style="display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Tonight's manifest</span>
+          <div style="display:flex; flex-direction:column; gap:10px">
+            <sc-for list="{{ tonight }}" as="t" hint-placeholder-count="3">
+              <button onClick="{{ t.onOpen }}" style="cursor:pointer; text-align:left; width:100%; border:1px solid rgba(46,29,107,.12); background:#FFFFFF; border-radius:16px; padding:15px; display:flex; align-items:center; gap:14px">
+                <div style="width:46px; height:46px; border-radius:14px; background:rgba(46,29,107,.07); display:flex; flex-direction:column; align-items:center; justify-content:center; flex:0 0 auto">
+                  <span style="font-size:9px; letter-spacing:.1em; color:#7A6FA0">BOT</span>
+                  <span style="font-size:11px; font-weight:700; color:#2E1D6B">{{ t.short }}</span>
+                </div>
+                <div style="flex:1; min-width:0">
+                  <span style="display:block; font-size:14.5px; font-weight:650">{{ t.name }}</span>
+                  <span style="display:block; font-size:12px; color:#7A6FA0; margin-top:2px">{{ t.meta }}</span>
+                </div>
+                <span style="flex:0 0 auto; padding:5px 11px; border-radius:999px; font-size:10.5px; font-weight:700; background:{{ t.bg }}; color:{{ t.fg }}">{{ t.status }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ scCal }}" hint-placeholder-val="{{ false }}">
+        <div data-wide="true" style="display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:18px; align-items:start">
+          <div style="border-radius:22px; background:#2E1D6B; padding:22px">
+            <div style="display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; padding-bottom:4px">
+              <sc-for list="{{ adminBoatChips }}" as="b" hint-placeholder-count="4">
+                <button onClick="{{ b.onPick }}" style="flex:0 0 auto; cursor:pointer; padding:9px 16px; border-radius:999px; font-size:12.5px; font-weight:650; background:{{ b.bg }}; color:{{ b.fg }}; border:1px solid {{ b.bd }}">{{ b.code }}</button>
+              </sc-for>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
+              <button onClick="{{ prevMonth }}" style="cursor:pointer; padding:7px 13px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:12px">&#8592;</button>
+              <span style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:650; color:#FFFFFF">{{ monthLabel }}</span>
+              <button onClick="{{ nextMonth }}" style="cursor:pointer; padding:7px 13px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:12px">&#8594;</button>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:5px">
+              <sc-for list="{{ dowLabels }}" as="d" hint-placeholder-count="7">
+                <div style="text-align:center; font-size:9.5px; letter-spacing:.1em; color:#8B7DC4; padding:4px 0; font-weight:700">{{ d }}</div>
+              </sc-for>
+              <sc-for list="{{ adminCells }}" as="c" hint-placeholder-count="35">
+                <button onClick="{{ c.onPick }}" style="position:relative; cursor:{{ c.cursor }}; height:46px; border-radius:11px; font-size:13px; font-weight:650; display:flex; align-items:center; justify-content:center; background:{{ c.bg }}; color:{{ c.fg }}; border:1px solid {{ c.bd }}; visibility:{{ c.vis }}">{{ c.day }}
+                  <i style="position:absolute; top:4px; right:5px; width:5px; height:5px; border-radius:99px; background:{{ c.holidayDot }}; display:block"></i>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:14px">
+            <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:20px">
+              <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Selected night</span>
+              <div style="font-family:'Poppins',sans-serif; font-size:20px; font-weight:650; letter-spacing:-.02em; margin:7px 0 3px">{{ adminSelLabel }}</div>
+              <div style="font-size:12.5px; color:#635A87; margin-bottom:16px">{{ adminSelMeta }}</div>
+              <div style="display:flex; gap:9px; flex-wrap:wrap">
+                <button onClick="{{ noop }}" style="cursor:pointer; border:0; padding:11px 17px; border-radius:12px; background:#FFB800; color:#2E1D6B; font-size:12.5px; font-weight:700">Assign booking</button>
+                <button onClick="{{ noop }}" style="cursor:pointer; padding:11px 17px; border-radius:12px; background:transparent; border:1px solid rgba(46,29,107,.2); color:#2E1D6B; font-size:12.5px; font-weight:650">Block night</button>
+              </div>
+            </div>
+            <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:20px">
+              <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Cuti umum {{ monthLabel }}</span>
+              <div style="display:flex; gap:8px; flex-wrap:wrap">
+                <sc-for list="{{ holidays }}" as="h" hint-placeholder-count="2">
+                  <span style="display:flex; align-items:center; gap:7px; padding:6px 12px; border-radius:999px; background:rgba(255,184,0,.18); border:1px solid rgba(255,184,0,.4); font-size:11.5px; color:#8A6A00; font-weight:600"><b style="font-family:'Poppins',sans-serif">{{ h.d }}</b>{{ h.n }}</span>
+                </sc-for>
+              </div>
+              <sc-if value="{{ noHoliday }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:12.5px; color:#7A6FA0">Tiada cuti umum bulan ini.</span>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ scBookings }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="display:flex; gap:7px; margin-bottom:16px; overflow-x:auto; padding-bottom:4px">
+            <sc-for list="{{ bookingFilters }}" as="f" hint-placeholder-count="4">
+              <button onClick="{{ f.onPick }}" style="flex:0 0 auto; cursor:pointer; padding:9px 15px; border-radius:999px; font-size:12.5px; font-weight:650; background:{{ f.bg }}; color:{{ f.fg }}; border:1px solid {{ f.bd }}">{{ f.label }}</button>
+            </sc-for>
+          </div>
+          <div data-two="true" style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+            <sc-for list="{{ bookingRows }}" as="b" hint-placeholder-count="6">
+              <button onClick="{{ b.onOpen }}" style="cursor:pointer; text-align:left; width:100%; border:1px solid rgba(46,29,107,.12); background:#FFFFFF; border-radius:16px; padding:16px">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+                  <span style="font-size:14.5px; font-weight:650">{{ b.name }}</span>
+                  <span style="padding:4px 10px; border-radius:999px; font-size:10.5px; font-weight:700; background:{{ b.bg }}; color:{{ b.fg }}">{{ b.status }}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; margin-top:7px; font-size:12px; color:#7A6FA0">
+                  <span>{{ b.ref }}</span><i style="width:3px; height:3px; border-radius:2px; background:#B7ABE0; display:block"></i><span>{{ b.boat }}</span><i style="width:3px; height:3px; border-radius:2px; background:#B7ABE0; display:block"></i><span>{{ b.date }}</span>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px solid rgba(46,29,107,.09)">
+                  <span style="font-size:12px; color:#635A87">{{ b.pax }} pax</span>
+                  <span style="font-size:13.5px; font-weight:700; color:{{ b.amtColor }}">{{ b.amount }}</span>
+                </div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ scDetail }}" hint-placeholder-val="{{ false }}">
+        <div data-wide="true" style="display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:16px; align-items:start">
+          <div>
+            <button onClick="{{ backToBookings }}" style="cursor:pointer; background:none; border:0; padding:0; color:#2E1D6B; font-size:12.5px; font-weight:700; margin-bottom:14px">&#8592; All bookings</button>
+            <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px; margin-bottom:14px">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+                <span style="font-family:'Poppins',sans-serif; font-size:21px; font-weight:650; letter-spacing:-.02em">{{ dName }}</span>
+                <span style="padding:5px 12px; border-radius:999px; font-size:10.5px; font-weight:700; background:{{ dBg }}; color:{{ dFg }}">{{ dStatus }}</span>
+              </div>
+              <div style="font-size:12.5px; color:#7A6FA0; margin-top:5px">{{ dRef }} &#183; booked 04 Feb 2027</div>
+              <div data-kpi="true" style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-top:18px; padding-top:16px; border-top:1px solid rgba(46,29,107,.10)">
+                <div><span style="display:block; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:4px">Boat</span><span style="font-size:13.5px; font-weight:650">{{ dBoat }}</span></div>
+                <div><span style="display:block; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:4px">Night</span><span style="font-size:13.5px; font-weight:650">{{ dDate }}</span></div>
+                <div><span style="display:block; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:4px">Phone</span><span style="font-size:13.5px; font-weight:650">{{ dPhone }}</span></div>
+                <div><span style="display:block; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:4px">Weather</span><span style="font-size:13.5px; font-weight:650; color:#137A47">{{ dWeather }}</span></div>
+              </div>
+            </div>
+            <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px; margin-bottom:14px">
+              <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Pax list ({{ dPaxCount }})</span>
+              <div data-kpi="true" style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px 14px">
+                <sc-for list="{{ dPaxList }}" as="p" hint-placeholder-count="8">
+                  <span style="font-size:12.5px; color:#3B3160">{{ p }}</span>
+                </sc-for>
+              </div>
+            </div>
+            <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px">
+              <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:10px">Skipper note</span>
+              <p style="margin:0; font-size:13.5px; line-height:1.6; color:#3B3160">{{ dNote }}</p>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:14px">
+            <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px">
+              <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:14px">Payment</span>
+              <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:14px">
+                <div><span style="display:block; font-size:11.5px; color:#635A87; margin-bottom:3px">Deposit received</span><span style="font-family:'Poppins',sans-serif; font-size:23px; font-weight:700; color:#137A47">RM 250</span></div>
+                <div style="text-align:right"><span style="display:block; font-size:11.5px; color:#635A87; margin-bottom:3px">Balance at jetty</span><span style="font-family:'Poppins',sans-serif; font-size:23px; font-weight:700; color:#B07800">{{ dBalance }}</span></div>
+              </div>
+              <div style="height:6px; border-radius:999px; overflow:hidden; background:rgba(46,29,107,.10); display:flex"><div style="width:{{ dPct }}; background:#2FBF71"></div></div>
+              <div style="display:flex; align-items:center; gap:12px; margin-top:16px; padding:12px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.10)">
+                <div style="width:42px; height:52px; border-radius:8px; flex:0 0 auto; background:rgba(255,184,0,.20); border:1px solid rgba(255,184,0,.42); display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:700; letter-spacing:.06em; color:#8A6A00">JPG</div>
+                <div style="flex:1; min-width:0"><span style="display:block; font-size:12.5px; font-weight:650">resit-deposit-014.jpg</span><span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:2px">Uploaded 04 Feb, 21:14</span></div>
+                <span style="font-size:11.5px; font-weight:700; color:#2E1D6B">View</span>
+              </div>
+            </div>
+            <button onClick="{{ noop }}" style="cursor:pointer; border:0; padding:14px; border-radius:14px; background:#FFB800; color:#2E1D6B; font-size:13.5px; font-weight:700">WhatsApp customer</button>
+            <button onClick="{{ noop }}" style="cursor:pointer; padding:14px; border-radius:14px; background:transparent; border:1px solid rgba(239,68,68,.4); color:#C22B2B; font-size:13.5px; font-weight:650">Cancel booking</button>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ scPackages }}" hint-placeholder-val="{{ false }}">
+        <div data-two="true" style="display:grid; grid-template-columns:1fr 1fr; gap:14px">
+          <sc-for list="{{ packages }}" as="p" hint-placeholder-count="4">
+            <div style="border-radius:18px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); overflow:hidden">
+              <div style="display:flex; gap:14px; padding:16px">
+                <div style="width:64px; height:64px; border-radius:14px; flex:0 0 auto; background:rgba(46,29,107,.07); border:1px solid rgba(46,29,107,.12); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-size:17px; font-weight:700; color:#2E1D6B">{{ p.tag }}</div>
+                <div style="flex:1; min-width:0">
+                  <span style="display:block; font-size:14.5px; font-weight:650">{{ p.name }}</span>
+                  <span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:3px">{{ p.meta }}</span>
+                  <span style="display:inline-block; margin-top:8px; font-family:'Poppins',sans-serif; font-size:16px; font-weight:700; color:#B07800">{{ p.price }}</span>
+                </div>
+              </div>
+              <div style="display:flex; border-top:1px solid rgba(46,29,107,.09)">
+                <button onClick="{{ p.onEdit }}" style="flex:1; cursor:pointer; background:none; border:0; padding:12px; color:#2E1D6B; font-size:12.5px; font-weight:700">Edit page</button>
+                <div style="width:1px; background:rgba(46,29,107,.09)"></div>
+                <button onClick="{{ noop }}" style="flex:1; cursor:pointer; background:none; border:0; padding:12px; color:#7A6FA0; font-size:12.5px; font-weight:650">Duplicate</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ scBuilder }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="display:flex; gap:6px; overflow-x:auto; margin-bottom:18px; padding-bottom:4px">
+            <sc-for list="{{ pbTabs }}" as="t" hint-placeholder-count="5">
+              <button onClick="{{ t.onPick }}" style="flex:0 0 auto; cursor:pointer; padding:9px 16px; border-radius:999px; font-size:12.5px; font-weight:650; background:{{ t.bg }}; color:{{ t.fg }}; border:1px solid {{ t.bd }}">{{ t.label }}</button>
+            </sc-for>
+          </div>
+          <div data-wide="true" style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:18px; align-items:start">
+            <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px">
+
+              <sc-if value="{{ pbOverview }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-direction:column; gap:14px">
+                <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Page title</span>
+                  <input value="{{ pbTitle }}" onChange="{{ setPbTitle }}" style="padding:13px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:13.5px"></label>
+                <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Sub-headline</span>
+                  <textarea value="{{ pbSub }}" onChange="{{ setPbSub }}" rows="3" style="padding:13px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:13.5px; resize:vertical"></textarea></label>
+                <div style="border-radius:14px; border:1px dashed rgba(46,29,107,.22); padding:16px; text-align:center">
+                  <image-slot id="crm-pb-cover" radius="10" placeholder="Cover pakej" style="width:100%; height:110px; display:block; margin-bottom:12px"></image-slot>
+                  <span style="font-size:12.5px; color:#635A87">Cover image. Drop a photo to replace.</span>
+                </div>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ pbItin }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column; gap:10px">
+                <sc-for list="{{ itinerary }}" as="it" hint-placeholder-count="5">
+                  <div style="display:flex; gap:13px; padding:14px; border-radius:14px; background:#F7F5FE; border:1px solid rgba(46,29,107,.10)">
+                    <span style="flex:0 0 auto; font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#B07800; width:52px">{{ it.time }}</span>
+                    <div style="flex:1; min-width:0">
+                      <span style="display:block; font-size:13.5px; font-weight:650">{{ it.title }}</span>
+                      <span style="display:block; font-size:12px; color:#7A6FA0; margin-top:3px; line-height:1.5">{{ it.body }}</span>
+                    </div>
+                    <span style="flex:0 0 auto; color:#B7ABE0; font-size:14px">&#8942;</span>
+                  </div>
+                </sc-for>
+                <button onClick="{{ noop }}" style="cursor:pointer; padding:13px; border-radius:14px; background:transparent; border:1px dashed rgba(46,29,107,.24); color:#635A87; font-size:12.5px; font-weight:650">Add step</button>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ pbPricing }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column; gap:14px">
+                <div data-two="true" style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+                  <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Price per pax</span>
+                    <input value="RM 180" readonly="true" style="padding:13px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:13.5px"></label>
+                  <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Deposit per boat</span>
+                    <input value="RM 250" readonly="true" style="padding:13px 14px; border-radius:12px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:13.5px"></label>
+                </div>
+                <div style="border-radius:16px; background:#F7F5FE; border:1px solid rgba(46,29,107,.10); padding:16px">
+                  <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:12px">Included in price</span>
+                  <div style="display:flex; flex-direction:column; gap:9px">
+                    <sc-for list="{{ includes }}" as="i" hint-placeholder-count="5">
+                      <span style="display:flex; gap:9px; align-items:flex-start; font-size:12.5px; color:#3B3160"><i style="color:#B07800; font-style:normal">&#10003;</i>{{ i }}</span>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ pbFaq }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column; gap:10px">
+                <sc-for list="{{ faqRows }}" as="f" hint-placeholder-count="4">
+                  <div style="padding:14px; border-radius:14px; background:#F7F5FE; border:1px solid rgba(46,29,107,.10)">
+                    <span style="display:block; font-size:13.5px; font-weight:650">{{ f.q }}</span>
+                    <span style="display:block; font-size:12px; color:#7A6FA0; margin-top:5px; line-height:1.55">{{ f.a }}</span>
+                  </div>
+                </sc-for>
+                <button onClick="{{ noop }}" style="cursor:pointer; padding:13px; border-radius:14px; background:transparent; border:1px dashed rgba(46,29,107,.24); color:#635A87; font-size:12.5px; font-weight:650">Add question</button>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ pbPreview }}" hint-placeholder-val="{{ false }}">
+              <p style="margin:0; font-size:13.5px; color:#635A87">Pratonton dipaparkan di sebelah kanan. Tekan tab lain untuk terus edit.</p>
+              </sc-if>
+            </div>
+
+            <div style="border-radius:20px; overflow:hidden; border:1px solid rgba(46,29,107,.14); background:#F5F2FE">
+              <div style="padding:10px 14px; border-bottom:1px solid rgba(46,29,107,.10); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Live preview</div>
+              <img src="uploads/pasted-1788397611096-0.png" alt="Banner Candat Sotong 2027" style="width:100%; display:block">
+              <div style="padding:18px">
+                <span style="font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:#8A6A00; font-weight:700">Musim 2027</span>
+                <h4 style="font-family:'Poppins',sans-serif; font-size:19px; font-weight:650; letter-spacing:-.02em; margin:8px 0 6px">{{ pbTitle }}</h4>
+                <p style="margin:0 0 14px; font-size:12.5px; line-height:1.6; color:#635A87">{{ pbSub }}</p>
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-radius:12px; background:rgba(255,184,0,.16); border:1px solid rgba(255,184,0,.4)">
+                  <span style="font-size:12px; color:#8A6A00; font-weight:600">Dari</span>
+                  <span style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:700; color:#B07800">RM 180 / pax</span>
+                </div>
+                <button onClick="{{ noop }}" style="cursor:pointer; border:0; width:100%; margin-top:12px; padding:13px; border-radius:999px; background:#FFB800; color:#2E1D6B; font-size:13.5px; font-weight:700">Saya Ready Book Trip</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ scReports }}" hint-placeholder-val="{{ false }}">
+        <div data-wide="true" style="display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:16px; align-items:start">
+          <div style="border-radius:22px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:22px">
+            <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Collected this season</span>
+            <div style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:700; letter-spacing:-.03em; margin:8px 0 3px; color:#2E1D6B">RM 84,310</div>
+            <span style="font-size:12.5px; color:#7A6FA0">Across 4 boats, 132 nights sold</span>
+            <div style="display:flex; align-items:flex-end; gap:10px; height:120px; margin-top:24px">
+              <sc-for list="{{ chart }}" as="c" hint-placeholder-count="7">
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end">
+                  <div style="width:100%; border-radius:6px 6px 0 0; background:{{ c.color }}; height:{{ c.h }}"></div>
+                  <span style="font-size:9.5px; color:#7A6FA0; letter-spacing:.04em; font-weight:600">{{ c.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="border-radius:22px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); overflow:hidden">
+            <div style="padding:16px 18px 10px; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">By boat</div>
+            <sc-for list="{{ boatRevenue }}" as="r" hint-placeholder-count="4">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-top:1px solid rgba(46,29,107,.08)">
+                <div><span style="display:block; font-size:13.5px; font-weight:650">{{ r.code }}</span><span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:2px">{{ r.nights }} nights</span></div>
+                <span style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:700">{{ r.amount }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ scSettings }}" hint-placeholder-val="{{ false }}">
+        <div data-two="true" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start">
+          <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:20px">
+            <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700; margin-bottom:14px">Fleet</span>
+            <div style="display:flex; flex-direction:column; gap:12px">
+              <sc-for list="{{ fleet }}" as="b" hint-placeholder-count="4">
+                <div style="display:flex; align-items:center; justify-content:space-between">
+                  <div><span style="display:block; font-size:13.5px; font-weight:650">{{ b.code }}</span><span style="display:block; font-size:11.5px; color:#7A6FA0; margin-top:2px">{{ b.skipper }}</span></div>
+                  <span style="font-size:12px; color:#635A87; font-weight:600">{{ b.cap }} pax</span>
+                </div>
+              </sc-for>
+            </div>
+            <button onClick="{{ noop }}" style="cursor:pointer; width:100%; margin-top:16px; padding:12px; border-radius:12px; background:transparent; border:1px dashed rgba(46,29,107,.24); color:#635A87; font-size:12.5px; font-weight:650">Add boat</button>
+          </div>
+          <div style="border-radius:20px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:20px; display:flex; flex-direction:column; gap:14px">
+            <span style="font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Booking rules</span>
+            <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:12px; color:#635A87">Deposit per boat</span>
+              <input value="RM 250" readonly="true" style="padding:12px 14px; border-radius:11px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:13.5px"></label>
+            <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:12px; color:#635A87">WhatsApp number</span>
+              <input value="{{ waNumber }}" onChange="{{ setWa }}" style="padding:12px 14px; border-radius:11px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:13.5px"></label>
+            <label style="display:flex; flex-direction:column; gap:7px"><span style="font-size:12px; color:#635A87">Season</span>
+              <input value="Mac 2027 - September 2027" readonly="true" style="padding:12px 14px; border-radius:11px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#635A87; font-size:13.5px"></label>
+          </div>
+        </div>
+        </sc-if>
+
+      </div>
+
+      <nav data-mob="true" style="position:sticky; bottom:0; display:grid; grid-template-columns:repeat(5,1fr); gap:2px; padding:9px 10px 16px; border-top:1px solid rgba(46,29,107,.12); background:#FFFFFF">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+          <button onClick="{{ n.onPick }}" style="cursor:pointer; background:none; border:0; padding:7px 2px; display:flex; flex-direction:column; align-items:center; gap:5px; color:{{ n.fg }}">
+            <span style="font-size:16px; line-height:1">{{ n.icon }}</span>
+            <span style="font-size:9.5px; font-weight:700; letter-spacing:.02em">{{ n.label }}</span>
+          </button>
+        </sc-for>
+      </nav>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;dashboard&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;dashboard&quot;,&quot;calendar&quot;,&quot;bookings&quot;,&quot;detail&quot;,&quot;packages&quot;,&quot;builder&quot;,&quot;reports&quot;,&quot;settings&quot;]},&quot;startLoggedOut&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const AMBER = '#FFB800';
+const PURPLE = '#2E1D6B';
+const BOATS = [
+  { code: 'TRF 92', skipper: 'Pak Su Rahim', cap: 10 },
+  { code: 'KNF 6241', skipper: 'Wan Azlan', cap: 12 },
+  { code: 'BTL 07', skipper: 'Din Kecik', cap: 8 },
+  { code: 'PKR 1180', skipper: 'Hafiz Ramli', cap: 14 }
+];
+const MONTHS = [
+  { name: 'Mac', m: 2, days: 31 }, { name: 'April', m: 3, days: 30 },
+  { name: 'Mei', m: 4, days: 31 }, { name: 'Jun', m: 5, days: 30 },
+  { name: 'Julai', m: 6, days: 31 }, { name: 'Ogos', m: 7, days: 31 },
+  { name: 'September', m: 8, days: 30 }
+];
+const HOLIDAYS = {
+  0: [{ d: 9, n: 'Hari Raya Aidilfitri' }, { d: 10, n: 'Hari Raya Aidilfitri' }],
+  1: [],
+  2: [{ d: 1, n: 'Hari Pekerja' }, { d: 17, n: 'Hari Raya Aidiladha' }, { d: 20, n: 'Hari Wesak' }],
+  3: [{ d: 7, n: 'Keputeraan Agong' }, { d: 29, n: 'Awal Muharram' }],
+  4: [],
+  5: [{ d: 31, n: 'Hari Kebangsaan' }],
+  6: [{ d: 6, n: 'Maulidur Rasul' }, { d: 16, n: 'Hari Malaysia' }]
+};
+const STATUS = {
+  open: { bg: 'rgba(47,191,113,.16)', fg: '#7CEEB0', bd: 'rgba(47,191,113,.38)' },
+  hold: { bg: 'rgba(255,184,0,.16)', fg: '#FFD36B', bd: 'rgba(255,184,0,.40)' },
+  full: { bg: 'rgba(239,68,68,.14)', fg: '#FF9C9C', bd: 'rgba(239,68,68,.34)' }
+};
+const BOOKINGS = [
+  { ref: 'CS-2703-014', name: 'Hafiz Ramli', phone: '019-333 4821', boat: 'TRF 92', date: '17 Mac 2027', pax: 8, amount: 'RM 1,440', balance: 'RM 1,190', pct: '17%', status: 'Confirmed', tone: 'open',
+    pax_list: ['Hafiz Ramli', 'Zubir Hashim', 'Amirul Nasri', 'Khairul Anwar', 'Faridah Yaacob', 'Nik Suhaimi', 'Rosli Deraman', 'Azman Kadir'],
+    note: 'Dua orang first timer. Sediakan jaket tambahan dan air panas.' },
+  { ref: 'CS-2704-021', name: 'Nurul Aina Zulkifli', phone: '012-664 7310', boat: 'KNF 6241', date: '02 April 2027', pax: 12, amount: 'RM 2,160', balance: 'RM 1,910', pct: '12%', status: 'Deposit due', tone: 'hold',
+    pax_list: ['Nurul Aina Zulkifli', 'Sofia Adriana', 'Iqbal Faris', 'Danish Haziq', 'Nabila Roslan', 'Zafran Idris', 'Aina Sofea', 'Hakim Zulkarnain', 'Liyana Farhah', 'Adam Rayyan', 'Syafiq Naim', 'Farah Adilla'],
+    note: 'Rombongan pejabat. Minta bot berlabuh dekat tukun buatan.' },
+  { ref: 'CS-2704-026', name: 'Tan Wei Sheng', phone: '017-552 9044', boat: 'BTL 07', date: '11 April 2027', pax: 6, amount: 'RM 1,080', balance: 'RM 830', pct: '23%', status: 'Confirmed', tone: 'open',
+    pax_list: ['Tan Wei Sheng', 'Lim Jia Xin', 'Chong Kah Meng', 'Ho Yee Ling', 'Ng Zhi Hao', 'Teoh Sin Yee'],
+    note: 'Bawa kamera bawah air. Nak berlabuh awal sikit.' },
+  { ref: 'CS-2705-033', name: 'Mohd Faizal Osman', phone: '013-990 2187', boat: 'TRF 92', date: '06 Mei 2027', pax: 9, amount: 'RM 1,620', balance: 'RM 1,370', pct: '15%', status: 'Weather hold', tone: 'full',
+    pax_list: ['Mohd Faizal Osman', 'Shahrul Nizam', 'Muhaimin Zaki', 'Rizal Hakimi', 'Zulhelmi Awang', 'Fauzi Mat Yusof', 'Kamal Aziz', 'Syed Naufal', 'Redzuan Ismail'],
+    note: 'Angin monsun berpatah balik. Pantau ramalan dua hari sebelum.' },
+  { ref: 'CS-2705-041', name: 'Sivaneswaran Munusamy', phone: '016-447 8205', boat: 'PKR 1180', date: '22 Mei 2027', pax: 14, amount: 'RM 2,520', balance: 'RM 2,270', pct: '10%', status: 'Deposit due', tone: 'hold',
+    pax_list: ['Sivaneswaran Munusamy', 'Prakash Devan', 'Kavitha Rajan', 'Sathish Kumaran', 'Meena Letchumi', 'Bala Krishnan', 'Ravi Chandran', 'Suria Devi', 'Thines Waran', 'Anand Raj', 'Mohana Priya', 'Dinesh Rao', 'Vimala Devi', 'Arun Segaran'],
+    note: 'Semua makanan vegetarian. Tiada udang atau ikan untuk umpan sampingan.' },
+  { ref: 'CS-2706-048', name: 'Aiman Zulhilmi', phone: '011-228 6630', boat: 'KNF 6241', date: '13 Jun 2027', pax: 10, amount: 'RM 1,800', balance: 'RM 1,550', pct: '14%', status: 'Confirmed', tone: 'open',
+    pax_list: ['Aiman Zulhilmi', 'Haziq Danial', 'Luqman Hakim', 'Irfan Syazwan', 'Naufal Aiman', 'Zaim Firdaus', 'Aqil Hanif', 'Rayyan Iskandar', 'Harith Zafran', 'Nabil Ariff'],
+    note: 'Trip ulang tahun. Bawa kek, minta juragan berhenti sekejap pukul 12 malam.' }
+];
+const FAQS = [
+  { q: 'Perlu bawa pancing sendiri?', a: 'Boleh disewa dari pihak Sakura Tackle sekiranya tiada. Sila bawa baju ganti, ubat mabuk laut dan barang-barang peribadi lain' },
+  { q: 'Kalau hujan atau angin kuat?', a: 'Kami pantau ramalan cuaca dua hari sebelum trip. Deposit dipulangkan penuh atau ditukar ke tarikh lain.' },
+  { q: 'Boleh bawa kanak-kanak?', a: 'Boleh, umur 8 tahun ke atas dan mesti ditemani penjaga.' },
+  { q: 'Bila baki perlu dijelaskan?', a: 'Baki dibayar di Jeti Marang sebelum bertolak.' }
+];
+const ITIN = [
+  { time: '18:30', title: 'Berkumpul di Jeti Marang', body: 'Taklimat keselamatan dan pembahagian jaket.' },
+  { time: '19:00', title: 'Bertolak ke lubuk', body: 'Perjalanan lebih kurang 45 minit ke kawasan tukun.' },
+  { time: '20:00', title: 'Mula candat', body: 'Lampu dipasang. Juragan tunjuk teknik untuk yang baru.' },
+  { time: '01:00', title: 'Rehat dan minum', body: 'Air panas, Milo dan mi segera disediakan.' },
+  { time: '06:00', title: 'Balik ke jeti', body: 'Hasil ditimbang dan dibahagi sama rata.' }
+];
+
+class Component extends DCLogic {
+  state = {
+    logged: true, screen: 'dashboard', boat: 0, monthIdx: 0, sel: 17,
+    detailIdx: 0, filter: 'All', pbTab: 'overview',
+    pbTitle: 'Trip Candat Sotong Otai-Otai',
+    pbSub: 'Tak perlu skil tinggi, janji ada hati. Kami bawa anda ke lubuk rahsia kapten otai kami.',
+    loginUser: '', loginPass: '', waNumber: '019-333 4821'
+  };
+
+  componentDidMount() {
+    if (this.props.startScreen) this.setState({ screen: this.props.startScreen });
+    if (this.props.startLoggedOut) this.setState({ logged: false });
+  }
+
+  statusFor(b, m, d) {
+    const h = (b * 61 + m * 137 + d * 29) % 11;
+    return h < 6 ? 'open' : h < 9 ? 'hold' : 'full';
+  }
+
+  chip(active) {
+    return active
+      ? { bg: AMBER, fg: PURPLE, bd: AMBER }
+      : { bg: 'rgba(255,255,255,.06)', fg: '#D6CDF5', bd: 'rgba(255,255,255,.16)' };
+  }
+  lightChip(active) {
+    return active
+      ? { bg: PURPLE, fg: '#FFFFFF', bd: PURPLE }
+      : { bg: '#FFFFFF', fg: '#635A87', bd: 'rgba(46,29,107,.16)' };
+  }
+  tone(t) {
+    if (t === 'open') return { bg: 'rgba(47,191,113,.16)', fg: '#137A47' };
+    if (t === 'hold') return { bg: 'rgba(255,184,0,.22)', fg: '#8A6A00' };
+    return { bg: 'rgba(239,68,68,.14)', fg: '#C22B2B' };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const mo = MONTHS[s.monthIdx];
+    const monthLabel = mo.name + ' 2027';
+    const hols = HOLIDAYS[s.monthIdx] || [];
+    const holDays = hols.map(h => h.d);
+
+    const first = new Date(2027, mo.m, 1).getDay();
+    const lead = (first + 6) % 7;
+    const cells = [];
+    for (let i = 0; i < lead; i++) cells.push({ day: '', vis: 'hidden', cursor: 'default', bg: 'transparent', fg: 'transparent', bd: 'transparent', holidayDot: 'transparent', onPick: () => {} });
+    for (let d = 1; d <= mo.days; d++) {
+      const st = this.statusFor(s.boat, s.monthIdx, d);
+      const sel = d === s.sel;
+      const c = STATUS[st];
+      cells.push({
+        day: String(d), vis: 'visible', cursor: 'pointer',
+        bg: sel ? AMBER : c.bg, fg: sel ? PURPLE : c.fg, bd: sel ? AMBER : c.bd,
+        holidayDot: holDays.indexOf(d) >= 0 ? (sel ? PURPLE : AMBER) : 'transparent',
+        onPick: () => this.setState({ sel: d })
+      });
+    }
+
+    const det = BOOKINGS[s.detailIdx];
+    const dt = this.tone(det.tone);
+    const filters = ['All', 'Confirmed', 'Deposit due', 'Weather hold'];
+    const rows = BOOKINGS.filter(b => s.filter === 'All' || b.status === s.filter);
+
+    const titles = {
+      dashboard: ['Tonight', 'Rabu 17 Mac 2027'],
+      calendar: ['Slot manager', BOATS[s.boat].code + ' availability'],
+      bookings: ['Bookings', rows.length + ' of ' + BOOKINGS.length + ' shown'],
+      detail: ['Booking', det.ref],
+      packages: ['Packages and pricing', '4 published trips'],
+      builder: ['Page builder', s.pbTitle],
+      reports: ['Reports', 'Season 2027 to date'],
+      settings: ['Settings', 'Sakura Tackle operator']
+    };
+    const t = titles[s.screen] || titles.dashboard;
+
+    const side = [
+      ['dashboard', 'Dashboard', '\u25C9'], ['calendar', 'Slot manager', '\u25A6'],
+      ['bookings', 'Bookings', '\u2261'], ['detail', 'Booking detail', '\u25A3'],
+      ['packages', 'Packages', '\u25C8'], ['builder', 'Page builder', '\u2637'],
+      ['reports', 'Reports', '\u25E7'], ['settings', 'Settings', '\u2699']
+    ];
+    const bottom = [
+      ['dashboard', 'Home', '\u25C9'], ['calendar', 'Calendar', '\u25A6'],
+      ['bookings', 'Bookings', '\u2261'], ['reports', 'Reports', '\u25E7'],
+      ['settings', 'More', '\u2699']
+    ];
+
+    const chartVals = [42, 61, 78, 95, 70, 55, 38];
+    const chartLabels = ['MAC', 'APR', 'MEI', 'JUN', 'JUL', 'OGO', 'SEP'];
+
+    return {
+      showLogin: !s.logged,
+      showApp: s.logged,
+      loginUser: s.loginUser, loginPass: s.loginPass,
+      setLoginUser: e => this.setState({ loginUser: e.target.value }),
+      setLoginPass: e => this.setState({ loginPass: e.target.value }),
+      doLogin: () => this.setState({ logged: true }),
+      doLogout: () => this.setState({ logged: false }),
+      noop: () => {},
+
+      adminTitle: t[0], adminSubtitle: t[1],
+      sideNav: side.map(([k, label, icon]) => ({
+        label, icon,
+        onPick: () => this.setState({ screen: k }),
+        bg: s.screen === k ? 'rgba(255,184,0,.18)' : 'transparent',
+        fg: s.screen === k ? '#FFD36B' : '#B7ABE0',
+        w: s.screen === k ? '650' : '500'
+      })),
+      navItems: bottom.map(([k, label, icon]) => ({
+        label, icon,
+        fg: s.screen === k ? '#2E1D6B' : '#9C93BC',
+        onPick: () => this.setState({ screen: k })
+      })),
+
+      scDash: s.screen === 'dashboard',
+      scCal: s.screen === 'calendar',
+      scBookings: s.screen === 'bookings',
+      scDetail: s.screen === 'detail',
+      scPackages: s.screen === 'packages',
+      scBuilder: s.screen === 'builder',
+      scReports: s.screen === 'reports',
+      scSettings: s.screen === 'settings',
+
+      kpis: [
+        { label: 'Deposit due', value: '4', note: 'RM 1,000 outstanding', color: '#B07800' },
+        { label: 'This week', value: '11', note: 'nights sold', color: '#1B1436' },
+        { label: 'Collected MTD', value: 'RM 12.4k', note: 'up from RM 9.8k', color: '#137A47' },
+        { label: 'Open slots', value: '19', note: 'next 30 nights', color: '#1B1436' }
+      ],
+      tonight: BOOKINGS.slice(0, 3).map((b, i) => Object.assign({
+        short: b.boat.split(' ')[0], name: b.name,
+        meta: b.boat + ', ' + b.pax + ' pax, ' + b.amount,
+        status: b.status,
+        onOpen: () => this.setState({ screen: 'detail', detailIdx: i })
+      }, this.tone(b.tone))),
+
+      monthLabel,
+      dowLabels: ['ISN', 'SEL', 'RAB', 'KHA', 'JUM', 'SAB', 'AHD'],
+      prevMonth: () => this.setState(x => ({ monthIdx: Math.max(0, x.monthIdx - 1) })),
+      nextMonth: () => this.setState(x => ({ monthIdx: Math.min(MONTHS.length - 1, x.monthIdx + 1) })),
+      adminBoatChips: BOATS.map((b, i) => Object.assign({
+        code: b.code, onPick: () => this.setState({ boat: i })
+      }, this.chip(i === s.boat))),
+      adminCells: cells,
+      holidays: hols,
+      noHoliday: hols.length === 0,
+      adminSelLabel: s.sel + ' ' + monthLabel,
+      adminSelMeta: (() => {
+        const st = this.statusFor(s.boat, s.monthIdx, s.sel);
+        if (st === 'open') return BOATS[s.boat].code + ' is open. No booking held.';
+        if (st === 'hold') return BOATS[s.boat].code + ' held for deposit. Expires in 48 hours.';
+        return BOATS[s.boat].code + ' fully booked. Charter confirmed.';
+      })(),
+
+      bookingFilters: filters.map(f => Object.assign({
+        label: f, onPick: () => this.setState({ filter: f })
+      }, this.lightChip(f === s.filter))),
+      bookingRows: rows.map(b => Object.assign({
+        ref: b.ref, name: b.name, boat: b.boat, date: b.date, pax: b.pax, amount: b.amount, status: b.status,
+        amtColor: b.tone === 'hold' ? '#B07800' : '#1B1436',
+        onOpen: () => this.setState({ screen: 'detail', detailIdx: BOOKINGS.indexOf(b) })
+      }, this.tone(b.tone))),
+      backToBookings: () => this.setState({ screen: 'bookings' }),
+
+      dName: det.name, dRef: det.ref, dBoat: det.boat, dDate: det.date, dPhone: det.phone,
+      dStatus: det.status, dBg: dt.bg, dFg: dt.fg,
+      dWeather: det.tone === 'full' ? 'Monitoring' : 'Clear',
+      dPaxCount: det.pax, dPaxList: det.pax_list, dNote: det.note,
+      dBalance: det.balance, dPct: det.pct,
+
+      packages: [
+        { name: 'Trip Semalaman Standard', meta: '7pm to 6am, min 6 pax', price: 'RM 180 / pax', tag: 'STD' },
+        { name: 'Charter Penuh Satu Bot', meta: 'Bot eksklusif, sehingga 14 pax', price: 'RM 2,400 / bot', tag: 'CHR' },
+        { name: 'Trip Keluarga Petang', meta: '5pm to 11pm, sesuai kanak-kanak', price: 'RM 120 / pax', tag: 'FAM' },
+        { name: 'Pakej Dua Malam', meta: 'Dua malam berturut, homestay termasuk', price: 'RM 420 / pax', tag: '2NT' }
+      ].map(p => Object.assign({}, p, { onEdit: () => this.setState({ screen: 'builder' }) })),
+
+      pbTabs: [['overview', 'Overview'], ['itinerary', 'Itinerary'], ['pricing', 'Pricing'], ['faq', 'FAQ'], ['preview', 'Preview']].map(([k, label]) => Object.assign({
+        label, onPick: () => this.setState({ pbTab: k })
+      }, this.lightChip(k === s.pbTab))),
+      pbOverview: s.pbTab === 'overview',
+      pbItin: s.pbTab === 'itinerary',
+      pbPricing: s.pbTab === 'pricing',
+      pbFaq: s.pbTab === 'faq',
+      pbPreview: s.pbTab === 'preview',
+      pbTitle: s.pbTitle, pbSub: s.pbSub,
+      setPbTitle: e => this.setState({ pbTitle: e.target.value }),
+      setPbSub: e => this.setState({ pbSub: e.target.value }),
+      itinerary: ITIN,
+      faqRows: FAQS,
+      includes: ['Candat, tali dan lampu', 'Jaket keselamatan bersijil', 'Air panas, Milo dan mi segera', 'Juragan berpengalaman 15 tahun', 'Hasil dibahagi sama rata'],
+
+      chart: chartVals.map((v, i) => ({ label: chartLabels[i], h: v + '%', color: i === 3 ? AMBER : 'rgba(46,29,107,.22)' })),
+      boatRevenue: [
+        { code: 'TRF 92', nights: 38, amount: 'RM 26,140' },
+        { code: 'KNF 6241', nights: 41, amount: 'RM 24,880' },
+        { code: 'PKR 1180', nights: 29, amount: 'RM 19,470' },
+        { code: 'BTL 07', nights: 24, amount: 'RM 13,820' }
+      ],
+      fleet: BOATS,
+      waNumber: s.waNumber,
+      setWa: e => this.setState({ waNumber: e.target.value })
+    };
+  }
+}
+</script>
+</body>
+</html>

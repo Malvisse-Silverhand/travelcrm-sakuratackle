@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/effects.css">
+<script src="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<script src="./image-slot.js"></script>
+<style>
+:root{
+  --primary:#1a5f7a; --primary-dark:#134a5f; --primary-tint:#e9f1f4; --primary-ink:#0f3c4e;
+  --accent:#f4a261; --accent-tint:#fdefe1;
+  --sb-bg:#10333f; --sb-ink:rgba(255,255,255,.72); --sb-line:rgba(255,255,255,.1);
+  --bg:#f3f5f6; --surface:#ffffff;
+  --success:#2a9d8f; --success-tint:#e6f4f2;
+  --warn:#b8860b; --warn-tint:#fbf1dc;
+  --danger:#e76f51; --danger-tint:#fceae5;
+  --ink:#1d2a31; --ink-2:#4c5c65; --ink-3:#8a9aa3; --line:#e3e7ea;
+  --font-display:'Poppins',system-ui,sans-serif; --font-body:'Inter',system-ui,sans-serif;
+  --r-xs:6px; --r-sm:8px; --r-md:12px;
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px; --s-6:32px;
+  --row-pad:10px;
+  --sh-1:0 1px 2px rgba(21,34,41,.04),0 4px 14px rgba(21,34,41,.05);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:var(--font-body);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:13px}
+a{color:var(--primary);text-decoration:none}
+a:hover{color:var(--primary-dark)}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:var(--font-body);color:var(--ink);min-width:0;width:100%}
+::-webkit-scrollbar{height:8px;width:8px}
+::-webkit-scrollbar-thumb{background:#cfd6da;border-radius:99px}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--bg)">
+
+  <div style="display:flex;align-items:center;gap:var(--s-4);padding:9px var(--s-5);background:var(--sb-bg);color:#fff">
+    <div style="display:flex;align-items:center;gap:var(--s-3);flex:0 0 auto">
+      <div style="width:26px;height:26px;border-radius:var(--r-xs);background:var(--accent);display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:13px;color:#152229">T</div>
+      <span style="font-family:var(--font-display);font-weight:600;font-size:14px">Travellah Booking</span>
+      <span style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45)">admin crm</span>
+    </div>
+    <div style="flex:1 1 auto;display:flex;justify-content:flex-end;align-items:center;gap:var(--s-3);min-width:0">
+      <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search bookings, trips, invoices, customers" style="max-width:320px;padding:7px 11px;border:1px solid var(--sb-line);border-radius:var(--r-sm);font-size:12.5px;background:rgba(255,255,255,.08);color:#fff">
+      <div style="position:relative;flex:0 0 auto">
+        <span style="display:grid;place-items:center;width:28px;height:28px;border-radius:var(--r-sm);background:rgba(255,255,255,.1);font-size:13px">✉</span>
+        <span style="position:absolute;top:-5px;right:-6px;background:var(--danger);color:#fff;font-size:9.5px;font-weight:700;padding:2px 5px;border-radius:99px">12</span>
+      </div>
+      <span style="width:28px;height:28px;border-radius:99px;background:var(--accent);color:#152229;display:grid;place-items:center;font-size:11px;font-weight:700;flex:0 0 auto">FA</span>
+    </div>
+  </div>
+
+  <div style="display:flex;min-height:calc(100vh - 46px);align-items:stretch">
+
+    <div style="flex:0 0 216px;background:var(--sb-bg);padding:var(--s-4) var(--s-3);display:flex;flex-direction:column;gap:var(--s-4)">
+      <sc-for list="{{ navGroups }}" as="g" hint-placeholder-count="8">
+        <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+          <sc-if value="{{ g.solo }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ g.onSolo }}" style="display:flex;align-items:center;width:100%;text-align:left;border:0;background:{{ g.soloBg }};color:{{ g.soloFg }};font-size:12.5px;font-weight:600;padding:8px 10px;border-radius:var(--r-xs)" style-hover="background:rgba(255,255,255,.09);color:#fff">{{ g.label }}</button>
+          </sc-if>
+          <sc-if value="{{ g.group }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+              <button onClick="{{ g.onToggle }}" style="display:flex;align-items:center;gap:var(--s-2);width:100%;text-align:left;border:0;background:transparent;color:{{ g.headFg }};font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:9px 10px 7px;border-radius:var(--r-xs)" style-hover="color:#fff">
+                <span style="flex:1 1 auto;min-width:0">{{ g.label }}</span>
+                <sc-if value="{{ g.dot }}" hint-placeholder-val="{{ false }}">
+                  <span style="flex:0 0 auto;width:5px;height:5px;border-radius:99px;background:var(--accent)"></span>
+                </sc-if>
+                <span style="flex:0 0 auto;font-size:8px;letter-spacing:0">{{ g.chev }}</span>
+              </button>
+              <sc-if value="{{ g.open }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:2px;border-left:1px solid var(--sb-line);margin-left:10px;padding-left:6px;min-width:0">
+                  <sc-for list="{{ g.items }}" as="n" hint-placeholder-count="4">
+                    <button onClick="{{ n.onClick }}" style="display:flex;align-items:center;gap:var(--s-2);width:100%;text-align:left;border:0;background:{{ n.bg }};color:{{ n.fg }};font-size:12.5px;font-weight:{{ n.weight }};padding:7px 10px;border-radius:var(--r-xs);min-width:0" style-hover="background:rgba(255,255,255,.09);color:#fff">
+                      <span style="flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ n.label }}</span>
+                      <sc-if value="{{ n.badge }}" hint-placeholder-val="{{ false }}">
+                        <span style="flex:0 0 auto;background:var(--accent);color:#152229;font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:99px">{{ n.badge }}</span>
+                      </sc-if>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+      <div style="margin-top:auto;border-top:1px solid var(--sb-line);padding-top:var(--s-3);display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:11px;color:rgba(255,255,255,.5)">Collapsed view</span>
+        <span style="font-size:11px;color:rgba(255,255,255,.34);line-height:1.5">Theme, density and tenant branding live in Settings.</span>
+      </div>
+    </div>
+
+    <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column">
+
+      <div style="background:var(--surface);border-bottom:1px solid var(--line);padding:var(--s-4) var(--s-5);display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--s-4)">
+        <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+          <span style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">{{ crumb }}</span>
+          <span style="font-family:var(--font-display);font-weight:600;font-size:21px;color:var(--ink)">{{ title }}</span>
+          <span style="font-size:12.5px;color:var(--ink-2);max-width:70ch">{{ subtitle }}</span>
+        </div>
+        <div style="display:flex;gap:var(--s-2);flex:0 0 auto">
+          <button style="flex:0 0 auto;white-space:nowrap;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:var(--r-sm);width:auto">Export CSV</button>
+          <button style="flex:0 0 auto;white-space:nowrap;border:0;background:var(--primary);color:#fff;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:var(--r-sm);width:auto">{{ primaryAction }}</button>
+        </div>
+      </div>
+
+      <div style="padding:var(--s-5);display:flex;flex-direction:column;gap:var(--s-4);min-width:0">
+
+        <sc-if value="{{ hasKpis }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:var(--s-3);min-width:0">
+            <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+              <div style="background:{{ k.bg }};border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:4px;min-width:0;box-shadow:var(--sh-1)">
+                <span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)">{{ k.label }}</span>
+                <span style="font-family:var(--font-display);font-weight:600;font-size:19px;color:{{ k.fg }}">{{ k.value }}</span>
+                <span style="font-size:11.5px;color:var(--ink-2)">{{ k.sub }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:var(--s-4);min-width:0">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--primary);border-radius:var(--r-sm);overflow:hidden;box-shadow:var(--sh-1)">
+              <sc-for list="{{ tripCounts }}" as="c" hint-placeholder-count="5">
+                <div style="background:var(--primary);padding:var(--s-3) var(--s-4);display:flex;flex-direction:column;gap:2px;border-left:1px solid rgba(255,255,255,.16)">
+                  <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.75)">{{ c.label }}</span>
+                  <span style="font-family:var(--font-display);font-weight:700;font-size:20px;color:#fff">{{ c.value }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--s-3);min-width:0">
+              <sc-for list="{{ regionPanels }}" as="r" hint-placeholder-count="2">
+                <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);min-width:0;box-shadow:var(--sh-1)">
+                  <div style="padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:var(--s-3)">
+                    <span style="font-family:var(--font-display);font-weight:600;font-size:14px">{{ r.name }}</span>
+                    <span style="font-size:11.5px;color:var(--ink-2)">{{ r.meta }}</span>
+                  </div>
+                  <sc-for list="{{ r.rows }}" as="d" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:var(--s-3);padding:9px var(--s-4);border-bottom:1px solid #f1f4f5;min-width:0">
+                      <span style="flex:1 1 auto;font-size:12.5px;font-weight:500;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ d.trip }}</span>
+                      <span style="flex:0 0 auto;font-size:11.5px;color:var(--ink-2)">{{ d.date }}</span>
+                      <span style="flex:0 0 52px;text-align:right;font-size:11.5px;font-weight:600;color:var(--primary)">{{ d.seats }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="background:var(--primary-tint);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);flex-wrap:wrap">
+                <span style="font-family:var(--font-display);font-weight:600;font-size:15px;color:var(--primary-ink)">Trip checklist</span>
+                <span style="background:var(--surface);border:1px solid var(--line);font-size:11px;font-weight:700;color:var(--ink-2);padding:4px 9px;border-radius:99px">23 trips need action</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--s-2);min-width:0">
+                <sc-for list="{{ checklist }}" as="c" hint-placeholder-count="6">
+                  <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xs);padding:10px var(--s-3);display:flex;align-items:center;gap:var(--s-3);min-width:0">
+                    <span style="flex:1 1 auto;font-size:12.5px;color:var(--ink);min-width:0">{{ c.task }}</span>
+                    <span style="flex:0 0 auto;background:{{ c.bg }};color:{{ c.fg }};font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:99px">{{ c.count }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isPackages }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--s-3);min-width:0">
+            <sc-for list="{{ packages }}" as="p" hint-placeholder-count="6">
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;display:flex;flex-direction:column;min-width:0;box-shadow:var(--sh-1)">
+                <div style="height:130px;background:var(--primary-tint)">
+                  <image-slot id="{{ p.slot }}" shape="rect" placeholder="{{ p.name }} cover"></image-slot>
+                </div>
+                <div style="padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-2);min-width:0">
+                  <div style="display:flex;align-items:center;gap:var(--s-2);flex-wrap:wrap">
+                    <span style="background:{{ p.bg }};color:{{ p.fg }};font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:99px">{{ p.status }}</span>
+                    <span style="font-size:11px;color:var(--ink-3)">{{ p.code }}</span>
+                  </div>
+                  <span style="font-family:var(--font-display);font-weight:600;font-size:14.5px;line-height:1.35">{{ p.name }}</span>
+                  <span style="font-size:12px;color:var(--ink-2);line-height:1.5">{{ p.blurb }}</span>
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-3);border-top:1px solid var(--line);padding-top:var(--s-2);margin-top:2px">
+                    <span style="font-family:var(--font-display);font-weight:600;font-size:15px;color:var(--primary)">{{ p.price }}</span>
+                    <span style="font-size:11.5px;color:var(--ink-2)">{{ p.meta }}</span>
+                  </div>
+                  <div style="display:flex;gap:var(--s-2)">
+                    <button style="flex:1 1 auto;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:12px;font-weight:600;padding:7px 10px;border-radius:var(--r-xs);width:auto">Duplicate</button>
+                    <button onClick="{{ p.onEdit }}" style="flex:1 1 auto;border:0;background:var(--primary);color:#fff;font-size:12px;font-weight:600;padding:7px 10px;border-radius:var(--r-xs);width:auto">Edit page</button>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isReviews }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--s-3);min-width:0">
+            <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="6">
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-2);min-width:0;box-shadow:var(--sh-1)">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s-3)">
+                  <span style="font-size:13px;color:var(--accent);letter-spacing:.1em">{{ r.stars }}</span>
+                  <span style="background:{{ r.bg }};color:{{ r.fg }};font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:99px">{{ r.status }}</span>
+                </div>
+                <span style="font-size:12.5px;color:var(--ink);line-height:1.6;text-wrap:pretty">{{ r.body }}</span>
+                <div style="display:flex;flex-direction:column;gap:1px;border-top:1px solid var(--line);padding-top:var(--s-2);margin-top:2px">
+                  <span style="font-size:12px;font-weight:600">{{ r.name }}</span>
+                  <span style="font-size:11.5px;color:var(--ink-2)">{{ r.trip }}</span>
+                </div>
+                <div style="display:flex;gap:var(--s-2)">
+                  <button style="border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:12px;font-weight:600;padding:6px 11px;border-radius:var(--r-xs);width:auto">Reply</button>
+                  <button style="border:0;background:var(--success-tint);color:#1d6f65;font-size:12px;font-weight:600;padding:6px 11px;border-radius:var(--r-xs);width:auto">Publish</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isGantt }}" hint-placeholder-val="{{ false }}">
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0;box-shadow:var(--sh-1)">
+            <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:var(--s-4);align-items:center">
+              <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Trip</span>
+              <div style="display:flex;align-items:center;gap:var(--s-3);min-width:0">
+                <div style="flex:1 1 auto;display:grid;grid-template-columns:repeat(3,1fr);min-width:0">
+                  <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);border-left:1px solid var(--line);padding-left:var(--s-2)">Sep 2026</span>
+                  <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);border-left:1px solid var(--line);padding-left:var(--s-2)">Oct 2026</span>
+                  <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);border-left:1px solid var(--line);padding-left:var(--s-2)">Nov 2026</span>
+                </div>
+                <span style="flex:0 0 92px;text-align:right;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Dates</span>
+              </div>
+            </div>
+            <sc-for list="{{ ganttRows }}" as="b" hint-placeholder-count="7">
+              <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:var(--s-4);align-items:center;border-top:1px solid #f1f4f5;padding-top:var(--s-2);padding-bottom:var(--s-2)">
+                <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                  <span style="font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ b.trip }}</span>
+                  <span style="font-size:11px;color:var(--ink-2)">{{ b.meta }}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--s-3);min-width:0">
+                  <div style="flex:1 1 auto;position:relative;height:22px;background:#f5f7f8;border-radius:var(--r-xs);min-width:0">
+                    <div style="position:absolute;top:3px;height:16px;left:{{ b.left }};width:{{ b.width }};background:{{ b.color }};border-radius:99px"></div>
+                  </div>
+                  <span style="flex:0 0 92px;text-align:right;font-size:11px;font-weight:600;color:var(--ink-2);white-space:nowrap">{{ b.bar }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isReporting }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:var(--s-4);min-width:0">
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-4);min-width:0;box-shadow:var(--sh-1)">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-3);flex-wrap:wrap">
+                <span style="font-family:var(--font-display);font-weight:600;font-size:15px">Gross sales by departure month</span>
+                <span style="font-size:11.5px;color:var(--ink-2)">FY2026 to date, RM thousands</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-2);align-items:end;height:180px">
+                <sc-for list="{{ chartBars }}" as="m" hint-placeholder-count="12">
+                  <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;height:100%;min-width:0">
+                    <span style="font-size:10px;font-weight:600;color:var(--ink-2)">{{ m.value }}</span>
+                    <div style="width:100%;height:{{ m.h }};background:{{ m.color }};border-radius:4px 4px 0 0"></div>
+                    <span style="font-size:10px;color:var(--ink-3)">{{ m.label }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--s-3);min-width:0">
+              <sc-for list="{{ reports }}" as="r" hint-placeholder-count="6">
+                <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:6px;min-width:0;box-shadow:var(--sh-1)">
+                  <span style="font-family:var(--font-display);font-weight:600;font-size:13.5px">{{ r.name }}</span>
+                  <span style="font-size:12px;color:var(--ink-2);line-height:1.55">{{ r.desc }}</span>
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);margin-top:var(--s-2)">
+                    <span style="font-size:11px;color:var(--ink-3)">{{ r.updated }}</span>
+                    <button style="border:1px solid var(--line);background:var(--surface);color:var(--primary);font-size:12px;font-weight:600;padding:6px 11px;border-radius:var(--r-xs);width:auto">Run report</button>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--s-3);align-items:start;min-width:0">
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-4);min-width:0;box-shadow:var(--sh-1)">
+              <div style="display:flex;flex-direction:column;gap:3px">
+                <span style="font-family:var(--font-display);font-weight:600;font-size:15px">System theme</span>
+                <span style="font-size:12px;color:var(--ink-2)">Applies to the CRM and the public trip pages for this tenant.</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:var(--s-2)">
+                <sc-for list="{{ themeOptions }}" as="t" hint-placeholder-count="4">
+                  <button onClick="{{ t.onClick }}" style="border:2px solid {{ t.border }};background:var(--surface);border-radius:var(--r-sm);padding:var(--s-3);display:flex;flex-direction:column;gap:var(--s-2);text-align:left;width:auto">
+                    <div style="display:flex;gap:4px">
+                      <span style="width:22px;height:22px;border-radius:5px;background:{{ t.c1 }}"></span>
+                      <span style="width:22px;height:22px;border-radius:5px;background:{{ t.c2 }}"></span>
+                      <span style="width:22px;height:22px;border-radius:5px;background:{{ t.c3 }}"></span>
+                    </div>
+                    <span style="font-size:12.5px;font-weight:600;color:var(--ink)">{{ t.name }}</span>
+                    <span style="font-size:11px;color:var(--ink-2)">{{ t.note }}</span>
+                  </button>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--s-2)">
+                <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Table density</span>
+                <div style="display:flex;gap:var(--s-2)">
+                  <sc-for list="{{ densityOptions }}" as="d" hint-placeholder-count="2">
+                    <button onClick="{{ d.onClick }}" style="border:1px solid {{ d.border }};background:{{ d.bg }};color:{{ d.fg }};font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:var(--r-sm);width:auto">{{ d.name }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0;box-shadow:var(--sh-1)">
+              <span style="font-family:var(--font-display);font-weight:600;font-size:15px">Agency profile</span>
+              <sc-for list="{{ settingFields }}" as="f" hint-placeholder-count="6">
+                <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                  <label style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)">{{ f.label }}</label>
+                  <input defaultValue="{{ f.value }}" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px;background:var(--surface)">
+                  <span style="font-size:11px;color:var(--ink-3)">{{ f.help }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0;box-shadow:var(--sh-1)">
+              <span style="font-family:var(--font-display);font-weight:600;font-size:15px">Operational rules</span>
+              <sc-for list="{{ toggles }}" as="t" hint-placeholder-count="5">
+                <div style="display:flex;align-items:flex-start;gap:var(--s-3);border-bottom:1px solid #f1f4f5;padding-bottom:var(--s-3);min-width:0">
+                  <div style="flex:1 1 auto;display:flex;flex-direction:column;gap:2px;min-width:0">
+                    <span style="font-size:12.5px;font-weight:600">{{ t.name }}</span>
+                    <span style="font-size:11.5px;color:var(--ink-2);line-height:1.5">{{ t.desc }}</span>
+                  </div>
+                  <button onClick="{{ t.onClick }}" style="flex:0 0 auto;width:38px;height:22px;border:0;border-radius:99px;background:{{ t.track }};position:relative;padding:0">
+                    <span style="position:absolute;top:3px;left:{{ t.knob }};width:16px;height:16px;border-radius:99px;background:#fff"></span>
+                  </button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isBuilder }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:var(--s-4);min-width:0">
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-3) var(--s-4);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s-3);box-shadow:var(--sh-1)">
+              <div style="display:flex;gap:var(--s-1);background:#f1f4f5;padding:3px;border-radius:var(--r-xs);overflow-x:auto">
+                <sc-for list="{{ builderTabs }}" as="e" hint-placeholder-count="7">
+                  <button onClick="{{ e.onClick }}" style="border:0;background:{{ e.bg }};color:{{ e.fg }};font-size:12px;font-weight:600;padding:7px 12px;border-radius:5px;white-space:nowrap;width:auto">{{ e.label }}</button>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:var(--s-2);flex-wrap:wrap">
+                <button onClick="{{ backToPackages }}" style="flex:0 0 auto;white-space:nowrap;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:600;color:var(--ink-2);padding:8px 12px;border-radius:var(--r-xs);width:auto">Back to packages</button>
+                <button onClick="{{ openPreview }}" style="flex:0 0 auto;white-space:nowrap;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:600;color:var(--primary);padding:8px 12px;border-radius:var(--r-xs);width:auto">Preview page</button>
+                <button style="flex:0 0 auto;white-space:nowrap;border:0;background:var(--primary);color:#fff;font-size:12px;font-weight:600;padding:8px 14px;border-radius:var(--r-xs);width:auto">Publish</button>
+              </div>
+            </div>
+
+            <sc-if value="{{ bOverview }}" hint-placeholder-val="{{ true }}">
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-5);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--s-5);box-shadow:var(--sh-1)">
+                <div style="display:flex;flex-direction:column;gap:var(--s-4);min-width:0">
+                  <div style="display:flex;flex-direction:column;gap:5px">
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Package title</label>
+                    <input value="{{ pkgTitle }}" onChange="{{ onPkgTitle }}" style="padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:13px">
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s-3)">
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Duration</label>
+                      <input defaultValue="{{ pkgDuration }}" style="padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:13px">
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Adult price (RM)</label>
+                      <input defaultValue="{{ pkgPrice }}" style="padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:13px">
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Min group size</label>
+                      <input defaultValue="{{ pkgGroup }}" style="padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:13px">
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:5px">
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Overview summary</label>
+                    <textarea rows="5" defaultValue="{{ pkgSummary }}" style="padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:13px;line-height:1.6;resize:vertical"></textarea>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:var(--s-2)">
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Highlights</label>
+                    <sc-for list="{{ highlights }}" as="h" hint-placeholder-count="6">
+                      <div style="display:flex;gap:var(--s-2);align-items:center">
+                        <input defaultValue="{{ h.text }}" style="flex:1 1 auto;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                        <button onClick="{{ h.remove }}" style="border:1px solid var(--line);background:var(--surface);color:var(--danger);font-size:12px;font-weight:700;width:30px;height:30px;border-radius:var(--r-xs);flex:0 0 auto">✕</button>
+                      </div>
+                    </sc-for>
+                    <button onClick="{{ addHighlight }}" style="align-self:flex-start;border:1px dashed #cfd6da;background:transparent;color:var(--primary);font-size:12px;font-weight:600;padding:7px 11px;border-radius:var(--r-xs);width:auto">+ Add highlight</button>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:var(--s-3);min-width:0">
+                  <label style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Gallery cover</label>
+                  <div style="height:170px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--line)">
+                    <image-slot id="{{ pkgSlot }}" shape="rounded" radius="8" placeholder="Drop cover image"></image-slot>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-3)">
+                    <sc-for list="{{ pkgMeta }}" as="m" hint-placeholder-count="4">
+                      <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                        <label style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">{{ m.label }}</label>
+                        <input defaultValue="{{ m.value }}" style="padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:13px">
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ bItinerary }}" hint-placeholder-val="{{ false }}">
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0;box-shadow:var(--sh-1)">
+                <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+                  <div style="border:1px solid var(--line);border-radius:var(--r-xs);padding:var(--s-3);display:grid;grid-template-columns:44px minmax(0,1.4fr) minmax(0,1.4fr) minmax(0,120px) minmax(0,84px);gap:var(--s-3);align-items:start;background:#f7f9fa">
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Day</label>
+                      <span style="font-family:var(--font-display);font-weight:600;font-size:15px">{{ d.nn }}</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Day title</label>
+                      <input defaultValue="{{ d.title }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px;background:var(--surface)">
+                      <label style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:4px">Hours</label>
+                      <input defaultValue="{{ d.hours }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px;background:var(--surface)">
+                      <label style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:4px">Hotel</label>
+                      <input defaultValue="{{ d.hotel }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px;background:var(--surface)">
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Activities (one per line)</label>
+                      <textarea rows="6" defaultValue="{{ d.activityText }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px;line-height:1.5;background:var(--surface);resize:vertical"></textarea>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                      <label style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Meals</label>
+                      <sc-for list="{{ d.meals }}" as="m" hint-placeholder-count="3">
+                        <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2)">
+                          <input type="checkbox" defaultChecked="{{ m.on }}" style="accent-color:var(--primary);width:auto">{{ m.label }}
+                        </label>
+                      </sc-for>
+                      <label style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:4px">Photo</label>
+                      <div style="height:52px;border-radius:var(--r-xs);overflow:hidden;border:1px solid var(--line)">
+                        <image-slot id="{{ d.slot }}" shape="rounded" radius="6" placeholder="Day photo"></image-slot>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Order</label>
+                      <div style="display:flex;gap:4px">
+                        <button onClick="{{ d.up }}" style="flex:1;border:1px solid var(--line);background:var(--surface);font-size:12px;padding:5px 0;border-radius:var(--r-xs);color:var(--ink-2);width:auto">↑</button>
+                        <button onClick="{{ d.down }}" style="flex:1;border:1px solid var(--line);background:var(--surface);font-size:12px;padding:5px 0;border-radius:var(--r-xs);color:var(--ink-2);width:auto">↓</button>
+                      </div>
+                      <button onClick="{{ d.remove }}" style="border:1px solid var(--line);background:var(--surface);font-size:11.5px;font-weight:600;color:var(--danger);padding:6px 0;border-radius:var(--r-xs);width:100%">Remove</button>
+                    </div>
+                  </div>
+                </sc-for>
+                <button onClick="{{ addDay }}" style="align-self:flex-start;border:1px dashed #cfd6da;background:transparent;color:var(--primary);font-size:12px;font-weight:600;padding:8px 12px;border-radius:var(--r-xs);width:auto">+ Add day</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ bIncludes }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--s-3)">
+                <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-2);min-width:0;box-shadow:var(--sh-1)">
+                  <span style="font-size:12.5px;font-weight:600">The fee includes</span>
+                  <sc-for list="{{ includes }}" as="i" hint-placeholder-count="6">
+                    <div style="display:flex;gap:var(--s-2);align-items:center">
+                      <span style="width:18px;height:18px;border-radius:99px;background:var(--success);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700;flex:0 0 auto">✓</span>
+                      <input defaultValue="{{ i.text }}" style="flex:1 1 auto;padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                      <button onClick="{{ i.remove }}" style="border:1px solid var(--line);background:var(--surface);color:var(--danger);font-size:11px;font-weight:700;width:28px;height:28px;border-radius:var(--r-xs);flex:0 0 auto">✕</button>
+                    </div>
+                  </sc-for>
+                  <button onClick="{{ addInclude }}" style="align-self:flex-start;border:1px dashed #cfd6da;background:transparent;color:var(--primary);font-size:12px;font-weight:600;padding:7px 11px;border-radius:var(--r-xs);width:auto">+ Add item</button>
+                </div>
+                <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-2);min-width:0;box-shadow:var(--sh-1)">
+                  <span style="font-size:12.5px;font-weight:600">The fee excludes</span>
+                  <sc-for list="{{ excludes }}" as="e" hint-placeholder-count="5">
+                    <div style="display:flex;gap:var(--s-2);align-items:center">
+                      <span style="width:18px;height:18px;border-radius:99px;background:var(--danger-tint);color:var(--danger);display:grid;place-items:center;font-size:10px;font-weight:700;flex:0 0 auto">✕</span>
+                      <input defaultValue="{{ e.text }}" style="flex:1 1 auto;padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                      <button onClick="{{ e.remove }}" style="border:1px solid var(--line);background:var(--surface);color:var(--danger);font-size:11px;font-weight:700;width:28px;height:28px;border-radius:var(--r-xs);flex:0 0 auto">✕</button>
+                    </div>
+                  </sc-for>
+                  <button onClick="{{ addExclude }}" style="align-self:flex-start;border:1px dashed #cfd6da;background:transparent;color:var(--primary);font-size:12px;font-weight:600;padding:7px 11px;border-radius:var(--r-xs);width:auto">+ Add item</button>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ bDates }}" hint-placeholder-val="{{ false }}">
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;min-width:0;box-shadow:var(--sh-1)">
+                <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.4fr) minmax(0,110px) minmax(0,90px) minmax(0,80px) minmax(0,90px);gap:var(--s-3);padding:9px var(--s-4);background:#f7f9fa;border-bottom:1px solid var(--line);font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">
+                  <span>Start date</span><span>End date</span><span>Adult price</span><span>Capacity</span><span>Booked</span><span></span>
+                </div>
+                <sc-for list="{{ dates }}" as="d" hint-placeholder-count="5">
+                  <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.4fr) minmax(0,110px) minmax(0,90px) minmax(0,80px) minmax(0,90px);gap:var(--s-3);padding:8px var(--s-4);border-bottom:1px solid #f1f4f5;align-items:center">
+                    <input defaultValue="{{ d.startDate }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                    <input defaultValue="{{ d.endDate }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                    <input defaultValue="{{ d.price }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                    <input defaultValue="{{ d.capacity }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                    <span style="font-size:12.5px;font-weight:600">{{ d.booked }}</span>
+                    <button onClick="{{ d.remove }}" style="border:1px solid var(--line);background:var(--surface);font-size:11.5px;font-weight:600;color:var(--danger);padding:6px 9px;border-radius:var(--r-xs);width:auto;justify-self:end">Remove</button>
+                  </div>
+                </sc-for>
+                <div style="padding:var(--s-3) var(--s-4)">
+                  <button onClick="{{ addDate }}" style="border:1px dashed #cfd6da;background:transparent;color:var(--primary);font-size:12px;font-weight:600;padding:8px 12px;border-radius:var(--r-xs);width:auto">+ Add departure date</button>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ bPricing }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--s-3);align-items:start;min-width:0">
+                <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0;box-shadow:var(--sh-1)">
+                  <span style="font-family:var(--font-display);font-weight:600;font-size:14.5px">Seat pricing</span>
+                  <sc-for list="{{ seatPricing }}" as="p" hint-placeholder-count="4">
+                    <div style="display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:var(--s-3);align-items:center;min-width:0">
+                      <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                        <span style="font-size:12.5px;font-weight:600">{{ p.label }}</span>
+                        <span style="font-size:11px;color:var(--ink-3)">{{ p.note }}</span>
+                      </div>
+                      <input defaultValue="{{ p.value }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px;text-align:right">
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0;box-shadow:var(--sh-1)">
+                  <div style="display:flex;flex-direction:column;gap:3px">
+                    <span style="font-family:var(--font-display);font-weight:600;font-size:14.5px">Deposit for this package</span>
+                    <span style="font-size:12px;color:var(--ink-2)">Overrides the agency default set in Finance, Payments.</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:var(--s-2)">
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Deposit type</label>
+                    <div style="display:flex;gap:var(--s-2);flex-wrap:wrap">
+                      <sc-for list="{{ depositTypes }}" as="t" hint-placeholder-count="3">
+                        <button onClick="{{ t.onClick }}" style="border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};font-size:12px;font-weight:600;padding:7px 12px;border-radius:99px;width:auto;white-space:nowrap">{{ t.label }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-3)">
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Deposit value</label>
+                      <input value="{{ depositValue }}" onChange="{{ onDepositValue }}" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Final payment due</label>
+                      <input defaultValue="45 days before departure" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Cut-off days</label>
+                      <input defaultValue="21" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                      <span style="font-size:11px;color:var(--ink-3)">Deposit bookings stop this many days before departure.</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                      <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Allow full payment</label>
+                      <select defaultValue="Yes" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px;background:var(--surface)">
+                        <option>Yes</option>
+                        <option>No, deposit only</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div style="background:var(--primary-tint);border-radius:var(--r-xs);padding:var(--s-3);display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary-ink)">Checkout preview, 2 pax</span>
+                    <span style="font-size:12.5px;color:var(--ink)">{{ depositPreview }}</span>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ bFaq }}" hint-placeholder-val="{{ false }}">
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0;box-shadow:var(--sh-1)">
+                <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="5">
+                  <div style="display:grid;grid-template-columns:minmax(0,130px) minmax(0,1fr) minmax(0,2fr) minmax(0,86px);gap:var(--s-3);align-items:start;border:1px solid var(--line);border-radius:var(--r-xs);padding:var(--s-3);background:#f7f9fa">
+                    <input defaultValue="{{ q.group }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12px;background:var(--surface)">
+                    <input defaultValue="{{ q.q }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px;font-weight:600;background:var(--surface)">
+                    <textarea rows="3" defaultValue="{{ q.a }}" style="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px;line-height:1.55;background:var(--surface);resize:vertical"></textarea>
+                    <button onClick="{{ q.remove }}" style="border:1px solid var(--line);background:var(--surface);font-size:11.5px;font-weight:600;color:var(--danger);padding:7px 9px;border-radius:var(--r-xs);width:auto">Remove</button>
+                  </div>
+                </sc-for>
+                <button onClick="{{ addFaq }}" style="align-self:flex-start;border:1px dashed #cfd6da;background:transparent;color:var(--primary);font-size:12px;font-weight:600;padding:8px 12px;border-radius:var(--r-xs);width:auto">+ Add question</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ bPreview }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#e9ecee;border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);flex-wrap:wrap">
+                  <span style="font-size:11.5px;color:var(--ink-2)">travellah.my/trip/{{ pkgSlug }}</span>
+                  <span style="background:var(--warn-tint);color:#8a6100;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px">Draft preview, not live</span>
+                </div>
+                <div style="background:var(--surface);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-1)">
+                  <div style="display:grid;grid-template-columns:2fr 1fr;grid-template-rows:110px 110px;gap:3px">
+                    <div style="grid-row:span 2"><image-slot id="{{ pkgSlot }}" shape="rect" placeholder="Hero image"></image-slot></div>
+                    <div><image-slot id="prev-2" shape="rect" placeholder="Gallery 2"></image-slot></div>
+                    <div><image-slot id="prev-3" shape="rect" placeholder="Gallery 3"></image-slot></div>
+                  </div>
+                  <div style="padding:var(--s-5);display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:var(--s-5);align-items:start">
+                    <div style="display:flex;flex-direction:column;gap:var(--s-4);min-width:0">
+                      <div style="display:flex;flex-direction:column;gap:var(--s-2)">
+                        <span style="align-self:flex-start;background:var(--accent-tint);color:#a4611f;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:99px">{{ pkgRegion }}</span>
+                        <span style="font-family:var(--font-display);font-weight:600;font-size:24px;line-height:1.25">{{ pkgTitle }}</span>
+                        <span style="font-size:13px;color:var(--ink-2);line-height:1.65;text-wrap:pretty">{{ pkgSummary }}</span>
+                      </div>
+                      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden">
+                        <sc-for list="{{ previewFacts }}" as="f" hint-placeholder-count="6">
+                          <div style="background:var(--surface);padding:10px var(--s-3);display:flex;flex-direction:column;gap:2px">
+                            <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">{{ f.label }}</span>
+                            <span style="font-size:12.5px;font-weight:600">{{ f.value }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:var(--s-2)">
+                        <span style="font-family:var(--font-display);font-weight:600;font-size:16px">Itinerary</span>
+                        <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+                          <div style="display:flex;gap:var(--s-3);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-3);min-width:0">
+                            <span style="flex:0 0 44px;font-family:var(--font-display);font-weight:700;font-size:12px;color:var(--primary)">Day {{ d.nn }}</span>
+                            <div style="flex:1 1 auto;display:flex;flex-direction:column;gap:3px;min-width:0">
+                              <span style="font-size:13px;font-weight:600">{{ d.title }}</span>
+                              <span style="font-size:12px;color:var(--ink-2);line-height:1.6">{{ d.previewLine }}</span>
+                              <span style="font-size:11px;color:var(--ink-3)">{{ d.previewMeta }}</span>
+                            </div>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:var(--s-3);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);box-shadow:var(--sh-1);min-width:0">
+                      <div style="display:flex;flex-direction:column;gap:2px">
+                        <span style="font-size:11px;color:var(--ink-3)">From, per adult</span>
+                        <span style="font-family:var(--font-display);font-weight:700;font-size:22px;color:var(--primary)">RM {{ pkgPrice }}</span>
+                      </div>
+                      <div style="background:var(--primary-tint);border-radius:var(--r-xs);padding:var(--s-3);display:flex;flex-direction:column;gap:3px">
+                        <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary-ink)">Book with a deposit</span>
+                        <span style="font-size:12.5px;color:var(--ink);line-height:1.55">{{ depositPreviewShort }}</span>
+                      </div>
+                      <button style="border:0;background:var(--accent);color:#152229;font-size:13px;font-weight:700;padding:11px 14px;border-radius:var(--r-sm);width:100%">Book this trip</button>
+                      <button style="border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:12.5px;font-weight:600;padding:9px 14px;border-radius:var(--r-sm);width:100%">Chat on WhatsApp</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isPayments }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:var(--s-1);background:var(--surface);border:1px solid var(--line);padding:3px;border-radius:var(--r-sm);align-self:flex-start;box-shadow:var(--sh-1)">
+            <sc-for list="{{ payTabs }}" as="t" hint-placeholder-count="2">
+              <button onClick="{{ t.onClick }}" style="border:0;background:{{ t.bg }};color:{{ t.fg }};font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:5px;white-space:nowrap;width:auto">{{ t.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isDeposit }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:var(--s-4);min-width:0">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--s-3);align-items:start;min-width:0">
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0;box-shadow:var(--sh-1)">
+                <div style="display:flex;flex-direction:column;gap:3px">
+                  <span style="font-family:var(--font-display);font-weight:600;font-size:15px">Agency deposit default</span>
+                  <span style="font-size:12px;color:var(--ink-2)">Used by any package that has no override in its own pricing tab.</span>
+                </div>
+                <sc-for list="{{ depositToggles }}" as="t" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:flex-start;gap:var(--s-3);border-bottom:1px solid #f1f4f5;padding-bottom:var(--s-3);min-width:0">
+                    <div style="flex:1 1 auto;display:flex;flex-direction:column;gap:2px;min-width:0">
+                      <span style="font-size:12.5px;font-weight:600">{{ t.name }}</span>
+                      <span style="font-size:11.5px;color:var(--ink-2);line-height:1.5">{{ t.desc }}</span>
+                    </div>
+                    <button onClick="{{ t.onClick }}" style="flex:0 0 auto;width:38px;height:22px;border:0;border-radius:99px;background:{{ t.track }};position:relative;padding:0">
+                      <span style="position:absolute;top:3px;left:{{ t.knob }};width:16px;height:16px;border-radius:99px;background:#fff"></span>
+                    </button>
+                  </div>
+                </sc-for>
+                <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-3)">
+                  <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Default deposit</label>
+                    <input defaultValue="30% of trip total" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Minimum deposit</label>
+                    <input defaultValue="RM 1,500.00 per pax" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Balance due</label>
+                    <input defaultValue="45 days before departure" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Reminder schedule</label>
+                    <input defaultValue="14, 7 and 1 day before due" style="padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-xs);font-size:12.5px">
+                  </div>
+                </div>
+              </div>
+
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);min-width:0;box-shadow:var(--sh-1)">
+                <span style="font-family:var(--font-display);font-weight:600;font-size:15px">Checkout summary the traveller sees</span>
+                <span style="font-size:12px;color:var(--ink-2)">Tokyo - Fuji - Osaka - Kyoto 7D6N, 4 pax, departing 1 Sep 2026.</span>
+                <div style="display:flex;flex-direction:column;gap:var(--s-2)">
+                  <sc-for list="{{ payOptions }}" as="o" hint-placeholder-count="2">
+                    <button onClick="{{ o.onClick }}" style="border:2px solid {{ o.border }};background:{{ o.bg }};border-radius:var(--r-sm);padding:var(--s-3);display:flex;align-items:center;gap:var(--s-3);text-align:left;width:100%">
+                      <span style="flex:0 0 16px;width:16px;height:16px;border-radius:99px;border:2px solid {{ o.border }};background:{{ o.dot }}"></span>
+                      <span style="flex:1 1 auto;display:flex;flex-direction:column;gap:2px;min-width:0">
+                        <span style="font-size:12.5px;font-weight:600;color:var(--ink)">{{ o.label }}</span>
+                        <span style="font-size:11.5px;color:var(--ink-2)">{{ o.note }}</span>
+                      </span>
+                      <span style="flex:0 0 auto;font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--primary)">{{ o.amount }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+                <div style="border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden">
+                  <sc-for list="{{ summaryLines }}" as="l" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);padding:9px var(--s-3);border-bottom:1px solid #f1f4f5;background:{{ l.bg }}">
+                      <span style="font-size:12.5px;font-weight:{{ l.w }};color:var(--ink)">{{ l.label }}</span>
+                      <span style="font-size:12.5px;font-weight:{{ l.w }};color:{{ l.fg }}">{{ l.value }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;min-width:0;box-shadow:var(--sh-1)">
+              <div style="padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s-3)">
+                <span style="font-family:var(--font-display);font-weight:600;font-size:14.5px">Deposit rules by package</span>
+                <span style="font-size:11.5px;color:var(--ink-2)">6 packages, 2 using the agency default</span>
+              </div>
+              <div style="overflow-x:auto">
+                <div style="min-width:860px">
+                  <div style="display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,140px) minmax(0,130px) minmax(0,110px) minmax(0,110px) minmax(0,120px);gap:var(--s-3);padding:9px var(--s-4);background:#f7f9fa;border-bottom:1px solid var(--line);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">
+                    <span>Package</span><span>Deposit type</span><span style="text-align:right">Deposit</span><span style="text-align:right">Cut-off</span><span>Full payment</span><span>Status</span>
+                  </div>
+                  <sc-for list="{{ depositPlans }}" as="p" hint-placeholder-count="6">
+                    <div style="display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,140px) minmax(0,130px) minmax(0,110px) minmax(0,110px) minmax(0,120px);gap:var(--s-3);padding:var(--row-pad) var(--s-4);border-bottom:1px solid #f1f4f5;align-items:center;min-width:0">
+                      <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                        <span style="font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.name }}</span>
+                        <span style="font-size:11px;color:var(--ink-3)">{{ p.code }}</span>
+                      </div>
+                      <span style="font-size:12px;color:var(--ink-2)">{{ p.type }}</span>
+                      <div style="display:flex;flex-direction:column;gap:1px;align-items:flex-end">
+                        <span style="font-size:12.5px;font-weight:600">{{ p.deposit }}</span>
+                        <span style="font-size:11px;color:var(--ink-3)">{{ p.perPax }}</span>
+                      </div>
+                      <span style="font-size:12.5px;text-align:right">{{ p.cutoff }}</span>
+                      <span style="font-size:12px;color:var(--ink-2)">{{ p.full }}</span>
+                      <span style="justify-self:start;background:{{ p.bg }};color:{{ p.fg }};font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px">{{ p.status }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;min-width:0;box-shadow:var(--sh-1)">
+              <div style="padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s-3)">
+                <span style="font-family:var(--font-display);font-weight:600;font-size:14.5px">Balances due after deposit</span>
+                <span style="font-size:11.5px;color:var(--ink-2)">Reminders send automatically at 14, 7 and 1 day</span>
+              </div>
+              <div style="overflow-x:auto">
+                <div style="min-width:900px">
+                  <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1.5fr) minmax(0,120px) minmax(0,120px) minmax(0,120px) minmax(0,150px);gap:var(--s-3);padding:9px var(--s-4);background:#f7f9fa;border-bottom:1px solid var(--line);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">
+                    <span>Traveller</span><span>Trip</span><span style="text-align:right">Trip total</span><span style="text-align:right">Deposit paid</span><span style="text-align:right">Balance</span><span>Due and reminders</span>
+                  </div>
+                  <sc-for list="{{ balances }}" as="b" hint-placeholder-count="6">
+                    <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1.5fr) minmax(0,120px) minmax(0,120px) minmax(0,120px) minmax(0,150px);gap:var(--s-3);padding:var(--row-pad) var(--s-4);border-bottom:1px solid #f1f4f5;align-items:center;min-width:0">
+                      <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                        <span style="font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ b.name }}</span>
+                        <span style="font-size:11px;color:var(--ink-3)">{{ b.ref }}</span>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                        <span style="font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ b.trip }}</span>
+                        <span style="font-size:11px;color:var(--ink-3)">{{ b.plan }}</span>
+                      </div>
+                      <span style="font-size:12.5px;text-align:right">{{ b.total }}</span>
+                      <span style="font-size:12.5px;text-align:right;font-weight:600;color:#1d6f65">{{ b.paid }}</span>
+                      <span style="font-size:12.5px;text-align:right;font-weight:600">{{ b.balance }}</span>
+                      <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                        <span style="font-size:12px">{{ b.due }}</span>
+                        <span style="align-self:flex-start;background:{{ b.bg }};color:{{ b.fg }};font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px">{{ b.status }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isTable }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:var(--s-3);min-width:0">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s-3);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-2) var(--s-3);box-shadow:var(--sh-1)">
+              <div style="display:flex;gap:var(--s-1);flex-wrap:wrap">
+                <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+                  <button onClick="{{ c.onClick }}" style="border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};font-size:12px;font-weight:600;padding:6px 12px;border-radius:99px;width:auto">{{ c.label }}</button>
+                </sc-for>
+              </div>
+              <span style="font-size:11.5px;color:var(--ink-2)">{{ rowCount }}</span>
+            </div>
+
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;min-width:0;box-shadow:var(--sh-1)">
+              <div style="overflow-x:auto">
+                <div style="min-width:900px">
+                  <div style="display:grid;grid-template-columns:{{ cols }};gap:var(--s-3);padding:9px var(--s-4);background:#f7f9fa;border-bottom:1px solid var(--line);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">
+                    <sc-for list="{{ headers }}" as="h" hint-placeholder-count="6">
+                      <span style="text-align:{{ h.ta }};min-width:0">{{ h.label }}</span>
+                    </sc-for>
+                  </div>
+                  <sc-for list="{{ rows }}" as="r" hint-placeholder-count="7">
+                    <div style="display:grid;grid-template-columns:{{ cols }};gap:var(--s-3);padding:var(--row-pad) var(--s-4);border-bottom:1px solid #f1f4f5;align-items:center;min-width:0" style-hover="background:#fafbfc">
+                      <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="6">
+                        <div style="display:flex;flex-direction:column;gap:2px;min-width:0;align-items:{{ c.a }}">
+                          <sc-if value="{{ c.t }}" hint-placeholder-val="{{ true }}">
+                            <span style="font-size:12.5px;font-weight:{{ c.w }};color:{{ c.color }};min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%">{{ c.t }}</span>
+                          </sc-if>
+                          <sc-if value="{{ c.s }}" hint-placeholder-val="{{ false }}">
+                            <span style="font-size:11px;color:var(--ink-3);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%">{{ c.s }}</span>
+                          </sc-if>
+                          <sc-if value="{{ c.badge }}" hint-placeholder-val="{{ false }}">
+                            <span style="background:{{ c.bg }};color:{{ c.fg }};font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap">{{ c.badge }}</span>
+                          </sc-if>
+                          <sc-if value="{{ c.acts }}" hint-placeholder-val="{{ false }}">
+                            <div style="display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap">
+                              <sc-for list="{{ c.acts }}" as="a" hint-placeholder-count="2">
+                                <button style="border:1px solid {{ a.border }};background:{{ a.bg }};color:{{ a.fg }};font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:var(--r-xs);width:auto;white-space:nowrap">{{ a.label }}</button>
+                              </sc-for>
+                            </div>
+                          </sc-if>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:var(--s-6);display:flex;flex-direction:column;align-items:center;gap:6px">
+                  <span style="font-family:var(--font-display);font-weight:600;font-size:14px">No records match this filter</span>
+                  <span style="font-size:12px;color:var(--ink-2)">Clear the search box or pick another status to see the full list.</span>
+                </div>
+              </sc-if>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);padding:10px var(--s-4);background:#f7f9fa;font-size:11.5px;color:var(--ink-2)">
+                <span>{{ footNote }}</span>
+                <div style="display:flex;gap:6px">
+                  <button style="border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:var(--r-xs);width:auto">Previous</button>
+                  <button style="border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:var(--r-xs);width:auto">Next</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Teal Cream&quot;,&quot;Plum Sunset&quot;,&quot;Forest Bone&quot;,&quot;Cobalt Slate&quot;],&quot;default&quot;:&quot;Teal Cream&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Branding&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Compact&quot;,&quot;Comfortable&quot;],&quot;default&quot;:&quot;Compact&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Branding&quot;}}">
+const TONE = {
+  ok: ['var(--success-tint)', '#1d6f65'],
+  warn: ['var(--warn-tint)', '#8a6100'],
+  bad: ['var(--danger-tint)', '#b04a2f'],
+  info: ['var(--primary-tint)', 'var(--primary-ink)'],
+  mute: ['#f1f4f5', 'var(--ink-2)']
+};
+const C = (t, s, w) => ({ t, s, a: 'flex-start', w: w || '500', color: 'var(--ink)' });
+const S = (t, s) => ({ t, s, a: 'flex-start', w: '600', color: 'var(--ink)' });
+const N = (t, s) => ({ t, s, a: 'flex-end', w: '600', color: 'var(--ink)' });
+const B = (badge, tone) => ({ badge, bg: TONE[tone][0], fg: TONE[tone][1], a: 'flex-start' });
+const A = (labels) => ({
+  a: 'flex-end',
+  acts: labels.map(([label, kind]) => kind === 'primary'
+    ? { label, border: 'var(--primary)', bg: 'var(--primary)', fg: '#fff' }
+    : kind === 'danger'
+      ? { label, border: 'var(--danger-tint)', bg: 'var(--danger-tint)', fg: '#b04a2f' }
+      : { label, border: 'var(--line)', bg: 'var(--surface)', fg: 'var(--ink-2)' })
+});
+const H = (labels) => labels.map(l => (typeof l === 'string' ? { label: l, ta: 'left' } : { label: l[0], ta: 'right' }));
+const row = (tag, cells) => ({ tag, cells });
+
+const THEMES = {
+  'Teal Cream': { note: 'Default tenant palette', primary: '#1a5f7a', dark: '#134a5f', tint: '#e9f1f4', pink: '#0f3c4e', accent: '#f4a261', accentTint: '#fdefe1', sb: '#10333f', bg: '#f3f5f6' },
+  'Plum Sunset': { note: 'High-contrast dark rail', primary: '#6b2350', dark: '#511739', tint: '#f4e8ef', pink: '#4a1234', accent: '#f26430', accentTint: '#fdeae1', sb: '#3f0f2c', bg: '#f5f4f7' },
+  'Forest Bone': { note: 'Calm, low saturation', primary: '#2f5d3f', dark: '#22452f', tint: '#e8f0ea', pink: '#1d3b28', accent: '#d9a12b', accentTint: '#fbf1d9', sb: '#1b3524', bg: '#f4f5f2' },
+  'Cobalt Slate': { note: 'Corporate blue', primary: '#22468f', dark: '#193673', tint: '#e8edf8', pink: '#152c5e', accent: '#f08a24', accentTint: '#fdeedd', sb: '#152444', bg: '#f3f5f8' }
+};
+
+const SCREENS = {
+  bookings: {
+    crumb: 'Bookings', title: 'Bookings', action: 'New booking',
+    sub: 'All confirmed seats and deposits across group departures. Balance is due 45 days before departure.',
+    kpis: [
+      ['Confirmed bookings', '182', 'Sep to Nov 2026 departures', 'info'],
+      ['Deposits collected', 'RM 707,212.00', '68% of invoiced value', 'ok'],
+      ['Outstanding balance', 'RM 1,035,040.52', '41 bookings past first reminder', 'warn'],
+      ['Cancellations', '7', 'RM 18,400 in forfeited deposits', 'bad']
+    ],
+    chips: ['All', 'Deposit paid', 'Fully paid', 'Overdue'],
+    cols: 'minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,1.7fr) 56px minmax(0,110px) minmax(0,120px) minmax(0,130px)',
+    headers: H(['Customer', 'Contact', 'Trip and departure', 'Pax', ['Paid'], ['Balance'], 'Status']),
+    rows: [
+      row('Deposit paid', [S('Nurul Aisyah Rahman', 'BK-26-0912'), C('012-337 4821', 'aisyah.rahman@gmail.com'), C('Tokyo - Fuji - Osaka - Kyoto 7D6N', 'Departs 1 Sep 2026'), C('4'), N('RM 6,000.00'), N('RM 27,960.00'), B('Deposit paid', 'warn')]),
+      row('Fully paid', [S('Tan Wei Ming', 'BK-26-0918'), C('016-224 9017', 'wm.tan@quantumlogix.my'), C('Seoul - Jeonju - Busan 6D5N', 'Departs 12 Sep 2026'), C('2'), N('RM 13,180.00'), N('RM 0.00'), B('Fully paid', 'ok')]),
+      row('Overdue', [S('Kavitha Subramaniam', 'BK-26-0921'), C('019-806 3355', 'kavitha.s@ampangdental.com'), C('Uzbekistan Silk Road 8D7N', 'Departs 20 Sep 2026'), C('3'), N('RM 4,500.00'), N('RM 22,470.00'), B('Overdue 9 days', 'bad')]),
+      row('Deposit paid', [S('Hafiz Zulkarnain', 'BK-26-0925'), C('013-449 7728', 'hafiz.zul@perakcement.my'), C('Turkiye Grand Tour 10D9N', 'Departs 4 Oct 2026'), C('6'), N('RM 9,000.00'), N('RM 48,540.00'), B('Deposit paid', 'warn')]),
+      row('Fully paid', [S('Lim Siew Ling', 'BK-26-0930'), C('017-660 1284', 'siewling.lim@outlook.com'), C('Hokkaido Autumn 7D6N', 'Departs 14 Oct 2026'), C('2'), N('RM 17,980.00'), N('RM 0.00'), B('Fully paid', 'ok')]),
+      row('Deposit paid', [S('Muhammad Faiz Ariffin', 'BK-26-0934'), C('011-2870 4416', 'faiz.ariffin@mmuniversiti.edu.my'), C('Umrah Plus Aqsa 12D11N', 'Departs 2 Nov 2026'), C('8'), N('RM 24,000.00'), N('RM 71,200.00'), B('Deposit paid', 'warn')]),
+      row('Overdue', [S('Chong Ka Ho', 'BK-26-0939'), C('018-337 5590', 'kaho.chong@gmail.com'), C('Vietnam North Loop 6D5N', 'Departs 9 Nov 2026'), C('2'), N('RM 1,600.00'), N('RM 6,780.00'), B('Overdue 3 days', 'bad')]),
+      row('Fully paid', [S('Sharifah Nadia Idris', 'BK-26-0941'), C('012-908 1173', 'nadia.idris@kltravelclub.my'), C('Georgia and Armenia 9D8N', 'Departs 22 Nov 2026'), C('5'), N('RM 43,450.00'), N('RM 0.00'), B('Fully paid', 'ok')])
+    ],
+    foot: 'Showing 8 of 182 bookings'
+  },
+  'open-trips': {
+    crumb: 'Bookings / Open Trips', title: 'Open trips', action: 'Publish departure',
+    sub: 'Public group departures with seats still on sale. Seats release back to inventory 48 hours after an unpaid invoice.',
+    kpis: [
+      ['Open departures', '24', 'Next 90 days', 'info'],
+      ['Seats sold', '318 / 468', '68% load factor', 'ok'],
+      ['At-risk departures', '5', 'Below minimum 10 pax', 'warn'],
+      ['Value on sale', 'RM 1,286,400.00', 'At current published prices', 'info']
+    ],
+    chips: ['All', 'On sale', 'Nearly full', 'At risk'],
+    cols: 'minmax(0,1.9fr) minmax(0,1.1fr) minmax(0,1fr) minmax(0,110px) minmax(0,110px) minmax(0,130px)',
+    headers: H(['Trip', 'Departure', 'Tour leader', ['Seats'], ['Adult price'], 'Status']),
+    rows: [
+      row('Nearly full', [S('Tokyo - Fuji - Osaka - Kyoto 7D6N', 'JPN-TFO-7D'), C('1 Sep 2026', 'Returns 7 Sep'), C('Azman Roslan', 'MY licence TG-4471'), N('18 / 20'), N('RM 8,490'), B('Nearly full', 'warn')]),
+      row('On sale', [S('Seoul - Jeonju - Busan 6D5N', 'KOR-SJB-6D'), C('12 Sep 2026', 'Returns 17 Sep'), C('Diyana Kamarudin', 'MY licence TG-5120'), N('14 / 24'), N('RM 6,590'), B('On sale', 'ok')]),
+      row('At risk', [S('Uzbekistan Silk Road 8D7N', 'UZB-SLK-8D'), C('20 Sep 2026', 'Returns 27 Sep'), C('Rizal Hamzah', 'MY licence TG-3388'), N('8 / 20'), N('RM 8,990'), B('Below minimum', 'bad')]),
+      row('On sale', [S('Turkiye Grand Tour 10D9N', 'TUR-GRD-10D'), C('4 Oct 2026', 'Returns 13 Oct'), C('Serkan Yilmaz', 'Local partner, Istanbul'), N('22 / 32'), N('RM 9,590'), B('On sale', 'ok')]),
+      row('Nearly full', [S('Hokkaido Autumn 7D6N', 'JPN-HKD-7D'), C('14 Oct 2026', 'Returns 20 Oct'), C('Azman Roslan', 'MY licence TG-4471'), N('19 / 20'), N('RM 8,990'), B('1 seat left', 'warn')]),
+      row('On sale', [S('Umrah Plus Aqsa 12D11N', 'UMR-AQS-12D'), C('2 Nov 2026', 'Returns 13 Nov'), C('Ustaz Faridzul Anuar', 'Mutawwif, TH-0912'), N('34 / 45'), N('RM 11,900'), B('On sale', 'ok')]),
+      row('At risk', [S('Georgia and Armenia 9D8N', 'CAU-GEA-9D'), C('22 Nov 2026', 'Returns 30 Nov'), C('Nino Beridze', 'Local partner, Tbilisi'), N('9 / 24'), N('RM 8,690'), B('Below minimum', 'bad')])
+    ],
+    foot: 'Showing 7 of 24 open departures'
+  },
+  'private-trip': {
+    crumb: 'Bookings / Private Trip', title: 'Private trip requests', action: 'New request',
+    sub: 'Charter and corporate enquiries handled outside published departures. Quotes expire 14 days after issue.',
+    kpis: [
+      ['Live requests', '19', '6 awaiting first quote', 'info'],
+      ['Quoted value', 'RM 612,880.00', 'Across 13 open quotes', 'ok'],
+      ['Won this month', '5', 'RM 214,300.00 contracted', 'ok'],
+      ['Median response', '6.2 hours', 'Target is under 8 hours', 'info']
+    ],
+    chips: ['All', 'New enquiry', 'Quoted', 'Won', 'Lost'],
+    cols: 'minmax(0,1.5fr) minmax(0,1.6fr) 56px minmax(0,1fr) minmax(0,120px) minmax(0,140px)',
+    headers: H(['Group', 'Requested itinerary', 'Pax', 'Travel window', ['Budget'], 'Stage']),
+    rows: [
+      row('Quoted', [S('Quantum Logix Sdn Bhd', 'Corporate incentive'), C('Da Nang and Hoi An, 5D4N', 'Beach resort, 2 team dinners'), C('42'), C('18 - 22 Nov 2026'), N('RM 168,000'), B('Quoted', 'warn')]),
+      row('New enquiry', [S('Keluarga Dato Zainal', 'Multi-generation family'), C('Osaka and Kyoto, 8D7N', 'Wheelchair access, halal meals'), C('11'), C('12 - 19 Dec 2026'), N('RM 96,000'), B('New enquiry', 'info')]),
+      row('Won', [S('SMK Seri Bintang Utara', 'School study tour'), C('Singapore STEM circuit, 4D3N', 'Science Centre plus NUS visit'), C('68'), C('8 - 11 Mar 2027'), N('RM 108,800'), B('Won', 'ok')]),
+      row('Quoted', [S('Persatuan Doktor Muslim', 'Association retreat'), C('Uzbekistan, 8D7N', 'Conference hall, 3 cities'), C('26'), C('4 - 11 Apr 2027'), N('RM 233,000'), B('Quoted', 'warn')]),
+      row('Lost', [S('Bina Sejahtera Engineering', 'Client appreciation trip'), C('Hokkaido ski, 6D5N', 'Lost on price to competitor'), C('18'), C('20 - 25 Jan 2027'), N('RM 142,000'), B('Lost', 'bad')]),
+      row('New enquiry', [S('Halim and Wong wedding', 'Destination wedding party'), C('Bali, 5D4N', 'Villa block plus MPV fleet'), C('34'), C('6 - 10 Jun 2027'), N('RM 122,400'), B('New enquiry', 'info')])
+    ],
+    foot: 'Showing 6 of 19 private requests'
+  },
+  regions: {
+    crumb: 'Packages / Regions', title: 'Regions', action: 'Add region',
+    sub: 'Regions group packages for the storefront menu and drive the dashboard breakdown.',
+    kpis: [
+      ['Active regions', '9', '2 hidden from storefront', 'info'],
+      ['Packages live', '66', '11 drafts pending review', 'info'],
+      ['Pax YTD', '400', 'Across all regions', 'ok'],
+      ['Revenue YTD', 'RM 1,742,252.52', 'Gross before commissions', 'ok']
+    ],
+    chips: ['All', 'Published', 'Hidden'],
+    cols: 'minmax(0,1.1fr) minmax(0,2fr) minmax(0,90px) minmax(0,90px) minmax(0,130px) minmax(0,110px)',
+    headers: H(['Region', 'Countries', ['Packages'], ['Pax YTD'], ['Revenue YTD'], 'Storefront']),
+    rows: [
+      row('Published', [S('East Asia', 'REG-EA'), C('Japan, South Korea, Taiwan', '14 departures in next 90 days'), N('21'), N('168'), N('RM 812,440.00'), B('Published', 'ok')]),
+      row('Published', [S('Central Asia', 'REG-CA'), C('Uzbekistan, Kazakhstan, Kyrgyzstan', 'Silk Road series, spring and autumn'), N('8'), N('54'), N('RM 268,910.00'), B('Published', 'ok')]),
+      row('Published', [S('Middle East', 'REG-ME'), C('Saudi Arabia, Jordan, Palestine', 'Umrah plus Aqsa programmes'), N('9'), N('96'), N('RM 402,700.00'), B('Published', 'ok')]),
+      row('Published', [S('Caucasus', 'REG-CC'), C('Georgia, Armenia, Azerbaijan', 'Autumn colour departures'), N('6'), N('28'), N('RM 121,640.00'), B('Published', 'ok')]),
+      row('Published', [S('Southeast Asia', 'REG-SEA'), C('Vietnam, Thailand, Indonesia', 'Short haul weekend series'), N('15'), N('42'), N('RM 98,320.00'), B('Published', 'ok')]),
+      row('Hidden', [S('Europe', 'REG-EU'), C('Turkiye, Spain, Portugal', 'Relaunch planned for Q2 2027'), N('5'), N('12'), N('RM 38,242.52'), B('Hidden', 'mute')])
+    ],
+    foot: 'Showing 6 of 9 regions'
+  },
+  customers: {
+    crumb: 'Sales / Customers', title: 'Customers', action: 'Add customer',
+    sub: 'One record per traveller or household, merged across bookings, invoices and enquiry forms.',
+    kpis: [
+      ['Customer records', '2,847', '164 added in the last 30 days', 'info'],
+      ['Repeat travellers', '38%', '1,082 with two or more trips', 'ok'],
+      ['Average lifetime value', 'RM 11,240.00', 'Up RM 640 year on year', 'ok'],
+      ['Unreachable', '73', 'Bounced email or dead number', 'warn']
+    ],
+    chips: ['All', 'Repeat', 'First time', 'VIP'],
+    cols: 'minmax(0,1.3fr) minmax(0,1.3fr) 70px minmax(0,130px) minmax(0,1.1fr) minmax(0,110px)',
+    headers: H(['Customer', 'Contact', ['Trips'], ['Lifetime value'], 'Last trip', 'Segment']),
+    rows: [
+      row('VIP', [S('Sharifah Nadia Idris', 'CUS-00412'), C('012-908 1173', 'nadia.idris@kltravelclub.my'), N('7'), N('RM 74,180.00'), C('Georgia and Armenia', 'Nov 2026'), B('VIP', 'info')]),
+      row('Repeat', [S('Tan Wei Ming', 'CUS-01188'), C('016-224 9017', 'wm.tan@quantumlogix.my'), N('4'), N('RM 38,920.00'), C('Seoul - Jeonju - Busan', 'Sep 2026'), B('Repeat', 'ok')]),
+      row('Repeat', [S('Nurul Aisyah Rahman', 'CUS-01920'), C('012-337 4821', 'aisyah.rahman@gmail.com'), N('3'), N('RM 41,600.00'), C('Tokyo - Fuji - Osaka', 'Sep 2026'), B('Repeat', 'ok')]),
+      row('First time', [S('Chong Ka Ho', 'CUS-02644'), C('018-337 5590', 'kaho.chong@gmail.com'), N('1'), N('RM 8,380.00'), C('Vietnam North Loop', 'Nov 2026'), B('First time', 'mute')]),
+      row('VIP', [S('Muhammad Faiz Ariffin', 'CUS-00877'), C('011-2870 4416', 'faiz.ariffin@mmuniversiti.edu.my'), N('6'), N('RM 96,400.00'), C('Umrah Plus Aqsa', 'Nov 2026'), B('VIP', 'info')]),
+      row('Repeat', [S('Kavitha Subramaniam', 'CUS-01503'), C('019-806 3355', 'kavitha.s@ampangdental.com'), N('2'), N('RM 26,970.00'), C('Uzbekistan Silk Road', 'Sep 2026'), B('Repeat', 'ok')]),
+      row('First time', [S('Lim Siew Ling', 'CUS-02710'), C('017-660 1284', 'siewling.lim@outlook.com'), N('1'), N('RM 17,980.00'), C('Hokkaido Autumn', 'Oct 2026'), B('First time', 'mute')])
+    ],
+    foot: 'Showing 7 of 2,847 customers'
+  },
+  trips: {
+    crumb: 'Operations / Trips', title: 'Trip operations', action: 'New trip',
+    sub: 'Operational view of every departure: rooming, transport, guide assignment and supplier confirmations.',
+    kpis: [
+      ['Total trips', '66', 'All statuses, FY2026', 'info'],
+      ['Upcoming', '24', 'Next departure in 4 days', 'ok'],
+      ['Ongoing', '1', 'Uzbekistan Silk Road, day 3', 'warn'],
+      ['Ended', '34', '7 cancelled and refunded', 'mute']
+    ],
+    chips: ['All', 'Upcoming', 'Ongoing', 'Ended', 'Cancelled'],
+    cols: 'minmax(0,1.8fr) minmax(0,1fr) 56px minmax(0,1.1fr) minmax(0,1.3fr) minmax(0,120px)',
+    headers: H(['Trip', 'Dates', 'Pax', 'Tour leader', 'Ops readiness', 'Status']),
+    rows: [
+      row('Upcoming', [S('Tokyo - Fuji - Osaka - Kyoto 7D6N', 'JPN-TFO-7D / Sep intake'), C('1 - 7 Sep 2026'), C('18'), C('Azman Roslan', 'Contact 012-771 4408'), C('Rooming final, coach confirmed', 'Shinkansen tickets pending'), B('Upcoming', 'ok')]),
+      row('Ongoing', [S('Uzbekistan Silk Road 8D7N', 'UZB-SLK-8D / Aug intake'), C('26 Aug - 2 Sep 2026'), C('16'), C('Rizal Hamzah', 'Contact 013-882 0091'), C('Day 3 of 8, Samarkand', 'All suppliers settled'), B('Ongoing', 'warn')]),
+      row('Upcoming', [S('Seoul - Jeonju - Busan 6D5N', 'KOR-SJB-6D'), C('12 - 17 Sep 2026'), C('14'), C('Diyana Kamarudin', 'Contact 016-303 7712'), C('Awaiting KTX seat map', 'Hotel deposit paid'), B('Upcoming', 'ok')]),
+      row('Upcoming', [S('Turkiye Grand Tour 10D9N', 'TUR-GRD-10D'), C('4 - 13 Oct 2026'), C('22'), C('Serkan Yilmaz', 'Istanbul partner desk'), C('Cappadocia balloon slots held', 'Visa list submitted'), B('Upcoming', 'ok')]),
+      row('Ended', [S('Hanoi and Ha Long 5D4N', 'VNM-HHL-5D / Jul intake'), C('18 - 22 Jul 2026'), C('26'), C('Diyana Kamarudin', 'Contact 016-303 7712'), C('Closed, 4 reviews collected', 'Supplier invoices verified'), B('Ended', 'mute')]),
+      row('Cancelled', [S('Kashmir Tulip Season 7D6N', 'IND-KSH-7D'), C('12 - 18 Apr 2026'), C('0'), C('Unassigned', 'Cancelled 6 weeks prior'), C('7 pax moved to 2027 intake', 'Deposits refunded in full'), B('Cancelled', 'bad')])
+    ],
+    foot: 'Showing 6 of 66 trips'
+  },
+  ticketing: {
+    crumb: 'Operations / Ticketing', title: 'Ticketing', action: 'Issue tickets',
+    sub: 'Airline bookings held against group departures. Unticketed PNRs auto-cancel at the airline deadline.',
+    kpis: [
+      ['Held PNRs', '31', '9 with deadlines inside 72 hours', 'warn'],
+      ['Tickets issued', '284', 'RM 486,120.00 in air fares', 'ok'],
+      ['Deadline breaches', '2', 'Rebooked at higher fare class', 'bad'],
+      ['Average fare', 'RM 1,712.00', 'Group net, excluding taxes', 'info']
+    ],
+    chips: ['All', 'Held', 'Issued', 'Deadline soon'],
+    cols: 'minmax(0,100px) minmax(0,1.7fr) 56px minmax(0,1.1fr) minmax(0,120px) minmax(0,130px)',
+    headers: H(['PNR', 'Airline and routing', 'Pax', 'Issue deadline', ['Fare total'], 'Status']),
+    rows: [
+      row('Deadline soon', [S('7QK4LM'), C('Malaysia Airlines MH88 / MH89', 'KUL - NRT - KIX - KUL'), C('18'), C('4 Sep 2026, 18:00', 'Airline hard deadline'), N('RM 34,020.00'), B('Deadline in 2 days', 'bad')]),
+      row('Issued', [S('3PDX9R'), C('Korean Air KE672 / KE671', 'KUL - ICN - KUL'), C('14'), C('Issued 22 Aug 2026'), N('RM 21,560.00'), B('Issued', 'ok')]),
+      row('Held', [S('9WBT2C'), C('Uzbekistan Airways HY592', 'KUL - TAS via SIN'), C('16'), C('11 Sep 2026, 12:00'), N('RM 28,640.00'), B('Held', 'warn')]),
+      row('Issued', [S('5MRF8Q'), C('Turkish Airlines TK61 / TK60', 'KUL - IST - KUL'), C('22'), C('Issued 19 Aug 2026'), N('RM 63,140.00'), B('Issued', 'ok')]),
+      row('Held', [S('2GHN7V'), C('AirAsia X D7522 / D7523', 'KUL - CTS via HND'), C('19'), C('26 Sep 2026, 23:59'), N('RM 30,780.00'), B('Held', 'warn')]),
+      row('Deadline soon', [S('8LKQ4T'), C('Saudia SV831 / SV830', 'KUL - JED - KUL'), C('34'), C('5 Sep 2026, 09:00', 'Group desk extension refused'), N('RM 91,460.00'), B('Deadline in 3 days', 'bad')])
+    ],
+    foot: 'Showing 6 of 31 active PNRs'
+  },
+  approvals: {
+    crumb: 'Finance / Approvals', title: 'Approvals', action: 'Approval rules',
+    sub: 'Discounts, refunds and supplier payments above the delegated limit wait here for finance sign-off.',
+    kpis: [
+      ['Pending approvals', '14', 'Oldest waiting 3 days', 'warn'],
+      ['Value pending', 'RM 128,470.00', 'Refunds plus supplier drawdowns', 'info'],
+      ['Approved this month', '62', 'RM 604,110.00 released', 'ok'],
+      ['Rejected', '4', 'Mostly missing documentation', 'bad']
+    ],
+    chips: ['All', 'Pending', 'Approved', 'Rejected'],
+    cols: 'minmax(0,1.1fr) minmax(0,1.7fr) minmax(0,1fr) minmax(0,120px) minmax(0,100px) minmax(0,190px)',
+    headers: H(['Type', 'Detail', 'Requested by', ['Amount'], 'Submitted', ['Action']]),
+    rows: [
+      row('Pending', [S('Refund', 'APR-2618'), C('Kashmir Tulip Season cancellation', '7 pax, full deposit refund'), C('Farah Adilah', 'Sales desk'), N('RM 10,500.00'), C('30 Aug 2026'), A([['Approve', 'primary'], ['Reject', 'danger']])]),
+      row('Pending', [S('Supplier payment', 'APR-2622'), C('Nihon Tabi DMC, balance for Sep intake', 'Invoice NT-2026-0844'), C('Rizal Hamzah', 'Operations'), N('RM 46,820.00'), C('31 Aug 2026'), A([['Approve', 'primary'], ['Reject', 'danger']])]),
+      row('Pending', [S('Discount', 'APR-2627'), C('Quantum Logix incentive, 42 pax', '8% group discount request'), C('Diyana Kamarudin', 'Corporate sales'), N('RM 13,440.00'), C('1 Sep 2026'), A([['Approve', 'primary'], ['Reject', 'danger']])]),
+      row('Approved', [S('Refund', 'APR-2601'), C('Medical withdrawal, Hokkaido Autumn', 'Insurance letter attached'), C('Farah Adilah', 'Sales desk'), N('RM 8,990.00'), C('26 Aug 2026'), A([['View', 'ghost']])]),
+      row('Approved', [S('Supplier payment', 'APR-2604'), C('Cappadocia balloon deposit, 22 pax', 'Invoice CB-9912'), C('Serkan Yilmaz', 'Istanbul partner'), N('RM 19,360.00'), C('27 Aug 2026'), A([['View', 'ghost']])]),
+      row('Rejected', [S('Discount', 'APR-2596'), C('Walk-in request, Umrah Plus Aqsa', 'Below floor price, no approval'), C('Hasrul Nizam', 'Retail counter'), N('RM 3,600.00'), C('25 Aug 2026'), A([['View', 'ghost']])])
+    ],
+    foot: 'Showing 6 of 14 pending items'
+  },
+  invoices: {
+    crumb: 'Finance / Invoices', title: 'Invoices', action: 'Create invoice',
+    sub: 'Tax invoices issued to travellers and corporate accounts. Reminders fire at 7, 3 and 1 day before due date.',
+    kpis: [
+      ['Invoiced YTD', 'RM 1,742,252.52', '1,206 invoices issued', 'info'],
+      ['Outstanding', 'RM 1,035,040.52', '41 invoices past due', 'warn'],
+      ['Collected in Aug', 'RM 388,420.00', '96% of due amount', 'ok'],
+      ['Credit notes', 'RM 24,180.00', '9 issued this quarter', 'mute']
+    ],
+    chips: ['All', 'Paid', 'Partial', 'Overdue'],
+    cols: 'minmax(0,110px) minmax(0,1.3fr) minmax(0,1.5fr) minmax(0,100px) minmax(0,100px) minmax(0,120px) minmax(0,110px)',
+    headers: H(['Invoice', 'Billed to', 'Trip', 'Issued', 'Due', ['Amount'], 'Status']),
+    rows: [
+      row('Partial', [S('INV-26-1841'), C('Nurul Aisyah Rahman', 'BK-26-0912'), C('Tokyo - Fuji - Osaka - Kyoto 7D6N', '4 pax'), C('12 Jul 2026'), C('18 Jul 2026'), N('RM 33,960.00', 'RM 27,960.00 due'), B('Partial', 'warn')]),
+      row('Paid', [S('INV-26-1855'), C('Tan Wei Ming', 'BK-26-0918'), C('Seoul - Jeonju - Busan 6D5N', '2 pax'), C('18 Jul 2026'), C('24 Jul 2026'), N('RM 13,180.00'), B('Paid', 'ok')]),
+      row('Overdue', [S('INV-26-1862'), C('Kavitha Subramaniam', 'BK-26-0921'), C('Uzbekistan Silk Road 8D7N', '3 pax'), C('20 Jul 2026'), C('24 Aug 2026'), N('RM 26,970.00', 'RM 22,470.00 due'), B('Overdue', 'bad')]),
+      row('Partial', [S('INV-26-1877'), C('Perak Cement Industries', 'Corporate account CA-0118'), C('Turkiye Grand Tour 10D9N', '6 pax'), C('2 Aug 2026'), C('20 Aug 2026'), N('RM 57,540.00', 'RM 48,540.00 due'), B('Partial', 'warn')]),
+      row('Paid', [S('INV-26-1884'), C('Lim Siew Ling', 'BK-26-0930'), C('Hokkaido Autumn 7D6N', '2 pax'), C('6 Aug 2026'), C('12 Aug 2026'), N('RM 17,980.00'), B('Paid', 'ok')]),
+      row('Overdue', [S('INV-26-1902'), C('Chong Ka Ho', 'BK-26-0939'), C('Vietnam North Loop 6D5N', '2 pax'), C('14 Aug 2026'), C('29 Aug 2026'), N('RM 8,380.00', 'RM 6,780.00 due'), B('Overdue', 'bad')]),
+      row('Paid', [S('INV-26-1915'), C('Sharifah Nadia Idris', 'BK-26-0941'), C('Georgia and Armenia 9D8N', '5 pax'), C('22 Aug 2026'), C('28 Aug 2026'), N('RM 43,450.00'), B('Paid', 'ok')])
+    ],
+    foot: 'Showing 7 of 1,206 invoices'
+  },
+  payments: {
+    crumb: 'Finance / Payments', title: 'Payments received', action: 'Record payment',
+    sub: 'Every receipt matched to an invoice. Unmatched transfers sit in the suspense account until allocated.',
+    kpis: [
+      ['Received in Aug', 'RM 388,420.00', '214 receipts', 'ok'],
+      ['Unallocated', 'RM 12,640.00', '6 transfers in suspense', 'warn'],
+      ['Card fees', 'RM 4,918.02', '1.2% average on FPX and card', 'mute'],
+      ['Refunds paid', 'RM 19,490.00', '11 refunds cleared', 'info']
+    ],
+    chips: ['All', 'Allocated', 'Unallocated', 'Refund'],
+    cols: 'minmax(0,110px) minmax(0,1.3fr) minmax(0,1fr) minmax(0,120px) minmax(0,110px) minmax(0,1.1fr)',
+    headers: H(['Receipt', 'From', 'Method', ['Amount'], 'Date', 'Allocated to']),
+    rows: [
+      row('Allocated', [S('RCP-9042'), C('Sharifah Nadia Idris', 'CUS-00412'), C('FPX Maybank2u', 'Ref MB88213904'), N('RM 43,450.00'), C('28 Aug 2026'), C('INV-26-1915', 'Fully settled')]),
+      row('Allocated', [S('RCP-9051'), C('Perak Cement Industries', 'CA-0118'), C('Corporate transfer', 'CIMB ref 771 4408'), N('RM 9,000.00'), C('29 Aug 2026'), C('INV-26-1877', 'Deposit portion')]),
+      row('Unallocated', [S('RCP-9058'), C('Unnamed transfer', 'No reference supplied'), C('Interbank GIRO', 'Suspense account'), N('RM 3,000.00'), C('30 Aug 2026'), C('Not matched', 'Chasing remitter')]),
+      row('Allocated', [S('RCP-9060'), C('Muhammad Faiz Ariffin', 'CUS-00877'), C('Credit card, Visa', 'Fee RM 288.00'), N('RM 24,000.00'), C('31 Aug 2026'), C('INV-26-1938', 'Deposit for 8 pax')]),
+      row('Refund', [S('RCP-9063'), C('Kashmir Tulip Season pax', '7 travellers'), C('Refund out, IBG', 'Batch RF-0442'), N('RM 10,500.00'), C('1 Sep 2026'), C('CN-26-0087', 'Credit note applied')]),
+      row('Unallocated', [S('RCP-9066'), C('Chong K. H.', 'Name mismatch on transfer'), C('FPX CIMB Clicks', 'Ref CC90042118'), N('RM 1,600.00'), C('1 Sep 2026'), C('Not matched', 'Likely INV-26-1902')])
+    ],
+    foot: 'Showing 6 of 214 receipts this month'
+  },
+  expenses: {
+    crumb: 'Finance / Expenses', title: 'Expenses', action: 'Add expense',
+    sub: 'Trip and office costs recorded against a cost centre. Tour leader float is reconciled within 5 days of return.',
+    kpis: [
+      ['Expenses in Aug', 'RM 69,438.03', '148 entries', 'info'],
+      ['Trip cost of sales', 'RM 61,204.60', '88% of total expenses', 'ok'],
+      ['Awaiting receipt', 'RM 5,842.00', '17 entries with no document', 'warn'],
+      ['Cost per pax', 'RM 1,528.00', 'Down RM 61 month on month', 'ok']
+    ],
+    chips: ['All', 'Trip cost', 'Office', 'Marketing', 'No receipt'],
+    cols: 'minmax(0,100px) minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,110px) minmax(0,1fr) minmax(0,120px)',
+    headers: H(['Date', 'Category', 'Vendor', 'Cost centre', ['Amount'], 'Paid by', 'Receipt']),
+    rows: [
+      row('Trip cost', [S('29 Aug 2026'), C('Accommodation'), C('Nihon Tabi DMC', 'Invoice NT-2026-0844'), C('JPN-TFO-7D', 'Sep intake'), N('RM 46,820.00'), C('Company account', 'Maybank 5140'), B('Attached', 'ok')]),
+      row('Trip cost', [S('29 Aug 2026'), C('Local transport'), C('Samarkand Coach Lines', 'Cash payment on site'), C('UZB-SLK-8D', 'Aug intake'), N('RM 4,180.00'), C('Rizal Hamzah', 'Leader float'), B('Attached', 'ok')]),
+      row('No receipt', [S('30 Aug 2026'), C('Meals'), C('Assorted street vendors', 'Day 3 group lunch'), C('UZB-SLK-8D', 'Aug intake'), N('RM 1,262.00'), C('Rizal Hamzah', 'Leader float'), B('Missing', 'bad')]),
+      row('Marketing', [S('30 Aug 2026'), C('Advertising'), C('Meta Platforms Ireland', 'Sep departures campaign'), C('Marketing', 'MKT-2026-09'), N('RM 6,400.00'), C('Company card', 'Visa 4102'), B('Attached', 'ok')]),
+      row('Office', [S('31 Aug 2026'), C('Software'), C('Travellah Booking SaaS', 'Monthly subscription'), C('Head office', 'OPS-ADMIN'), N('RM 1,290.00'), C('Company card', 'Visa 4102'), B('Attached', 'ok')]),
+      row('Trip cost', [S('1 Sep 2026'), C('Entrance fees'), C('Registan Museum Complex', '16 pax admission'), C('UZB-SLK-8D', 'Aug intake'), N('RM 968.00'), C('Rizal Hamzah', 'Leader float'), B('Attached', 'ok')]),
+      row('No receipt', [S('1 Sep 2026'), C('Tips and porterage'), C('Hotel porters, Bukhara', 'No document available'), C('UZB-SLK-8D', 'Aug intake'), N('RM 420.00'), C('Rizal Hamzah', 'Leader float'), B('Missing', 'bad')])
+    ],
+    foot: 'Showing 7 of 148 expense entries'
+  },
+  'verify-expenses': {
+    crumb: 'Finance / Verify Expenses', title: 'Verify expenses', action: 'Verification rules',
+    sub: 'Second-line check before an expense hits the profit and loss. Verifier cannot be the person who submitted it.',
+    kpis: [
+      ['Queued for check', '23', 'RM 18,904.00 in value', 'warn'],
+      ['Verified in Aug', '131', '94% cleared within 48 hours', 'ok'],
+      ['Queried back', '9', 'Wrong cost centre or no receipt', 'bad'],
+      ['Float outstanding', 'RM 8,400.00', '2 leaders still to reconcile', 'info']
+    ],
+    chips: ['All', 'Queued', 'Verified', 'Queried'],
+    cols: 'minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,110px) minmax(0,1fr) minmax(0,110px) minmax(0,190px)',
+    headers: H(['Expense', 'Submitted by', ['Amount'], 'Cost centre', 'Receipt', ['Action']]),
+    rows: [
+      row('Queued', [S('Day 3 group lunch, Samarkand', 'EXP-4471 / 30 Aug 2026'), C('Rizal Hamzah', 'Tour leader'), N('RM 1,262.00'), C('UZB-SLK-8D'), B('Missing', 'bad'), A([['Verify', 'primary'], ['Query', 'danger']])]),
+      row('Queued', [S('Hotel porterage, Bukhara', 'EXP-4478 / 1 Sep 2026'), C('Rizal Hamzah', 'Tour leader'), N('RM 420.00'), C('UZB-SLK-8D'), B('Missing', 'bad'), A([['Verify', 'primary'], ['Query', 'danger']])]),
+      row('Queued', [S('Coach hire, Registan transfer', 'EXP-4469 / 29 Aug 2026'), C('Rizal Hamzah', 'Tour leader'), N('RM 4,180.00'), C('UZB-SLK-8D'), B('Attached', 'ok'), A([['Verify', 'primary'], ['Query', 'danger']])]),
+      row('Verified', [S('Nihon Tabi DMC balance', 'EXP-4462 / 29 Aug 2026'), C('Nadhirah Salleh', 'Finance executive'), N('RM 46,820.00'), C('JPN-TFO-7D'), B('Attached', 'ok'), A([['View', 'ghost']])]),
+      row('Queried', [S('Sep campaign, Meta Ads', 'EXP-4455 / 30 Aug 2026'), C('Hasrul Nizam', 'Marketing'), N('RM 6,400.00'), C('Marketing'), B('Attached', 'ok'), A([['View', 'ghost']])]),
+      row('Verified', [S('Registan entrance fees, 16 pax', 'EXP-4480 / 1 Sep 2026'), C('Nadhirah Salleh', 'Finance executive'), N('RM 968.00'), C('UZB-SLK-8D'), B('Attached', 'ok'), A([['View', 'ghost']])])
+    ],
+    foot: 'Showing 6 of 23 queued items'
+  },
+  commissions: {
+    crumb: 'Finance / Commissions', title: 'Commissions', action: 'Run payout'
+    ,
+    sub: 'Agent and sub-agent earnings. Commission is payable once the traveller balance is settled in full.',
+    kpis: [
+      ['Payable now', 'RM 3,200.00', '4 agents cleared for payout', 'ok'],
+      ['Accrued, not payable', 'RM 27,640.00', 'Held against unpaid balances', 'warn'],
+      ['Paid YTD', 'RM 148,910.00', 'Across 38 agents', 'info'],
+      ['Top agent share', '18%', 'Kelab Pelancongan Shah Alam', 'info']
+    ],
+    chips: ['All', 'Payable', 'Accrued', 'Paid'],
+    cols: 'minmax(0,1.4fr) minmax(0,90px) 66px minmax(0,130px) minmax(0,80px) minmax(0,120px) minmax(0,110px)',
+    headers: H(['Agent', ['Bookings'], ['Pax'], ['Gross sales'], ['Rate'], ['Commission'], 'Status']),
+    rows: [
+      row('Payable', [S('Kelab Pelancongan Shah Alam', 'AGT-0071 / sub-agent'), N('9'), N('34'), N('RM 128,400.00'), N('5.0%'), N('RM 1,400.00', 'Cleared portion'), B('Payable', 'ok')]),
+      row('Payable', [S('Zaleha Travel Counter, Kuantan', 'AGT-0088 / retail partner'), N('6'), N('18'), N('RM 74,600.00'), N('4.5%'), N('RM 900.00'), B('Payable', 'ok')]),
+      row('Accrued', [S('Wanderlust KL, Bangsar', 'AGT-0104 / sub-agent'), N('11'), N('41'), N('RM 186,200.00'), N('5.0%'), N('RM 9,310.00', 'Balances unpaid'), B('Accrued', 'warn')]),
+      row('Payable', [S('Faridah Yusof', 'AGT-0119 / individual referrer'), N('3'), N('7'), N('RM 42,800.00'), N('2.0%'), N('RM 560.00'), B('Payable', 'ok')]),
+      row('Accrued', [S('Sabah Explorer Tours', 'AGT-0126 / sub-agent'), N('7'), N('24'), N('RM 96,800.00'), N('4.5%'), N('RM 4,356.00', 'Awaiting final payment'), B('Accrued', 'warn')]),
+      row('Paid', [S('Penang Heritage Travel', 'AGT-0058 / retail partner'), N('12'), N('48'), N('RM 214,300.00'), N('5.0%'), N('RM 10,715.00', 'Paid 22 Aug 2026'), B('Paid', 'mute')]),
+      row('Payable', [S('Hafizah Ismail', 'AGT-0133 / individual referrer'), N('2'), N('4'), N('RM 17,000.00'), N('2.0%'), N('RM 340.00'), B('Payable', 'ok')])
+    ],
+    foot: 'Showing 7 of 38 agent accounts'
+  },
+  admins: {
+    crumb: 'Others / Admins', title: 'Admin users', action: 'Invite admin',
+    sub: 'Staff accounts and permission scopes. Finance approvals require two-factor authentication.',
+    kpis: [
+      ['Active admins', '14', '3 invitations pending', 'info'],
+      ['Two-factor enabled', '11 of 14', 'Mandatory for finance roles', 'warn'],
+      ['Roles configured', '6', 'Finance, ops, sales, marketing, counter, owner', 'info'],
+      ['Dormant accounts', '2', 'No login in 60 days', 'bad']
+    ],
+    chips: ['All', 'Active', 'Pending', 'Dormant'],
+    cols: 'minmax(0,1.2fr) minmax(0,1fr) minmax(0,1.4fr) minmax(0,120px) minmax(0,90px) minmax(0,110px)',
+    headers: H(['Name', 'Role', 'Email', 'Last login', '2FA', 'Status']),
+    rows: [
+      row('Active', [S('Farah Adilah Kamal', 'ADM-002'), C('Owner'), C('farah@travellah.my', 'Full access'), C('2 Sep 2026, 08:41'), B('On', 'ok'), B('Active', 'ok')]),
+      row('Active', [S('Nadhirah Salleh', 'ADM-005'), C('Finance executive'), C('nadhirah@travellah.my', 'Approvals, invoices, payments'), C('2 Sep 2026, 09:12'), B('On', 'ok'), B('Active', 'ok')]),
+      row('Active', [S('Rizal Hamzah', 'ADM-008'), C('Operations lead'), C('rizal@travellah.my', 'Trips, ticketing, expenses'), C('1 Sep 2026, 22:04'), B('On', 'ok'), B('Active', 'ok')]),
+      row('Active', [S('Diyana Kamarudin', 'ADM-011'), C('Corporate sales'), C('diyana@travellah.my', 'Private trips, customers'), C('2 Sep 2026, 07:55'), B('On', 'ok'), B('Active', 'ok')]),
+      row('Active', [S('Hasrul Nizam', 'ADM-014'), C('Marketing'), C('hasrul@travellah.my', 'Packages, reviews, reporting'), C('30 Aug 2026, 16:20'), B('Off', 'bad'), B('Active', 'ok')]),
+      row('Pending', [S('Azman Roslan', 'ADM-017'), C('Tour leader, limited'), C('azman.roslan@travellah.my', 'Trip checklist and float only'), C('Invitation sent 28 Aug'), B('Off', 'bad'), B('Pending', 'warn')]),
+      row('Dormant', [S('Suriani Abdul Latif', 'ADM-009'), C('Retail counter'), C('suriani@travellah.my', 'Bookings, customers'), C('26 Jun 2026, 11:03'), B('On', 'ok'), B('Dormant', 'mute')])
+    ],
+    foot: 'Showing 7 of 14 admin accounts'
+  }
+};
+
+SCREENS.leads = {
+  crumb: 'Sales / Leads Manager', title: 'Leads manager', action: 'Add lead',
+  sub: 'Live feed from the enquiry forms, WhatsApp click-throughs and Meta lead ads on travellah.my. Last sync 3 Sep 2026, 09:14.',
+  kpis: [
+    ['Open leads', '74', '11 arrived in the last 24 hours', 'info'],
+    ['Untouched over 24h', '6', 'Breaching the 8-hour response target', 'bad'],
+    ['Quoted', 'RM 486,300.00', '29 leads at quote stage', 'warn'],
+    ['Won in Aug', '38 of 142', '26.8% conversion, up 3.1 points', 'ok']
+  ],
+  chips: ['All', 'New', 'Contacted', 'Quoted', 'Won', 'Lost'],
+  cols: 'minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.5fr) minmax(0,110px) minmax(0,1fr) minmax(0,1.2fr) minmax(0,110px)',
+  headers: H(['Lead', 'Source', 'Interest', ['Value'], 'Owner', 'Last touch and next action', 'Stage']),
+  rows: [
+    row('New', [S('Amirah Zulaikha', 'LD-26-3391 / 3 Sep, 08:52'), C('Trip page form', 'Tokyo 7D6N page'), C('Tokyo - Fuji - Osaka - Kyoto 7D6N', '2 adults, Dec school holiday'), N('RM 16,980'), C('Unassigned', 'Round robin pending'), C('No contact yet', 'Call within 8 hours'), B('New', 'info')]),
+    row('New', [S('Ganesh Muniandy', 'LD-26-3388 / 3 Sep, 07:20'), C('WhatsApp button', 'Landed from Google'), C('Umrah Plus Aqsa 12D11N', '4 pax, asking about Nov intake'), N('RM 47,600'), C('Hasrul Nizam', 'Retail counter'), C('WhatsApp read, no reply', 'Send itinerary PDF'), B('New', 'info')]),
+    row('Contacted', [S('Wong Mei Fong', 'LD-26-3374 / 2 Sep, 15:04'), C('Meta lead ad', 'Hokkaido autumn campaign'), C('Hokkaido Autumn 7D6N', '2 adults, 1 child'), N('RM 22,470'), C('Farah Adilah', 'Sales desk'), C('Called 2 Sep, wants Oct dates', 'Hold 2 seats until 5 Sep'), B('Contacted', 'warn')]),
+    row('Quoted', [S('Sunrise Dental Group', 'LD-26-3352 / 30 Aug, 11:31'), C('Referral', 'From AGT-0071'), C('Private charter, Da Nang 5D4N', '22 staff, incentive trip'), N('RM 88,000'), C('Diyana Kamarudin', 'Corporate sales'), C('Quote QT-0912 sent 1 Sep', 'Follow up 4 Sep'), B('Quoted', 'warn')]),
+    row('Quoted', [S('Hafiz Zulkarnain', 'LD-26-3340 / 28 Aug, 09:12'), C('Trip page form', 'Turkiye page'), C('Turkiye Grand Tour 10D9N', '6 pax, family group'), N('RM 57,540'), C('Farah Adilah', 'Sales desk'), C('Quote sent, asked for instalments', 'Explain deposit plan'), B('Quoted', 'warn')]),
+    row('Won', [S('Sharifah Nadia Idris', 'LD-26-3301 / 20 Aug, 14:48'), C('Repeat customer', 'CUS-00412'), C('Georgia and Armenia 9D8N', '5 pax, paid in full'), N('RM 43,450'), C('Farah Adilah', 'Sales desk'), C('Converted to BK-26-0941', 'Send visa checklist'), B('Won', 'ok')]),
+    row('Lost', [S('Chandran Pillai', 'LD-26-3288 / 18 Aug, 10:02'), C('Walk-in, Kuantan', 'Partner counter AGT-0088'), C('Kashmir Tulip Season 7D6N', 'Departure cancelled'), N('RM 17,400'), C('Zaleha Travel Counter', 'Retail partner'), C('Declined 2027 reschedule', 'Add to spring 2027 list'), B('Lost', 'bad')])
+  ],
+  foot: 'Showing 7 of 74 open leads'
+};
+
+const DAYS = [
+  { title: 'Arrival in Tokyo, Shinjuku evening', hours: '4 hours', hotel: 'Sunroute Plaza Shinjuku', acts: ['Narita airport meet and greet', 'Private coach transfer to Shinjuku', 'Evening walk at Kabukicho and Omoide Yokocho'], meals: { B: false, L: false, D: true } },
+  { title: 'Shibuya, Harajuku and Meiji Jingu', hours: '9 hours', hotel: 'Sunroute Plaza Shinjuku', acts: ['Shibuya crossing and Hachiko statue', 'Takeshita Street in Harajuku', 'Meiji Jingu shrine grounds', 'Shibuya Sky observation deck'], meals: { B: true, L: false, D: false } },
+  { title: 'Asakusa, Akihabara and Odaiba', hours: '9 hours', hotel: 'Sunroute Plaza Shinjuku', acts: ['Senso-ji temple and Nakamise street', 'Akihabara Electric Town', 'Odaiba waterfront and Rainbow Bridge view'], meals: { B: true, L: true, D: false } },
+  { title: 'Mt Fuji, Lake Kawaguchi day tour', hours: '10 hours', hotel: 'Fuji Lake Hotel', acts: ['Fuji fifth station, weather permitting', 'Lake Kawaguchi Kachi Kachi ropeway', 'Oishi Park lakeside stop'], meals: { B: true, L: true, D: true } },
+  { title: 'Shinkansen to Osaka, Dotonbori night', hours: '8 hours', hotel: 'Hotel Vischio Osaka', acts: ['Hikari Shinkansen, Shin-Fuji to Shin-Osaka', 'Dotonbori and Shinsaibashi street food', 'Glico sign and Ebisu bridge'], meals: { B: true, L: false, D: false } },
+  { title: 'Nara deer park and Kyoto east', hours: '9 hours', hotel: 'Hotel Vischio Osaka', acts: ['Nara Park bowing deer', 'Todai-ji great buddha hall', 'Kiyomizu-dera and Higashiyama lanes'], meals: { B: true, L: true, D: false } },
+  { title: 'Arashiyama, Fushimi Inari, departure', hours: '7 hours', hotel: 'Departure', acts: ['Arashiyama bamboo grove at sunrise', 'Fushimi Inari Taisha torii trail', 'Transfer to Kansai airport'], meals: { B: true, L: false, D: false } }
+];
+
+const META = {
+  dashboard: {
+    crumb: 'Dashboard', title: 'Dashboard management', action: 'Add booking',
+    sub: 'Financial position, trip load and the operational checklist for the current selling season.',
+    kpis: [
+      ['Total receivable amount', 'RM 1,035,040.52', '41 invoices past due date', 'warn'],
+      ['Total expenses', 'RM 69,438.03', '148 entries recorded in August', 'mute'],
+      ['Gross revenue', 'RM 965,602.49', 'Net of refunds and credit notes', 'ok'],
+      ['Total sales', 'RM 1,742,252.52', '1,206 invoices issued FY2026', 'info'],
+      ['Total pax', '400', 'Departed and confirmed travellers', 'info'],
+      ['Total commissions', 'RM 3,200.00', 'Payable to 4 cleared agents', 'ok']
+    ]
+  },
+  packages: { crumb: 'Packages / Packages', title: 'Packages', action: 'New package', sub: 'Itinerary templates published to the storefront. Duplicating a package copies days, fees and FAQs.' },
+  reviews: { crumb: 'Operations / Reviews', title: 'Reviews', action: 'Request reviews', sub: 'Traveller feedback collected 3 days after return. Published reviews appear on the trip page.' },
+  gantt: { crumb: 'Operations / Trip Gantt Chart', title: 'Trip Gantt chart', action: 'Export schedule', sub: 'Departure overlap across the next quarter, used to spot tour leader and coach clashes.' },
+  reporting: { crumb: 'Reports / Reporting', title: 'Reporting', action: 'Schedule report', sub: 'Saved reports for management, finance and the tourism board licence return.' },
+  settings: { crumb: 'Others / Settings', title: 'Settings', action: 'Save changes', sub: 'Tenant branding, table density and the operational rules that drive automatic reminders.' },
+  builder: { crumb: 'Packages / Page Builder', title: 'Package page builder', action: 'Save changes', sub: 'Every block here maps to a section on the public trip page. Preview shows exactly what the traveller sees.' }
+};
+
+class Component extends DCLogic {
+  state = {
+    screen: 'dashboard',
+    theme: 'Teal Cream',
+    density: 'Compact',
+    query: '',
+    chip: {},
+    openGroups: {},
+    builderTab: 'overview',
+    payTab: 'receipts',
+    payOption: 'deposit',
+    depositType: 'Percentage',
+    depositValue: '30',
+    pkgTitle: 'Tokyo - Fuji - Osaka - Nara - Kyoto 7D6N',
+    pkgIndex: 0,
+    days: DAYS.map((d, i) => ({ id: i + 1, title: d.title, hours: d.hours, hotel: d.hotel, acts: d.acts, meals: Object.assign({}, d.meals) })),
+    highlights: [
+      'Shibuya Sky sunset slot booked in advance, no queueing on arrival',
+      'Senso-ji temple and Nakamise street with a licensed local guide',
+      'Full day around Mt Fuji including the Kachi Kachi ropeway',
+      'Hikari Shinkansen leg from Shin-Fuji to Shin-Osaka',
+      'Hand-feeding the bowing sika deer in Nara Park',
+      'Arashiyama bamboo grove entered before the tour buses arrive'
+    ],
+    includes: [
+      '6 nights accommodation, twin sharing, 3-star city hotels',
+      'Airport transfers on arrival and departure',
+      'Daily breakfast plus 4 lunches and 2 dinners',
+      'English and Malay speaking tour leader from Kuala Lumpur',
+      'All entrance fees listed in the itinerary',
+      'Shinkansen reserved seats, Shin-Fuji to Shin-Osaka'
+    ],
+    excludes: [
+      'International flights, quoted separately per departure',
+      'Meals not listed in the itinerary',
+      'Travel insurance, from RM 180 per pax',
+      'Optional Fuji fifth station upgrade in winter',
+      'Personal expenses and porterage'
+    ],
+    dates: [
+      { startDate: '1 Sep 2026', endDate: '7 Sep 2026', price: '8490', capacity: '20', booked: 18 },
+      { startDate: '14 Sep 2026', endDate: '20 Sep 2026', price: '8490', capacity: '20', booked: 11 },
+      { startDate: '5 Oct 2026', endDate: '11 Oct 2026', price: '8790', capacity: '20', booked: 6 },
+      { startDate: '30 Nov 2026', endDate: '6 Dec 2026', price: '8990', capacity: '24', booked: 2 },
+      { startDate: '15 Mar 2027', endDate: '21 Mar 2027', price: '9490', capacity: '24', booked: 0 }
+    ],
+    faqs: [
+      { group: 'Booking and payment', q: 'How much deposit confirms my seat?', a: 'RM 1,500 per pax, or 30% of the trip total, whichever is higher. The balance is due 45 days before departure and reminders are sent automatically.' },
+      { group: 'Booking and payment', q: 'Can I pay the balance in instalments?', a: 'Yes. Once the deposit is paid you can settle the balance in any number of transfers up to the due date. The system tracks each receipt against your invoice.' },
+      { group: 'Visa and documents', q: 'Do Malaysian passport holders need a visa for Japan?', a: 'No visa is required for stays up to 90 days on a Malaysian passport with at least 6 months validity. We still collect a passport copy for the rooming and rail bookings.' },
+      { group: 'On the ground', q: 'What about internet access?', a: 'A pocket wifi router is provided per vehicle for the whole trip. Prepaid data SIM cards can be arranged on request at RM 60 for 7 days.' },
+      { group: 'On the ground', q: 'How much walking should I expect?', a: 'Between 6 and 9 kilometres on temple and market days. Day 4 around Lake Kawaguchi is the lightest, day 7 in Arashiyama and Fushimi Inari is the heaviest.' }
+    ],
+    toggles: { deadline: true, autoRelease: true, waitlist: false, leaderFloat: true, publicReviews: true },
+    depositOn: { enabled: true, allowFull: true, autoReminder: true, blockLate: true }
+  };
+
+  componentDidMount() {
+    this.applyTheme(this.props.theme ?? this.state.theme);
+    if (this.props.theme && THEMES[this.props.theme]) this.setState({ theme: this.props.theme });
+    if (this.props.density) this.applyDensity(this.props.density);
+  }
+
+  applyTheme(name) {
+    const t = THEMES[name] || THEMES['Teal Cream'];
+    const r = document.documentElement.style;
+    r.setProperty('--primary', t.primary);
+    r.setProperty('--primary-dark', t.dark);
+    r.setProperty('--primary-tint', t.tint);
+    r.setProperty('--primary-ink', t.pink);
+    r.setProperty('--accent', t.accent);
+    r.setProperty('--accent-tint', t.accentTint);
+    r.setProperty('--sb-bg', t.sb);
+    r.setProperty('--bg', t.bg);
+  }
+
+  applyDensity(d) {
+    document.documentElement.style.setProperty('--row-pad', d === 'Comfortable' ? '15px' : '9px');
+  }
+
+  setTheme = (name) => { this.applyTheme(name); this.setState({ theme: name }); };
+  setDensity = (d) => { this.applyDensity(d); this.setState({ density: d }); };
+
+  renderVals() {
+    const s = this.state;
+    const key = s.screen;
+    const sc = SCREENS[key];
+    const meta = sc || META[key];
+
+    const money = (n) => n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const unit = 8490;
+    const dv = parseFloat(s.depositValue) || 0;
+    const depUnit = s.depositType === 'Percentage' ? unit * dv / 100 : s.depositType === 'Fixed per pax' ? dv : dv / 2;
+    const depFor = (pax) => (s.depositType === 'Fixed per booking' ? dv : depUnit * pax);
+    const dep2 = depFor(2);
+    const depositLabel = s.depositType === 'Percentage' ? dv + '% deposit' : s.depositType === 'Fixed per pax' ? 'RM ' + money(dv) + ' per pax' : 'RM ' + money(dv) + ' per booking';
+
+    const nav = [
+      ['dashboard', 'Dashboard'],
+      ['Bookings', [['bookings', 'All Bookings', '3'], ['open-trips', 'Open Trips'], ['private-trip', 'Private Trip']]],
+      ['Packages', [['regions', 'Regions'], ['packages', 'Packages'], ['builder', 'Page Builder']]],
+      ['Sales', [['customers', 'Customers'], ['leads', 'Leads Manager', '6']]],
+      ['Operations', [['trips', 'Trips'], ['ticketing', 'Ticketing', '9'], ['reviews', 'Reviews'], ['gantt', 'Trip Gantt Chart']]],
+      ['Finance', [['approvals', 'Approvals', '14'], ['invoices', 'Invoices'], ['payments', 'Payments'], ['expenses', 'Expenses'], ['verify-expenses', 'Verify Expenses'], ['commissions', 'Commissions']]],
+      ['Reports', [['reporting', 'Reporting']]],
+      ['Others', [['admins', 'Admins'], ['settings', 'Settings']]]
+    ];
+
+    const q = s.query.trim().toLowerCase();
+    const chip = s.chip[key] || 'All';
+    let rows = sc ? sc.rows : [];
+    if (chip !== 'All') rows = rows.filter(r => r.tag === chip);
+    if (q) rows = rows.filter(r => r.cells.some(c => [c.t, c.s, c.badge].some(v => typeof v === 'string' && v.toLowerCase().includes(q))));
+
+    const kpis = (meta.kpis || []).map(([label, value, sub, tone]) => ({
+      label, value, sub,
+      bg: tone === 'ok' ? 'var(--success-tint)' : tone === 'warn' ? 'var(--warn-tint)' : tone === 'bad' ? 'var(--danger-tint)' : tone === 'mute' ? '#f7f9fa' : 'var(--primary-tint)',
+      fg: tone === 'bad' ? '#b04a2f' : tone === 'ok' ? '#1d6f65' : 'var(--ink)'
+    }));
+
+    return {
+      navGroups: nav.map(([label, items]) => {
+        if (typeof items === 'string') {
+          const k = label;
+          return {
+            solo: true, group: false, label: items,
+            onSolo: () => this.setState({ screen: k }),
+            soloBg: key === k ? 'rgba(255,255,255,.14)' : 'transparent',
+            soloFg: key === k ? '#ffffff' : 'var(--sb-ink)'
+          };
+        }
+        const holds = items.some(i => i[0] === key);
+        const open = s.openGroups[label] === undefined ? holds : s.openGroups[label];
+        return {
+          solo: false, group: true, label, open,
+          chev: open ? '▼' : '▶',
+          dot: holds && !open,
+          headFg: holds ? '#ffffff' : 'rgba(255,255,255,.4)',
+          onToggle: () => this.setState({ openGroups: Object.assign({}, s.openGroups, { [label]: !open }) }),
+          items: items.map(([k, l, badge]) => ({
+            label: l, badge,
+            onClick: () => this.setState({ screen: k }),
+            bg: key === k ? 'rgba(255,255,255,.14)' : 'transparent',
+            fg: key === k ? '#ffffff' : 'var(--sb-ink)',
+            weight: key === k ? '600' : '500'
+          }))
+        };
+      }),
+
+      crumb: meta.crumb, title: meta.title, subtitle: meta.sub, primaryAction: meta.action,
+      hasKpis: !!(meta.kpis || []).length,
+      kpis,
+
+      isDashboard: key === 'dashboard',
+      isPackages: key === 'packages',
+      isReviews: key === 'reviews',
+      isGantt: key === 'gantt',
+      isReporting: key === 'reporting',
+      isSettings: key === 'settings',
+      isBuilder: key === 'builder',
+      isPayments: key === 'payments',
+      isDeposit: key === 'payments' && s.payTab === 'deposit',
+      isTable: !!sc && !(key === 'payments' && s.payTab === 'deposit'),
+
+      cols: sc ? sc.cols : 'minmax(0,1fr)',
+      headers: sc ? sc.headers : [],
+      rows,
+      isEmpty: !!sc && rows.length === 0,
+      rowCount: sc ? rows.length + ' of ' + sc.rows.length + ' shown' : '',
+      footNote: sc ? sc.foot : '',
+      chips: sc ? sc.chips.map(label => ({
+        label,
+        onClick: () => this.setState({ chip: Object.assign({}, s.chip, { [key]: label }) }),
+        bg: chip === label ? 'var(--primary)' : 'var(--surface)',
+        fg: chip === label ? '#fff' : 'var(--ink-2)',
+        border: chip === label ? 'var(--primary)' : 'var(--line)'
+      })) : [],
+
+      query: s.query,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+
+      tripCounts: [
+        { label: 'Total trips', value: '66' },
+        { label: 'Upcoming', value: '24' },
+        { label: 'Ongoing', value: '1' },
+        { label: 'Ended', value: '34' },
+        { label: 'Cancelled', value: '7' }
+      ],
+
+      regionPanels: [
+        {
+          name: 'East Asia', meta: '21 packages, RM 812,440 YTD',
+          rows: [
+            { trip: 'Tokyo - Fuji - Osaka - Kyoto 7D6N', date: '1 Sep', seats: '18/20' },
+            { trip: 'Seoul - Jeonju - Busan 6D5N', date: '12 Sep', seats: '14/24' },
+            { trip: 'Hokkaido Autumn 7D6N', date: '14 Oct', seats: '19/20' },
+            { trip: 'Taiwan Round Island 8D7N', date: '3 Nov', seats: '11/24' }
+          ]
+        },
+        {
+          name: 'Central Asia', meta: '8 packages, RM 268,910 YTD',
+          rows: [
+            { trip: 'Uzbekistan Silk Road 8D7N', date: '20 Sep', seats: '8/20' },
+            { trip: 'Kazakhstan Almaty Escape 6D5N', date: '10 Oct', seats: '12/20' },
+            { trip: 'Kyrgyzstan Alpine Lakes 7D6N', date: '24 Oct', seats: '6/16' },
+            { trip: 'Silk Road Grand Loop 12D11N', date: '15 Nov', seats: '15/24' }
+          ]
+        }
+      ],
+
+      checklist: [
+        { task: 'Air tickets to issue before deadline', count: '9', bg: 'var(--danger-tint)', fg: '#b04a2f' },
+        { task: 'Balances overdue past reminder 3', count: '41', bg: 'var(--danger-tint)', fg: '#b04a2f' },
+        { task: 'Visa documents incomplete', count: '13', bg: 'var(--warn-tint)', fg: '#8a6100' },
+        { task: 'Rooming lists to confirm with DMC', count: '6', bg: 'var(--warn-tint)', fg: '#8a6100' },
+        { task: 'Tour leaders unassigned', count: '4', bg: 'var(--warn-tint)', fg: '#8a6100' },
+        { task: 'Leader floats to reconcile', count: '2', bg: 'var(--primary-tint)', fg: 'var(--primary-ink)' }
+      ],
+
+      packages: [
+        { slot: 'pkg-jpn', code: 'JPN-TFO-7D', name: 'Tokyo - Fuji - Osaka - Nara - Kyoto 7D6N', blurb: 'Best seller. Shinkansen transfer, 9 highlights, 3-star city hotels.', price: 'RM 8,490', meta: '12 departures live', status: 'Published', bg: 'var(--success-tint)', fg: '#1d6f65' },
+        { slot: 'pkg-kor', code: 'KOR-SJB-6D', name: 'Seoul - Jeonju - Busan 6D5N', blurb: 'KTX intercity rail, hanok stay in Jeonju, Gamcheon village walk.', price: 'RM 6,590', meta: '7 departures live', status: 'Published', bg: 'var(--success-tint)', fg: '#1d6f65' },
+        { slot: 'pkg-uzb', code: 'UZB-SLK-8D', name: 'Uzbekistan Silk Road 8D7N', blurb: 'Tashkent, Samarkand, Bukhara and Khiva with high-speed Afrosiyob rail.', price: 'RM 8,990', meta: '4 departures live', status: 'Published', bg: 'var(--success-tint)', fg: '#1d6f65' },
+        { slot: 'pkg-tur', code: 'TUR-GRD-10D', name: 'Turkiye Grand Tour 10D9N', blurb: 'Istanbul, Cappadocia balloon option, Pamukkale and Ephesus.', price: 'RM 9,590', meta: '3 departures live', status: 'Published', bg: 'var(--success-tint)', fg: '#1d6f65' },
+        { slot: 'pkg-umr', code: 'UMR-AQS-12D', name: 'Umrah Plus Aqsa 12D11N', blurb: 'Makkah and Madinah with Jordan and Palestine extension, licensed mutawwif.', price: 'RM 11,900', meta: '5 departures live', status: 'Published', bg: 'var(--success-tint)', fg: '#1d6f65' },
+        { slot: 'pkg-cau', code: 'CAU-GEA-9D', name: 'Georgia and Armenia 9D8N', blurb: 'Tbilisi, Kazbegi, Yerevan. Autumn colour season only.', price: 'RM 8,690', meta: 'Draft, pricing in review', status: 'Draft', bg: '#f1f4f5', fg: 'var(--ink-2)' }
+      ].map((p, i) => Object.assign({}, p, {
+        onEdit: () => this.setState({ screen: 'builder', pkgIndex: i, pkgTitle: p.name, builderTab: 'overview' })
+      })),
+
+      reviews: [
+        { stars: '★★★★★', status: 'Published', bg: 'var(--success-tint)', fg: '#1d6f65', body: 'Azman handled the Shinkansen transfer and our late flight without any fuss. Hotels were walking distance from the stations, which mattered with two young kids.', name: 'Nurul Aisyah Rahman', trip: 'Tokyo - Fuji - Osaka - Kyoto, Jul 2026' },
+        { stars: '★★★★★', status: 'Published', bg: 'var(--success-tint)', fg: '#1d6f65', body: 'Servis terbaik. Itinerary padat tapi tak rushing, dan makan semua halal seperti dijanjikan.', name: 'Muhammad Faiz Ariffin', trip: 'Umrah Plus Aqsa, Jun 2026' },
+        { stars: '★★★★☆', status: 'Needs reply', bg: 'var(--warn-tint)', fg: '#8a6100', body: 'Great guide in Samarkand. The internal flight to Urgench was moved twice and we only found out by WhatsApp the night before.', name: 'Kavitha Subramaniam', trip: 'Uzbekistan Silk Road, May 2026' },
+        { stars: '★★★★★', status: 'Published', bg: 'var(--success-tint)', fg: '#1d6f65', body: 'Booked for 42 staff and the invoicing was clean. Finance had one PO and one tax invoice instead of forty.', name: 'Tan Wei Ming', trip: 'Quantum Logix incentive, Apr 2026' },
+        { stars: '★★★☆☆', status: 'Needs reply', bg: 'var(--warn-tint)', fg: '#8a6100', body: 'Ha Long cruise was excellent but the Hanoi hotel was a downgrade from what the package page showed.', name: 'Chong Ka Ho', trip: 'Hanoi and Ha Long, Jul 2026', },
+        { stars: '★★★★★', status: 'Pending check', bg: 'var(--primary-tint)', fg: 'var(--primary-ink)', body: 'Seventh trip with this team. Nadia in the office remembers our seat preferences without being asked.', name: 'Sharifah Nadia Idris', trip: 'Hokkaido Autumn, Oct 2025' }
+      ],
+
+      ganttRows: [
+        { trip: 'Tokyo - Fuji - Osaka - Kyoto', meta: 'Azman Roslan, 18 pax', left: '0%', width: '7.5%', color: 'var(--primary)', bar: '1 - 7 Sep' },
+        { trip: 'Seoul - Jeonju - Busan', meta: 'Diyana Kamarudin, 14 pax', left: '12.2%', width: '6.6%', color: 'var(--primary)', bar: '12 - 17 Sep' },
+        { trip: 'Uzbekistan Silk Road', meta: 'Rizal Hamzah, 16 pax, ongoing', left: '20.9%', width: '8.7%', color: 'var(--accent)', bar: '20 - 27 Sep' },
+        { trip: 'Turkiye Grand Tour', meta: 'Serkan Yilmaz, 22 pax', left: '36.6%', width: '11%', color: 'var(--primary)', bar: '4 - 13 Oct' },
+        { trip: 'Hokkaido Autumn', meta: 'Azman Roslan, 19 pax', left: '47.5%', width: '7.6%', color: 'var(--primary)', bar: '14 - 20 Oct' },
+        { trip: 'Kyrgyzstan Alpine Lakes', meta: 'Local partner, 6 pax, at risk', left: '58.4%', width: '7.6%', color: 'var(--danger)', bar: '24 - 30 Oct' },
+        { trip: 'Umrah Plus Aqsa', meta: 'Ustaz Faridzul Anuar, 34 pax', left: '67.7%', width: '13.1%', color: 'var(--primary)', bar: '2 - 13 Nov' },
+        { trip: 'Georgia and Armenia', meta: 'Local partner, 9 pax, at risk', left: '89.6%', width: '9.8%', color: 'var(--danger)', bar: '22 - 30 Nov' }
+      ],
+
+      chartBars: [
+        ['Jan', '118', '46%'], ['Feb', '96', '38%'], ['Mar', '142', '56%'], ['Apr', '164', '64%'],
+        ['May', '138', '54%'], ['Jun', '186', '73%'], ['Jul', '212', '83%'], ['Aug', '176', '69%'],
+        ['Sep', '254', '100%'], ['Oct', '198', '78%'], ['Nov', '148', '58%'], ['Dec', '110', '43%']
+      ].map(([label, value, h], i) => ({ label, value, h, color: i === 8 ? 'var(--accent)' : 'var(--primary)' })),
+
+      reports: [
+        { name: 'Sales by package and region', desc: 'Gross sales, pax and average selling price per package, grouped by region.', updated: 'Last run 1 Sep 2026' },
+        { name: 'Aged receivables', desc: 'Outstanding balances bucketed at 30, 60 and 90 days with assigned collector.', updated: 'Last run 2 Sep 2026' },
+        { name: 'Trip profitability', desc: 'Revenue against verified cost of sales per departure, including leader float.', updated: 'Last run 31 Aug 2026' },
+        { name: 'Agent commission statement', desc: 'Per-agent payout schedule with cleared and held portions.', updated: 'Last run 28 Aug 2026' },
+        { name: 'Tourism licence return', desc: 'Outbound pax by destination country for the MOTAC quarterly return.', updated: 'Last run 15 Jul 2026' },
+        { name: 'Enquiry to booking funnel', desc: 'Website enquiries, quotes issued and conversion rate by source channel.', updated: 'Last run 2 Sep 2026' }
+      ],
+
+      builderTabs: [
+        ['overview', 'Overview'], ['itinerary', 'Itinerary'], ['includes', 'Includes'],
+        ['dates', 'Departure dates'], ['pricing', 'Pricing and deposit'], ['faq', 'FAQ'], ['preview', 'Preview']
+      ].map(([k, label]) => ({
+        label,
+        onClick: () => this.setState({ builderTab: k }),
+        bg: s.builderTab === k ? 'var(--surface)' : 'transparent',
+        fg: s.builderTab === k ? 'var(--ink)' : 'var(--ink-3)'
+      })),
+      bOverview: s.builderTab === 'overview',
+      bItinerary: s.builderTab === 'itinerary',
+      bIncludes: s.builderTab === 'includes',
+      bDates: s.builderTab === 'dates',
+      bPricing: s.builderTab === 'pricing',
+      bFaq: s.builderTab === 'faq',
+      bPreview: s.builderTab === 'preview',
+      backToPackages: () => this.setState({ screen: 'packages' }),
+      openPreview: () => this.setState({ builderTab: 'preview' }),
+
+      pkgTitle: s.pkgTitle,
+      onPkgTitle: (e) => this.setState({ pkgTitle: e.target.value }),
+      pkgDuration: '7D6N',
+      pkgPrice: unit.toLocaleString('en-MY', { minimumFractionDigits: 2 }),
+      pkgGroup: '10',
+      pkgSummary: 'A paced first trip to Japan built around rail rather than long coach days. Two nights in Shinjuku, a full day at Lake Kawaguchi under Mt Fuji, then the Shinkansen south for Osaka, Nara and Kyoto. Leisure blocks are left open on days 2 and 6 for shopping.',
+      pkgSlot: 'pkg-jpn',
+      pkgSlug: 'tokyo-fuji-osaka-nara-kyoto-7d6n',
+      pkgRegion: 'East Asia',
+      pkgMeta: [
+        { label: 'Best season', value: 'March to April, October to November' },
+        { label: 'Accommodation', value: '3-star, upgradable to 4-star' },
+        { label: 'Transport', value: 'Shinkansen plus private coach' },
+        { label: 'URL slug', value: 'tokyo-fuji-osaka-nara-kyoto-7d6n' }
+      ],
+      previewFacts: [
+        { label: 'Duration', value: '7 days 6 nights' },
+        { label: 'Group size', value: '10 to 20 pax' },
+        { label: 'Departs from', value: 'Kuala Lumpur' },
+        { label: 'Meals', value: '6 breakfasts, 4 lunches' },
+        { label: 'Guide', value: 'Malay and English' },
+        { label: 'Deposit', value: depositLabel }
+      ],
+
+      highlights: s.highlights.map((text, i) => ({
+        text, remove: () => this.setState({ highlights: s.highlights.filter((_, j) => j !== i) })
+      })),
+      addHighlight: () => this.setState({ highlights: s.highlights.concat(['New highlight']) }),
+
+      days: s.days.map((d, i) => ({
+        nn: String(i + 1).padStart(2, '0'),
+        title: d.title, hours: d.hours, hotel: d.hotel,
+        activityText: d.acts.join('\n'),
+        slot: 'day-' + d.id,
+        meals: [['B', 'Breakfast'], ['L', 'Lunch'], ['D', 'Dinner']].map(([k, label]) => ({ label, on: !!d.meals[k] })),
+        previewLine: d.acts.join('. ') + '.',
+        previewMeta: d.hours + ' of activity. Hotel: ' + d.hotel + '. Meals: ' + (['B', 'L', 'D'].filter(k => d.meals[k]).join(', ') || 'own arrangement'),
+        up: () => { if (i === 0) return; const a = s.days.slice(); a.splice(i - 1, 0, a.splice(i, 1)[0]); this.setState({ days: a }); },
+        down: () => { if (i === s.days.length - 1) return; const a = s.days.slice(); a.splice(i + 1, 0, a.splice(i, 1)[0]); this.setState({ days: a }); },
+        remove: () => this.setState({ days: s.days.filter((_, j) => j !== i) })
+      })),
+      addDay: () => this.setState({
+        days: s.days.concat([{ id: Date.now(), title: 'New day', hours: '8 hours', hotel: 'To be confirmed', acts: ['Activity one'], meals: { B: true, L: false, D: false } }])
+      }),
+
+      includes: s.includes.map((text, i) => ({ text, remove: () => this.setState({ includes: s.includes.filter((_, j) => j !== i) }) })),
+      addInclude: () => this.setState({ includes: s.includes.concat(['New inclusion']) }),
+      excludes: s.excludes.map((text, i) => ({ text, remove: () => this.setState({ excludes: s.excludes.filter((_, j) => j !== i) }) })),
+      addExclude: () => this.setState({ excludes: s.excludes.concat(['New exclusion']) }),
+
+      dates: s.dates.map((d, i) => Object.assign({}, d, {
+        remove: () => this.setState({ dates: s.dates.filter((_, j) => j !== i) })
+      })),
+      addDate: () => this.setState({ dates: s.dates.concat([{ startDate: '', endDate: '', price: '8490', capacity: '20', booked: 0 }]) }),
+
+      faqs: s.faqs.map((q, i) => Object.assign({}, q, {
+        remove: () => this.setState({ faqs: s.faqs.filter((_, j) => j !== i) })
+      })),
+      addFaq: () => this.setState({ faqs: s.faqs.concat([{ group: 'Booking and payment', q: 'New question', a: '' }]) }),
+
+      seatPricing: [
+        { label: 'Adult, twin sharing', note: 'Published price on the trip page', value: '8490' },
+        { label: 'Child with bed, 4 to 11', note: '10% below adult fare', value: '7640' },
+        { label: 'Child no bed, 2 to 11', note: '25% below adult fare', value: '6370' },
+        { label: 'Single supplement', note: 'Charged per room, per trip', value: '1980' }
+      ],
+      depositTypes: ['Percentage', 'Fixed per pax', 'Fixed per booking'].map(label => ({
+        label,
+        onClick: () => this.setState({ depositType: label, depositValue: label === 'Percentage' ? '30' : label === 'Fixed per pax' ? '1500' : '5000' }),
+        bg: s.depositType === label ? 'var(--primary)' : 'var(--surface)',
+        fg: s.depositType === label ? '#fff' : 'var(--ink-2)',
+        border: s.depositType === label ? 'var(--primary)' : 'var(--line)'
+      })),
+      depositValue: s.depositValue,
+      onDepositValue: (e) => this.setState({ depositValue: e.target.value }),
+      depositPreview: 'Trip total RM ' + money(unit * 2) + '. Deposit charged at checkout RM ' + money(dep2) + '. Balance RM ' + money(unit * 2 - dep2) + ' due 45 days before departure, with reminders at 14, 7 and 1 day.',
+      depositPreviewShort: 'Pay RM ' + money(depFor(1)) + ' per pax now, balance 45 days before departure.',
+
+      payTabs: [['receipts', 'Receipts'], ['deposit', 'Deposit and partial payment']].map(([k, label]) => ({
+        label,
+        onClick: () => this.setState({ payTab: k }),
+        bg: s.payTab === k ? 'var(--primary)' : 'transparent',
+        fg: s.payTab === k ? '#fff' : 'var(--ink-2)'
+      })),
+
+      depositToggles: [
+        { k: 'enabled', name: 'Accept deposit bookings', desc: 'Show a deposit option alongside full payment at checkout.' },
+        { k: 'allowFull', name: 'Keep full payment visible', desc: 'Travellers can still settle the whole trip in one transaction.' },
+        { k: 'autoReminder', name: 'Automatic balance reminders', desc: 'Email and WhatsApp reminders at 14, 7 and 1 day before the due date.' },
+        { k: 'blockLate', name: 'Enforce the cut-off', desc: 'Force full payment once the departure is inside the cut-off window.' }
+      ].map(t => ({
+        name: t.name, desc: t.desc,
+        track: s.depositOn[t.k] ? 'var(--primary)' : '#cfd6da',
+        knob: s.depositOn[t.k] ? '19px' : '3px',
+        onClick: () => this.setState({ depositOn: Object.assign({}, s.depositOn, { [t.k]: !s.depositOn[t.k] }) })
+      })),
+
+      payOptions: [
+        { k: 'deposit', label: 'Pay deposit now', note: depositLabel + ', balance due 18 Jul 2026', amount: 'RM ' + money(depFor(4)) },
+        { k: 'full', label: 'Pay in full', note: 'Nothing further to settle before departure', amount: 'RM ' + money(unit * 4) }
+      ].map(o => ({
+        label: o.label, note: o.note, amount: o.amount,
+        onClick: () => this.setState({ payOption: o.k }),
+        border: s.payOption === o.k ? 'var(--primary)' : 'var(--line)',
+        bg: s.payOption === o.k ? 'var(--primary-tint)' : 'var(--surface)',
+        dot: s.payOption === o.k ? 'var(--primary)' : 'transparent'
+      })),
+
+      summaryLines: [
+        { label: 'Trip total, 4 adults', value: 'RM ' + money(unit * 4), w: '500', fg: 'var(--ink)', bg: 'var(--surface)' },
+        { label: s.payOption === 'deposit' ? 'Deposit payable today' : 'Payable today', value: 'RM ' + money(s.payOption === 'deposit' ? depFor(4) : unit * 4), w: '700', fg: 'var(--primary)', bg: 'var(--surface)' },
+        { label: 'Remaining balance', value: 'RM ' + money(s.payOption === 'deposit' ? unit * 4 - depFor(4) : 0), w: '500', fg: 'var(--ink)', bg: 'var(--surface)' },
+        { label: 'Balance due date', value: s.payOption === 'deposit' ? '18 Jul 2026' : 'Not applicable', w: '500', fg: 'var(--ink-2)', bg: '#f7f9fa' }
+      ],
+
+      depositPlans: [
+        { name: 'Tokyo - Fuji - Osaka - Nara - Kyoto 7D6N', code: 'JPN-TFO-7D', type: 'Percentage, 30%', deposit: 'RM 2,547.00', perPax: 'per pax', cutoff: '21 days', full: 'Allowed', status: 'Override', bg: 'var(--primary-tint)', fg: 'var(--primary-ink)' },
+        { name: 'Seoul - Jeonju - Busan 6D5N', code: 'KOR-SJB-6D', type: 'Fixed per pax', deposit: 'RM 1,500.00', perPax: 'per pax', cutoff: '14 days', full: 'Allowed', status: 'Override', bg: 'var(--primary-tint)', fg: 'var(--primary-ink)' },
+        { name: 'Uzbekistan Silk Road 8D7N', code: 'UZB-SLK-8D', type: 'Percentage, 40%', deposit: 'RM 3,596.00', perPax: 'per pax', cutoff: '30 days', full: 'Allowed', status: 'Override', bg: 'var(--primary-tint)', fg: 'var(--primary-ink)' },
+        { name: 'Umrah Plus Aqsa 12D11N', code: 'UMR-AQS-12D', type: 'Fixed per booking', deposit: 'RM 5,000.00', perPax: 'per booking', cutoff: '45 days', full: 'Allowed', status: 'Override', bg: 'var(--primary-tint)', fg: 'var(--primary-ink)' },
+        { name: 'Turkiye Grand Tour 10D9N', code: 'TUR-GRD-10D', type: 'Agency default', deposit: 'RM 2,877.00', perPax: 'per pax, 30%', cutoff: '21 days', full: 'Allowed', status: 'Default', bg: '#f1f4f5', fg: 'var(--ink-2)' },
+        { name: 'Georgia and Armenia 9D8N', code: 'CAU-GEA-9D', type: 'Deposit disabled', deposit: 'Full payment', perPax: 'no deposit option', cutoff: 'Not used', full: 'Required', status: 'Full only', bg: 'var(--warn-tint)', fg: '#8a6100' }
+      ],
+
+      balances: [
+        { name: 'Nurul Aisyah Rahman', ref: 'BK-26-0912 / INV-26-1841', trip: 'Tokyo - Fuji - Osaka - Kyoto', plan: 'Deposit 30%, 4 pax', total: 'RM 33,960.00', paid: 'RM 6,000.00', balance: 'RM 27,960.00', due: 'Due 18 Jul 2026', status: 'Reminder 3 sent', bg: 'var(--danger-tint)', fg: '#b04a2f' },
+        { name: 'Hafiz Zulkarnain', ref: 'BK-26-0925 / INV-26-1877', trip: 'Turkiye Grand Tour', plan: 'Agency default, 6 pax', total: 'RM 57,540.00', paid: 'RM 9,000.00', balance: 'RM 48,540.00', due: 'Due 20 Aug 2026', status: 'Reminder 2 sent', bg: 'var(--warn-tint)', fg: '#8a6100' },
+        { name: 'Muhammad Faiz Ariffin', ref: 'BK-26-0934 / INV-26-1938', trip: 'Umrah Plus Aqsa', plan: 'Fixed per booking, 8 pax', total: 'RM 95,200.00', paid: 'RM 24,000.00', balance: 'RM 71,200.00', due: 'Due 18 Sep 2026', status: 'On schedule', bg: 'var(--success-tint)', fg: '#1d6f65' },
+        { name: 'Kavitha Subramaniam', ref: 'BK-26-0921 / INV-26-1862', trip: 'Uzbekistan Silk Road', plan: 'Deposit 40%, 3 pax', total: 'RM 26,970.00', paid: 'RM 4,500.00', balance: 'RM 22,470.00', due: 'Overdue since 24 Aug', status: 'Seat release pending', bg: 'var(--danger-tint)', fg: '#b04a2f' },
+        { name: 'Chong Ka Ho', ref: 'BK-26-0939 / INV-26-1902', trip: 'Vietnam North Loop', plan: 'Deposit 20%, 2 pax', total: 'RM 8,380.00', paid: 'RM 1,600.00', balance: 'RM 6,780.00', due: 'Overdue since 29 Aug', status: 'Reminder 3 sent', bg: 'var(--danger-tint)', fg: '#b04a2f' },
+        { name: 'Wong Mei Fong', ref: 'BK-26-0944 / INV-26-1949', trip: 'Hokkaido Autumn', plan: 'Deposit 30%, 3 pax', total: 'RM 22,470.00', paid: 'RM 6,741.00', balance: 'RM 15,729.00', due: 'Due 30 Sep 2026', status: 'On schedule', bg: 'var(--success-tint)', fg: '#1d6f65' }
+      ],
+
+      themeOptions: Object.keys(THEMES).map(name => {
+        const t = THEMES[name];
+        return {
+          name, note: t.note, c1: t.sb, c2: t.primary, c3: t.accent,
+          border: s.theme === name ? t.primary : 'var(--line)',
+          onClick: () => this.setTheme(name)
+        };
+      }),
+
+      densityOptions: ['Compact', 'Comfortable'].map(name => ({
+        name,
+        onClick: () => this.setDensity(name),
+        bg: s.density === name ? 'var(--primary)' : 'var(--surface)',
+        fg: s.density === name ? '#fff' : 'var(--ink-2)',
+        border: s.density === name ? 'var(--primary)' : 'var(--line)'
+      })),
+
+      settingFields: [
+        { label: 'Trading name', value: 'Travellah Booking Sdn Bhd', help: 'Shown on invoices, receipts and the storefront footer.' },
+        { label: 'MOTAC licence', value: 'KPK/LN 9128 (Tour Operating Business)', help: 'Printed on every tax invoice as required.' },
+        { label: 'Booking email', value: 'bookings@travellah.my', help: 'Receives enquiry forms and reminder replies.' },
+        { label: 'WhatsApp line', value: '+60 12-771 4408', help: 'Drives the floating chat button on trip pages.' },
+        { label: 'Deposit per pax', value: 'RM 1,500.00', help: 'Default deposit used when an invoice is created.' },
+        { label: 'Balance due', value: '45 days before departure', help: 'Reminder schedule counts back from this date.' }
+      ],
+
+      toggles: [
+        { k: 'deadline', name: 'Ticketing deadline alerts', desc: 'Notify operations 72 hours before an airline PNR expires.' },
+        { k: 'autoRelease', name: 'Auto-release unpaid seats', desc: 'Return seats to inventory 48 hours after an unpaid invoice.' },
+        { k: 'waitlist', name: 'Waitlist on full departures', desc: 'Collect names once a departure reaches capacity.' },
+        { k: 'leaderFloat', name: 'Require receipt for float spend', desc: 'Block verification of leader expenses with no document attached.' },
+        { k: 'publicReviews', name: 'Publish reviews automatically', desc: 'Four stars and above go live without a manual check.' }
+      ].map(t => ({
+        name: t.name, desc: t.desc,
+        track: s.toggles[t.k] ? 'var(--primary)' : '#cfd6da',
+        knob: s.toggles[t.k] ? '19px' : '3px',
+        onClick: () => this.setState({ toggles: Object.assign({}, s.toggles, { [t.k]: !s.toggles[t.k] }) })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

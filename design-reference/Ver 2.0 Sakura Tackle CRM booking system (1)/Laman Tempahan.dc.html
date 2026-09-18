@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/tokens/typography.css">
+<script src="_ds/fidodesign-design-system-e4b26589-cae1-49fe-be67-2f35896cd7c7/_ds_bundle.js"></script>
+<script src="image-slot.js"></script>
+<style>
+  * { box-sizing:border-box; }
+  a { color:#2E1D6B; text-decoration:none; }
+  a:hover { color:#4A34A0; }
+  input, select, textarea, button { font-family:'Inter', system-ui, sans-serif; }
+  input:focus, select:focus, textarea:focus { outline:2px solid rgba(255,184,0,.7); outline-offset:1px; }
+  @container (max-width: 820px) {
+    [data-stack] { grid-template-columns:minmax(0,1fr) !important; gap:24px !important; }
+    [data-stack-2] { grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important; }
+    [data-pad] { padding-left:16px !important; padding-right:16px !important; }
+    [data-hide-sm] { display:none !important; }
+    [data-hero] { padding-top:28px !important; padding-bottom:8px !important; }
+    [data-cal] { padding:16px !important; }
+    [data-cell] { height:42px !important; font-size:13px !important; }
+    [data-sec] { padding-top:36px !important; padding-bottom:0 !important; }
+    [data-legend] { gap:10px !important; font-size:10.5px !important; }
+  }
+</style>
+</helmet>
+
+<div style="container-type:inline-size; position:relative; min-height:100%; background:#F5F2FE; color:#1B1436; font-family:'Inter', system-ui, sans-serif">
+
+  <header style="background:rgba(245,242,254,.92); backdrop-filter:blur(14px); border-bottom:1px solid rgba(46,29,107,.10)">
+    <div data-pad="true" style="max-width:1180px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px">
+      <div style="display:flex; align-items:center; gap:11px">
+        <div style="width:34px; height:34px; border-radius:11px; background:linear-gradient(145deg,#FFB800,#F08A00); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:700; font-size:14px; color:#2E1D6B">CS</div>
+        <div style="display:flex; flex-direction:column; line-height:1.15">
+          <span style="font-family:'Poppins',sans-serif; font-weight:600; font-size:15px; letter-spacing:-.01em">Candat Sotong</span>
+          <span style="font-size:11px; color:#7A6FA0; letter-spacing:.04em">Sakura Tackle</span>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:18px">
+        <span data-hide-sm="true" style="font-size:12.5px; color:#7A6FA0; letter-spacing:.02em">Marang, Terengganu</span>
+        <a href="#tempah" style="padding:9px 18px; border-radius:14px; background:#FFB800; color:#2E1D6B; font-size:12.5px; font-weight:700">Tempah Slot</a>
+      </div>
+    </div>
+  </header>
+
+  <section data-stack="true" data-pad="true" data-hero="true" style="max-width:1180px; margin:0 auto; padding:64px 24px 40px; display:grid; grid-template-columns:1.05fr minmax(0,.95fr); gap:52px; align-items:center">
+    <div>
+      <div style="display:inline-block; padding:6px 14px; border-radius:999px; background:rgba(46,29,107,.07); border:1px solid rgba(46,29,107,.16); color:#2E1D6B; font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase">Trip Candat Paling Best di Terengganu</div>
+      <h1 style="font-family:'Poppins',sans-serif; font-size:clamp(32px,4.4cqw,54px); line-height:1.05; letter-spacing:-.03em; font-weight:650; margin:20px 0 0; color:#1B1436">Trip Candat Sotong Otai-Otai</h1>
+      <p style="font-size:16.5px; line-height:1.65; color:#635A87; max-width:46ch; margin:18px 0 0; text-wrap:pretty">Tak perlu skil tinggi, janji ada hati. Kami bawa anda ke lubuk rahsia kapten otai kami.</p>
+      <div style="display:flex; gap:12px; margin-top:30px; flex-wrap:wrap">
+        <a href="#tempah" style="display:flex; align-items:center; gap:12px; padding:13px 15px 13px 24px; border-radius:999px; background:#FFB800; color:#2E1D6B; font-size:14.5px; font-weight:700; box-shadow:0 14px 30px rgba(255,184,0,.32)">Semak Tarikh Kosong
+          <span style="width:30px; height:30px; border-radius:999px; background:rgba(46,29,107,.14); display:flex; align-items:center; justify-content:center; font-size:14px">&#8599;</span></a>
+        <a href="#harga" style="padding:13px 24px; border-radius:999px; border:1px solid rgba(46,29,107,.22); color:#2E1D6B; font-size:14.5px; font-weight:600">Lihat Harga</a>
+      </div>
+    </div>
+    <div style="min-width:0; border-radius:28px; background:#EDE7FB; border:1px solid rgba(46,29,107,.10); padding:8px">
+      <image-slot id="cs-hero-boat" radius="21" placeholder="Foto bot candat waktu senja di Jeti Marang" style="width:100%; min-width:0; height:400px; display:block"></image-slot>
+    </div>
+  </section>
+
+  <section id="tempah" data-pad="true" data-sec="true" style="max-width:1180px; margin:0 auto; padding:24px 24px 0">
+    <div style="border-radius:26px; background:#EDE7FB; border:1px solid rgba(46,29,107,.12); padding:8px">
+      <div data-cal="true" style="border-radius:19px; background:#2E1D6B; padding:24px">
+
+        <div style="border-radius:14px; overflow:hidden; margin-bottom:22px; border:1px solid rgba(255,255,255,.12)">
+          <img src="uploads/pasted-1788397611096-0.png" alt="Candat Sotong 2027, Marang Terengganu" style="width:100%; display:block">
+        </div>
+
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:18px; flex-wrap:wrap; margin-bottom:18px">
+          <div>
+            <h2 style="font-family:'Poppins',sans-serif; font-size:clamp(20px,2.4cqw,25px); font-weight:650; letter-spacing:-.02em; margin:0; color:#FFFFFF">Ready Untuk Candat?</h2>
+            <p style="font-size:13.5px; color:#B7ABE0; margin:7px 0 0">Semak kelendar trip. Satu bot, satu trip semalaman. Tekan tarikh untuk tempah.</p>
+          </div>
+          <div data-legend="true" style="display:flex; gap:16px; font-size:11.5px; color:#B7ABE0">
+            <span style="display:flex; align-items:center; gap:7px"><i style="width:9px; height:9px; border-radius:3px; background:#2FBF71; display:block"></i>Available</span>
+            <span style="display:flex; align-items:center; gap:7px"><i style="width:9px; height:9px; border-radius:3px; background:#FFB800; display:block"></i>Selling Fast</span>
+            <span style="display:flex; align-items:center; gap:7px"><i style="width:9px; height:9px; border-radius:3px; background:#EF4444; display:block"></i>Full</span>
+          </div>
+        </div>
+
+        <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#9C8ED0; font-weight:700; margin-bottom:10px">Berapa orang dalam kumpulan anda?</span>
+        <div style="display:flex; gap:9px; overflow-x:auto; padding-bottom:4px; margin-bottom:22px">
+          <sc-for list="{{ paxChips }}" as="p" hint-placeholder-count="5">
+            <button onClick="{{ p.onPick }}" style="flex:0 0 auto; cursor:pointer; padding:11px 20px; border-radius:14px; font-family:'Poppins',sans-serif; font-weight:650; font-size:14px; background:{{ p.bg }}; color:{{ p.fg }}; border:1px solid {{ p.bd }}">{{ p.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px">
+          <button onClick="{{ prevMonth }}" style="cursor:pointer; padding:8px 15px; border-radius:12px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:12.5px">&#8592;</button>
+          <span style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:650; letter-spacing:.01em; color:#FFFFFF">{{ monthLabel }}</span>
+          <button onClick="{{ nextMonth }}" style="cursor:pointer; padding:8px 15px; border-radius:12px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#E8E1FF; font-size:12.5px">&#8594;</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:6px">
+          <sc-for list="{{ dowLabels }}" as="d" hint-placeholder-count="7">
+            <div style="text-align:center; font-size:10px; letter-spacing:.12em; color:#8B7DC4; padding:6px 0 4px; font-weight:700">{{ d }}</div>
+          </sc-for>
+          <sc-for list="{{ cells }}" as="c" hint-placeholder-count="35">
+            <button onClick="{{ c.onPick }}" data-cell="true" style="position:relative; cursor:{{ c.cursor }}; height:54px; border-radius:13px; font-size:14.5px; font-weight:650; font-family:'Poppins',sans-serif; display:flex; align-items:center; justify-content:center; background:{{ c.bg }}; color:{{ c.fg }}; border:1px solid {{ c.bd }}; visibility:{{ c.vis }}">{{ c.day }}
+              <i style="position:absolute; top:5px; right:6px; width:6px; height:6px; border-radius:99px; background:{{ c.holidayDot }}; display:block"></i>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:18px; padding-top:16px; border-top:1px solid rgba(255,255,255,.12)">
+          <span style="display:block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#9C8ED0; font-weight:700; margin-bottom:10px">Cuti umum {{ monthLabel }}</span>
+          <div style="display:flex; gap:9px; flex-wrap:wrap">
+            <sc-for list="{{ holidays }}" as="h" hint-placeholder-count="2">
+              <span style="display:flex; align-items:center; gap:8px; padding:7px 13px; border-radius:999px; background:rgba(255,184,0,.14); border:1px solid rgba(255,184,0,.34); font-size:12px; color:#FFD36B"><b style="font-family:'Poppins',sans-serif; color:#FFB800">{{ h.d }}</b>{{ h.n }}</span>
+            </sc-for>
+          </div>
+          <sc-if value="{{ noHoliday }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size:12.5px; color:#8B7DC4">Tiada cuti umum bulan ini.</span>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-pad="true" data-sec="true" style="max-width:1180px; margin:0 auto; padding:22px 24px 0">
+    <div style="border-radius:26px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:26px; box-shadow:0 18px 46px rgba(46,29,107,.07)">
+      <div style="display:flex; justify-content:center; gap:8px; padding:5px; border-radius:999px; background:#F0ECFC; width:fit-content; margin:0 auto 26px">
+        <button onClick="{{ tabForm }}" style="cursor:pointer; border:0; padding:10px 22px; border-radius:999px; font-size:13.5px; font-weight:650; background:{{ tabFormBg }}; color:{{ tabFormFg }}">Borang Tempahan</button>
+        <button onClick="{{ tabCheck }}" style="cursor:pointer; border:0; padding:10px 22px; border-radius:999px; font-size:13.5px; font-weight:650; background:{{ tabCheckBg }}; color:{{ tabCheckFg }}">Semak Booking Saya</button>
+      </div>
+
+      <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:14px 16px; border-radius:14px; background:rgba(255,184,0,.16); border:1px solid rgba(255,184,0,.42); margin-bottom:22px">
+          <span style="font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8A6A00; font-weight:700">Slot dipilih</span>
+          <span style="font-size:14px; color:#1B1436; font-weight:650">{{ selectionLabel }}</span>
+        </div>
+        <div data-stack="true" style="display:grid; grid-template-columns:1fr 1fr; gap:18px">
+          <label style="display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Nama penuh</span>
+            <input value="{{ fName }}" onChange="{{ setName }}" placeholder="Nama seperti dalam IC" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:14px"></label>
+          <label style="display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">No. telefon / WhatsApp</span>
+            <input value="{{ fPhone }}" onChange="{{ setPhone }}" placeholder="0123456789" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:14px"></label>
+          <label style="display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Bilangan pax</span>
+            <select value="{{ fPax }}" onChange="{{ setPax }}" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:14px">
+              <sc-for list="{{ paxOptions }}" as="o" hint-placeholder-count="9">
+                <option value="{{ o }}">{{ o }}</option>
+              </sc-for>
+            </select></label>
+          <label style="display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Email (pilihan)</span>
+            <input value="{{ fEmail }}" onChange="{{ setEmail }}" placeholder="email@anda.com" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:14px"></label>
+          <label style="grid-column:1 / -1; display:flex; flex-direction:column; gap:8px"><span style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#635A87; font-weight:700">Nota atau permintaan khas</span>
+            <textarea value="{{ fNote }}" onChange="{{ setNote }}" rows="3" placeholder="Contoh: perlukan jaket keselamatan saiz kanak-kanak" style="padding:13px 15px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:14px; resize:vertical"></textarea></label>
+        </div>
+        <button onClick="{{ submitBooking }}" style="cursor:pointer; border:0; width:100%; margin-top:24px; padding:16px; border-radius:999px; background:#FFB800; color:#2E1D6B; font-size:15.5px; font-weight:700; font-family:'Poppins',sans-serif; box-shadow:0 14px 30px rgba(255,184,0,.3)">Saya Ready Book Trip</button>
+        <p style="text-align:center; font-size:12.5px; color:#7A6FA0; margin:14px 0 0">Kami akan hubungi anda dalam masa 24 jam via WhatsApp.</p>
+        <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:16px; padding:14px 16px; border-radius:13px; background:rgba(47,191,113,.12); border:1px solid rgba(47,191,113,.36); color:#137A47; font-size:13.5px; text-align:center">Tempahan diterima. Rujukan {{ newRef }}.</div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ showCheck }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <p style="font-size:14px; color:#635A87; margin:0 0 16px; max-width:56ch">Masukkan nombor telefon yang digunakan semasa tempahan untuk semak status booking anda.</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; max-width:520px">
+          <input value="{{ checkPhone }}" onChange="{{ setCheckPhone }}" placeholder="Nombor telefon (cth: 0123456789)" style="flex:1; min-width:220px; padding:14px 16px; border-radius:13px; background:#F7F5FE; border:1px solid rgba(46,29,107,.16); color:#1B1436; font-size:14px">
+          <button onClick="{{ runCheck }}" style="cursor:pointer; border:0; padding:14px 26px; border-radius:13px; background:#2E1D6B; color:#FFFFFF; font-size:14px; font-weight:650">Semak</button>
+        </div>
+        <sc-if value="{{ hasResult }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:20px; border-radius:16px; background:#F7F5FE; border:1px solid rgba(46,29,107,.12); overflow:hidden">
+            <div style="padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-bottom:1px solid rgba(46,29,107,.10)">
+              <span style="font-family:'Poppins',sans-serif; font-weight:650; font-size:15px">{{ resRef }}</span>
+              <span style="padding:5px 12px; border-radius:999px; font-size:11.5px; font-weight:700; background:{{ resBg }}; color:{{ resFg }}">{{ resStatus }}</span>
+            </div>
+            <div data-stack-2="true" style="padding:18px; display:grid; grid-template-columns:repeat(4,1fr); gap:18px">
+              <div><span style="display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:5px">Bot</span><span style="font-size:14px; font-weight:650">{{ resBoat }}</span></div>
+              <div><span style="display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:5px">Tarikh</span><span style="font-size:14px; font-weight:650">{{ resDate }}</span></div>
+              <div><span style="display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:5px">Pax</span><span style="font-size:14px; font-weight:650">{{ resPax }}</span></div>
+              <div><span style="display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#7A6FA0; margin-bottom:5px">Baki</span><span style="font-size:14px; font-weight:650; color:#B07800">{{ resBalance }}</span></div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noResult }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:20px; padding:22px; border-radius:16px; background:#F7F5FE; border:1px dashed rgba(46,29,107,.22); text-align:center">
+            <p style="margin:0 0 4px; font-size:14.5px; font-weight:650">Tiada tempahan untuk nombor itu</p>
+            <p style="margin:0; font-size:13px; color:#635A87">Cuba nombor lain, atau WhatsApp kami dan kami semak manual.</p>
+          </div>
+        </sc-if>
+      </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <section id="harga" data-pad="true" data-sec="true" style="max-width:1180px; margin:0 auto; padding:56px 24px 0">
+    <h2 style="font-family:'Poppins',sans-serif; font-size:clamp(24px,3.2cqw,34px); font-weight:650; letter-spacing:-.025em; margin:0 0 8px">Harga dan apa yang termasuk</h2>
+    <p style="font-size:15px; color:#635A87; margin:0 0 26px; max-width:56ch">Harga sama untuk semua bot. Yang berbeza cuma kapasiti dan juragan.</p>
+    <div data-stack="true" style="display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:18px">
+      <div data-stack="true" style="border-radius:24px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+        <div style="padding:28px">
+          <span style="font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#8A6A00; font-weight:700">Trip semalaman</span>
+          <div style="font-family:'Poppins',sans-serif; font-size:40px; font-weight:700; letter-spacing:-.03em; margin:12px 0 2px">{{ priceLabel }}</div>
+          <div style="font-size:13.5px; color:#635A87">seorang, minimum 6 pax</div>
+          <div style="margin-top:22px; display:flex; flex-direction:column; gap:11px; font-size:13.5px; color:#3B3160">
+            <sc-for list="{{ includes }}" as="i" hint-placeholder-count="5">
+              <span style="display:flex; gap:10px; align-items:flex-start"><i style="color:#B07800; font-style:normal">&#10003;</i>{{ i }}</span>
+            </sc-for>
+          </div>
+        </div>
+        <image-slot id="cs-harga-lampu" radius="0" placeholder="Foto lampu candat waktu malam" style="width:100%; min-width:0; min-height:280px; display:block"></image-slot>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:18px">
+        <div style="border-radius:24px; background:linear-gradient(160deg,#FFB800,#E8890B); color:#2E1D6B; padding:26px">
+          <span style="font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; opacity:.72">Deposit</span>
+          <div style="font-family:'Poppins',sans-serif; font-size:38px; font-weight:700; letter-spacing:-.03em; margin:10px 0 4px">RM 250</div>
+          <p style="margin:0; font-size:13.5px; line-height:1.55; opacity:.85">Satu bayaran per bot untuk kunci malam tersebut. Baki dijelaskan di jeti sebelum bertolak.</p>
+        </div>
+        <div style="flex:1; border-radius:24px; background:#FFFFFF; border:1px solid rgba(46,29,107,.12); padding:26px">
+          <span style="font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#7A6FA0; font-weight:700">Waktu trip</span>
+          <div style="font-family:'Poppins',sans-serif; font-size:25px; font-weight:650; margin:10px 0 6px">7.00 malam hingga 6.00 pagi</div>
+          <p style="margin:0; font-size:13.5px; color:#635A87; line-height:1.55">Berkumpul di Jeti Marang pukul 6.30 petang. Trip dibatalkan penuh jika cuaca tidak mengizinkan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-pad="true" data-sec="true" style="max-width:1180px; margin:0 auto; padding:56px 24px 80px">
+    <div data-stack="true" style="display:grid; grid-template-columns:.8fr 1.2fr; gap:36px; align-items:start">
+      <h2 style="font-family:'Poppins',sans-serif; font-size:clamp(24px,3.2cqw,34px); font-weight:650; letter-spacing:-.025em; margin:0">Soalan lazim</h2>
+      <div style="display:flex; flex-direction:column">
+        <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="4">
+          <div style="padding:18px 0; border-bottom:1px solid rgba(46,29,107,.12)">
+            <button onClick="{{ f.onToggle }}" style="width:100%; cursor:pointer; background:none; border:0; padding:0; display:flex; align-items:center; justify-content:space-between; gap:16px; text-align:left; color:#1B1436; font-size:16px; font-weight:650; font-family:'Poppins',sans-serif">{{ f.q }}<span style="color:#B07800; font-size:20px">{{ f.sign }}</span></button>
+            <div style="max-height:{{ f.h }}; overflow:hidden; transition:max-height .35s cubic-bezier(.32,.72,0,1)">
+              <p style="margin:12px 0 0; font-size:14.5px; line-height:1.65; color:#635A87; max-width:60ch">{{ f.a }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top:1px solid rgba(46,29,107,.10); background:#EDE7FB">
+    <div data-pad="true" style="max-width:1180px; margin:0 auto; padding:28px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap">
+      <span style="font-size:13px; color:#7A6FA0">Sakura Tackle, Jeti Marang, Terengganu</span>
+      <span style="font-size:13px; color:#7A6FA0">019-333 4821</span>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/60193334821" style="position:absolute; right:20px; bottom:20px; display:flex; align-items:center; gap:10px; padding:13px 20px; border-radius:999px; background:#1FA855; color:#fff; font-size:14px; font-weight:650; box-shadow:0 16px 36px rgba(31,168,85,.34)">WhatsApp Kami</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pricePerPax&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:180,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:80,&quot;max&quot;:400,&quot;step&quot;:10,&quot;unit&quot;:&quot;RM&quot;}}">
+const AMBER = '#FFB800';
+const MONTHS = [
+  { name: 'Mac', m: 2, days: 31 },
+  { name: 'April', m: 3, days: 30 },
+  { name: 'Mei', m: 4, days: 31 },
+  { name: 'Jun', m: 5, days: 30 },
+  { name: 'Julai', m: 6, days: 31 },
+  { name: 'Ogos', m: 7, days: 31 },
+  { name: 'September', m: 8, days: 30 }
+];
+const HOLIDAYS = {
+  0: [{ d: 9, n: 'Hari Raya Aidilfitri' }, { d: 10, n: 'Hari Raya Aidilfitri' }],
+  1: [],
+  2: [{ d: 1, n: 'Hari Pekerja' }, { d: 17, n: 'Hari Raya Aidiladha' }, { d: 20, n: 'Hari Wesak' }],
+  3: [{ d: 7, n: 'Keputeraan Agong' }, { d: 29, n: 'Awal Muharram' }],
+  4: [],
+  5: [{ d: 31, n: 'Hari Kebangsaan' }],
+  6: [{ d: 6, n: 'Maulidur Rasul' }, { d: 16, n: 'Hari Malaysia' }]
+};
+const STATUS = {
+  open: { bg: 'rgba(47,191,113,.16)', fg: '#7CEEB0', bd: 'rgba(47,191,113,.38)' },
+  hold: { bg: 'rgba(255,184,0,.16)', fg: '#FFD36B', bd: 'rgba(255,184,0,.40)' },
+  full: { bg: 'rgba(239,68,68,.14)', fg: '#FF9C9C', bd: 'rgba(239,68,68,.34)' }
+};
+const CAPACITY = [6, 8, 10, 12, 14];
+const BOOKINGS = [
+  { ref: 'CS-2703-014', phone: '0193334821', boat: 'TRF 92', date: '17 Mac 2027', pax: 8, status: 'Confirmed', tone: 'open' },
+  { ref: 'CS-2704-021', phone: '0126647310', boat: 'KNF 6241', date: '02 April 2027', pax: 12, status: 'Deposit due', tone: 'hold' },
+  { ref: 'CS-2706-048', phone: '0112286630', boat: 'KNF 6241', date: '13 Jun 2027', pax: 10, status: 'Confirmed', tone: 'open' }
+];
+const FAQS = [
+  { q: 'Perlu bawa pancing sendiri?', a: 'Boleh disewa dari pihak Sakura Tackle sekiranya tiada. Sila bawa baju ganti, ubat mabuk laut dan barang-barang peribadi lain' },
+  { q: 'Kalau hujan atau angin kuat?', a: 'Kami pantau ramalan cuaca dua hari sebelum trip. Jika trip dibatalkan atas sebab cuaca, deposit dipulangkan penuh atau ditukar ke tarikh lain.' },
+  { q: 'Boleh bawa kanak-kanak?', a: 'Boleh, umur 8 tahun ke atas dan mesti ditemani penjaga. Jaket keselamatan saiz kecil ada atas setiap bot.' },
+  { q: 'Bila baki perlu dijelaskan?', a: 'Baki dibayar di Jeti Marang sebelum bertolak. Tunai atau pemindahan bank, kedua-duanya diterima.' }
+];
+
+class Component extends DCLogic {
+  state = {
+    monthIdx: 0, paxIdx: 2, selDay: 17, tab: 'form', submitted: false, openFaq: 0,
+    form: { name: '', phone: '', pax: '8 pax', email: '', note: '' },
+    checkPhone: '', checked: false
+  };
+
+  price() { return this.props.pricePerPax ?? 180; }
+
+  statusFor(capIdx, monthIdx, day) {
+    const h = (capIdx * 61 + monthIdx * 137 + day * 29) % 11;
+    if (h < 6) return 'open';
+    if (h < 9) return 'hold';
+    return 'full';
+  }
+
+  renderVals() {
+    const s = this.state;
+    const mo = MONTHS[s.monthIdx];
+    const monthLabel = mo.name + ' 2027';
+    const hols = HOLIDAYS[s.monthIdx] || [];
+    const holDays = hols.map(h => h.d);
+    const price = this.price();
+
+    const first = new Date(2027, mo.m, 1).getDay();
+    const lead = (first + 6) % 7;
+    const cells = [];
+    for (let i = 0; i < lead; i++) cells.push({ day: '', vis: 'hidden', cursor: 'default', bg: 'transparent', fg: 'transparent', bd: 'transparent', holidayDot: 'transparent', onPick: () => {} });
+    for (let d = 1; d <= mo.days; d++) {
+      const st = this.statusFor(s.paxIdx, s.monthIdx, d);
+      const sel = d === s.selDay;
+      const c = STATUS[st];
+      cells.push({
+        day: String(d), vis: 'visible', cursor: 'pointer',
+        bg: sel ? AMBER : c.bg,
+        fg: sel ? '#2E1D6B' : c.fg,
+        bd: sel ? AMBER : c.bd,
+        holidayDot: holDays.indexOf(d) >= 0 ? (sel ? '#2E1D6B' : '#FFB800') : 'transparent',
+        onPick: () => this.setState({ selDay: d, submitted: false })
+      });
+    }
+
+    const st = this.statusFor(s.paxIdx, s.monthIdx, s.selDay);
+    const word = st === 'open' ? 'Available' : st === 'hold' ? 'Selling Fast' : 'Full';
+    const found = BOOKINGS.find(b => b.phone === s.checkPhone.replace(/[^0-9]/g, ''));
+    const tone = t => t === 'open'
+      ? { bg: 'rgba(47,191,113,.16)', fg: '#137A47' }
+      : { bg: 'rgba(255,184,0,.20)', fg: '#8A6A00' };
+
+    return {
+      monthLabel,
+      dowLabels: ['ISN', 'SEL', 'RAB', 'KHA', 'JUM', 'SAB', 'AHD'],
+      prevMonth: () => this.setState(x => ({ monthIdx: Math.max(0, x.monthIdx - 1) })),
+      nextMonth: () => this.setState(x => ({ monthIdx: Math.min(MONTHS.length - 1, x.monthIdx + 1) })),
+      cells,
+      holidays: hols,
+      noHoliday: hols.length === 0,
+
+      paxChips: CAPACITY.map((c, i) => ({
+        label: c + ' pax',
+        onPick: () => this.setState({ paxIdx: i }),
+        bg: i === s.paxIdx ? AMBER : 'rgba(255,255,255,.06)',
+        fg: i === s.paxIdx ? '#2E1D6B' : '#D6CDF5',
+        bd: i === s.paxIdx ? AMBER : 'rgba(255,255,255,.16)'
+      })),
+
+      selectionLabel: s.selDay + ' ' + monthLabel + ', ' + CAPACITY[s.paxIdx] + ' pax (' + word + ')',
+      priceLabel: 'RM ' + price,
+
+      showForm: s.tab === 'form',
+      showCheck: s.tab === 'check',
+      tabForm: () => this.setState({ tab: 'form' }),
+      tabCheck: () => this.setState({ tab: 'check' }),
+      tabFormBg: s.tab === 'form' ? AMBER : 'transparent',
+      tabFormFg: s.tab === 'form' ? '#1B1436' : '#635A87',
+      tabCheckBg: s.tab === 'check' ? AMBER : 'transparent',
+      tabCheckFg: s.tab === 'check' ? '#1B1436' : '#635A87',
+
+      paxOptions: [4, 5, 6, 7, 8, 9, 10, 12, 14].map(n => n + ' pax'),
+      fName: s.form.name, fPhone: s.form.phone, fPax: s.form.pax, fEmail: s.form.email, fNote: s.form.note,
+      setName: e => this.setState({ form: Object.assign({}, s.form, { name: e.target.value }) }),
+      setPhone: e => this.setState({ form: Object.assign({}, s.form, { phone: e.target.value }) }),
+      setPax: e => this.setState({ form: Object.assign({}, s.form, { pax: e.target.value }) }),
+      setEmail: e => this.setState({ form: Object.assign({}, s.form, { email: e.target.value }) }),
+      setNote: e => this.setState({ form: Object.assign({}, s.form, { note: e.target.value }) }),
+      submitBooking: () => this.setState({ submitted: true }),
+      submitted: s.submitted,
+      newRef: 'CS-' + String(mo.m + 1).padStart(2, '0') + String(s.selDay).padStart(2, '0') + '-057',
+
+      checkPhone: s.checkPhone,
+      setCheckPhone: e => this.setState({ checkPhone: e.target.value, checked: false }),
+      runCheck: () => this.setState({ checked: true }),
+      hasResult: s.checked && !!found,
+      noResult: s.checked && !found,
+      resRef: found ? found.ref : '',
+      resBoat: found ? found.boat : '',
+      resDate: found ? found.date : '',
+      resPax: found ? found.pax + ' orang' : '',
+      resBalance: found ? 'RM ' + (found.pax * price - 250).toLocaleString() : '',
+      resStatus: found ? found.status : '',
+      resBg: found ? tone(found.tone).bg : '',
+      resFg: found ? tone(found.tone).fg : '',
+
+      includes: ['Candat, tali dan lampu', 'Jaket keselamatan bersijil', 'Air panas, Milo dan mi segera', 'Juragan berpengalaman 15 tahun', 'Hasil dibahagi sama rata'],
+      faqs: FAQS.map((f, i) => ({
+        q: f.q, a: f.a,
+        sign: s.openFaq === i ? '\u2212' : '+',
+        h: s.openFaq === i ? '220px' : '0px',
+        onToggle: () => this.setState(x => ({ openFaq: x.openFaq === i ? -1 : i }))
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
