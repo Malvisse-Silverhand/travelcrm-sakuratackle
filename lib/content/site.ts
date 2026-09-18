@@ -16,7 +16,19 @@ export const HERO = {
   eyebrow: "Musim Candat Telah Dibuka",
   photo: UPLOADS + "2026/02/restored_night_fishing_4k_v2-scaled.png",
   photoAlt: "Aktiviti candat sotong waktu malam di perairan Pulau Kapas",
+  /** M1 uses a different, less detailed shot — the night-fishing photo loses
+   *  its subject once it is cropped to a phone-width frame. */
+  photoMobile: UPLOADS + "2026/02/restored_boat_group_4k_v3-scaled.png",
+  photoMobileAlt: "Kumpulan pelanggan di atas bot candat",
 };
+
+/** Phone-only tab bar fixed to the bottom of the viewport (design frame M1). */
+export const MOBILE_NAV = [
+  { label: "Utama", href: "#top" },
+  { label: "Armada", href: "#armada" },
+  { label: "Galeri", href: "#galeri" },
+  { label: "FAQ", href: "#faq" },
+];
 
 /** The three figures under the search control. Fleet size and the capacity
  *  range are derived from the boats table at render time, not hardcoded. */

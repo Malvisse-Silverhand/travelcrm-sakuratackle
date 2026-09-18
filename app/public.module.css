@@ -957,6 +957,36 @@
   filter: brightness(1.08);
 }
 
+/* -------------------------------------------------- mobile bottom tab bar */
+
+/* Frame M1. Hidden on anything wider than a phone; the desktop header nav
+   covers the same four destinations. */
+.tabBar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 70;
+  grid-template-columns: repeat(4, 1fr);
+  background: #fff;
+  border-top: 1px solid var(--border-mid);
+  padding: 9px 8px calc(10px + env(safe-area-inset-bottom, 0px));
+}
+
+.tabBarLink {
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #9c93bc;
+  text-decoration: none;
+  padding: 4px 0;
+}
+
+.tabBarLinkActive {
+  color: var(--purple);
+}
+
 /* ----------------------------------------------------------- 980 and below */
 
 @container (max-width: 980px) {
@@ -1023,21 +1053,124 @@
     padding-right: 16px;
   }
 
-  .headerLocation {
+  /* M1 header: mark, name, and a shorter CTA. The sub-brand line and the
+     location both drop — neither survives 390px without wrapping. */
+  .headerInner {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .headerLocation,
+  .brandSub {
     display: none;
   }
 
+  .logoMark {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 12.5px;
+  }
+
+  .brandName {
+    font-size: 13.5px;
+  }
+
+  .headerCta {
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 11.5px;
+  }
+
+  .heroSection {
+    padding: 16px 0 24px;
+  }
+
+  .heroFrame {
+    border-radius: 20px;
+  }
+
+  .heroPhoto {
+    opacity: 0.5;
+  }
+
+  .heroScrim {
+    background: linear-gradient(180deg, rgba(27, 20, 54, 0.5), rgba(27, 20, 54, 0.88));
+  }
+
   .heroContent {
-    padding: 44px 20px 52px;
+    padding: 28px 20px 32px;
+    text-align: left;
+  }
+
+  .heroBadge {
+    padding: 5px 11px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
   }
 
   .heroTitle {
-    font-size: 30px;
+    font-size: 27px;
+    line-height: 1.1;
+    margin: 14px 0 0;
+    max-width: none;
   }
 
+  .heroLead {
+    font-size: 13.5px;
+    margin: 12px 0 0;
+    max-width: none;
+  }
+
+  /* The card stops overlapping the photo on phones — at 390px the overlap
+     eats the hero copy instead of decorating it. */
+  .search {
+    margin: 14px 0 0;
+    border-radius: 18px;
+    padding: 14px;
+    gap: 0;
+    box-shadow: 0 14px 34px rgba(46, 29, 107, 0.12);
+  }
+
+  /* The divider turns from a vertical rule between columns into a horizontal
+     one between stacked rows. It stays in the DOM rather than being hidden so
+     it can do that job — an adjacent-sibling border on .searchField could not
+     reach across it. */
+  .searchDivider {
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin: 12px 0;
+  }
+
+  .searchLabel {
+    font-size: 9.5px;
+  }
+
+  .searchInput {
+    font-size: 14.5px;
+    margin-top: 5px;
+  }
+
+  .searchBtn {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 14px;
+  }
+
+  /* Trust figures become a card with one claim per line (M1). */
   .trustStrip {
-    gap: 8px 18px;
-    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--border);
+    font-size: 12.5px;
   }
 
   .fleetGrid,
@@ -1050,6 +1183,37 @@
     gap: 12px;
   }
 
+  .sectionTitle {
+    font-size: 23px;
+  }
+
+  .sectionTitleSm {
+    font-size: 20px;
+  }
+
+  .eyebrow {
+    font-size: 9.5px;
+  }
+
+  /* M3 */
+  .faqQuestion {
+    padding: 14px 16px;
+    font-size: 13.5px;
+    gap: 12px;
+  }
+
+  .faqSign {
+    width: auto;
+    height: auto;
+    background: none;
+    font-size: 14px;
+  }
+
+  .faqAnswer {
+    padding: 0 16px 14px;
+    font-size: 12.5px;
+  }
+
   .ctaBand {
     padding: 28px 20px;
   }
@@ -1058,9 +1222,18 @@
     font-size: 25px;
   }
 
+  .tabBar {
+    display: grid;
+  }
+
+  /* Both floats sit above the tab bar rather than behind it. */
   .whatsappFloat {
     right: 14px;
-    bottom: 14px;
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px));
     padding: 12px 18px;
+  }
+
+  .footer {
+    padding-bottom: calc(26px + 62px + env(safe-area-inset-bottom, 0px));
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useBooking } from "./BookingState";
 import PaymentPanel from "./PaymentPanel";
@@ -36,6 +36,9 @@ type Props = {
   packageId: string;
   pricePerPax: number;
   depositPerBoat: number;
+  /** Group size `initialAvailability` was fetched for, so the first render
+   *  knows it already has the data it would otherwise go and ask for. */
+  initialPax: number;
   initialAvailability: Availability[];
 };
 
@@ -67,6 +70,7 @@ export default function BookingExperience({
   packageId,
   pricePerPax,
   depositPerBoat,
+  initialPax,
   initialAvailability,
 }: Props) {
   const supabase = useMemo(() => createClient(), []);
@@ -102,8 +106,17 @@ export default function BookingExperience({
     return map;
   }, [availability]);
 
+  /** Month + pax the availability on screen belongs to. Seeded with what the
+   *  server already fetched, so mounting does not immediately re-request the
+   *  same rows — that round trip greyed the whole calendar out for a moment
+   *  on every page load. */
+  const loadedFor = useRef(`${firstMonthIdx}:${initialPax}`);
+
   /** Refetch whenever the month or the group size changes. */
   useEffect(() => {
+    const key = `${monthIdx}:${pax}`;
+    if (loadedFor.current === key) return;
+
     let cancelled = false;
     const load = async () => {
       setLoadingCal(true);
@@ -115,6 +128,7 @@ export default function BookingExperience({
         p_pax: pax,
       });
       if (cancelled) return;
+      loadedFor.current = key;
       setAvailability(error || !data ? [] : (data as Availability[]));
       setLoadingCal(false);
     };

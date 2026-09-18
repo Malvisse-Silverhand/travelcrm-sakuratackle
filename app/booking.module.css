@@ -892,6 +892,114 @@
 }
 
 @container (max-width: 620px) {
+  /* Frame M2. */
+  .calSection {
+    padding-top: 20px;
+  }
+
+  .calFrame {
+    border-radius: 20px;
+    padding: 0;
+    background: none;
+    border: 0;
+  }
+
+  .calPanel {
+    border-radius: 20px;
+    padding: 16px;
+  }
+
+  .calTitle {
+    font-size: 19px;
+  }
+
+  .calSub {
+    font-size: 12px;
+    margin: 6px 0 14px;
+  }
+
+  /* The legend costs a whole row at 390px and repeats what the cell colours
+     already say, so it goes. */
+  .legend {
+    display: none;
+  }
+
+  /* Six chips do not fit across a phone; swipe them instead of wrapping to
+     two rows and pushing the calendar down. */
+  .paxRow {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 7px;
+    padding-bottom: 4px;
+    margin-bottom: 14px;
+    scrollbar-width: none;
+  }
+
+  .paxRow::-webkit-scrollbar {
+    display: none;
+  }
+
+  .paxChip {
+    flex: 0 0 auto;
+    padding: 9px 15px;
+    border-radius: 12px;
+    font-size: 12.5px;
+  }
+
+  .monthNav {
+    margin-bottom: 10px;
+  }
+
+  .monthBtn {
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 11.5px;
+  }
+
+  .monthLabel {
+    font-size: 14.5px;
+  }
+
+  .grid {
+    gap: 4px;
+  }
+
+  .dow {
+    font-size: 8.5px;
+    letter-spacing: 0.08em;
+    padding: 4px 0;
+  }
+
+  .cell {
+    height: 40px;
+    border-radius: 10px;
+    font-size: 12.5px;
+  }
+
+  .holidayDot {
+    top: 3px;
+    right: 4px;
+    width: 5px;
+    height: 5px;
+  }
+
+  .calSide {
+    margin-top: 12px;
+  }
+
+  .slotCardValue {
+    font-size: 16px;
+  }
+
+  .depositAmount {
+    font-size: 28px;
+  }
+
+  .formCard {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
   .payTotals,
   .bankGrid {
     grid-template-columns: minmax(0, 1fr);
@@ -904,14 +1012,16 @@
   .tabs {
     flex-direction: column;
     border-radius: 18px;
+    width: 100%;
   }
 
   .tab {
     border-radius: 14px;
+    text-align: center;
   }
 
-  .cell {
-    height: 38px;
-    font-size: 12.5px;
+  /* Clears the fixed bottom tab bar so the last field is not trapped under it. */
+  .formSection {
+    padding-bottom: calc(24px + 62px + env(safe-area-inset-bottom, 0px));
   }
 }

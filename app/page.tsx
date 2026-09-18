@@ -6,6 +6,7 @@ import { BookingProvider } from "@/components/public/BookingState";
 import HeroSearch from "@/components/public/HeroSearch";
 import FleetSection, { type FleetBoat } from "@/components/public/FleetSection";
 import FaqAccordion, { type Faq } from "@/components/public/FaqAccordion";
+import MobileTabBar from "@/components/public/MobileTabBar";
 import {
   CTA_BAND,
   FACILITIES,
@@ -142,13 +143,18 @@ export default async function Home() {
           <section className={styles.heroSection}>
             <div className={styles.container}>
               <div className={styles.heroFrame}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={HERO.photo}
-                  alt={HERO.photoAlt}
-                  className={styles.heroPhoto}
-                  fetchPriority="high"
-                />
+                {/* Frame M1 uses a different shot: the night-fishing photo
+                    loses its subject when cropped to phone width. */}
+                <picture>
+                  <source media="(max-width: 620px)" srcSet={HERO.photoMobile} />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={HERO.photo}
+                    alt={HERO.photoAlt}
+                    className={styles.heroPhoto}
+                    fetchPriority="high"
+                  />
+                </picture>
                 <div className={styles.heroScrim} />
                 <div className={styles.heroContent}>
                   <span className={styles.heroBadge}>{HERO.eyebrow}</span>
@@ -166,6 +172,14 @@ export default async function Home() {
               </div>
             </div>
           </section>
+
+          <BookingExperience
+            packageId={pkg.id}
+            pricePerPax={Number(pkg.price_per_pax)}
+            depositPerBoat={Number(pkg.deposit_per_boat)}
+            initialPax={DEFAULT_PAX}
+            initialAvailability={(availability ?? []) as Availability[]}
+          />
 
           <FleetSection boats={fleet} />
 
@@ -204,13 +218,6 @@ export default async function Home() {
               )}
             </div>
           </section>
-
-          <BookingExperience
-            packageId={pkg.id}
-            pricePerPax={Number(pkg.price_per_pax)}
-            depositPerBoat={Number(pkg.deposit_per_boat)}
-            initialAvailability={(availability ?? []) as Availability[]}
-          />
 
           <section id="galeri" className={styles.gallerySection}>
             <div className={styles.container}>
@@ -383,6 +390,8 @@ export default async function Home() {
         >
           WhatsApp Kami
         </a>
+
+        <MobileTabBar />
       </div>
     </BookingProvider>
   );
