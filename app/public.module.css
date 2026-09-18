@@ -121,8 +121,23 @@
 
 /* ------------------------------------------------------------------ hero */
 
+/* The hero owns the fold, booking.com style: photo, search control and trust
+   figures fill the first screen, and the calendar starts below it. svh rather
+   than vh so a mobile browser's collapsing toolbar cannot make this overflow.
+   The header is 63px (14px padding twice, a 34px mark, and its border). */
 .heroSection {
   padding: 28px 0 36px;
+  min-height: calc(100svh - 63px);
+  display: flex;
+  align-items: stretch;
+}
+
+/* Column so the photo frame can absorb whatever height the fold has left,
+   instead of sitting content-sized in the middle of a tall empty section. */
+.heroSection > .container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .heroEmpty {
@@ -137,6 +152,10 @@
   border-radius: 26px;
   overflow: hidden;
   background: var(--hero-ink);
+  flex: 1 1 auto;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
 }
 
 .heroPhoto {
@@ -156,6 +175,7 @@
 
 .heroContent {
   position: relative;
+  width: 100%;
   padding: 72px 56px 80px;
   text-align: center;
 }
@@ -196,6 +216,7 @@
 .search {
   position: relative;
   margin: -38px auto 0;
+  width: 100%;
   max-width: 900px;
   background: #fff;
   border: 1px solid var(--border);
@@ -1084,10 +1105,15 @@
 
   .heroSection {
     padding: 16px 0 24px;
+    min-height: 0;
+    display: block;
   }
 
   .heroFrame {
     border-radius: 20px;
+    flex: none;
+    min-height: 0;
+    display: block;
   }
 
   .heroPhoto {
