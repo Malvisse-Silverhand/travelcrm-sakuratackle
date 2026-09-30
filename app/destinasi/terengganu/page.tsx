@@ -4,6 +4,8 @@ import BookingExperience from "@/components/public/BookingExperience";
 import { BookingProvider } from "@/components/public/BookingState";
 import FaqAccordion from "@/components/public/FaqAccordion";
 import CoastMap from "@/components/public/CoastMap";
+import BookingNotice from "@/components/public/BookingNotice";
+import FloatingWhatsApp from "@/components/public/FloatingWhatsApp";
 import { DEFAULT_PAX, loadBookingData } from "@/lib/booking/publicData";
 import { HERO, JETTY } from "@/lib/content/site";
 import {
@@ -20,18 +22,18 @@ import styles from "../destinasi.module.css";
 export const metadata: Metadata = {
   title: "Panduan Terengganu: Candat Sotong & Persisiran Pantai | Sakura Tackle",
   description:
-    "Peta interaktif persisiran Terengganu — Jeti Marang, Pulau Kapas, Kuala Terengganu, Redang hingga Kemaman. Rancang cuti di sekitar trip candat sotong dan tempah slot terus.",
+    "Peta interaktif persisiran Terengganu: Jeti Marang, Pulau Kapas, Kuala Terengganu, Redang hingga Kemaman. Rancang cuti di sekitar trip candat sotong dan tempah slot terus.",
 };
 
 const NAV = [
   { label: "Kawasan", href: "#kawasan" },
   { label: "Peta", href: "#peta" },
   { label: "Itinerari", href: "#itinerari" },
-  { label: "Tempah", href: "#tempah" },
+  { label: "Kalendar", href: "#tempah" },
 ];
 
 export default async function TerengganuGuide() {
-  const { openMonthIdx, pkg, org, availability } = await loadBookingData();
+  const { openMonthIdx, pkg, org, availability, unavailable } = await loadBookingData();
 
   const businessName = org?.business_name ?? "Sakura Tackle";
   const waNumber = org?.whatsapp_number ?? "601153598055";
@@ -59,7 +61,7 @@ export default async function TerengganuGuide() {
           </nav>
           <div className={pub.headerRight}>
             <a href="#tempah" className={pub.headerCta}>
-              Tempah Slot
+              Semak Tarikh Kosong
             </a>
           </div>
         </div>
@@ -118,16 +120,14 @@ export default async function TerengganuGuide() {
 
         <section id="kawasan" className={styles.section}>
           <div className={pub.container}>
-            <span className={pub.eyebrow}>Rancang Ikut Kawasan</span>
-            <h2 className={pub.sectionTitle}>Bina laluan di sekitar tempat, bukan pin</h2>
+            <h2 className={pub.sectionTitle}>Empat kawasan sepanjang pantai</h2>
             <p className={pub.sectionLead}>
-              Persisiran Terengganu panjang. Pecahkan kepada empat blok, pilih satu atau dua
-              yang sesuai dengan masa anda, dan letakkan malam candat di tengahnya.
+              Pilih satu atau dua kawasan ikut masa anda, dan letakkan malam candat di
+              tengahnya.
             </p>
             <div className={styles.areaGrid}>
               {AREAS.map((a) => (
                 <a key={a.id} href={`#peta-${a.id}`} className={styles.areaCard}>
-                  <span className={styles.areaNum}>{a.n}</span>
                   <h3 className={styles.areaName}>{a.name}</h3>
                   <div className={styles.areaPlaces}>{a.places}</div>
                   <p className={styles.areaBody}>{a.body}</p>
@@ -153,8 +153,8 @@ export default async function TerengganuGuide() {
         <section id="itinerari" className={styles.section}>
           <div className={`${pub.container} ${styles.twoCol}`}>
             <div>
-              <span className={pub.eyebrow}>Contoh Itinerari · 2 Hari 1 Malam</span>
-              <h2 className={pub.sectionTitle}>Satu malam di laut, satu hari di darat</h2>
+              <h2 className={pub.sectionTitle}>Contoh 2 hari 1 malam</h2>
+              <p className={pub.sectionLead}>Satu malam di laut, satu hari di darat.</p>
               <ol className={styles.timeline}>
                 {ITINERARY.map((it) => (
                   <li key={it.when} className={styles.timelineItem}>
@@ -166,7 +166,6 @@ export default async function TerengganuGuide() {
               </ol>
             </div>
             <div>
-              <span className={pub.eyebrow}>Butiran Laluan</span>
               <h2 className={pub.sectionTitleSm}>Tiga keputusan sebelum anda tempah</h2>
               <div className={styles.tipList}>
                 {ROUTE_TIPS.map((t, i) => (
@@ -195,7 +194,6 @@ export default async function TerengganuGuide() {
           <BookingProvider initialPax={DEFAULT_PAX} firstMonthIdx={openMonthIdx}>
             <div className={styles.bookingIntro}>
               <div className={pub.container}>
-                <span className={pub.eyebrow}>Tempah Trip Candat</span>
                 <h2 className={pub.sectionTitle}>{pkg.title}</h2>
                 <p className={pub.sectionLead}>
                   Pilih malam, isi butiran group, dan lock slot dengan deposit. Bertolak dari{" "}
@@ -212,18 +210,7 @@ export default async function TerengganuGuide() {
             />
           </BookingProvider>
         ) : (
-          <section id="tempah" className={styles.section}>
-            <div className={pub.container}>
-              <h2 className={pub.sectionTitle}>Trip belum dibuka</h2>
-              <p className={pub.sectionLead}>
-                Tiada pakej trip yang diterbitkan buat masa ini. Hubungi kami terus melalui
-                WhatsApp.
-              </p>
-              <a href={waHref} target="_blank" rel="noopener noreferrer" className={styles.btnGold}>
-                WhatsApp Kami
-              </a>
-            </div>
-          </section>
+          <BookingNotice kind={unavailable ? "down" : "closed"} waHref={waHref} />
         )}
 
         {pkg && pkg.faqs.length > 0 && (
@@ -246,15 +233,7 @@ export default async function TerengganuGuide() {
         </div>
       </footer>
 
-      <a
-        href={waHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={pub.whatsappFloat}
-        aria-label={`WhatsApp ${businessName}`}
-      >
-        WhatsApp Kami
-      </a>
+      <FloatingWhatsApp href={waHref} label={`WhatsApp ${businessName}`} />
     </div>
   );
 }

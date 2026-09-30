@@ -28,7 +28,8 @@ export const MOBILE_NAV = [
   { label: "Armada", href: "#armada" },
   { label: "Galeri", href: "#galeri" },
   { label: "FAQ", href: "#faq" },
-  { label: "Peta Terengganu", href: "/destinasi/terengganu" },
+  // Short label: five tabs share 390px, and "Peta Terengganu" wrapped.
+  { label: "Peta", href: "/destinasi/terengganu" },
 ];
 
 /** The three figures under the search control. Fleet size and the capacity

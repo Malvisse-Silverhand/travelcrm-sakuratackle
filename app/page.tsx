@@ -1,12 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
-import BookingExperience, {
-  type Availability,
-} from "@/components/public/BookingExperience";
+import BookingExperience from "@/components/public/BookingExperience";
 import { BookingProvider } from "@/components/public/BookingState";
 import HeroSearch from "@/components/public/HeroSearch";
 import FleetSection, { type FleetBoat } from "@/components/public/FleetSection";
-import FaqAccordion, { type Faq } from "@/components/public/FaqAccordion";
+import FaqAccordion from "@/components/public/FaqAccordion";
 import MobileTabBar from "@/components/public/MobileTabBar";
+import BookingNotice from "@/components/public/BookingNotice";
+import FloatingWhatsApp from "@/components/public/FloatingWhatsApp";
+import { DEFAULT_PAX, loadBookingData } from "@/lib/booking/publicData";
 import {
   CTA_BAND,
   FACILITIES,
@@ -19,50 +20,17 @@ import {
   STEPS_NOTE,
   TESTIMONIALS,
 } from "@/lib/content/site";
-import { MONTHS, currentMonthIdx, isoDate } from "@/lib/season";
-import { todayISO } from "@/lib/date";
 import styles from "./public.module.css";
-
-/** Group size the page opens on — matches the design's default state. */
-const DEFAULT_PAX = 8;
-
-type PackageRow = {
-  id: string;
-  title: string;
-  subtitle: string | null;
-  price_per_pax: number;
-  deposit_per_boat: number;
-  includes: string[];
-  faqs: Faq[];
-};
-
-type OrgSettings = {
-  business_name: string;
-  location: string;
-  whatsapp_number: string;
-};
 
 export default async function Home() {
   const supabase = await createClient();
 
-  // The season spans Mac 2026 → Sep 2027, so index 0 is a month already in the
-  // past. Open on the first month that still has sellable nights.
-  const openMonthIdx = currentMonthIdx(todayISO());
-
-  const [{ data: pkg }, { data: org }, { data: boats }, { data: availability }] =
+  // Package, org and opening-month availability come from the loader the
+  // destination guide shares, so both pages tell a database outage apart from
+  // an unpublished season the same way. Only the fleet is homepage-specific.
+  const [{ openMonthIdx, pkg, org, availability, unavailable }, { data: boats }] =
     await Promise.all([
-      supabase
-        .from("packages")
-        .select("id,title,subtitle,price_per_pax,deposit_per_boat,includes,faqs")
-        .eq("published", true)
-        .order("created_at")
-        .limit(1)
-        .maybeSingle<PackageRow>(),
-      supabase
-        .from("org_settings")
-        .select("business_name,location,whatsapp_number")
-        .eq("id", 1)
-        .maybeSingle<OrgSettings>(),
+      loadBookingData(),
       supabase
         .from("boats")
         .select(
@@ -72,23 +40,18 @@ export default async function Home() {
         .order("sort_order")
         .order("code")
         .returns<FleetBoat[]>(),
-      supabase.rpc("get_public_availability", {
-        p_from: isoDate(openMonthIdx, 1),
-        p_to: isoDate(openMonthIdx, MONTHS[openMonthIdx].days),
-        p_pax: DEFAULT_PAX,
-      }),
     ]);
 
   if (!pkg) {
+    const wa = org?.whatsapp_number ?? "601153598055";
     return (
       <div className={styles.shell}>
-        <main className={styles.heroEmpty}>
-          <h1 className={styles.heroTitle}>Trip belum dibuka</h1>
-          <p className={styles.heroLead}>
-            Tiada pakej trip yang diterbitkan buat masa ini. Sila cuba sebentar lagi atau
-            hubungi kami terus.
-          </p>
-        </main>
+        <BookingNotice
+          kind={unavailable ? "down" : "closed"}
+          waHref={`https://api.whatsapp.com/send?phone=${wa}&text=${encodeURIComponent(
+            "Saya berminat trip candat sotong"
+          )}`}
+        />
       </div>
     );
   }
@@ -178,7 +141,7 @@ export default async function Home() {
             pricePerPax={Number(pkg.price_per_pax)}
             depositPerBoat={Number(pkg.deposit_per_boat)}
             initialPax={DEFAULT_PAX}
-            initialAvailability={(availability ?? []) as Availability[]}
+            initialAvailability={availability}
           />
 
           <FleetSection boats={fleet} />
@@ -326,7 +289,7 @@ export default async function Home() {
 
           <section className={styles.ctaSection}>
             <div className={styles.container}>
-              <div className={styles.ctaBand}>
+              <div className={styles.ctaBand} data-hides-wa-float>
                 <h2 className={styles.ctaTitle}>{CTA_BAND.title}</h2>
                 <p className={styles.ctaBody}>{CTA_BAND.body}</p>
                 <a
@@ -381,15 +344,7 @@ export default async function Home() {
           </div>
         </footer>
 
-        <a
-          href={waHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.whatsappFloat}
-          aria-label={`WhatsApp ${businessName}`}
-        >
-          WhatsApp Kami
-        </a>
+        <FloatingWhatsApp href={waHref} label={`WhatsApp ${businessName}`} />
 
         <MobileTabBar />
       </div>

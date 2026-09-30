@@ -850,6 +850,42 @@
   color: var(--text-muted);
 }
 
+/* ------------------------------------------------------ booking notice */
+
+/* Dark type on the light page: the old empty state borrowed the hero's
+   white-on-photo styles and rendered as a near-blank page. */
+.notice {
+  padding: 56px 0;
+}
+
+.noticeCard {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 36px 32px;
+  border-radius: 22px;
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.noticeTitle {
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.noticeBody {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-muted-2);
+  margin: 12px auto 0;
+  max-width: 44ch;
+}
+
 /* ------------------------------------------------------------------- cta */
 
 .ctaSection {
@@ -978,6 +1014,23 @@
   filter: brightness(1.08);
 }
 
+.whatsappFloat {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Stepped aside while a section with its own WhatsApp action is on screen. */
+.whatsappFloatHidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsappFloat {
+    transition: none;
+  }
+}
+
 /* -------------------------------------------------- mobile bottom tab bar */
 
 /* Frame M1. Hidden on anything wider than a phone; the desktop header nav
@@ -989,7 +1042,10 @@
   right: 0;
   bottom: 0;
   z-index: 70;
-  grid-template-columns: repeat(4, 1fr);
+  /* One column per tab, however many there are, so adding a destination
+     cannot push a tab onto a second row. */
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   background: #fff;
   border-top: 1px solid var(--border-mid);
   padding: 9px 8px calc(10px + env(safe-area-inset-bottom, 0px));

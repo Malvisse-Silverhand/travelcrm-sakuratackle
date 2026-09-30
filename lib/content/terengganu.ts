@@ -31,7 +31,6 @@ export type AreaId = "marang" | "kt" | "utara" | "selatan";
 
 export type Area = {
   id: AreaId;
-  n: string;
   name: string;
   places: string;
   body: string;
@@ -49,44 +48,40 @@ export const CATEGORIES: Record<SpotCategory, { label: string; color: string }> 
 export const BASE = { lat: 5.2069, lng: 103.2058 };
 
 export const HERO_COPY = {
-  eyebrow: "Panduan Destinasi · Terengganu",
+  eyebrow: "Panduan Destinasi",
   title: "Terengganu, dari jeti ke lubuk",
   lead:
-    "Rancang trip candat sotong anda ikut kawasan, bukan ikut pin. Malam di laut Pulau Kapas, siang jelajah persisiran pantai Terengganu.",
+    "Malam di laut Pulau Kapas, siang jelajah pantai Terengganu. Rancang cuti anda di sekitar satu trip candat.",
 };
 
 export const AREAS: Area[] = [
   {
     id: "marang",
-    n: "01",
     name: "Marang & Pulau Kapas",
-    places: "Jeti Marang · Pulau Kapas · Pulau Gemia",
+    places: "Jeti Marang, Pulau Kapas, Pulau Gemia",
     body:
       "Pangkalan trip kami. Bot bertolak dari Jeti Marang selepas Waktu Asar dan menuju perairan sekitar Pulau Kapas. Datang awal, parkir, dan makan dulu di pekan Marang sebelum turun ke laut.",
   },
   {
     id: "kt",
-    n: "02",
     name: "Kuala Terengganu",
-    places: "Pasar Payang · Kampung Cina · Masjid Kristal · Batu Buruk",
+    places: "Pasar Payang, Kampung Cina, Masjid Kristal, Batu Buruk",
     body:
-      "Bandar paling dekat dengan jeti. Sesuai untuk pagi sebelum trip atau hari selepas pulang — beli keropok dan kain di Pasar Payang, jalan kaki di Kampung Cina, petang di pantai Batu Buruk.",
+      "Bandar paling dekat dengan jeti. Sesuai untuk pagi sebelum trip atau hari selepas pulang. Beli keropok dan kain di Pasar Payang, jalan kaki di Kampung Cina, petang di pantai Batu Buruk.",
   },
   {
     id: "utara",
-    n: "03",
     name: "Utara: Merang ke Besut",
-    places: "Jeti Merang · Pulau Redang · Setiu · Kuala Besut",
+    places: "Jeti Merang, Pulau Redang, Setiu, Kuala Besut",
     body:
       "Laluan ke pulau-pulau besar. Kalau group nak sambung cuti, ini arah untuk snorkel dan pantai pasir putih. Rancang sekurang-kurangnya satu malam tambahan.",
   },
   {
     id: "selatan",
-    n: "04",
     name: "Selatan: Rantau Abang ke Kemaman",
-    places: "Rantau Abang · Dungun · Pulau Tenggol · Kemaman",
+    places: "Rantau Abang, Dungun, Pulau Tenggol, Kemaman",
     body:
-      "Laluan pantai yang lebih tenang ke arah Pahang. Sesuai untuk group yang datang dari selatan — singgah dalam perjalanan ke Marang atau semasa pulang.",
+      "Laluan pantai yang lebih tenang ke arah Pahang. Sesuai untuk group yang datang dari selatan: singgah dalam perjalanan ke Marang atau semasa pulang.",
   },
 ];
 
@@ -150,7 +145,7 @@ export const SPOTS: Spot[] = [
     area: "kt",
     lat: 5.3355,
     lng: 103.1395,
-    blurb: "Pasar ikonik Kuala Terengganu — keropok, kerepek, kain batik dan songket.",
+    blurb: "Pasar ikonik Kuala Terengganu untuk keropok, kerepek, kain batik dan songket.",
   },
   {
     id: "kampung-cina",
@@ -206,7 +201,7 @@ export const SPOTS: Spot[] = [
     area: "utara",
     lat: 5.62,
     lng: 103.06,
-    blurb: "Bekas penempatan pelarian Vietnam — pulau bersejarah yang unik.",
+    blurb: "Bekas penempatan pelarian Vietnam. Pulau bersejarah yang unik.",
   },
   {
     id: "setiu",
@@ -233,7 +228,7 @@ export const SPOTS: Spot[] = [
     area: "utara",
     lat: 5.91,
     lng: 102.743,
-    blurb: "Dua pulau popular — Perhentian Besar dan Kecil.",
+    blurb: "Dua pulau popular: Perhentian Besar dan Perhentian Kecil.",
   },
 
   // Selatan
@@ -309,7 +304,7 @@ export const ROUTE_TIPS = [
   {
     title: "Tempah malam dulu, baru hotel",
     body:
-      "Musim candat biasanya penuh, terutama hujung minggu. Kunci tarikh bot dulu — sekurang-kurangnya sebulan awal — baru tempah penginapan di sekitarnya.",
+      "Musim candat biasanya penuh, terutama hujung minggu. Kunci tarikh bot dulu, sekurang-kurangnya sebulan awal, baru tempah penginapan di sekitarnya.",
   },
   {
     title: "Pilih pangkalan di Marang atau Kuala Terengganu",
@@ -317,14 +312,14 @@ export const ROUTE_TIPS = [
       "Jeti di Marang. Kalau nak dekat, tidur di Marang. Kalau nak banyak pilihan makan dan jalan, tidur di Kuala Terengganu dan memandu ke jeti.",
   },
   {
-    title: "Laut yang tentukan, bukan kalendar",
+    title: "Cuaca boleh tangguhkan trip",
     body:
-      "Keselamatan dahulu. Kalau keadaan laut tak selamat, trip boleh ditangguhkan — kami akan hubungi anda terus untuk tukar tarikh.",
+      "Keselamatan dahulu. Kalau keadaan laut tak selamat, trip boleh ditangguhkan dan kami akan hubungi anda terus untuk tukar tarikh.",
   },
 ];
 
 export const PACKING = [
-  "Ubat mabuk laut — makan 30 minit sebelum naik bot",
+  "Ubat mabuk laut, makan 30 minit sebelum naik bot",
   "Baju sejuk atau windbreaker untuk angin laut malam",
   "Plastik untuk bawa balik sotong",
   "Umpan/candat sendiri (atau beli di vending machine jeti)",

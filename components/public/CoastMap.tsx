@@ -19,6 +19,12 @@ const ALL_CATEGORIES = Object.keys(CATEGORIES) as SpotCategory[];
 /** Spots whose natural next step is booking the trip itself. */
 const BOOKABLE: SpotCategory[] = ["jeti", "lubuk"];
 
+/** Whether to skip camera flights and smooth scrolls. Read at call time
+ *  rather than once, so changing the OS setting takes effect immediately. */
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 /** Straight-line distance, so the label never pretends to be a drive time. */
 function kmFromBase(s: Spot): number {
   const R = 6371;
@@ -141,7 +147,13 @@ export default function CoastMap({ waNumber }: { waNumber: string }) {
         setCats(ALL_CATEGORIES);
         const first = SPOTS.find((s) => s.area === id);
         if (first) setActiveId(first.id);
-        document.getElementById("peta")?.scrollIntoView({ behavior: "smooth" });
+        document
+          .getElementById("peta")
+          ?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+        // Clicking the same area card twice would otherwise do nothing: the
+        // hash would not change, so hashchange would not fire. Swapping it for
+        // the plain section anchor re-arms every card without a history entry.
+        history.replaceState(null, "", "#peta");
       }
     };
     onHash();
@@ -151,7 +163,11 @@ export default function CoastMap({ waNumber }: { waNumber: string }) {
 
   const focus = (s: Spot) => {
     setActiveId(s.id);
-    mapRef.current?.flyTo([s.lat, s.lng], s.radiusM ? 11 : 13, { duration: 0.8 });
+    const zoom = s.radiusM ? 11 : 13;
+    // The flight shows where the new spot sits relative to the last one; with
+    // reduced motion, jump straight there instead.
+    if (prefersReducedMotion()) mapRef.current?.setView([s.lat, s.lng], zoom);
+    else mapRef.current?.flyTo([s.lat, s.lng], zoom, { duration: 0.8 });
   };
 
   const toggleCat = (c: SpotCategory) =>
@@ -176,7 +192,7 @@ export default function CoastMap({ waNumber }: { waNumber: string }) {
   )}`;
 
   return (
-    <div className={styles.mapShell}>
+    <div className={styles.mapShell} data-hides-wa-float>
       <div className={styles.mapToolbar}>
         <div className={styles.areaTabs} role="tablist" aria-label="Kawasan">
           <button
@@ -241,7 +257,7 @@ export default function CoastMap({ waNumber }: { waNumber: string }) {
               <div className={styles.spotActions}>
                 {BOOKABLE.includes(active.category) ? (
                   <a href="#tempah" className={styles.btnGold}>
-                    Tempah trip candat
+                    Semak Tarikh Kosong
                   </a>
                 ) : (
                   <button
@@ -323,7 +339,7 @@ export default function CoastMap({ waNumber }: { waNumber: string }) {
         </div>
         <div className={styles.planActions}>
           <a href="#tempah" className={styles.btnGold}>
-            Semak tarikh kosong
+            Semak Tarikh Kosong
           </a>
           {planSpots.length > 0 && (
             <a

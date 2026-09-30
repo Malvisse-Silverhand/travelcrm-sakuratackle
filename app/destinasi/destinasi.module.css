@@ -69,6 +69,8 @@
   letter-spacing: -0.03em;
   color: #fff;
   margin: 18px 0 0;
+  /* avoids a one-word second line ("lubuk") */
+  text-wrap: balance;
 }
 
 .heroLead {
@@ -206,13 +208,6 @@
   transform: translateY(-4px);
   border-color: var(--gold);
   color: var(--ink);
-}
-
-.areaNum {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--gold-dark);
 }
 
 .areaName {
@@ -377,6 +372,12 @@
   padding: 16px 18px;
   box-shadow: var(--shadow-search);
   animation: spring-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotCard {
+    animation: none;
+  }
 }
 
 @keyframes spring-in {
