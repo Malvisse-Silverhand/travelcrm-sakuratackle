@@ -9,7 +9,17 @@ import styles from "@/app/public.module.css";
  *  Without this, the float sat directly on top of the map's "Hantar pelan via
  *  WhatsApp" button on desktop: two green WhatsApp buttons stacked, one of
  *  them half covered. */
-export default function FloatingWhatsApp({ href, label }: { href: string; label: string }) {
+export default function FloatingWhatsApp({
+  href,
+  label,
+  className,
+}: {
+  href: string;
+  label: string;
+  /** Lets a page hide the float where it has another WhatsApp button, e.g.
+   *  the homepage's phone tab bar. */
+  className?: string;
+}) {
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
@@ -33,7 +43,9 @@ export default function FloatingWhatsApp({ href, label }: { href: string; label:
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`${styles.whatsappFloat} ${hidden ? styles.whatsappFloatHidden : ""}`}
+      className={`${styles.whatsappFloat} ${hidden ? styles.whatsappFloatHidden : ""} ${
+        className ?? ""
+      }`}
       aria-label={label}
       aria-hidden={hidden || undefined}
       tabIndex={hidden ? -1 : undefined}

@@ -6,7 +6,9 @@
 // prices, boats, WhatsApp number, address — is read from the database instead
 // and must NOT be duplicated here, or the two copies will drift.
 
-export type Facility = { title: string; body: string };
+import type { FacilityIconName } from "@/components/public/home/FacilityIcon";
+
+export type Facility = { title: string; body: string; icon: FacilityIconName };
 export type Step = { n: string; title: string; body: string };
 export type GalleryImage = { src: string; alt: string; wide: boolean; tall: boolean };
 
@@ -22,13 +24,13 @@ export const HERO = {
   photoMobileAlt: "Kumpulan pelanggan di atas bot candat",
 };
 
-/** Phone-only tab bar fixed to the bottom of the viewport (design frame M1). */
+/** Phone-only tab bar fixed to the bottom of the viewport. The WhatsApp
+ *  button sits in the middle, between the first and second half of these. */
 export const MOBILE_NAV = [
   { label: "Utama", href: "#top" },
   { label: "Armada", href: "#armada" },
   { label: "Galeri", href: "#galeri" },
-  { label: "FAQ", href: "#faq" },
-  // Short label: five tabs share 390px, and "Peta Terengganu" wrapped.
+  // Short label: "Peta Terengganu" wrapped at 390px.
   { label: "Peta", href: "/destinasi/terengganu" },
 ];
 
@@ -37,22 +39,25 @@ export const MOBILE_NAV = [
 export const TRUST_STRIP_DEPOSIT = "Deposit RM{deposit} untuk lock slot";
 
 export const FACILITIES: Facility[] = [
-  { title: "GPS Fish Finder", body: "Sonar kesan lubuk candat." },
-  { title: "Makan Malam", body: "Makan dan minum disediakan (2 kali). *ais disediakan" },
-  { title: "Kapasiti", body: "8–15 Pax" },
-  { title: "Ais & Kotak", body: "Simpan tangkapan segar." },
-  { title: "Safety Gear", body: "Life jacket." },
+  { title: "GPS Fish Finder", body: "Sonar kesan lubuk candat.", icon: "sonar" },
+  { title: "Makan Malam", body: "Makan dan minum disediakan (2 kali). *ais disediakan", icon: "meal" },
+  { title: "Kapasiti", body: "8–15 Pax", icon: "group" },
+  { title: "Ais & Kotak", body: "Simpan tangkapan segar.", icon: "cooler" },
+  { title: "Safety Gear", body: "Life jacket.", icon: "lifering" },
   {
     title: "Lampu Candat",
     body: "LED Hijau High-Power untuk mudahkan aktiviti mencandat.",
+    icon: "lamp",
   },
   {
     title: "Umpan/Candat",
     body: "Boleh beli di vending machine di jeti sekiranya tiada.",
+    icon: "jig",
   },
   {
     title: "Bilik Rehat & Tandas",
     body: "Bilik rehat dan tandas yang selesa di atas bot.",
+    icon: "rest",
   },
 ];
 
@@ -89,7 +94,9 @@ export const STEPS_NOTE = {
   body: "Musim candat biasanya sangat ‘full’. Kami sarankan tempahan dibuat sekurang-kurangnya 1 bulan awal terutamanya untuk malam hujung minggu.",
 };
 
-/** `wide`/`tall` reproduce the design's masonry spans. */
+/** Spans in the homepage's 4 × 3 gallery grid: `wide` takes two columns,
+ *  `tall` two rows. The twelve cells hold one 2 × 2, one 2 × 1 and six
+ *  singles, so change these together. */
 export const GALLERY: GalleryImage[] = [
   {
     src: UPLOADS + "2026/04/WhatsApp-Image-2026-04-10-at-00.36.46-1.jpeg",
@@ -103,10 +110,10 @@ export const GALLERY: GalleryImage[] = [
   { src: UPLOADS + "2026/02/Speedboat.jpeg", wide: false, tall: false },
   {
     src: UPLOADS + "2026/04/WhatsApp-Image-2026-04-10-at-00.36.47-1.jpeg",
-    wide: true,
+    wide: false,
     tall: false,
   },
-  { src: UPLOADS + "2026/02/restored_night_fishing_4k_v2-scaled.png", wide: true, tall: false },
+  { src: UPLOADS + "2026/02/restored_night_fishing_4k_v2-scaled.png", wide: false, tall: false },
 ].map((g, i) => ({
   ...g,
   alt: `Galeri tangkapan candat sotong Sakura Tackle ${i + 1}`,
@@ -150,6 +157,19 @@ export const BANK = {
   accountName: "Sakura Tackle Enterprise",
   accountNumber: "5624 1188 3097",
 };
+
+/** The homepage's screens, in order, for the desktop section rail. */
+export const SCREENS = [
+  { id: "top", label: "Utama" },
+  { id: "tempah", label: "Tempah" },
+  { id: "armada", label: "Armada" },
+  { id: "fasiliti", label: "Fasiliti" },
+  { id: "perjalanan", label: "Perjalanan" },
+  { id: "galeri", label: "Galeri" },
+  { id: "testimoni", label: "Testimoni" },
+  { id: "faq", label: "FAQ" },
+  { id: "jeti", label: "Jeti" },
+];
 
 export const NAV = [
   { label: "Armada", href: "#armada" },

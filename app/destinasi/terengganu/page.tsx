@@ -20,7 +20,7 @@ import pub from "@/app/public.module.css";
 import styles from "../destinasi.module.css";
 
 export const metadata: Metadata = {
-  title: "Panduan Terengganu: Candat Sotong & Persisiran Pantai | Sakura Tackle",
+  title: "Panduan Terengganu: Candat Sotong & Persisiran Pantai | SAKURA TACKLE",
   description:
     "Peta interaktif persisiran Terengganu: Jeti Marang, Pulau Kapas, Kuala Terengganu, Redang hingga Kemaman. Rancang cuti di sekitar trip candat sotong dan tempah slot terus.",
 };
@@ -49,8 +49,8 @@ export default async function TerengganuGuide() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/logo-badge.webp" alt="Sakura Tackle" width={34} height={34} className={pub.logoMark} />
             <span className={pub.brandText}>
-              <span className={pub.brandName}>Candat Sotong</span>
-              <span className={pub.brandSub}>{businessName}</span>
+              <span className={pub.brandName}>SAKURA TACKLE</span>
+              <span className={pub.brandSub}>Trip Candat Sotong</span>
             </span>
           </Link>
           <nav className={pub.nav} aria-label="Navigasi panduan">

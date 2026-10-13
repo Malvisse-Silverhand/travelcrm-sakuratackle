@@ -14,7 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Trip Candat Sotong Otai-Otai | Sakura Tackle",
+  title: "SAKURA TACKLE | Trip Candat Sotong Otai-Otai",
   description:
     "Trip candat sotong semalaman di Marang, Terengganu. Tak perlu skil tinggi, janji ada hati. Semak tarikh kosong dan tempah slot anda.",
 };

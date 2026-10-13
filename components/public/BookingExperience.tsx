@@ -1,19 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, LazyMotion, MotionConfig, domAnimation, m } from "motion/react";
 import { createClient } from "@/lib/supabase/client";
 import { useBooking } from "./BookingState";
+import BookingCalendar, { CalendarLegend, STATUS_WORD } from "./BookingCalendar";
+import CheckBooking from "./CheckBooking";
 import PaymentPanel from "./PaymentPanel";
-import {
-  DOW_LABELS,
-  HOLIDAYS,
-  MONTHS,
-  PAX_CHIPS,
-  PAX_OPTIONS,
-  formatLongDate,
-  isoDate,
-  monthLabel,
-} from "@/lib/season";
+import { HOLIDAYS, MONTHS, PAX_CHIPS, formatLongDate, isoDate, monthLabel } from "@/lib/season";
 import styles from "@/app/booking.module.css";
 
 export type Availability = {
@@ -21,15 +15,6 @@ export type Availability = {
   status: "open" | "selling_fast" | "full" | "blocked";
   suggested_boat_id: string | null;
   suggested_boat_code: string | null;
-};
-
-type CheckResult = {
-  ref: string;
-  boat_code: string;
-  night_date: string;
-  pax: number;
-  status: string;
-  balance_due: number;
 };
 
 type Props = {
@@ -40,30 +25,36 @@ type Props = {
    *  knows it already has the data it would otherwise go and ask for. */
   initialPax: number;
   initialAvailability: Availability[];
+  /** Extra class for the section, e.g. the homepage's one-screen sizing. */
+  className?: string;
 };
 
-type Tab = "form" | "pay" | "check";
+/** The three booking steps, then the confirmation. "pay" and "check" sit
+ *  outside the steps: they serve customers who have already booked, until
+ *  the phase 3 client portal takes them over. */
+type View = "date" | "details" | "review" | "done" | "pay" | "check";
 
-const STATUS_WORD: Record<string, string> = {
-  open: "Available",
-  selling_fast: "Selling Fast",
-  full: "Full",
-  blocked: "Tidak dibuka",
+const STEPS: Array<{ view: View; label: string }> = [
+  { view: "date", label: "Tarikh & pax" },
+  { view: "details", label: "Butiran anda" },
+  { view: "review", label: "Semak & hantar" },
+];
+
+const ORDER: View[] = ["date", "details", "review", "done", "pay", "check"];
+
+const SUBTITLE: Record<View, string> = {
+  date: "Pilih saiz group dan malam trip. Satu bot, satu trip semalaman.",
+  details: "Siapa ketua kumpulan? Kami hubungi nombor ini untuk sahkan trip.",
+  review: "Pastikan semua betul sebelum hantar.",
+  done: "Slot anda dah masuk sistem kami.",
+  pay: "Dah tempah? Jelaskan deposit dan hantar resit di sini.",
+  check: "Semak status tempahan dengan nombor telefon anda.",
 };
 
-/** Maps a booking_status value to the pill styling used in the design. */
-function statusPillClass(status: string) {
-  if (status === "confirmed") return styles.statusOpen;
-  if (status === "cancelled" || status === "weather_hold") return styles.statusFull;
-  return styles.statusHold;
-}
-
-const STATUS_LABEL: Record<string, string> = {
-  pending: "Pending",
-  confirmed: "Confirmed",
-  deposit_due: "Deposit due",
-  weather_hold: "Weather hold",
-  cancelled: "Cancelled",
+const slide = {
+  enter: (dir: number) => ({ opacity: 0, x: dir * 28 }),
+  center: { opacity: 1, x: 0 },
+  exit: (dir: number) => ({ opacity: 0, x: dir * -28 }),
 };
 
 export default function BookingExperience({
@@ -72,6 +63,7 @@ export default function BookingExperience({
   depositPerBoat,
   initialPax,
   initialAvailability,
+  className,
 }: Props) {
   const supabase = useMemo(() => createClient(), []);
   const { pax, setPax, selected, setSelected, monthIdx, setMonthIdx, firstMonthIdx } =
@@ -80,25 +72,21 @@ export default function BookingExperience({
   const [availability, setAvailability] = useState<Availability[]>(initialAvailability);
   const [loadingCal, setLoadingCal] = useState(false);
 
-  const [tab, setTab] = useState<Tab>("form");
+  const [view, setView] = useState<View>("date");
+  // +1 slides the next panel in from the right, -1 from the left.
+  const [dir, setDir] = useState(1);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const [form, setForm] = useState({ name: "", phone: "", email: "", note: "" });
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [newRef, setNewRef] = useState<string | null>(null);
-  /** Phone the booking was made with — prefills the Pembayaran tab so the
-   *  customer does not retype it straight after booking. */
+  /** Phone the booking was made with — prefills Pembayaran so the customer
+   *  does not retype it straight after booking. */
   const [bookedPhone, setBookedPhone] = useState("");
-
-  const [checkPhone, setCheckPhone] = useState("");
-  const [checking, setChecking] = useState(false);
-  const [checked, setChecked] = useState(false);
-  const [results, setResults] = useState<CheckResult[]>([]);
-  const [checkError, setCheckError] = useState<string | null>(null);
 
   const month = MONTHS[monthIdx];
   const holidays = HOLIDAYS[monthIdx] ?? [];
-  const holidayDays = useMemo(() => holidays.map((h) => h.d), [holidays]);
 
   const byDate = useMemo(() => {
     const map = new Map<string, Availability>();
@@ -120,11 +108,9 @@ export default function BookingExperience({
     let cancelled = false;
     const load = async () => {
       setLoadingCal(true);
-      const from = isoDate(monthIdx, 1);
-      const to = isoDate(monthIdx, month.days);
       const { data, error } = await supabase.rpc("get_public_availability", {
-        p_from: from,
-        p_to: to,
+        p_from: isoDate(monthIdx, 1),
+        p_to: isoDate(monthIdx, month.days),
         p_pax: pax,
       });
       if (cancelled) return;
@@ -157,6 +143,7 @@ export default function BookingExperience({
   }, [availability, byDate, selected, loadingCal, setSelected]);
 
   const selectedRow = selected ? byDate.get(selected) : undefined;
+  const canBook = !!selectedRow?.suggested_boat_id && !loadingCal;
 
   const selectionLabel = selectedRow
     ? `${formatLongDate(selectedRow.night_date)}, ${pax} pax (${
@@ -164,45 +151,40 @@ export default function BookingExperience({
       })`
     : "Belum pilih tarikh";
 
-  const cells = useMemo(() => {
-    // Monday-first lead padding, matching the design's `(first + 6) % 7`.
-    const first = new Date(month.year, month.m, 1).getDay();
-    const lead = (first + 6) % 7;
-    const out: Array<{ key: string; day: number | null; iso: string | null }> = [];
-    for (let i = 0; i < lead; i++) out.push({ key: `pad-${i}`, day: null, iso: null });
-    for (let d = 1; d <= month.days; d++) {
-      out.push({ key: `d-${d}`, day: d, iso: isoDate(monthIdx, d) });
+  /** Where "Kembali" returns to from Pembayaran / Semak. */
+  const returnTo = useRef<View>("date");
+
+  const go = (next: View) => {
+    if (next === view) return;
+    if (next === "pay" || next === "check") {
+      if (view !== "pay" && view !== "check") returnTo.current = view;
     }
-    return out;
-  }, [month, monthIdx]);
-
-  const cellClass = useCallback(
-    (iso: string) => {
-      if (loadingCal) return `${styles.cell} ${styles.cellLoading}`;
-      if (iso === selected) return `${styles.cell} ${styles.cellSelected}`;
-      const row = byDate.get(iso);
-      if (!row) return `${styles.cell} ${styles.cellLoading}`;
-      if (row.status === "open") return `${styles.cell} ${styles.cellOpen}`;
-      if (row.status === "selling_fast") return `${styles.cell} ${styles.cellHold}`;
-      return `${styles.cell} ${styles.cellFull}`;
-    },
-    [byDate, selected, loadingCal]
-  );
-
-  const submitBooking = async () => {
+    setDir(ORDER.indexOf(next) >= ORDER.indexOf(view) ? 1 : -1);
     setFormError(null);
-    setNewRef(null);
+    setView(next);
+    // On a phone the next panel can start above the fold after a long step;
+    // bring the top of the section back rather than leave the reader mid-form.
+    const top = sectionRef.current?.getBoundingClientRect().top ?? 0;
+    if (top < 0) sectionRef.current?.scrollIntoView({ block: "start" });
+  };
 
-    if (!selectedRow || !selectedRow.suggested_boat_id) {
-      setFormError("Sila pilih tarikh yang masih ada slot.");
-      return;
-    }
+  const toReview = () => {
     if (!form.name.trim()) {
       setFormError("Sila isi nama penuh.");
       return;
     }
     if (!/^[0-9+\-\s]{9,}$/.test(form.phone.trim())) {
       setFormError("Sila isi nombor telefon yang sah.");
+      return;
+    }
+    go("review");
+  };
+
+  const submitBooking = async () => {
+    setFormError(null);
+
+    if (!selectedRow || !selectedRow.suggested_boat_id) {
+      setFormError("Sila pilih tarikh yang masih ada slot.");
       return;
     }
 
@@ -232,394 +214,409 @@ export default function BookingExperience({
     setNewRef(ref);
     setBookedPhone(phone);
     setForm({ name: "", phone: "", email: "", note: "" });
+    go("done");
   };
 
-  const runCheck = async () => {
-    setCheckError(null);
-    setChecking(true);
-    const { data, error } = await supabase.rpc("check_booking_by_phone", {
-      p_phone: checkPhone.replace(/[^0-9]/g, ""),
-    });
-    setChecking(false);
-    setChecked(true);
-    if (error) {
-      setResults([]);
-      setCheckError("Tidak dapat menyemak sekarang. Cuba sebentar lagi.");
-      return;
-    }
-    setResults((data ?? []) as CheckResult[]);
-  };
+  const stepIdx = STEPS.findIndex((s) => s.view === view);
+  const inSteps = stepIdx >= 0 || view === "done";
+  const total = pax * pricePerPax;
+
+  const slotSummary = (
+    <div className={styles.slotCard}>
+      <span className={styles.panelLabel}>Slot dipilih</span>
+      <div className={styles.slotCardValue}>{selectionLabel}</div>
+      <div className={styles.slotCardNote}>
+        Bertolak selepas Waktu Asar. Pulang 7:00 pagi keesokannya.
+      </div>
+      {view !== "done" && (
+        <button type="button" className={styles.slotChange} onClick={() => go("date")}>
+          Tukar tarikh atau pax
+        </button>
+      )}
+    </div>
+  );
+
+  const depositCard = (
+    <div className={styles.depositCard}>
+      <span className={styles.depositKicker}>Deposit</span>
+      <div className={styles.depositAmount}>RM {depositPerBoat.toLocaleString("en-MY")}</div>
+      <p className={styles.depositNote}>
+        Satu bayaran per bot untuk kunci malam tersebut. Baki dijelaskan di jeti sebelum
+        bertolak.
+      </p>
+    </div>
+  );
 
   return (
-    <>
-      <section id="tempah" className={styles.calSection}>
-        <div className={styles.calFrame}>
-          <div className={styles.calPanel}>
-            <div className={styles.calHead}>
-              <div>
-                <h2 className={styles.calTitle}>Ready Untuk Candat?</h2>
-                <p className={styles.calSub}>
-                  Semak kelendar trip. Satu bot, satu trip semalaman. Tekan tarikh untuk
-                  tempah.
-                </p>
-              </div>
-              <div className={styles.legend}>
-                <span className={styles.legendItem}>
-                  <i
-                    className={styles.legendDot}
-                    style={{ background: "var(--success)" }}
-                  />
-                  Available
-                </span>
-                <span className={styles.legendItem}>
-                  <i className={styles.legendDot} style={{ background: "var(--gold)" }} />
-                  Selling Fast
-                </span>
-                <span className={styles.legendItem}>
-                  <i
-                    className={styles.legendDot}
-                    style={{ background: "var(--danger-bg)" }}
-                  />
-                  Full
-                </span>
-              </div>
-            </div>
-
-            <span className={styles.panelLabel}>Berapa orang dalam kumpulan anda?</span>
-            <div className={styles.paxRow}>
-              {PAX_CHIPS.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setPax(c)}
-                  className={`${styles.paxChip} ${c === pax ? styles.paxChipActive : ""}`}
-                >
-                  {c} pax
-                </button>
-              ))}
-            </div>
-
-            <div className={styles.calBody}>
-              <div className={styles.calLeft}>
-                <div className={styles.monthNav}>
-                  <button
-                    type="button"
-                    className={styles.monthBtn}
-                    onClick={() => setMonthIdx((i) => Math.max(firstMonthIdx, i - 1))}
-                    disabled={monthIdx === firstMonthIdx}
-                    aria-label="Bulan sebelum"
-                  >
-                    &#8592;
-                  </button>
-                  <span className={styles.monthLabel}>{monthLabel(monthIdx)}</span>
-                  <button
-                    type="button"
-                    className={styles.monthBtn}
-                    onClick={() => setMonthIdx((i) => Math.min(MONTHS.length - 1, i + 1))}
-                    disabled={monthIdx === MONTHS.length - 1}
-                    aria-label="Bulan seterusnya"
-                  >
-                    &#8594;
-                  </button>
-                </div>
-
-                <div className={styles.grid}>
-                  {DOW_LABELS.map((d) => (
-                    <div key={d} className={styles.dow}>
-                      {d}
-                    </div>
-                  ))}
-                  {cells.map((c) => {
-                    if (!c.day || !c.iso) {
-                      return (
-                        <button
-                          key={c.key}
-                          className={`${styles.cell} ${styles.cellPad}`}
-                        />
-                      );
-                    }
-                    const row = byDate.get(c.iso);
-                    const disabled =
-                      loadingCal ||
-                      !row ||
-                      row.status === "full" ||
-                      row.status === "blocked";
-                    const isHoliday = holidayDays.includes(c.day);
-                    return (
-                      <button
-                        key={c.key}
-                        type="button"
-                        className={cellClass(c.iso)}
-                        disabled={disabled}
-                        onClick={() => {
-                          setSelected(c.iso);
-                          setNewRef(null);
-                        }}
-                        aria-label={`${c.day} ${monthLabel(monthIdx)}${
-                          row ? ` — ${STATUS_WORD[row.status]}` : ""
-                        }`}
-                      >
-                        {c.day}
-                        {isHoliday && (
-                          <i
-                            className={`${styles.holidayDot} ${
-                              c.iso === selected ? styles.holidayDotSelected : ""
-                            }`}
-                          />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className={styles.calSide}>
-                <span className={styles.panelLabel}>
-                  Cuti umum {monthLabel(monthIdx)}
-                </span>
-                {holidays.length > 0 ? (
-                  <div className={styles.holidayChips}>
-                    {holidays.map((h, i) => (
-                      <span key={`${h.d}-${i}`} className={styles.holidayChip}>
-                        <b>{h.d}</b>
-                        {h.n}
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <span className={styles.holidayEmpty}>Tiada cuti umum bulan ini.</span>
-                )}
-
-                <div className={styles.slotCard}>
-                  <span className={styles.panelLabel}>Slot dipilih</span>
-                  <div className={styles.slotCardValue}>{selectionLabel}</div>
-                  <div className={styles.slotCardNote}>
-                    Bertolak selepas Waktu Asar. Pulang 7:00 pagi keesokannya.
-                  </div>
-                </div>
-
-                <div className={styles.depositCard}>
-                  <span className={styles.depositKicker}>Deposit</span>
-                  <div className={styles.depositAmount}>
-                    RM {depositPerBoat.toLocaleString("en-MY")}
-                  </div>
-                  <p className={styles.depositNote}>
-                    Satu bayaran per bot untuk kunci malam tersebut. Baki dijelaskan di
-                    jeti sebelum bertolak.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className={styles.formSection}>
-        <div className={styles.formCard}>
-          <div className={styles.tabs}>
-            <button
-              type="button"
-              onClick={() => setTab("form")}
-              className={`${styles.tab} ${tab === "form" ? styles.tabActive : ""}`}
-            >
-              Borang Tempahan
-            </button>
-            <button
-              type="button"
-              onClick={() => setTab("pay")}
-              className={`${styles.tab} ${tab === "pay" ? styles.tabActive : ""}`}
-            >
-              Pembayaran
-            </button>
-            <button
-              type="button"
-              onClick={() => setTab("check")}
-              className={`${styles.tab} ${tab === "check" ? styles.tabActive : ""}`}
-            >
-              Semak Booking Saya
-            </button>
-          </div>
-
-          {tab === "form" && (
+    // data-hides-wa-float: the floating WhatsApp button covered the form's
+    // own buttons on a phone, so it steps aside while booking is on screen.
+    <section
+      id="tempah"
+      ref={sectionRef}
+      className={`${styles.calSection} ${className ?? ""}`}
+      data-hides-wa-float
+    >
+      <div className={styles.calFrame}>
+        <div className={styles.calPanel}>
+          <div className={styles.calHead}>
             <div>
-              <div className={styles.slotBanner}>
-                <span className={styles.slotLabel}>Slot dipilih</span>
-                <span className={styles.slotValue}>{selectionLabel}</span>
-              </div>
-
-              <div className={styles.formGrid}>
-                <label className={styles.field}>
-                  <span className={styles.fieldLabel}>Nama penuh</span>
-                  <input
-                    className={styles.input}
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder="Nama seperti dalam IC"
-                  />
-                </label>
-                <label className={styles.field}>
-                  <span className={styles.fieldLabel}>No. telefon / WhatsApp</span>
-                  <input
-                    className={styles.input}
-                    value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    placeholder="0123456789"
-                    inputMode="tel"
-                  />
-                </label>
-                <label className={styles.field}>
-                  <span className={styles.fieldLabel}>Bilangan pax</span>
-                  <select
-                    className={styles.input}
-                    value={pax}
-                    onChange={(e) => setPax(Number(e.target.value))}
-                  >
-                    {PAX_OPTIONS.map((o) => (
-                      <option key={o} value={o}>
-                        {o} pax
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className={styles.field}>
-                  <span className={styles.fieldLabel}>Email (pilihan)</span>
-                  <input
-                    className={styles.input}
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    placeholder="email@anda.com"
-                    inputMode="email"
-                  />
-                </label>
-                <label className={styles.fieldWide}>
-                  <span className={styles.fieldLabel}>Nota atau permintaan khas</span>
-                  <textarea
-                    className={styles.textarea}
-                    rows={3}
-                    value={form.note}
-                    onChange={(e) => setForm({ ...form, note: e.target.value })}
-                    placeholder="Contoh: perlukan jaket keselamatan saiz kanak-kanak"
-                  />
-                </label>
-              </div>
-
+              <h2 className={styles.calTitle}>Ready Untuk Candat?</h2>
+              <p className={styles.calSub}>{SUBTITLE[view]}</p>
+            </div>
+            <div className={styles.flowLinks}>
               <button
                 type="button"
-                className={styles.submit}
-                onClick={submitBooking}
-                disabled={submitting}
+                className={`${styles.flowLink} ${view === "pay" ? styles.flowLinkOn : ""}`}
+                onClick={() => go("pay")}
               >
-                {submitting ? "Menghantar..." : "Saya Ready Book Trip"}
+                Bayar deposit
               </button>
-              <p className={styles.submitHelp}>
-                Kami akan hubungi anda dalam masa 24 jam via WhatsApp.
-              </p>
-
-              {newRef && (
-                <div className={styles.successNote}>
-                  Tempahan diterima. Rujukan {newRef}. Sila jelaskan deposit RM{" "}
-                  {depositPerBoat.toLocaleString("en-MY")} di tab{" "}
-                  <button
-                    type="button"
-                    className={styles.inlineLink}
-                    onClick={() => setTab("pay")}
-                  >
-                    Pembayaran
-                  </button>
-                  .
-                </div>
-              )}
-              {formError && <div className={styles.failNote}>{formError}</div>}
+              <button
+                type="button"
+                className={`${styles.flowLink} ${view === "check" ? styles.flowLinkOn : ""}`}
+                onClick={() => go("check")}
+              >
+                Semak booking saya
+              </button>
             </div>
-          )}
+          </div>
 
-          {tab === "pay" && (
-            <PaymentPanel
-              pricePerPax={pricePerPax}
-              depositPerBoat={depositPerBoat}
-              initialRef={newRef ?? ""}
-              initialPhone={bookedPhone}
-              fallbackPax={pax}
-            />
-          )}
-
-          {tab === "check" && (
-            <div>
-              <p className={styles.checkLead}>
-                Masukkan nombor telefon yang digunakan semasa tempahan untuk semak status
-                booking anda.
-              </p>
-              <div className={styles.checkRow}>
-                <input
-                  className={styles.checkInput}
-                  value={checkPhone}
-                  onChange={(e) => {
-                    setCheckPhone(e.target.value);
-                    setChecked(false);
-                  }}
-                  placeholder="Nombor telefon (cth: 0123456789)"
-                  inputMode="tel"
-                />
-                <button
-                  type="button"
-                  className={styles.checkBtn}
-                  onClick={runCheck}
-                  disabled={checking || !checkPhone.trim()}
-                >
-                  {checking ? "Menyemak..." : "Semak"}
-                </button>
-              </div>
-
-              {checkError && <div className={styles.failNote}>{checkError}</div>}
-
-              {checked &&
-                !checkError &&
-                results.length > 0 &&
-                results.map((r) => (
-                  <div key={r.ref} className={styles.resultCard}>
-                    <div className={styles.resultHead}>
-                      <span className={styles.resultRef}>{r.ref}</span>
-                      <span className={`${styles.statusPill} ${statusPillClass(r.status)}`}>
-                        {STATUS_LABEL[r.status] ?? r.status}
+          {inSteps && (
+            <ol className={styles.stepper} aria-label="Langkah tempahan">
+              {STEPS.map((s, i) => {
+                const done = view === "done" || i < stepIdx;
+                const active = i === stepIdx;
+                return (
+                  <li key={s.view} className={styles.stepperItem}>
+                    <button
+                      type="button"
+                      className={`${styles.stepPill} ${active ? styles.stepPillOn : ""} ${
+                        done ? styles.stepPillDone : ""
+                      }`}
+                      disabled={view === "done" || i >= stepIdx}
+                      onClick={() => go(s.view)}
+                      aria-current={active ? "step" : undefined}
+                    >
+                      <span className={styles.stepDot} aria-hidden="true">
+                        {done ? "✓" : i + 1}
                       </span>
-                    </div>
-                    <div className={styles.resultBody}>
-                      <div>
-                        <span className={styles.resultLabel}>Bot</span>
-                        <span className={styles.resultValue}>{r.boat_code}</span>
-                      </div>
-                      <div>
-                        <span className={styles.resultLabel}>Tarikh</span>
-                        <span className={styles.resultValue}>
-                          {formatLongDate(r.night_date)}
-                        </span>
-                      </div>
-                      <div>
-                        <span className={styles.resultLabel}>Pax</span>
-                        <span className={styles.resultValue}>{r.pax} orang</span>
-                      </div>
-                      <div>
-                        <span className={styles.resultLabel}>Baki</span>
-                        <span className={styles.resultBalance}>
-                          RM {Number(r.balance_due).toLocaleString("en-MY")}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-              {checked && !checkError && results.length === 0 && (
-                <div className={styles.emptyState}>
-                  <p className={styles.emptyTitle}>Tiada tempahan untuk nombor itu</p>
-                  <p className={styles.emptyBody}>
-                    Cuba nombor lain, atau WhatsApp kami dan kami semak manual.
-                  </p>
-                </div>
-              )}
-            </div>
+                      <span className={styles.stepLabel}>{s.label}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
           )}
+
+          <LazyMotion features={domAnimation}>
+            <MotionConfig reducedMotion="user">
+              <AnimatePresence mode="wait" initial={false} custom={dir}>
+                <m.div
+                  key={view}
+                  custom={dir}
+                  variants={slide}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                >
+                  {view === "date" && (
+                    <div className={styles.dateStep}>
+                      <div className={styles.areaPax}>
+                        <span className={styles.panelLabel}>
+                          Berapa orang dalam kumpulan anda?
+                        </span>
+                        <div className={styles.paxRow}>
+                          {PAX_CHIPS.map((c) => (
+                            <button
+                              key={c}
+                              type="button"
+                              onClick={() => setPax(c)}
+                              aria-pressed={c === pax}
+                              className={`${styles.paxChip} ${
+                                c === pax ? styles.paxChipActive : ""
+                              }`}
+                            >
+                              {c} pax
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className={styles.areaCal}>
+                        <BookingCalendar
+                          monthIdx={monthIdx}
+                          firstMonthIdx={firstMonthIdx}
+                          onMonth={setMonthIdx}
+                          byDate={byDate}
+                          selected={selected}
+                          loading={loadingCal}
+                          onPick={(iso) => {
+                            setSelected(iso);
+                            setNewRef(null);
+                          }}
+                        />
+                        <div className={styles.nextBar}>
+                          <div className={styles.nextBarText}>
+                            <span className={styles.panelLabel}>Slot dipilih</span>
+                            <span className={styles.nextBarValue}>{selectionLabel}</span>
+                          </div>
+                          <button
+                            type="button"
+                            className={styles.nextBtn}
+                            disabled={!canBook}
+                            onClick={() => go("details")}
+                          >
+                            Teruskan &rarr;
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className={styles.areaSide}>
+                        <CalendarLegend />
+                        <span className={styles.panelLabel}>
+                          Cuti umum {monthLabel(monthIdx)}
+                        </span>
+                        {holidays.length > 0 ? (
+                          <div className={styles.holidayChips}>
+                            {holidays.map((h, i) => (
+                              <span key={`${h.d}-${i}`} className={styles.holidayChip}>
+                                <b>{h.d}</b>
+                                {h.n}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className={styles.holidayEmpty}>
+                            Tiada cuti umum bulan ini.
+                          </span>
+                        )}
+                        <div className={styles.sideDeposit}>{depositCard}</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {view === "details" && (
+                    <div className={styles.stepSplit}>
+                      <div className={styles.flowCard}>
+                        <h3 className={styles.cardTitle}>Butiran ketua kumpulan</h3>
+                        <div className={styles.formGrid}>
+                          <label className={styles.field}>
+                            <span className={styles.fieldLabel}>Nama penuh</span>
+                            <input
+                              className={styles.input}
+                              value={form.name}
+                              onChange={(e) => setForm({ ...form, name: e.target.value })}
+                              placeholder="Nama seperti dalam IC"
+                              autoComplete="name"
+                            />
+                          </label>
+                          <label className={styles.field}>
+                            <span className={styles.fieldLabel}>No. telefon / WhatsApp</span>
+                            <input
+                              className={styles.input}
+                              value={form.phone}
+                              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                              placeholder="0123456789"
+                              inputMode="tel"
+                              autoComplete="tel"
+                            />
+                          </label>
+                          <label className={styles.fieldWide}>
+                            <span className={styles.fieldLabel}>Email (pilihan)</span>
+                            <input
+                              className={styles.input}
+                              value={form.email}
+                              onChange={(e) => setForm({ ...form, email: e.target.value })}
+                              placeholder="email@anda.com"
+                              inputMode="email"
+                              autoComplete="email"
+                            />
+                          </label>
+                          <label className={styles.fieldWide}>
+                            <span className={styles.fieldLabel}>
+                              Nota atau permintaan khas
+                            </span>
+                            <textarea
+                              className={styles.textarea}
+                              rows={2}
+                              value={form.note}
+                              onChange={(e) => setForm({ ...form, note: e.target.value })}
+                              placeholder="Contoh: perlukan jaket keselamatan saiz kanak-kanak"
+                            />
+                          </label>
+                        </div>
+                        {formError && <div className={styles.failNote}>{formError}</div>}
+                        <div className={styles.actions}>
+                          <button
+                            type="button"
+                            className={styles.ghostBtn}
+                            onClick={() => go("date")}
+                          >
+                            &larr; Tarikh
+                          </button>
+                          <button type="button" className={styles.primaryBtn} onClick={toReview}>
+                            Semak tempahan &rarr;
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.splitSide}>
+                        {slotSummary}
+                        <div className={styles.sideDeposit}>{depositCard}</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {view === "review" && (
+                    <div className={styles.stepSplit}>
+                      <div className={styles.flowCard}>
+                        <h3 className={styles.cardTitle}>Semak sebelum hantar</h3>
+                        <dl className={styles.reviewList}>
+                          <ReviewRow
+                            label="Malam trip"
+                            value={selected ? formatLongDate(selected) : "—"}
+                          />
+                          <ReviewRow label="Bilangan" value={`${pax} pax`} />
+                          <ReviewRow
+                            label="Bot"
+                            value={selectedRow?.suggested_boat_code ?? "—"}
+                          />
+                          <ReviewRow label="Nama" value={form.name.trim()} />
+                          <ReviewRow label="Telefon" value={form.phone.trim()} />
+                          {form.email.trim() && (
+                            <ReviewRow label="Email" value={form.email.trim()} />
+                          )}
+                          {form.note.trim() && (
+                            <ReviewRow label="Nota" value={form.note.trim()} />
+                          )}
+                          <ReviewRow
+                            label="Anggaran harga"
+                            value={`RM ${total.toLocaleString("en-MY")}`}
+                            hint={`${pax} pax × RM${pricePerPax.toLocaleString("en-MY")}`}
+                          />
+                          <ReviewRow
+                            label="Deposit"
+                            value={`RM ${depositPerBoat.toLocaleString("en-MY")}`}
+                            hint="Dibayar selepas tempahan dihantar"
+                            strong
+                          />
+                        </dl>
+                        {formError && <div className={styles.failNote}>{formError}</div>}
+                        <div className={styles.actions}>
+                          <button
+                            type="button"
+                            className={styles.ghostBtn}
+                            onClick={() => go("details")}
+                          >
+                            &larr; Ubah butiran
+                          </button>
+                          <button
+                            type="button"
+                            className={styles.primaryBtn}
+                            onClick={submitBooking}
+                            disabled={submitting || !canBook}
+                          >
+                            {submitting ? "Menghantar..." : "Saya Ready Book Trip"}
+                          </button>
+                        </div>
+                        <p className={styles.submitHelp}>
+                          Kami akan hubungi anda dalam masa 24 jam via WhatsApp.
+                        </p>
+                      </div>
+                      <div className={styles.splitSide}>
+                        {slotSummary}
+                        <div className={styles.sideDeposit}>{depositCard}</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {view === "done" && (
+                    <div className={styles.stepSplit}>
+                      <div className={`${styles.flowCard} ${styles.doneCard}`}>
+                        <span className={styles.doneTick} aria-hidden="true">
+                          ✓
+                        </span>
+                        <h3 className={styles.cardTitle}>Tempahan diterima!</h3>
+                        <span className={styles.fieldLabel}>Nombor rujukan</span>
+                        <div className={styles.doneRef}>{newRef}</div>
+                        <p className={styles.doneBody}>
+                          Jelaskan deposit RM {depositPerBoat.toLocaleString("en-MY")} untuk
+                          lock slot. Kami akan hubungi anda dalam masa 24 jam via WhatsApp.
+                        </p>
+                        <div className={styles.actions}>
+                          <button
+                            type="button"
+                            className={styles.ghostBtn}
+                            onClick={() => {
+                              setNewRef(null);
+                              go("date");
+                            }}
+                          >
+                            Tempah malam lain
+                          </button>
+                          <button
+                            type="button"
+                            className={styles.primaryBtn}
+                            onClick={() => go("pay")}
+                          >
+                            Bayar deposit sekarang
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.splitSide}>{slotSummary}</div>
+                    </div>
+                  )}
+
+                  {(view === "pay" || view === "check") && (
+                    <div className={styles.flowCard}>
+                      <button
+                        type="button"
+                        className={styles.backLink}
+                        onClick={() => go(returnTo.current)}
+                      >
+                        &larr; Kembali ke tempahan
+                      </button>
+                      {view === "pay" ? (
+                        <PaymentPanel
+                          pricePerPax={pricePerPax}
+                          depositPerBoat={depositPerBoat}
+                          initialRef={newRef ?? ""}
+                          initialPhone={bookedPhone}
+                          fallbackPax={pax}
+                        />
+                      ) : (
+                        <CheckBooking />
+                      )}
+                    </div>
+                  )}
+                </m.div>
+              </AnimatePresence>
+            </MotionConfig>
+          </LazyMotion>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
+  );
+}
+
+function ReviewRow({
+  label,
+  value,
+  hint,
+  strong,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+  strong?: boolean;
+}) {
+  return (
+    <div className={`${styles.reviewRow} ${strong ? styles.reviewRowStrong : ""}`}>
+      <dt className={styles.reviewLabel}>{label}</dt>
+      <dd className={styles.reviewValue}>
+        {value}
+        {hint && <span className={styles.reviewHint}>{hint}</span>}
+      </dd>
+    </div>
   );
 }

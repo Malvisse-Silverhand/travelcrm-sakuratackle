@@ -99,11 +99,6 @@
   gap: 14px;
 }
 
-.headerLocation {
-  font-size: 12.5px;
-  color: var(--text-muted);
-}
-
 .headerCta {
   padding: 9px 18px;
   border-radius: 14px;
@@ -134,13 +129,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.heroEmpty {
-  max-width: 60ch;
-  margin: 0 auto;
-  padding: 120px 24px;
-  text-align: center;
 }
 
 .heroFrame {
@@ -198,6 +186,7 @@
   color: #fff;
   margin: 22px auto 0;
   max-width: 20ch;
+  text-wrap: balance;
 }
 
 .heroLead {
@@ -328,227 +317,6 @@
   line-height: 1.6;
 }
 
-/* ----------------------------------------------------------------- fleet */
-
-.fleetSection {
-  padding: 40px 0;
-}
-
-.fleetHead {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.fleetCount {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.fleetGrid {
-  margin-top: 28px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.fleetEmpty {
-  margin-top: 20px;
-  padding: 24px;
-  border: 1px dashed var(--border-strong);
-  border-radius: 18px;
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-muted-2);
-}
-
-.boatCard {
-  background: #fff;
-  border: 1px solid rgba(46, 29, 107, 0.09);
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: var(--shadow-fleet-card);
-  display: flex;
-  flex-direction: column;
-}
-
-.boatMedia {
-  position: relative;
-  height: 190px;
-  background: #e9e3fb;
-}
-
-.boatPhoto {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.boatPhotoEmpty {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  text-align: center;
-  font-size: 12.5px;
-  color: var(--text-muted);
-}
-
-.boatKind {
-  position: absolute;
-  top: 13px;
-  left: 13px;
-  z-index: 2;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(27, 20, 54, 0.82);
-  color: var(--amber-light);
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.boatBody {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  flex: 1;
-}
-
-.boatTitleRow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.boatName {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 18px;
-  letter-spacing: -0.02em;
-  margin: 0;
-}
-
-.boatRateBox {
-  text-align: right;
-  white-space: nowrap;
-}
-
-.boatRate {
-  font-family: var(--font-display);
-  font-weight: 650;
-  font-size: 18px;
-  color: var(--purple);
-}
-
-.boatRateSub {
-  font-size: 11px;
-  color: var(--muted-2);
-}
-
-.boatDesc {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-muted-2);
-  margin: 0;
-}
-
-.boatSpecs {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  padding-top: 13px;
-  border-top: 1px solid rgba(46, 29, 107, 0.09);
-  margin: 0;
-}
-
-.spec {
-  min-width: 0;
-}
-
-.specLabel {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted-2);
-}
-
-.specValue {
-  font-size: 13px;
-  font-weight: 600;
-  margin: 3px 0 0;
-}
-
-.boatFoot {
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.boatCta {
-  padding: 11px 20px;
-  border-radius: 14px;
-  background: var(--purple);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.boatCta:hover {
-  background: var(--purple-hover);
-  color: #fff;
-}
-
-/* ------------------------------------------------------------ facilities */
-
-.facilitiesSection {
-  padding: 0 0 44px;
-}
-
-.facilityGrid {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  overflow: hidden;
-}
-
-.facilityCell {
-  background: #fff;
-  padding: 20px;
-}
-
-.facilityTitle {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 14.5px;
-}
-
-.facilityBody {
-  font-size: 12.5px;
-  line-height: 1.55;
-  color: var(--text-muted-2);
-  margin-top: 7px;
-}
-
-.includesBlock {
-  margin-top: 28px;
-}
-
 .includesList {
   list-style: none;
   margin: 14px 0 0;
@@ -580,77 +348,7 @@
   font-style: normal;
 }
 
-/* --------------------------------------------------------------- gallery */
-
-.gallerySection {
-  background: var(--surface-alt);
-  padding: 40px 0 44px;
-}
-
-/* CSS columns, like the design's `.masonry`. Grid spans do not apply here,
-   so the wide/tall hints only change the aspect ratio of the image. */
-.masonry {
-  margin-top: 22px;
-  column-count: 4;
-  column-gap: 12px;
-}
-
-.masonryImg {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 14px;
-  margin-bottom: 12px;
-  break-inside: avoid;
-  background: #fff;
-}
-
-.masonryWide {
-  /* no-op on columns; kept so the markup still records the design's intent */
-  break-inside: avoid;
-}
-
-.masonryTall {
-  break-inside: avoid;
-}
-
-.testimonialBlock {
-  margin-top: 34px;
-  padding-top: 30px;
-  border-top: 1px solid var(--border-mid);
-}
-
-.testimonialScroller {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  padding-bottom: 10px;
-  margin-top: 18px;
-  scroll-snap-type: x proximity;
-}
-
-.testimonialImg {
-  flex: 0 0 auto;
-  width: 208px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  background: #fff;
-  display: block;
-  scroll-snap-align: start;
-}
-
 /* ----------------------------------------------------------------- steps */
-
-.stepsSection {
-  padding: 44px 0 8px;
-}
-
-.stepsGrid {
-  display: grid;
-  grid-template-columns: 0.85fr minmax(0, 1.15fr);
-  gap: 44px;
-  align-items: start;
-}
 
 .stepsNote {
   margin-top: 20px;
@@ -671,53 +369,6 @@
   line-height: 1.6;
   color: #4a3f6e;
   margin: 8px 0 0;
-}
-
-.stepList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.stepItem {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 16px;
-  align-items: start;
-  background: #fff;
-  border: 1px solid rgba(46, 29, 107, 0.09);
-  border-radius: 18px;
-  padding: 18px 20px;
-}
-
-.stepNum {
-  width: 32px;
-  height: 32px;
-  border-radius: 11px;
-  background: var(--purple);
-  color: var(--amber-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 650;
-  font-size: 14px;
-}
-
-.stepTitle {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.stepBody {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-muted-2);
-  margin-top: 5px;
 }
 
 /* ------------------------------------------------------------------- faq */
@@ -791,25 +442,6 @@
   margin: 0;
 }
 
-/* ----------------------------------------------------------------- jetty */
-
-.jettySection {
-  padding: 34px 0;
-}
-
-.jettyGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  gap: 40px;
-  align-items: center;
-}
-
-.jettyAddress {
-  margin-top: 16px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
 .mapsBtn {
   display: inline-block;
   margin-top: 18px;
@@ -824,26 +456,6 @@
 
 .mapsBtn:hover {
   background: var(--surface-tint);
-}
-
-.mapFrame {
-  position: relative;
-  height: 260px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: var(--surface-alt);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-
-.mapHint {
-  padding: 0 24px;
-  text-align: center;
-  font-size: 13px;
-  color: var(--text-muted);
 }
 
 /* ------------------------------------------------------ booking notice */
@@ -880,36 +492,6 @@
   color: var(--text-muted-2);
   margin: 12px auto 0;
   max-width: 44ch;
-}
-
-/* ------------------------------------------------------------------- cta */
-
-.ctaSection {
-  padding: 0 0 34px;
-}
-
-.ctaBand {
-  border-radius: 22px;
-  background: var(--purple);
-  padding: 40px;
-  text-align: center;
-}
-
-.ctaTitle {
-  font-family: var(--font-display);
-  font-weight: 650;
-  font-size: 32px;
-  letter-spacing: -0.025em;
-  color: #fff;
-  margin: 0;
-}
-
-.ctaBody {
-  font-size: 15.5px;
-  color: #d8cfff;
-  margin: 12px auto 0;
-  max-width: 44ch;
-  line-height: 1.6;
 }
 
 .ctaBtn {
@@ -1060,6 +642,29 @@
   color: var(--purple);
 }
 
+/* WhatsApp, raised out of the middle of the bar. */
+.tabBarWa {
+  justify-self: center;
+  align-self: start;
+  width: 54px;
+  height: 54px;
+  margin-top: -26px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  background: var(--whatsapp);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(18, 140, 126, 0.4);
+}
+
+.tabBarWa:hover,
+.tabBarWa:active {
+  color: #fff;
+  filter: brightness(1.08);
+}
+
 /* ----------------------------------------------------------- 980 and below */
 
 @container (max-width: 980px) {
@@ -1089,24 +694,7 @@
     display: none;
   }
 
-  .fleetGrid,
-  .facilityGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .masonry {
-    column-count: 2;
-    column-gap: 8px;
-  }
-
-  .masonryImg {
-    border-radius: 10px;
-    margin-bottom: 8px;
-  }
-
-  .stepsGrid,
   .faqGrid,
-  .jettyGrid,
   .footerGrid {
     grid-template-columns: minmax(0, 1fr);
     gap: 24px;
@@ -1126,14 +714,13 @@
     padding-right: 16px;
   }
 
-  /* M1 header: mark, name, and a shorter CTA. The sub-brand line and the
-     location both drop — neither survives 390px without wrapping. */
+  /* M1 header: mark, name, and a shorter CTA. The sub-brand line drops —
+     it does not survive 390px without wrapping. */
   .headerInner {
     padding-top: 12px;
     padding-bottom: 12px;
   }
 
-  .headerLocation,
   .brandSub {
     display: none;
   }
@@ -1249,16 +836,6 @@
     font-size: 12.5px;
   }
 
-  .fleetGrid,
-  .facilityGrid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .boatSpecs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
   .sectionTitle {
     font-size: 23px;
   }
@@ -1288,14 +865,6 @@
   .faqAnswer {
     padding: 0 16px 14px;
     font-size: 12.5px;
-  }
-
-  .ctaBand {
-    padding: 28px 20px;
-  }
-
-  .ctaTitle {
-    font-size: 25px;
   }
 
   .tabBar {
