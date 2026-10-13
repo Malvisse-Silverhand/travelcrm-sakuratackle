@@ -4,11 +4,13 @@ import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
   DOW_LABELS,
-  HOLIDAYS,
-  MONTHS,
   formatLongDate,
-  isoDate,
+  holidaysIn,
+  monthFirstISO,
+  monthISO,
   monthLabel,
+  monthLastISO,
+  type SeasonMonth,
 } from "@/lib/season";
 import styles from "../../app/admin/admin.module.css";
 
@@ -25,8 +27,9 @@ type NightRow = {
 type Props = {
   boats: Boat[];
   initialBoatId: string;
+  /** Every month of the season set in Settings. */
+  months: SeasonMonth[];
   initialMonthIdx: number;
-  initialMonthLabel: string;
   initialNights: NightRow[];
   packageId: string | null;
 };
@@ -34,6 +37,7 @@ type Props = {
 export default function CalendarManager({
   boats,
   initialBoatId,
+  months,
   initialMonthIdx,
   initialNights,
   packageId,
@@ -57,8 +61,8 @@ export default function CalendarManager({
   const [blockErr, setBlockErr] = useState<string | null>(null);
 
   const boat = boats.find((b) => b.id === boatId) ?? boats[0];
-  const month = MONTHS[monthIdx];
-  const holidays = HOLIDAYS[monthIdx] ?? [];
+  const month = months[monthIdx];
+  const holidays = useMemo(() => holidaysIn(month), [month]);
   const holidayDays = useMemo(() => holidays.map((h) => h.d), [holidays]);
 
   const byDate = useMemo(() => {
@@ -75,8 +79,8 @@ export default function CalendarManager({
         .from("trip_night_status")
         .select("night_date, blocked, blocked_reason, capacity, pax_held, status")
         .eq("boat_id", boatId)
-        .gte("night_date", isoDate(monthIdx, 1))
-        .lte("night_date", isoDate(monthIdx, month.days))
+        .gte("night_date", monthFirstISO(month))
+        .lte("night_date", monthLastISO(month))
         .order("night_date");
       if (cancelled) return;
       const rows = (data ?? []) as NightRow[];
@@ -88,16 +92,16 @@ export default function CalendarManager({
     return () => {
       cancelled = true;
     };
-  }, [supabase, boatId, monthIdx, month.days]);
+  }, [supabase, boatId, month]);
 
   const cells = useMemo(() => {
     const first = new Date(month.year, month.m, 1).getDay();
     const lead = (first + 6) % 7;
     const out: Array<{ key: string; day: number | null; iso: string | null }> = [];
     for (let i = 0; i < lead; i++) out.push({ key: `pad-${i}`, day: null, iso: null });
-    for (let d = 1; d <= month.days; d++) out.push({ key: `d-${d}`, day: d, iso: isoDate(monthIdx, d) });
+    for (let d = 1; d <= month.days; d++) out.push({ key: `d-${d}`, day: d, iso: monthISO(month, d) });
     return out;
-  }, [month, monthIdx]);
+  }, [month]);
 
   const cellClass = (iso: string) => {
     if (iso === selected) return `${styles.adminCell} ${styles.adminCellSelected}`;
@@ -158,7 +162,11 @@ export default function CalendarManager({
     });
     setAssignBusy(false);
     if (error || !data) {
-      setAssignMsg({ ok: false, text: "Gagal simpan tempahan. Cuba lagi." });
+      // The booking function says why it refused (night blocked, boat full…).
+      setAssignMsg({
+        ok: false,
+        text: `Booking not saved${error?.message ? `: ${error.message}` : ". Try again."}`,
+      });
       return;
     }
     const ref = Array.isArray(data) ? data[0]?.ref : undefined;
@@ -222,12 +230,12 @@ export default function CalendarManager({
           >
             &#8592;
           </button>
-          <span className={styles.adminMonthLabel}>{monthLabel(monthIdx)}</span>
+          <span className={styles.adminMonthLabel}>{monthLabel(month)}</span>
           <button
             type="button"
             className={styles.monthBtn}
-            disabled={monthIdx === MONTHS.length - 1}
-            onClick={() => setMonthIdx((i) => Math.min(MONTHS.length - 1, i + 1))}
+            disabled={monthIdx === months.length - 1}
+            onClick={() => setMonthIdx((i) => Math.min(months.length - 1, i + 1))}
           >
             &#8594;
           </button>
@@ -372,7 +380,7 @@ export default function CalendarManager({
         </div>
 
         <div className={styles.holidayCard}>
-          <span className={styles.kpiLabel}>Cuti umum {monthLabel(monthIdx)}</span>
+          <span className={styles.kpiLabel}>Cuti umum {monthLabel(month)}</span>
           {holidays.length > 0 ? (
             <div className={styles.adminHolidayChips}>
               {holidays.map((h, i) => (

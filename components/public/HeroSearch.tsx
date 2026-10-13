@@ -2,24 +2,20 @@
 
 import { useState } from "react";
 import { useBooking } from "./BookingState";
-import {
-  MONTHS,
-  PAX_OPTIONS,
-  SEASON_LAST_DAY,
-  isoDate,
-  monthLabel,
-} from "@/lib/season";
+import { PAX_OPTIONS, monthFirstISO, monthLabel, monthLastISO } from "@/lib/season";
 import styles from "@/app/public.module.css";
 
 /** The white control that overlaps the bottom of the hero photo. Choosing a
  *  date here jumps the calendar to that month and selects the night; choosing
  *  a group size re-filters the fleet below. */
-export default function HeroSearch({ firstMonthIdx }: { firstMonthIdx: number }) {
-  const { pax, setPax, selected, pickDate } = useBooking();
+export default function HeroSearch() {
+  const { pax, setPax, selected, pickDate, months } = useBooking();
   const [outOfSeason, setOutOfSeason] = useState<string | null>(null);
 
-  // A visitor may not search for a night before the first sellable month.
-  const minDate = isoDate(firstMonthIdx, 1);
+  // The native picker cannot offer a date outside the months on sale. Gaps
+  // inside the range (a closed month) are caught by pickDate instead.
+  const first = months[0];
+  const last = months[months.length - 1];
 
   const onDate = (iso: string) => {
     if (!iso) return;
@@ -29,9 +25,9 @@ export default function HeroSearch({ firstMonthIdx }: { firstMonthIdx: number })
       return;
     }
     setOutOfSeason(
-      `Musim candat berjalan Mac hingga September sahaja. Cuba tarikh antara ${monthLabel(
-        firstMonthIdx
-      )} dan ${monthLabel(MONTHS.length - 1)}.`
+      first && last
+        ? `Tarikh itu tiada trip. Cuba tarikh antara ${monthLabel(first)} dan ${monthLabel(last)}.`
+        : "Tarikh trip belum dibuka. WhatsApp kami untuk tanya tarikh seterusnya."
     );
   };
 
@@ -44,8 +40,8 @@ export default function HeroSearch({ firstMonthIdx }: { firstMonthIdx: number })
             type="date"
             className={styles.searchInput}
             value={selected ?? ""}
-            min={minDate}
-            max={SEASON_LAST_DAY}
+            min={first ? monthFirstISO(first) : undefined}
+            max={last ? monthLastISO(last) : undefined}
             onChange={(e) => onDate(e.target.value)}
             aria-label="Tarikh trip"
           />

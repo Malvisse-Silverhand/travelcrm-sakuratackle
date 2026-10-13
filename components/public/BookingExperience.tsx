@@ -7,7 +7,14 @@ import { useBooking } from "./BookingState";
 import BookingCalendar, { CalendarLegend, STATUS_WORD } from "./BookingCalendar";
 import CheckBooking from "./CheckBooking";
 import PaymentPanel from "./PaymentPanel";
-import { HOLIDAYS, MONTHS, PAX_CHIPS, formatLongDate, isoDate, monthLabel } from "@/lib/season";
+import {
+  PAX_CHIPS,
+  formatLongDate,
+  holidaysIn,
+  monthFirstISO,
+  monthLabel,
+  monthLastISO,
+} from "@/lib/season";
 import styles from "@/app/booking.module.css";
 
 export type Availability = {
@@ -27,6 +34,10 @@ type Props = {
   initialAvailability: Availability[];
   /** Extra class for the section, e.g. the homepage's one-screen sizing. */
   className?: string;
+  /** The availability read failed (as opposed to: no nights are open). */
+  unavailable?: boolean;
+  /** For the empty state's WhatsApp link. */
+  waHref?: string;
 };
 
 /** The three booking steps, then the confirmation. "pay" and "check" sit
@@ -64,10 +75,11 @@ export default function BookingExperience({
   initialPax,
   initialAvailability,
   className,
+  unavailable,
+  waHref,
 }: Props) {
   const supabase = useMemo(() => createClient(), []);
-  const { pax, setPax, selected, setSelected, monthIdx, setMonthIdx, firstMonthIdx } =
-    useBooking();
+  const { pax, setPax, selected, setSelected, months, monthIdx, setMonthIdx } = useBooking();
 
   const [availability, setAvailability] = useState<Availability[]>(initialAvailability);
   const [loadingCal, setLoadingCal] = useState(false);
@@ -85,8 +97,9 @@ export default function BookingExperience({
    *  does not retype it straight after booking. */
   const [bookedPhone, setBookedPhone] = useState("");
 
-  const month = MONTHS[monthIdx];
-  const holidays = HOLIDAYS[monthIdx] ?? [];
+  // Undefined only when no months are on sale; the empty state below covers it.
+  const month = months[monthIdx] as (typeof months)[number] | undefined;
+  const holidays = month ? holidaysIn(month) : [];
 
   const byDate = useMemo(() => {
     const map = new Map<string, Availability>();
@@ -98,19 +111,19 @@ export default function BookingExperience({
    *  server already fetched, so mounting does not immediately re-request the
    *  same rows — that round trip greyed the whole calendar out for a moment
    *  on every page load. */
-  const loadedFor = useRef(`${firstMonthIdx}:${initialPax}`);
+  const loadedFor = useRef(`0:${initialPax}`);
 
   /** Refetch whenever the month or the group size changes. */
   useEffect(() => {
     const key = `${monthIdx}:${pax}`;
-    if (loadedFor.current === key) return;
+    if (!month || loadedFor.current === key) return;
 
     let cancelled = false;
     const load = async () => {
       setLoadingCal(true);
       const { data, error } = await supabase.rpc("get_public_availability", {
-        p_from: isoDate(monthIdx, 1),
-        p_to: isoDate(monthIdx, month.days),
+        p_from: monthFirstISO(month),
+        p_to: monthLastISO(month),
         p_pax: pax,
       });
       if (cancelled) return;
@@ -122,7 +135,7 @@ export default function BookingExperience({
     return () => {
       cancelled = true;
     };
-  }, [supabase, monthIdx, pax, month.days]);
+  }, [supabase, monthIdx, pax, month]);
 
   /** Keep the selection valid: drop it if that night can no longer take the
    *  group, and fall back to the first night that can. */
@@ -204,9 +217,7 @@ export default function BookingExperience({
     setSubmitting(false);
 
     if (error || !data || (Array.isArray(data) && data.length === 0)) {
-      setFormError(
-        "Maaf, tempahan tidak berjaya dihantar. Cuba lagi atau WhatsApp kami terus."
-      );
+      setFormError(bookingErrorCopy(error?.message));
       return;
     }
 
@@ -320,7 +331,35 @@ export default function BookingExperience({
                   exit="exit"
                   transition={{ duration: 0.22, ease: "easeOut" }}
                 >
-                  {view === "date" && (
+                  {view === "date" && !month && (
+                    <div className={styles.flowCard}>
+                      <h3 className={styles.cardTitle}>
+                        {unavailable
+                          ? "Sistem tempahan sedang diselenggara"
+                          : "Tarikh trip belum dibuka"}
+                      </h3>
+                      <p className={styles.doneBody} style={{ margin: 0, textAlign: "left" }}>
+                        {unavailable
+                          ? "Kalendar tidak dapat dimuatkan buat masa ini. WhatsApp kami dan kami tempah untuk anda."
+                          : "Musim candat seterusnya belum dibuka untuk tempahan. WhatsApp kami untuk tanya tarikh atau masuk senarai menunggu."}
+                      </p>
+                      {waHref && (
+                        <div className={styles.actions}>
+                          <a
+                            href={waHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.primaryBtn}
+                            style={{ textAlign: "center", marginLeft: 0 }}
+                          >
+                            WhatsApp Kami
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {view === "date" && month && (
                     <div className={styles.dateStep}>
                       <div className={styles.areaPax}>
                         <span className={styles.panelLabel}>
@@ -345,8 +384,8 @@ export default function BookingExperience({
 
                       <div className={styles.areaCal}>
                         <BookingCalendar
+                          months={months}
                           monthIdx={monthIdx}
-                          firstMonthIdx={firstMonthIdx}
                           onMonth={setMonthIdx}
                           byDate={byDate}
                           selected={selected}
@@ -375,7 +414,7 @@ export default function BookingExperience({
                       <div className={styles.areaSide}>
                         <CalendarLegend />
                         <span className={styles.panelLabel}>
-                          Cuti umum {monthLabel(monthIdx)}
+                          Cuti umum {month ? monthLabel(month) : ""}
                         </span>
                         {holidays.length > 0 ? (
                           <div className={styles.holidayChips}>
@@ -597,6 +636,21 @@ export default function BookingExperience({
       </div>
     </section>
   );
+}
+
+/** Customer copy for the reasons create_public_booking rejects a booking
+ *  (supabase/migrations/20261014120000_harden_public_booking.sql). */
+function bookingErrorCopy(message: string | undefined): string {
+  const m = message ?? "";
+  if (m.includes("not enough seats") || m.includes("night not on sale")) {
+    return "Maaf, malam ini baru sahaja penuh atau ditutup. Pilih tarikh lain.";
+  }
+  if (m.includes("night has passed") || m.includes("outside the season")) {
+    return "Tarikh ini sudah tidak dibuka. Pilih tarikh lain.";
+  }
+  if (m.includes("invalid name")) return "Sila semak nama penuh.";
+  if (m.includes("invalid phone")) return "Sila semak nombor telefon.";
+  return "Maaf, tempahan tidak berjaya dihantar. Cuba lagi atau WhatsApp kami terus.";
 }
 
 function ReviewRow({

@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { monthIdxForISO } from "@/lib/season";
+import { monthIdxIn, type SeasonMonth } from "@/lib/season";
 
 /** Group size and chosen night, shared by three sections that sit far apart
  *  in the page: the hero search control, the fleet filter, and the calendar.
@@ -20,14 +20,14 @@ type BookingState = {
   /** ISO night the visitor has chosen, or null before they pick one. */
   selected: string | null;
   setSelected: (iso: string | null) => void;
-  /** Index into MONTHS that the calendar is showing. */
+  /** Months on sale, from the season set in Settings (see loadBookingData).
+   *  Empty when no trip nights are open. */
+  months: SeasonMonth[];
+  /** Index into `months` that the calendar is showing. */
   monthIdx: number;
   setMonthIdx: (idx: number | ((prev: number) => number)) => void;
-  /** Earliest month the visitor may page back to — months before this one
-   *  hold nothing but past nights. */
-  firstMonthIdx: number;
   /** Picks a date from outside the calendar (the hero search). Returns false
-   *  when the date falls outside the season, so the caller can say so. */
+   *  when the date falls outside the months on sale, so the caller can say so. */
   pickDate: (iso: string) => boolean;
 };
 
@@ -41,29 +41,30 @@ export function useBooking(): BookingState {
 
 export function BookingProvider({
   initialPax,
-  firstMonthIdx,
+  months,
   children,
 }: {
   initialPax: number;
-  /** Resolved on the server from Malaysia's clock. Passed in rather than
-   *  recomputed here so hydration cannot disagree, and so a visitor whose
-   *  device clock is wrong still sees the same months as everyone else. */
-  firstMonthIdx: number;
+  /** Resolved on the server from the season and Malaysia's clock. Passed in
+   *  rather than recomputed here so hydration cannot disagree, and so a
+   *  visitor whose device clock is wrong still sees the same months as
+   *  everyone else. */
+  months: SeasonMonth[];
   children: ReactNode;
 }) {
   const [pax, setPax] = useState(initialPax);
   const [selected, setSelected] = useState<string | null>(null);
-  const [monthIdx, setMonthIdx] = useState(firstMonthIdx);
+  const [monthIdx, setMonthIdx] = useState(0);
 
   const pickDate = useCallback(
     (iso: string) => {
-      const idx = monthIdxForISO(iso);
-      if (idx === null || idx < firstMonthIdx) return false;
+      const idx = monthIdxIn(months, iso);
+      if (idx === null) return false;
       setMonthIdx(idx);
       setSelected(iso);
       return true;
     },
-    [firstMonthIdx]
+    [months]
   );
 
   const value = useMemo(
@@ -72,12 +73,12 @@ export function BookingProvider({
       setPax,
       selected,
       setSelected,
+      months,
       monthIdx,
       setMonthIdx,
-      firstMonthIdx,
       pickDate,
     }),
-    [pax, selected, monthIdx, firstMonthIdx, pickDate]
+    [pax, selected, months, monthIdx, pickDate]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

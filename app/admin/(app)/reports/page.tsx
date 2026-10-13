@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getOperatorProfile } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
-import { MONTHS, isoDate } from "@/lib/season";
+import { FALLBACK_SEASON, monthKey, monthsBetween } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import styles from "../../admin.module.css";
 
@@ -31,8 +31,8 @@ export default async function ReportsPage() {
     .limit(1)
     .maybeSingle();
 
-  const seasonStart = pkg?.season_start ?? isoDate(0, 1);
-  const seasonEnd = pkg?.season_end ?? isoDate(MONTHS.length - 1, MONTHS[MONTHS.length - 1].days);
+  const seasonStart = pkg?.season_start ?? FALLBACK_SEASON.start;
+  const seasonEnd = pkg?.season_end ?? FALLBACK_SEASON.end;
 
   const { data: bookings } = await supabase
     .from("bookings")
@@ -49,12 +49,24 @@ export default async function ReportsPage() {
   const soldNightKeys = new Set(soldRows.map((r) => `${r.boat_id}-${r.night_date}`));
   const boatsWithSales = new Set(soldRows.map((r) => r.boat_id));
 
-  // Monthly chart: deposits collected, grouped by the night's month.
-  const monthlyTotals = MONTHS.map((m) => {
+  // Monthly chart: deposits collected, grouped by the night's year and month
+  // (grouping by month alone added Mac 2026 and Mac 2027 together). A season
+  // spanning a closed winter would show a run of empty bars, so months with no
+  // bookings at all are dropped once the season is longer than a year.
+  const seasonMonths = monthsBetween(seasonStart, seasonEnd);
+  const multiYear = seasonMonths[0]?.year !== seasonMonths[seasonMonths.length - 1]?.year;
+  const bookedKeys = new Set(rows.map((r) => r.night_date.slice(0, 7)));
+  const chartMonths =
+    seasonMonths.length > 12
+      ? seasonMonths.filter((m) => bookedKeys.has(monthKey(m)))
+      : seasonMonths;
+  const monthlyTotals = chartMonths.map((m) => {
+    const key = monthKey(m);
     const sum = collectedRows
-      .filter((r) => Number(r.night_date.slice(5, 7)) - 1 === m.m)
+      .filter((r) => r.night_date.startsWith(key))
       .reduce((s, r) => s + Number(r.deposit_amount), 0);
-    return { label: m.name.slice(0, 3).toUpperCase(), value: sum };
+    const short = m.name.slice(0, 3).toUpperCase();
+    return { key, label: multiYear ? `${short} ${String(m.year).slice(2)}` : short, value: sum };
   });
   const maxMonthly = Math.max(1, ...monthlyTotals.map((m) => m.value));
 
@@ -94,7 +106,7 @@ export default async function ReportsPage() {
             </span>
             <div className={styles.chartRow}>
               {monthlyTotals.map((m) => (
-                <div key={m.label} className={styles.chartBarCol}>
+                <div key={m.key} className={styles.chartBarCol}>
                   <div
                     className={styles.chartBar}
                     style={{ height: `${Math.max(4, (m.value / maxMonthly) * 100)}%` }}

@@ -39,7 +39,7 @@ export default async function Home() {
   // Package, org and opening-month availability come from the loader the
   // destination guide shares, so both pages tell a database outage apart from
   // an unpublished season the same way. Only the fleet is homepage-specific.
-  const [{ openMonthIdx, pkg, org, availability, unavailable }, { data: boats }] =
+  const [{ months, pkg, org, availability, unavailable }, { data: boats }] =
     await Promise.all([
       loadBookingData(),
       supabase
@@ -85,7 +85,7 @@ export default async function Home() {
       : null;
 
   return (
-    <BookingProvider initialPax={DEFAULT_PAX} firstMonthIdx={openMonthIdx}>
+    <BookingProvider initialPax={DEFAULT_PAX} months={months}>
       <MotionRoot>
         <div className={home.page}>
           <div className={home.sky} aria-hidden="true" />
@@ -151,7 +151,7 @@ export default async function Home() {
                 </div>
 
                 <div className={home.rise} style={delay(0.3)}>
-                  <HeroSearch firstMonthIdx={openMonthIdx} />
+                  <HeroSearch />
                 </div>
 
                 <div className={`${styles.trustStrip} ${home.rise}`} style={delay(0.4)}>
@@ -169,6 +169,8 @@ export default async function Home() {
               depositPerBoat={Number(pkg.deposit_per_boat)}
               initialPax={DEFAULT_PAX}
               initialAvailability={availability}
+              unavailable={unavailable}
+              waHref={waHref}
               className={`${home.screen} ${home.bookingScreen}`}
             />
 

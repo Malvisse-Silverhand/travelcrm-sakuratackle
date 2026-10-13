@@ -19,7 +19,7 @@ export default async function PackageBuilderPage({
   const { data: pkg } = await supabase
     .from("packages")
     .select(
-      "id, title, subtitle, cover_image_url, price_per_pax, deposit_per_boat, includes, itinerary, faqs"
+      "id, title, subtitle, cover_image_url, price_per_pax, deposit_per_boat, includes, itinerary, faqs, season_start, season_end"
     )
     .eq("id", id)
     .maybeSingle();

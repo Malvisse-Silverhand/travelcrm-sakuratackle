@@ -1,10 +1,14 @@
-// Season + holiday constants. Hardcoded on purpose — §8 of the build prompt
-// rules out a public-holiday API for this phase.
+// Season calendar helpers.
 //
-// v2 sells two seasons: the tail of Mac–September 2026 and the full
-// Mac–September 2027. The month window itself is unchanged; the v2 design's
-// "Musim Candat 2026" hero copy and its 3 Oct default date are placeholders
-// (October is outside the season and stays closed).
+// The season is NOT hardcoded here any more. Its dates are the published
+// package's `season_start` / `season_end`, which the operator edits in
+// Settings, and the nights actually on sale are the `trip_nights` rows inside
+// that range. Every page builds its month list from those with
+// `monthsBetween`, so moving the season in Settings moves the public
+// calendar, the hero search, the admin calendar and the reports together.
+//
+// What stays here: Malay month names, public holidays (keyed by date, so they
+// survive the season moving), and the group-size options.
 
 export type SeasonMonth = {
   /** Malay month name shown in the UI */
@@ -16,56 +20,46 @@ export type SeasonMonth = {
   days: number;
 };
 
-const MONTH_WINDOW: Array<{ name: string; m: number; days: number }> = [
-  { name: "Mac", m: 2, days: 31 },
-  { name: "April", m: 3, days: 30 },
-  { name: "Mei", m: 4, days: 31 },
-  { name: "Jun", m: 5, days: 30 },
-  { name: "Julai", m: 6, days: 31 },
-  { name: "Ogos", m: 7, days: 31 },
-  { name: "September", m: 8, days: 30 },
+export const MONTH_NAMES = [
+  "Januari",
+  "Februari",
+  "Mac",
+  "April",
+  "Mei",
+  "Jun",
+  "Julai",
+  "Ogos",
+  "September",
+  "Oktober",
+  "November",
+  "Disember",
 ];
 
-export const SEASON_YEARS = [2026, 2027] as const;
+/** Used only when the published package has no season set yet, so a fresh
+ *  database still renders something sensible. */
+export const FALLBACK_SEASON = { start: "2027-03-01", end: "2027-09-30" };
 
-/** Mac 2026 → September 2027, in order. Indices into this array are used as
- *  the calendar's month cursor and as the HOLIDAYS key. */
-export const MONTHS: SeasonMonth[] = SEASON_YEARS.flatMap((year) =>
-  MONTH_WINDOW.map((m) => ({ ...m, year }))
-);
+/** The longest season Settings accepts. Longer ranges are almost certainly a
+ *  typo in the year, and would make every season query needlessly large. */
+export const MAX_SEASON_MONTHS = 24;
+
+/** Public holidays in Malaysia (federal), by date. Add the next year's dates
+ *  here when the operator opens a new season; a missing year just shows no
+ *  holiday chips, nothing breaks. */
+export const HOLIDAYS_BY_DATE: Record<string, string> = {
+  "2027-03-09": "Hari Raya Aidilfitri",
+  "2027-03-10": "Hari Raya Aidilfitri",
+  "2027-05-01": "Hari Pekerja",
+  "2027-05-17": "Hari Raya Aidiladha",
+  "2027-05-20": "Hari Wesak",
+  "2027-06-07": "Keputeraan Agong",
+  "2027-06-29": "Awal Muharram",
+  "2027-08-31": "Hari Kebangsaan",
+  "2027-09-06": "Maulidur Rasul",
+  "2027-09-16": "Hari Malaysia",
+};
 
 export type Holiday = { d: number; n: string };
-
-/** Keyed by index into MONTHS.
- *
- *  2026 (indices 0–6) is deliberately empty: every 2026 month except the last
- *  is already in the past by launch, and the only sellable window left
- *  (18–30 Sep 2026) contains no public holiday — Hari Malaysia on the 16th
- *  falls before it. Holiday chips on past, unbookable months are cosmetic
- *  only, so no dates are invented here.
- *
- *  2027 (indices 7–13) is copied verbatim from the design files' own
- *  HOLIDAYS constant. */
-export const HOLIDAYS: Record<number, Holiday[]> = {
-  7: [
-    { d: 9, n: "Hari Raya Aidilfitri" },
-    { d: 10, n: "Hari Raya Aidilfitri" },
-  ],
-  9: [
-    { d: 1, n: "Hari Pekerja" },
-    { d: 17, n: "Hari Raya Aidiladha" },
-    { d: 20, n: "Hari Wesak" },
-  ],
-  10: [
-    { d: 7, n: "Keputeraan Agong" },
-    { d: 29, n: "Awal Muharram" },
-  ],
-  12: [{ d: 31, n: "Hari Kebangsaan" }],
-  13: [
-    { d: 6, n: "Maulidur Rasul" },
-    { d: 16, n: "Hari Malaysia" },
-  ],
-};
 
 /** Monday-first, matching the design's dowLabels. */
 export const DOW_LABELS = ["ISN", "SEL", "RAB", "KHA", "JUM", "SAB", "AHD"];
@@ -75,47 +69,98 @@ export const DOW_LABELS = ["ISN", "SEL", "RAB", "KHA", "JUM", "SAB", "AHD"];
 export const PAX_CHIPS = [4, 6, 8, 10, 12, 15];
 export const PAX_OPTIONS = [4, 6, 8, 10, 12, 15];
 
-export function isoDate(monthIdx: number, day: number): string {
-  const m = MONTHS[monthIdx];
-  return `${m.year}-${String(m.m + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+const pad = (n: number) => String(n).padStart(2, "0");
+
+function daysIn(year: number, m: number): number {
+  return new Date(Date.UTC(year, m + 1, 0)).getUTCDate();
 }
 
-export function monthLabel(monthIdx: number): string {
-  const m = MONTHS[monthIdx];
-  return `${m.name} ${m.year}`;
+/** Every calendar month that overlaps [start, end] (ISO dates), in order. */
+export function monthsBetween(start: string, end: string): SeasonMonth[] {
+  const [sy, sm] = start.split("-").map(Number);
+  const [ey, em] = end.split("-").map(Number);
+  const out: SeasonMonth[] = [];
+  let year = sy;
+  let m = sm - 1;
+  while (year < ey || (year === ey && m <= em - 1)) {
+    out.push({ name: MONTH_NAMES[m], m, year, days: daysIn(year, m) });
+    m += 1;
+    if (m === 12) {
+      m = 0;
+      year += 1;
+    }
+    if (out.length > 120) break; // corrupt range; never loop forever
+  }
+  return out;
 }
 
-/** First month index not entirely in the past — where the calendar opens, so
- *  nobody lands on a month of dead nights. Falls back to the last month once
- *  the whole window has passed. */
-export function currentMonthIdx(today: string): number {
-  const idx = MONTHS.findIndex(
-    (m) => `${m.year}-${String(m.m + 1).padStart(2, "0")}` >= today.slice(0, 7)
-  );
-  return idx === -1 ? MONTHS.length - 1 : idx;
+/** "YYYY-MM" for a month, the key availability rows are grouped by. */
+export function monthKey(month: SeasonMonth): string {
+  return `${month.year}-${pad(month.m + 1)}`;
+}
+
+/** ISO date of a day in a month. */
+export function monthISO(month: SeasonMonth, day: number): string {
+  return `${monthKey(month)}-${pad(day)}`;
+}
+
+export function monthFirstISO(month: SeasonMonth): string {
+  return monthISO(month, 1);
+}
+
+export function monthLastISO(month: SeasonMonth): string {
+  return monthISO(month, month.days);
+}
+
+/** e.g. "Mac 2027" */
+export function monthLabel(month: SeasonMonth): string {
+  return `${month.name} ${month.year}`;
+}
+
+/** Index of the month an ISO date falls in, or null when it is not in the
+ *  list (outside the season, or in a month with no trip nights). */
+export function monthIdxIn(months: SeasonMonth[], iso: string): number | null {
+  const key = iso.slice(0, 7);
+  const idx = months.findIndex((m) => monthKey(m) === key);
+  return idx === -1 ? null : idx;
+}
+
+/** First month not entirely in the past — where an admin calendar opens.
+ *  Falls back to the last month once the whole list has passed. */
+export function currentMonthIdxIn(months: SeasonMonth[], today: string): number {
+  const idx = months.findIndex((m) => monthKey(m) >= today.slice(0, 7));
+  return idx === -1 ? Math.max(0, months.length - 1) : idx;
+}
+
+export function holidaysIn(month: SeasonMonth): Holiday[] {
+  const prefix = `${monthKey(month)}-`;
+  return Object.entries(HOLIDAYS_BY_DATE)
+    .filter(([iso]) => iso.startsWith(prefix))
+    .map(([iso, n]) => ({ d: Number(iso.slice(8, 10)), n }))
+    .sort((a, b) => a.d - b.d);
 }
 
 /** Formats an ISO date as e.g. "17 Mac 2027". */
 export function formatLongDate(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);
-  const month = MONTH_WINDOW.find((x) => x.m === m - 1);
-  return `${d} ${month ? month.name : m} ${y}`;
+  return `${d} ${MONTH_NAMES[m - 1] ?? m} ${y}`;
 }
 
-/** Month index that an ISO date falls in, or null when the date sits outside
- *  the season entirely (October to February, or a year we do not sell).
- *  The hero's date picker uses this to jump the calendar to the month the
- *  visitor typed, and to reject dates that have no trip nights at all. */
-export function monthIdxForISO(iso: string): number | null {
-  const prefix = iso.slice(0, 7);
-  const idx = MONTHS.findIndex(
-    (m) => `${m.year}-${String(m.m + 1).padStart(2, "0")}` === prefix
-  );
-  return idx === -1 ? null : idx;
+/** e.g. "1 Mac 2027 – 30 September 2027", or "Not set". Admin-facing. */
+export function seasonLabel(start: string | null, end: string | null): string {
+  if (!start || !end) return "Not set";
+  return `${formatLongDate(start)} – ${formatLongDate(end)}`;
 }
 
-/** Bounds for the date picker's `min`/`max`, so the native calendar cannot
- *  offer a date the season does not cover. The window still has closed gaps
- *  inside it (every October to February), which monthIdxForISO catches. */
-export const SEASON_FIRST_DAY = isoDate(0, 1);
-export const SEASON_LAST_DAY = isoDate(MONTHS.length - 1, MONTHS[MONTHS.length - 1].days);
+/** Validates a season range typed in Settings. Returns a message for the
+ *  operator (admin UI is English), or null when the range is usable. */
+export function seasonRangeError(start: string, end: string, today: string): string | null {
+  const iso = /^\d{4}-\d{2}-\d{2}$/;
+  if (!iso.test(start) || !iso.test(end)) return "Pick both a start and an end date.";
+  if (start > end) return "The end date must be after the start date.";
+  if (end < today) return "The end date has already passed. A season must end in the future.";
+  if (monthsBetween(start, end).length > MAX_SEASON_MONTHS) {
+    return `That is longer than ${MAX_SEASON_MONTHS} months. Check the year.`;
+  }
+  return null;
+}

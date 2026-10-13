@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { SEASON_YEARS } from "@/lib/season";
+import { seasonLabel } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import styles from "../../app/admin/admin.module.css";
 
@@ -19,7 +19,17 @@ type PackageData = {
   includes: string[];
   itinerary: ItineraryItem[];
   faqs: FaqItem[];
+  season_start: string | null;
+  season_end: string | null;
 };
+
+/** "2027", or "2026–2027" when the season crosses a year. */
+function seasonYears(start: string | null, end: string | null): string {
+  if (!start || !end) return "";
+  const a = start.slice(0, 4);
+  const b = end.slice(0, 4);
+  return a === b ? a : `${a}–${b}`;
+}
 
 const TABS = [
   { key: "overview", label: "Overview" },
@@ -255,8 +265,8 @@ export default function PackageBuilder({ pkg }: { pkg: PackageData }) {
                 </div>
               </div>
               <p className={styles.emptyCardBody}>
-                Harga dan deposit ditetapkan pada peringkat pelan; edit melalui pangkalan data
-                sekiranya perlu diubah.
+                The deposit and the season ({seasonLabel(pkg.season_start, pkg.season_end)})
+                are edited in Settings. The price per pax is still changed in the database.
               </p>
             </div>
           )}
@@ -317,7 +327,7 @@ export default function PackageBuilder({ pkg }: { pkg: PackageData }) {
           )}
           <div className={styles.previewBody}>
             <span className={styles.previewKicker}>
-              Musim {SEASON_YEARS[0]}&ndash;{SEASON_YEARS[SEASON_YEARS.length - 1]}
+              Musim {seasonYears(pkg.season_start, pkg.season_end)}
             </span>
             <h4 className={styles.previewTitle}>{title}</h4>
             <p className={styles.previewSub}>{subtitle}</p>

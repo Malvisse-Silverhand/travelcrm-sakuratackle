@@ -33,7 +33,7 @@ const NAV = [
 ];
 
 export default async function TerengganuGuide() {
-  const { openMonthIdx, pkg, org, availability, unavailable } = await loadBookingData();
+  const { months, pkg, org, availability, unavailable } = await loadBookingData();
 
   const businessName = org?.business_name ?? "Sakura Tackle";
   const waNumber = org?.whatsapp_number ?? "601153598055";
@@ -192,7 +192,7 @@ export default async function TerengganuGuide() {
         </section>
 
         {pkg ? (
-          <BookingProvider initialPax={DEFAULT_PAX} firstMonthIdx={openMonthIdx}>
+          <BookingProvider initialPax={DEFAULT_PAX} months={months}>
             <div className={styles.bookingIntro}>
               <div className={pub.container}>
                 <h2 className={pub.sectionTitle}>{pkg.title}</h2>
@@ -208,6 +208,8 @@ export default async function TerengganuGuide() {
               depositPerBoat={Number(pkg.deposit_per_boat)}
               initialPax={DEFAULT_PAX}
               initialAvailability={availability}
+              unavailable={unavailable}
+              waHref={waHref}
             />
           </BookingProvider>
         ) : (

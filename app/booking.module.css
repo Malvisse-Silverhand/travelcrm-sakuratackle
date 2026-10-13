@@ -188,10 +188,43 @@
   cursor: not-allowed;
 }
 
+/* The chosen night: gold, with a little boat riding above the date. */
 .cellSelected {
   background: var(--gold);
   color: var(--purple);
   border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.22), 0 8px 18px rgba(255, 184, 0, 0.3);
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1;
+}
+
+.cellDay {
+  position: relative;
+}
+
+.cellBoat {
+  display: block;
+  width: 26px;
+  height: 19px;
+  filter: drop-shadow(0 1px 1.5px rgba(27, 20, 54, 0.3));
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cellBoat {
+    animation: boatBob 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes boatBob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(3deg);
+  }
 }
 
 .cellLoading {
@@ -1295,6 +1328,15 @@
     right: 4px;
     width: 5px;
     height: 5px;
+  }
+
+  .cellBoat {
+    width: 20px;
+    height: 15px;
+  }
+
+  .cellSelected .cellDay {
+    font-size: 11.5px;
   }
 
   .slotCardValue {

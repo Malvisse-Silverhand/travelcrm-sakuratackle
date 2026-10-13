@@ -22,7 +22,7 @@ export default async function SettingsPage() {
       .maybeSingle(),
     supabase
       .from("packages")
-      .select("deposit_per_boat, season_start, season_end")
+      .select("id, deposit_per_boat, season_start, season_end")
       .eq("published", true)
       .order("created_at")
       .limit(1)
@@ -40,6 +40,7 @@ export default async function SettingsPage() {
         <SettingsPanel
           boats={boats ?? []}
           whatsappNumber={org?.whatsapp_number ?? ""}
+          packageId={pkg?.id ?? null}
           depositPerBoat={pkg?.deposit_per_boat ?? 250}
           seasonStart={pkg?.season_start ?? null}
           seasonEnd={pkg?.season_end ?? null}

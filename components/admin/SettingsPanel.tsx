@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { MONTHS } from "@/lib/season";
-import { formatRM } from "@/lib/date";
+import SeasonSettings from "./SeasonSettings";
 import styles from "../../app/admin/admin.module.css";
 
 type Boat = {
@@ -18,26 +17,19 @@ type Boat = {
 type Props = {
   boats: Boat[];
   whatsappNumber: string;
+  /** The published package the season and deposit belong to. */
+  packageId: string | null;
   depositPerBoat: number;
   seasonStart: string | null;
   seasonEnd: string | null;
 };
-
-function monthName(iso: string): string {
-  const m = Number(iso.slice(5, 7)) - 1;
-  return MONTHS.find((x) => x.m === m)?.name ?? iso.slice(5, 7);
-}
-
-function seasonLabel(start: string | null, end: string | null): string {
-  if (!start || !end) return "Belum ditetapkan";
-  return `${monthName(start)} ${start.slice(0, 4)} - ${monthName(end)} ${end.slice(0, 4)}`;
-}
 
 const BLANK_BOAT = { code: "", skipper_name: "", capacity: "8" };
 
 export default function SettingsPanel({
   boats,
   whatsappNumber,
+  packageId,
   depositPerBoat,
   seasonStart,
   seasonEnd,
@@ -257,10 +249,6 @@ export default function SettingsPanel({
         <span className={styles.detailCardLabel}>Booking rules</span>
         <div className={styles.builderFields}>
           <label className={styles.field}>
-            <span className={styles.fieldLabel}>Deposit per boat</span>
-            <input className={styles.input} value={formatRM(depositPerBoat)} readOnly />
-          </label>
-          <label className={styles.field}>
             <span className={styles.fieldLabel}>WhatsApp number</span>
             <input className={styles.input} value={wa} onChange={(e) => setWa(e.target.value)} />
           </label>
@@ -276,12 +264,16 @@ export default function SettingsPanel({
               {waBusy ? "Menyimpan..." : "Simpan"}
             </button>
           </div>
-          <label className={styles.field}>
-            <span className={styles.fieldLabel}>Season</span>
-            <input className={styles.input} value={seasonLabel(seasonStart, seasonEnd)} readOnly />
-          </label>
         </div>
       </div>
+
+      <SeasonSettings
+        packageId={packageId}
+        seasonStart={seasonStart}
+        seasonEnd={seasonEnd}
+        depositPerBoat={depositPerBoat}
+        boats={boats}
+      />
     </div>
   );
 }

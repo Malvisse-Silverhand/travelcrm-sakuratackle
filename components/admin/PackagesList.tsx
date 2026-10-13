@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { MONTHS, PAX_CHIPS } from "@/lib/season";
+import { MONTH_NAMES, PAX_CHIPS } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import styles from "../../app/admin/admin.module.css";
 
@@ -29,7 +29,7 @@ function tagFor(title: string): string {
 
 function monthName(iso: string): string {
   const m = Number(iso.slice(5, 7)) - 1;
-  return MONTHS.find((x) => x.m === m)?.name ?? iso.slice(5, 7);
+  return MONTH_NAMES[m] ?? iso.slice(5, 7);
 }
 
 function seasonRange(start: string | null, end: string | null): string {

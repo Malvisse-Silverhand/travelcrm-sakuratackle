@@ -3,11 +3,21 @@ import * as Sentry from "@sentry/nextjs";
 import { createClient } from "@/lib/supabase/server";
 import type { Availability } from "@/components/public/BookingExperience";
 import type { Faq } from "@/components/public/FaqAccordion";
-import { MONTHS, currentMonthIdx, isoDate } from "@/lib/season";
+import {
+  FALLBACK_SEASON,
+  monthFirstISO,
+  monthKey,
+  monthLastISO,
+  monthsBetween,
+  type SeasonMonth,
+} from "@/lib/season";
 import { todayISO } from "@/lib/date";
 
 /** Group size the booking section opens on — matches the design's default. */
 export const DEFAULT_PAX = 8;
+
+/** PostgREST returns at most this many rows per request. */
+const PAGE = 1000;
 
 export type PackageRow = {
   id: string;
@@ -17,6 +27,8 @@ export type PackageRow = {
   deposit_per_boat: number;
   includes: string[];
   faqs: Faq[];
+  season_start: string | null;
+  season_end: string | null;
 };
 
 export type OrgSettings = {
@@ -25,8 +37,13 @@ export type OrgSettings = {
   whatsapp_number: string;
 };
 
-/** The published package, org settings and the opening month's availability:
- *  everything a page needs to render the booking calendar and form.
+/** The published package, org settings, the months on sale and the opening
+ *  month's availability: everything a page needs to render the booking flow.
+ *
+ *  Months on sale are derived, not hardcoded: every month inside the
+ *  package's season (set in Settings) that still has at least one future trip
+ *  night. A winter gap inside a two-year season has no trip nights, so it
+ *  drops out on its own, and so do months already past.
  *
  *  `unavailable` separates "the database could not be reached" from "no
  *  package is published". They used to look identical: when the free-tier
@@ -36,15 +53,14 @@ export type OrgSettings = {
  *  system is down rather than that the season is closed. */
 export async function loadBookingData() {
   const supabase = await createClient();
+  const today = todayISO();
 
-  // The season spans Mac 2026 → Sep 2027, so index 0 is a month already in the
-  // past. Open on the first month that still has sellable nights.
-  const openMonthIdx = currentMonthIdx(todayISO());
-
-  const [pkgRes, orgRes, availRes] = await Promise.all([
+  const [pkgRes, orgRes] = await Promise.all([
     supabase
       .from("packages")
-      .select("id,title,subtitle,price_per_pax,deposit_per_boat,includes,faqs")
+      .select(
+        "id,title,subtitle,price_per_pax,deposit_per_boat,includes,faqs,season_start,season_end"
+      )
       .eq("published", true)
       .order("created_at")
       .limit(1)
@@ -54,28 +70,59 @@ export async function loadBookingData() {
       .select("business_name,location,whatsapp_number")
       .eq("id", 1)
       .maybeSingle<OrgSettings>(),
-    supabase.rpc("get_public_availability", {
-      p_from: isoDate(openMonthIdx, 1),
-      p_to: isoDate(openMonthIdx, MONTHS[openMonthIdx].days),
-      p_pax: DEFAULT_PAX,
-    }),
   ]);
 
   // The package read is the one the page cannot work without, so it decides
   // whether the booking system counts as down.
-  const unavailable = Boolean(pkgRes.error);
-  if (pkgRes.error) {
-    Sentry.captureException(new Error(`Booking data unreachable: ${pkgRes.error.message}`), {
-      tags: { area: "public-booking" },
-      extra: { code: pkgRes.error.code, details: pkgRes.error.details },
-    });
+  let unavailable = Boolean(pkgRes.error);
+  if (pkgRes.error) report("package", pkgRes.error);
+
+  const pkg = pkgRes.data;
+  let months: SeasonMonth[] = [];
+  let availability: Availability[] = [];
+
+  if (pkg) {
+    const seasonStart = pkg.season_start ?? FALLBACK_SEASON.start;
+    const seasonEnd = pkg.season_end ?? FALLBACK_SEASON.end;
+    const from = seasonStart > today ? seasonStart : today;
+
+    if (from <= seasonEnd) {
+      // One row per night that has trip_nights rows, paged past the
+      // PostgREST row cap so a long season is never silently cut short.
+      const rows: Availability[] = [];
+      for (let offset = 0; ; offset += PAGE) {
+        const { data, error } = await supabase
+          .rpc("get_public_availability", { p_from: from, p_to: seasonEnd, p_pax: DEFAULT_PAX })
+          .range(offset, offset + PAGE - 1);
+        if (error) {
+          report("availability", error);
+          unavailable = true;
+          break;
+        }
+        rows.push(...((data ?? []) as Availability[]));
+        if (!data || data.length < PAGE) break;
+      }
+
+      const onSale = new Set(rows.map((r) => r.night_date.slice(0, 7)));
+      months = monthsBetween(from, seasonEnd).filter((m) => onSale.has(monthKey(m)));
+
+      // Only the opening month goes to the browser; the calendar fetches the
+      // others as the visitor pages to them.
+      const first = months[0];
+      if (first) {
+        const lo = monthFirstISO(first);
+        const hi = monthLastISO(first);
+        availability = rows.filter((r) => r.night_date >= lo && r.night_date <= hi);
+      }
+    }
   }
 
-  return {
-    openMonthIdx,
-    pkg: pkgRes.data,
-    org: orgRes.data,
-    availability: (availRes.data ?? []) as Availability[],
-    unavailable,
-  };
+  return { pkg, org: orgRes.data, months, availability, unavailable };
+}
+
+function report(what: string, error: { message: string; code?: string; details?: string }) {
+  Sentry.captureException(new Error(`Booking data unreachable (${what}): ${error.message}`), {
+    tags: { area: "public-booking" },
+    extra: { code: error.code, details: error.details },
+  });
 }
