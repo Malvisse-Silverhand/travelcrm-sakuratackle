@@ -1,0 +1,165 @@
+.page {
+  min-height: 100dvh;
+  background: #0f0b26;
+  color: #ece8ff;
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 24px 12px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 650;
+  margin: 0;
+}
+
+.sub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #a79fd0;
+}
+
+.toggles {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.toggle {
+  display: flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.toggleBtn {
+  border: 0;
+  background: none;
+  color: #cfc7ec;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  padding: 7px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.toggleOn {
+  background: var(--gold);
+  color: var(--purple);
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  padding: 0 24px 12px;
+  overflow-x: auto;
+}
+
+.tab {
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e8e1ff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  padding: 9px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.tabOn {
+  background: #fff;
+  color: var(--purple);
+}
+
+.stageWrap {
+  position: relative;
+  flex: 1;
+  min-height: 62vh;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+}
+
+.photo {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: min(300px, 38vw);
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  background: #000;
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+}
+
+.photo figcaption {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 14px 24px 22px;
+}
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  min-width: 240px;
+}
+
+.slider input {
+  accent-color: var(--gold);
+}
+
+.specs {
+  display: flex;
+  gap: 22px;
+  margin: 0;
+}
+
+.specs dt {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a79fd0;
+}
+
+.specs dd {
+  margin: 2px 0 0;
+  font-weight: 650;
+}
