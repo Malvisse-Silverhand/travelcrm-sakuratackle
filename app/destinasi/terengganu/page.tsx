@@ -46,7 +46,8 @@ export default async function TerengganuGuide() {
       <header className={pub.header}>
         <div className={pub.headerInner}>
           <Link href="/" className={pub.brand}>
-            <span className={pub.logoMark}>CS</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/logo-badge.webp" alt="Sakura Tackle" width={34} height={34} className={pub.logoMark} />
             <span className={pub.brandText}>
               <span className={pub.brandName}>Candat Sotong</span>
               <span className={pub.brandSub}>{businessName}</span>

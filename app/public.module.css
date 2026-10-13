@@ -49,18 +49,14 @@
   text-decoration: none;
 }
 
+/* The operator's round "Candat Sotong" badge from sakuratackle.com. */
 .logoMark {
-  width: 34px;
-  height: 34px;
-  border-radius: 11px;
-  background: linear-gradient(145deg, var(--gold), var(--gold-dark));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--purple);
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: contain;
+  display: block;
 }
 
 .brandText {
@@ -1143,10 +1139,8 @@
   }
 
   .logoMark {
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
-    font-size: 12.5px;
+    width: 32px;
+    height: 32px;
   }
 
   .brandName {

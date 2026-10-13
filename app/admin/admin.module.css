@@ -20,19 +20,14 @@
   box-shadow: 0 24px 60px rgba(46, 29, 107, 0.1);
 }
 
+/* The operator's round "Candat Sotong" badge from sakuratackle.com. */
 .logoMark {
-  width: 50px;
-  height: 50px;
-  border-radius: 16px;
-  background: linear-gradient(145deg, var(--gold), var(--gold-dark));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--purple);
-  margin-bottom: 24px;
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: contain;
+  display: block;
 }
 
 .title {
@@ -143,18 +138,14 @@
   padding: 0 8px 22px;
 }
 
+/* The operator's round "Candat Sotong" badge from sakuratackle.com. */
 .sidebarLogo {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: linear-gradient(145deg, var(--gold), var(--gold-dark));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--purple);
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: contain;
+  display: block;
 }
 
 .sidebarBrandText {

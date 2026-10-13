@@ -72,7 +72,8 @@ export default function LoginPage() {
   return (
     <div className={styles.loginWrap}>
       <div className={styles.loginCard}>
-        <div className={styles.logoMark}>CS</div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/logo-badge.webp" alt="Sakura Tackle" width={56} height={56} className={styles.logoMark} />
         <h2 className={styles.title}>Operator sign in</h2>
         <p className={styles.subtitle}>Sakura Tackle booking console</p>
 

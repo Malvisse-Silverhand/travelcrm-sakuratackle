@@ -19,7 +19,8 @@ export default function Sidebar() {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.sidebarBrand}>
-        <div className={styles.sidebarLogo}>CS</div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/logo-badge.webp" alt="Sakura Tackle" width={34} height={34} className={styles.sidebarLogo} />
         <div className={styles.sidebarBrandText}>
           <span className={styles.sidebarBrandName}>Sakura Tackle</span>
           <span className={styles.sidebarBrandSub}>Booking console</span>
