@@ -38,6 +38,13 @@ let capableCache: boolean | null = null;
 const getCapable = () => (capableCache ??= canRender3D());
 const noSubscribe = () => () => {};
 
+/** Whether this device will get the 3D scene: null on the server and during
+ *  hydration, then true or false. Lets a page hide a 3D slot outright where
+ *  it would only repeat a photo shown elsewhere. */
+export function useCan3D(): boolean | null {
+  return useSyncExternalStore(noSubscribe, getCapable, () => null);
+}
+
 const REDUCED = "(prefers-reduced-motion: reduce)";
 function subscribeReduced(cb: () => void) {
   const mq = window.matchMedia(REDUCED);

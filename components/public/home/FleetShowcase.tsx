@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { AnimatePresence, m } from "motion/react";
-import LazyBoatStage from "@/components/three/LazyBoatStage";
+import LazyBoatStage, { useCan3D } from "@/components/three/LazyBoatStage";
 import { useBooking } from "../BookingState";
 import { formatLongDate } from "@/lib/season";
 import pub from "@/app/public.module.css";
@@ -28,8 +28,8 @@ const slide = {
   exit: (dir: number) => ({ opacity: 0, x: dir * -24 }),
 };
 
-/** One boat at a time: a live low-poly model at night, lamps on and the
- *  group on deck, beside the boat's specs. Only boats big enough for the
+/** One boat at a time: the boat's real photo large, its live low-poly model
+ *  (night, lamps on, the group on deck) underneath, and the specs beside. Only boats big enough for the
  *  chosen group are offered, which is why this is a client component — `pax`
  *  is shared with the hero search and the booking calendar.
  *
@@ -37,6 +37,7 @@ const slide = {
  *  page never holds more than one WebGL context. */
 export default function FleetShowcase({ boats }: { boats: FleetBoat[] }) {
   const { pax, selected } = useBooking();
+  const can3D = useCan3D();
   const fleet = boats.filter((b) => b.capacity >= pax);
 
   // Chosen by code rather than index so the choice survives the list being
@@ -72,54 +73,75 @@ export default function FleetShowcase({ boats }: { boats: FleetBoat[] }) {
 
         {boat ? (
           <div className={styles.fleetBody}>
-            <div
-              className={styles.stageWrap}
-              onTouchStart={(e) => {
-                const t = e.touches[0];
-                touch.current = { x: t.clientX, y: t.clientY };
-              }}
-              onTouchEnd={(e) => {
-                const start = touch.current;
-                touch.current = null;
-                if (!start) return;
-                const t = e.changedTouches[0];
-                const dx = t.clientX - start.x;
-                const dy = t.clientY - start.y;
-                if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.4) go(dx < 0 ? 1 : -1);
-              }}
-            >
-              <LazyBoatStage
-                className={styles.stage}
-                code={boat.code}
-                lengthFt={boat.length_ft}
-                beam={boat.beam}
-                pax={Math.min(pax, boat.capacity)}
-                mode="night"
-                fallbackSrc={boat.photo_url}
-                fallbackAlt={`Bot ${boat.display_name ?? boat.code}`}
-              />
-              <span className={styles.stageTag}>Model 3D · warna ikut bot sebenar</span>
-              {fleet.length > 1 && (
-                <div className={styles.stageNav}>
-                  <button
-                    type="button"
-                    className={styles.stageBtn}
-                    onClick={() => go(-1)}
-                    aria-label="Bot sebelum"
-                  >
-                    &#8592;
-                  </button>
-                  <span className={styles.stageCount}>
-                    {idx + 1} / {fleet.length}
-                  </span>
-                  <button
-                    type="button"
-                    className={styles.stageBtn}
-                    onClick={() => go(1)}
-                    aria-label="Bot seterusnya"
-                  >
-                    &#8594;
-                  </button>
+            <div className={styles.fleetMedia}>
+              <div
+                className={styles.photoWrap}
+                onTouchStart={(e) => {
+                  const t = e.touches[0];
+                  touch.current = { x: t.clientX, y: t.clientY };
+                }}
+                onTouchEnd={(e) => {
+                  const start = touch.current;
+                  touch.current = null;
+                  if (!start) return;
+                  const t = e.changedTouches[0];
+                  const dx = t.clientX - start.x;
+                  const dy = t.clientY - start.y;
+                  if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.4) go(dx < 0 ? 1 : -1);
+                }}
+              >
+                {boat.photo_url ? (
+                  // Keyed so each boat's photo fades in rather than swapping.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={boat.id}
+                    src={boat.photo_url}
+                    alt={`Foto bot ${boat.display_name ?? boat.code}`}
+                    className={styles.boatPhoto}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className={styles.photoEmpty}>Foto bot akan datang</div>
+                )}
+                {fleet.length > 1 && (
+                  <div className={styles.stageNav}>
+                    <button
+                      type="button"
+                      className={styles.stageBtn}
+                      onClick={() => go(-1)}
+                      aria-label="Bot sebelum"
+                    >
+                      &#8592;
+                    </button>
+                    <span className={styles.stageCount}>
+                      {idx + 1} / {fleet.length}
+                    </span>
+                    <button
+                      type="button"
+                      className={styles.stageBtn}
+                      onClick={() => go(1)}
+                      aria-label="Bot seterusnya"
+                    >
+                      &#8594;
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Hidden where WebGL is unavailable: its fallback would only
+                  repeat the photo above. */}
+              {can3D !== false && (
+                <div className={styles.stageWrap}>
+                  <LazyBoatStage
+                    className={styles.stage}
+                    code={boat.code}
+                    lengthFt={boat.length_ft}
+                    beam={boat.beam}
+                    pax={Math.min(pax, boat.capacity)}
+                    mode="night"
+                    fallbackAlt={`Model 3D bot ${boat.display_name ?? boat.code}`}
+                  />
+                  <span className={styles.stageTag}>Model 3D · warna ikut bot sebenar</span>
                 </div>
               )}
             </div>
@@ -179,17 +201,6 @@ function BoatDetail({ boat }: { boat: FleetBoat }) {
           {boat.kind && <span className={styles.boatKind}>{boat.kind}</span>}
           <h3 className={styles.boatName}>{name}</h3>
         </div>
-        {boat.photo_url && (
-          // The real boat beside the model, so the stylised colours can be
-          // checked against the hull a customer will step onto.
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={boat.photo_url}
-            alt={`Foto sebenar bot ${name}`}
-            className={styles.boatThumb}
-            loading="lazy"
-          />
-        )}
       </div>
 
       {boat.description && <p className={styles.boatDesc}>{boat.description}</p>}

@@ -516,10 +516,6 @@ export default function BookingExperience({
                             value={selected ? formatLongDate(selected) : "—"}
                           />
                           <ReviewRow label="Bilangan" value={`${pax} pax`} />
-                          <ReviewRow
-                            label="Bot"
-                            value={selectedRow?.suggested_boat_code ?? "—"}
-                          />
                           <ReviewRow label="Nama" value={form.name.trim()} />
                           <ReviewRow label="Telefon" value={form.phone.trim()} />
                           {form.email.trim() && (

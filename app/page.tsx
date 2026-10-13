@@ -116,49 +116,44 @@ export default async function Home() {
           </header>
 
           <main>
-            {/* 1 — Utama */}
-            <section
-              id="top"
-              className={`${styles.heroSection} ${home.screen} ${home.heroScreen}`}
-            >
-              <div className={styles.container}>
-                <div className={`${styles.heroFrame} ${home.heroFill}`}>
-                  {/* Frame M1 uses a different shot: the night-fishing photo
-                      loses its subject when cropped to phone width. */}
-                  <picture>
-                    <source media="(max-width: 620px)" srcSet={HERO.photoMobile} />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={HERO.photo}
-                      alt={HERO.photoAlt}
-                      className={`${styles.heroPhoto} ${home.heroDrift}`}
-                      fetchPriority="high"
-                    />
-                  </picture>
-                  <div className={styles.heroScrim} />
-                  <div className={home.heroGlow} aria-hidden="true" />
-                  <div className={styles.heroContent}>
-                    <span className={`${styles.heroBadge} ${home.rise}`}>{HERO.eyebrow}</span>
-                    <h1 className={`${styles.heroTitle} ${home.riseKeep}`} style={delay(0.08)}>
-                      {pkg.title}
-                    </h1>
-                    {pkg.subtitle && (
-                      <p className={`${styles.heroLead} ${home.rise}`} style={delay(0.2)}>
-                        “{pkg.subtitle}”
-                      </p>
-                    )}
+            {/* 1 — Utama. Both hero photos are portrait (9:16), so a wide
+                frame could only ever show a slice of them. On a wide screen the
+                photo is shown whole beside the copy, over a blurred copy of
+                itself that fills the full width; on a phone, which is portrait
+                too, it fills the screen with the copy over its foot. */}
+            <section id="top" className={`${home.screen} ${home.hero}`}>
+              <picture className={home.heroBackdrop}>
+                <source media="(max-width: 620px)" srcSet={HERO.photoMobile} />
+                <img src={HERO.photo} alt="" className={home.heroBackdropImg} fetchPriority="high" />
+              </picture>
+              <div className={home.heroShade} aria-hidden="true" />
+              <div className={home.heroGlow} aria-hidden="true" />
+
+              <div className={`${styles.container} ${home.heroInner}`}>
+                <div className={home.heroCopy}>
+                  <span className={`${styles.heroBadge} ${home.rise}`}>{HERO.eyebrow}</span>
+                  <h1 className={`${styles.heroTitle} ${home.heroTitle} ${home.riseKeep}`} style={delay(0.08)}>
+                    {pkg.title}
+                  </h1>
+                  {pkg.subtitle && (
+                    <p className={`${styles.heroLead} ${home.heroLead} ${home.rise}`} style={delay(0.2)}>
+                      “{pkg.subtitle}”
+                    </p>
+                  )}
+                  <div className={`${home.heroSearch} ${home.rise}`} style={delay(0.3)}>
+                    <HeroSearch />
+                  </div>
+                  <div className={`${home.heroTrust} ${home.rise}`} style={delay(0.4)}>
+                    <span>{fleet.length} bot dalam armada</span>
+                    {capacityRange && <span>{capacityRange}</span>}
+                    <span>Deposit {depositLabel} untuk lock slot</span>
                   </div>
                 </div>
 
-                <div className={home.rise} style={delay(0.3)}>
-                  <HeroSearch />
-                </div>
-
-                <div className={`${styles.trustStrip} ${home.rise}`} style={delay(0.4)}>
-                  <span>{fleet.length} bot dalam armada</span>
-                  {capacityRange && <span>{capacityRange}</span>}
-                  <span>Deposit {depositLabel} untuk lock slot</span>
-                </div>
+                <picture className={`${home.heroFigure} ${home.rise}`} style={delay(0.15)}>
+                  <source media="(max-width: 620px)" srcSet={HERO.photoMobile} />
+                  <img src={HERO.photo} alt={HERO.photoAlt} className={home.heroFigureImg} />
+                </picture>
               </div>
             </section>
 

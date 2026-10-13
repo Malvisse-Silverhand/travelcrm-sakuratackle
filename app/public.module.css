@@ -112,25 +112,8 @@
 
 /* ------------------------------------------------------------------ hero */
 
-/* The hero owns the fold, booking.com style: photo, search control and trust
-   figures fill the first screen, and the calendar starts below it. svh rather
-   than vh so a mobile browser's collapsing toolbar cannot make this overflow.
-   The header is 63px (14px padding twice, a 34px mark, and its border). */
-.heroSection {
-  padding: 28px 0 36px;
-  min-height: calc(100svh - 63px);
-  display: flex;
-  align-items: stretch;
-}
-
-/* Column so the photo frame can absorb whatever height the fold has left,
-   instead of sitting content-sized in the middle of a tall empty section. */
-.heroSection > .container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
+/* Photo hero used by the Terengganu guide; the homepage has its own
+   full-width hero in home.module.css. */
 .heroFrame {
   position: relative;
   border-radius: 26px;
@@ -271,16 +254,6 @@
   color: var(--warn-text);
   font-size: 13px;
   text-align: center;
-}
-
-.trustStrip {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin-top: 26px;
-  font-size: 12.5px;
-  color: var(--text-muted-2);
 }
 
 /* -------------------------------------------------------- shared section */
@@ -740,12 +713,6 @@
     font-size: 11.5px;
   }
 
-  .heroSection {
-    padding: 16px 0 24px;
-    min-height: 0;
-    display: block;
-  }
-
   .heroFrame {
     border-radius: 20px;
     flex: none;
@@ -820,20 +787,6 @@
     padding: 14px;
     border-radius: 14px;
     font-size: 14px;
-  }
-
-  /* Trust figures become a card with one claim per line (M1). */
-  .trustStrip {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    margin-top: 14px;
-    padding: 14px 16px;
-    border-radius: 14px;
-    background: #fff;
-    border: 1px solid var(--border);
-    font-size: 12.5px;
   }
 
   .sectionTitle {

@@ -164,22 +164,123 @@
 
 /* ------------------------------------------------------------------- hero */
 
-.page .heroScreen {
+/* Full width, edge to edge. Both hero photos are portrait (9:16): on a wide
+   screen the photo stands whole on the right, over a blurred copy of itself
+   that fills the width; at 980 and below (phones, portrait tablets) the
+   photo itself fills the screen. Nothing is cropped to a landscape slice. */
+.page .hero {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  justify-content: stretch;
+  background: var(--hero-ink);
+  color: #fff;
+}
+
+.heroBackdrop {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.heroBackdropImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: blur(30px) saturate(1.15);
+  transform: scale(1.15);
+  opacity: 0.75;
+}
+
+.heroShade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(27, 20, 54, 0.94) 0%,
+    rgba(27, 20, 54, 0.74) 55%,
+    rgba(27, 20, 54, 0.5) 100%
+  );
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 48px;
+  align-items: center;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.heroCopy {
+  min-width: 0;
+  text-align: left;
+}
+
+.page .heroTitle {
+  margin: 20px 0 0;
+  max-width: 15ch;
+  font-size: clamp(40px, 4.4cqw, 60px);
+}
+
+.page .heroLead {
+  margin: 18px 0 0;
+  max-width: 44ch;
+}
+
+.heroSearch {
+  margin-top: 28px;
+  max-width: 660px;
+}
+
+.page .heroSearch [role="search"] {
+  margin: 0;
+  max-width: none;
+}
+
+.page .heroSearch [role="status"] {
+  margin: 10px 0 0;
+}
+
+.heroTrust {
   display: flex;
-  min-height: calc(100svh - var(--header-h) - var(--tabbar-h));
-  padding: 22px 0 26px;
-  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 20px;
+  font-size: 13px;
+  color: #d6cdf5;
 }
 
-.heroScreen > div {
-  flex: 1 1 auto;
+.heroTrust span::before {
+  content: "✓";
+  margin-right: 7px;
+  color: #5dff9c;
+  font-weight: 700;
 }
 
-.heroDrift {
-  transform-origin: 60% 45%;
+/* The photo, whole: its box has the photo's own proportions. */
+.heroFigure {
+  justify-self: center;
+  display: block;
+  height: min(calc(100svh - var(--header-h) - 64px), 760px);
+  aspect-ratio: 9 / 16;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 
-/* Green candat lamps glowing up off the water at the foot of the photo. */
+.heroFigureImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Green candat lamps glowing up off the water at the foot of the hero. */
 .heroGlow {
   position: absolute;
   left: 0;
@@ -192,10 +293,6 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .heroDrift {
-    animation: drift 30s ease-in-out infinite alternate;
-  }
-
   .heroGlow {
     animation: glow 4.5s ease-in-out infinite alternate;
   }
@@ -209,15 +306,6 @@
   .riseKeep {
     animation: riseKeep 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
     animation-delay: var(--d, 0s);
-  }
-}
-
-@keyframes drift {
-  from {
-    transform: scale(1.03);
-  }
-  to {
-    transform: scale(1.12) translate3d(-1.6%, -1.2%, 0);
   }
 }
 
@@ -280,14 +368,63 @@
   align-items: stretch;
 }
 
-.stageWrap {
+/* Real photo large, the 3D model underneath it. */
+.fleetMedia {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.photoWrap {
   position: relative;
-  height: min(60svh, 560px);
+  height: min(42svh, 420px);
   border-radius: 24px;
   overflow: hidden;
-  background: #120d2e;
-  box-shadow: 0 30px 60px rgba(27, 20, 54, 0.22);
+  background: #e9e3fb;
+  box-shadow: 0 30px 60px rgba(27, 20, 54, 0.2);
   touch-action: pan-y;
+}
+
+.boatPhoto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .boatPhoto {
+    animation: photoIn 0.45s ease both;
+  }
+}
+
+@keyframes photoIn {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+}
+
+.photoEmpty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.stageWrap {
+  position: relative;
+  height: min(22svh, 210px);
+  border-radius: 20px;
+  overflow: hidden;
+  background: #120d2e;
+  box-shadow: 0 18px 40px rgba(27, 20, 54, 0.18);
 }
 
 .stage {
@@ -424,15 +561,6 @@
   font-size: 22px;
   font-weight: 650;
   letter-spacing: -0.02em;
-}
-
-.boatThumb {
-  flex: none;
-  width: 96px;
-  height: 68px;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid var(--border);
 }
 
 .boatDesc {
@@ -947,6 +1075,35 @@
     display: none;
   }
 
+  /* Portrait screens: the portrait photo fills the hero, copy at its foot. */
+  .heroInner {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: end;
+    padding-top: 24px;
+    padding-bottom: 20px;
+  }
+
+  .heroFigure {
+    display: none;
+  }
+
+  .heroBackdropImg {
+    filter: none;
+    transform: none;
+    opacity: 1;
+    object-position: center top;
+  }
+
+  .heroShade {
+    background: linear-gradient(
+      180deg,
+      rgba(27, 20, 54, 0.05) 0%,
+      rgba(27, 20, 54, 0.2) 35%,
+      rgba(27, 20, 54, 0.9) 72%,
+      rgba(27, 20, 54, 0.96) 100%
+    );
+  }
+
   .page .bookingScreen {
     padding-left: 16px;
     padding-right: 16px;
@@ -959,8 +1116,12 @@
     gap: 18px;
   }
 
+  .photoWrap {
+    height: min(40svh, 380px);
+  }
+
   .stageWrap {
-    height: min(44svh, 400px);
+    height: min(26svh, 240px);
   }
 
   .facGrid {
@@ -990,16 +1151,25 @@
     padding: 28px 0;
   }
 
-  .page .heroScreen {
-    padding: 14px 0 18px;
+  .page .heroTitle {
+    font-size: 28px;
+    line-height: 1.1;
+    margin-top: 12px;
   }
 
-  /* The hero photo takes whatever height the phone screen has left. */
-  .page .heroFill {
-    flex: 1 1 auto;
-    min-height: 240px;
-    display: flex;
-    align-items: flex-end;
+  .page .heroLead {
+    font-size: 13.5px;
+    margin-top: 10px;
+  }
+
+  .heroSearch {
+    margin-top: 16px;
+  }
+
+  /* The trust figures are repeated in the booking screen; on a phone the
+     photo gets the room instead. */
+  .heroTrust {
+    display: none;
   }
 
   .page .bookingScreen {
@@ -1007,9 +1177,18 @@
     padding-bottom: 16px;
   }
 
-  .stageWrap {
-    height: min(32svh, 280px);
+  .photoWrap {
+    height: min(30svh, 260px);
     border-radius: 20px;
+  }
+
+  .stageWrap {
+    height: min(22svh, 190px);
+    border-radius: 16px;
+  }
+
+  .fleetMedia {
+    gap: 8px;
   }
 
   /* Three lines on a phone, so the specs and the button stay on screen. */
@@ -1037,11 +1216,6 @@
 
   .boatName {
     font-size: 18px;
-  }
-
-  .boatThumb {
-    width: 72px;
-    height: 52px;
   }
 
   .boatDesc {
