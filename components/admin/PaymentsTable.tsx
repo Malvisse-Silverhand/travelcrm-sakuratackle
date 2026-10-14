@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
+import { upfrontAmount } from "@/lib/booking/amounts";
 import DataTable, { type Column, type Filter, type Tab } from "./DataTable";
 import { STATUS_LABEL, statusPill } from "./bookingStatus";
 import styles from "../../app/admin/admin.module.css";
@@ -18,6 +19,8 @@ export type PaymentRow = {
   status: string;
   night_date: string;
   deposit_amount: number;
+  total_amount: number;
+  pay_plan: string | null;
   deposit_paid: boolean;
   deposit_paid_at: string | null;
   receipt_url: string | null;
@@ -64,7 +67,7 @@ export default function PaymentsTable({ rows }: { rows: PaymentRow[] }) {
   const verify = async (r: PaymentRow) => {
     if (
       !window.confirm(
-        `Mark the ${formatRM(Number(r.deposit_amount))} deposit for ${r.ref} (${r.full_name}) as received?`
+        `Mark the ${formatRM(upfrontAmount(r))} ${r.pay_plan === "full" ? "full payment" : "deposit"} for ${r.ref} (${r.full_name}) as received?`
       )
     ) {
       return;
@@ -114,9 +117,9 @@ export default function PaymentsTable({ rows }: { rows: PaymentRow[] }) {
     },
     {
       key: "deposit",
-      header: "Deposit",
+      header: "Due up front",
       align: "right",
-      render: (r) => formatRM(Number(r.deposit_amount)),
+      render: (r) => `${formatRM(upfrontAmount(r))}${r.pay_plan === "full" ? " (full)" : ""}`,
     },
     {
       key: "receipt",

@@ -1,7 +1,6 @@
 import "server-only";
 import * as Sentry from "@sentry/nextjs";
 import { createClient } from "@/lib/supabase/server";
-import type { Availability } from "@/components/public/BookingExperience";
 import type { Faq } from "@/components/public/FaqAccordion";
 import {
   FALLBACK_SEASON,
@@ -12,6 +11,15 @@ import {
   type SeasonMonth,
 } from "@/lib/season";
 import { todayISO } from "@/lib/date";
+
+/** One night of the season-wide availability, as get_public_availability
+ *  returns it. Only used here now, to work out which months are on sale. */
+export type Availability = {
+  night_date: string;
+  status: "open" | "selling_fast" | "full" | "blocked";
+  suggested_boat_id: string | null;
+  suggested_boat_code: string | null;
+};
 
 /** Group size the booking section opens on — matches the design's default. */
 export const DEFAULT_PAX = 8;

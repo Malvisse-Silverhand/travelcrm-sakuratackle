@@ -18,6 +18,7 @@ import {
   todayISO,
 } from "@/lib/date";
 import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
+import { upfrontAmount } from "@/lib/booking/amounts";
 import styles from "../admin.module.css";
 
 type BookingRow = {
@@ -26,6 +27,7 @@ type BookingRow = {
   full_name: string;
   pax: number;
   price_per_pax: number;
+  total_amount: number;
   status: string;
   night_date: string;
   boats: { code: string } | null;
@@ -90,13 +92,13 @@ export default async function DashboardPage() {
     await Promise.all([
       supabase
         .from("bookings")
-        .select("id, ref, full_name, pax, price_per_pax, status, night_date, boats(code)")
+        .select("id, ref, full_name, pax, price_per_pax, total_amount, status, night_date, boats(code)")
         .eq("night_date", today)
         .in("status", ["confirmed", "deposit_due"])
         .order("created_at"),
       supabase
         .from("bookings")
-        .select("id, deposit_amount")
+        .select("id, total_amount, deposit_amount, pay_plan")
         .eq("status", "deposit_due"),
       supabase
         .from("trip_night_status")
@@ -105,12 +107,12 @@ export default async function DashboardPage() {
         .lte("night_date", in30),
       supabase
         .from("bookings")
-        .select("deposit_amount")
+        .select("total_amount, deposit_amount, pay_plan")
         .eq("deposit_paid", true)
         .gte("deposit_paid_at", myMidnightUTC(monthStart)),
       supabase
         .from("bookings")
-        .select("deposit_amount")
+        .select("total_amount, deposit_amount, pay_plan")
         .eq("deposit_paid", true)
         .gte("deposit_paid_at", myMidnightUTC(prevMonthStart))
         .lt("deposit_paid_at", myMidnightUTC(prevMonthEnd)),
@@ -122,7 +124,7 @@ export default async function DashboardPage() {
 
   const depositDueRows = depositDueRes.data ?? [];
   const depositOutstanding = depositDueRows.reduce(
-    (sum, b) => sum + Number(b.deposit_amount),
+    (sum, b) => sum + upfrontAmount(b),
     0
   );
 
@@ -133,11 +135,11 @@ export default async function DashboardPage() {
   const openSlotsNext30 = nights.filter((n) => n.status === "open").length;
 
   const collectedMTD = (collectedRes.data ?? []).reduce(
-    (sum, b) => sum + Number(b.deposit_amount),
+    (sum, b) => sum + upfrontAmount(b),
     0
   );
   const collectedPrevMonth = (prevCollectedRes.data ?? []).reduce(
-    (sum, b) => sum + Number(b.deposit_amount),
+    (sum, b) => sum + upfrontAmount(b),
     0
   );
   const mtdNote =
@@ -246,7 +248,7 @@ export default async function DashboardPage() {
                 <div className={styles.manifestInfo}>
                   <span className={styles.manifestName} data-pii="name">{b.full_name}</span>
                   <span className={styles.manifestMeta}>
-                    {b.boats?.code ?? "?"}, {b.pax} pax, {formatRM(b.pax * b.price_per_pax)}
+                    {b.boats?.code ?? "?"}, {b.pax} pax, {formatRM(Number(b.total_amount))}
                   </span>
                 </div>
                 <span className={statusPill(b.status)}>

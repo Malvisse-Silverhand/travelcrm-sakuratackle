@@ -17,6 +17,7 @@ export type BookingListRow = {
   night_date: string;
   pax: number;
   price_per_pax: number;
+  total_amount: number;
   deposit_paid: boolean;
   boats: { code: string } | null;
 };
@@ -58,7 +59,7 @@ const COLUMNS: Column<BookingListRow>[] = [
   { key: "night", header: "Night", render: (b) => formatLongDate(b.night_date) },
   { key: "boat", header: "Boat", render: (b) => b.boats?.code ?? "—" },
   { key: "pax", header: "Pax", align: "right", render: (b) => b.pax },
-  { key: "total", header: "Total", align: "right", render: (b) => formatRM(b.pax * b.price_per_pax) },
+  { key: "total", header: "Total", align: "right", render: (b) => formatRM(Number(b.total_amount)) },
   { key: "deposit", header: "Deposit", render: (b) => (b.deposit_paid ? "Paid" : "—") },
   {
     key: "status",

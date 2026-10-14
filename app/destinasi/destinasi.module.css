@@ -688,6 +688,34 @@
   padding: 72px 0 8px;
 }
 
+.bookCta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px;
+  border-radius: 22px;
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+.bookCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 26px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--purple);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  box-shadow: var(--shadow-gold);
+  white-space: nowrap;
+}
+
 /* ----------------------------------------------------------- responsive */
 
 @container (max-width: 980px) {

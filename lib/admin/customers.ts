@@ -4,6 +4,7 @@
 // need a table of their own and come with the phase 4c migrations.
 
 import { normalizePhoneLocal } from "@/lib/phone";
+import { amountPaid, bookingTotal } from "@/lib/booking/amounts";
 
 export type CustomerBooking = {
   id: string;
@@ -15,7 +16,9 @@ export type CustomerBooking = {
   night_date: string;
   pax: number;
   price_per_pax: number;
+  total_amount: number;
   deposit_amount: number;
+  pay_plan: string | null;
   deposit_paid: boolean;
   created_at: string;
   boats: { code: string } | null;
@@ -81,8 +84,8 @@ export function summarise(key: string, list: CustomerBooking[], today: string): 
     cancelled: sorted.length - live.length,
     lastTrip: past[past.length - 1] ?? null,
     nextTrip: future[0] ?? null,
-    value: live.reduce((s, b) => s + b.pax * Number(b.price_per_pax), 0),
-    depositsPaid: sorted.reduce((s, b) => s + (b.deposit_paid ? Number(b.deposit_amount) : 0), 0),
+    value: live.reduce((s, b) => s + bookingTotal(b), 0),
+    depositsPaid: sorted.reduce((s, b) => s + amountPaid(b), 0),
     firstBooked: sorted[sorted.length - 1].created_at,
   };
 }

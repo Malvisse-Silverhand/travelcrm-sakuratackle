@@ -4,6 +4,7 @@ import PageHeader from "@/components/admin/PageHeader";
 import { FALLBACK_SEASON, monthKey, monthsBetween } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import styles from "../../admin.module.css";
+import { upfrontAmount } from "@/lib/booking/amounts";
 
 type Row = {
   boat_id: string;
@@ -11,6 +12,8 @@ type Row = {
   status: string;
   deposit_paid: boolean;
   deposit_amount: number;
+  total_amount: number;
+  pay_plan: string | null;
   boats: { code: string } | null;
 };
 
@@ -34,14 +37,14 @@ export default async function ReportsPage() {
 
   const { data: bookings } = await supabase
     .from("bookings")
-    .select("boat_id, night_date, status, deposit_paid, deposit_amount, boats(code)")
+    .select("boat_id, night_date, status, deposit_paid, deposit_amount, total_amount, pay_plan, boats(code)")
     .gte("night_date", seasonStart)
     .lte("night_date", seasonEnd);
 
   const rows = (bookings ?? []) as unknown as Row[];
 
   const collectedRows = rows.filter((r) => r.deposit_paid);
-  const totalCollected = collectedRows.reduce((sum, r) => sum + Number(r.deposit_amount), 0);
+  const totalCollected = collectedRows.reduce((sum, r) => sum + upfrontAmount(r), 0);
 
   const soldRows = rows.filter((r) => SOLD_STATUSES.has(r.status));
   const soldNightKeys = new Set(soldRows.map((r) => `${r.boat_id}-${r.night_date}`));
@@ -62,7 +65,7 @@ export default async function ReportsPage() {
     const key = monthKey(m);
     const sum = collectedRows
       .filter((r) => r.night_date.startsWith(key))
-      .reduce((s, r) => s + Number(r.deposit_amount), 0);
+      .reduce((s, r) => s + upfrontAmount(r), 0);
     const short = m.name.slice(0, 3).toUpperCase();
     return { key, label: multiYear ? `${short} ${String(m.year).slice(2)}` : short, value: sum };
   });
@@ -79,7 +82,7 @@ export default async function ReportsPage() {
   for (const r of collectedRows) {
     const code = r.boats?.code ?? "?";
     const entry = byBoat.get(r.boat_id) ?? { code, nights: new Set<string>(), amount: 0 };
-    entry.amount += Number(r.deposit_amount);
+    entry.amount += upfrontAmount(r);
     byBoat.set(r.boat_id, entry);
   }
   const boatRevenue = Array.from(byBoat.values())

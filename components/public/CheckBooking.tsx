@@ -78,7 +78,7 @@ export default function CheckBooking() {
           onClick={runCheck}
           disabled={checking || !phone.trim()}
         >
-          {checking ? "Menyemak..." : "Semak"}
+          {checking ? "Checking..." : "Check"}
         </button>
       </div>
 

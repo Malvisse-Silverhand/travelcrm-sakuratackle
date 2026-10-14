@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BookingExperience from "@/components/public/BookingExperience";
-import { BookingProvider } from "@/components/public/BookingState";
 import FaqAccordion from "@/components/public/FaqAccordion";
 import CoastMap from "@/components/public/CoastMap";
 import BookingNotice from "@/components/public/BookingNotice";
 import FloatingWhatsApp from "@/components/public/FloatingWhatsApp";
 import MobileTabBar from "@/components/public/MobileTabBar";
-import { DEFAULT_PAX, loadBookingData } from "@/lib/booking/publicData";
+import { loadBookingData } from "@/lib/booking/publicData";
 import { HERO, JETTY } from "@/lib/content/site";
 import {
   AREAS,
@@ -30,11 +28,11 @@ const NAV = [
   { label: "Kawasan", href: "#kawasan" },
   { label: "Peta", href: "#peta" },
   { label: "Itinerari", href: "#itinerari" },
-  { label: "Kalendar", href: "#tempah" },
+  { label: "Tempah", href: "#tempah" },
 ];
 
 export default async function TerengganuGuide() {
-  const { months, pkg, org, availability, unavailable } = await loadBookingData();
+  const { pkg, org, unavailable } = await loadBookingData();
 
   const businessName = org?.business_name ?? "Sakura Tackle";
   const waNumber = org?.whatsapp_number ?? "601153598055";
@@ -192,27 +190,23 @@ export default async function TerengganuGuide() {
           </div>
         </section>
 
+        {/* Booking lives in one place, the homepage search: one flow, one
+            pricing model (whole-boat charter). */}
         {pkg ? (
-          <BookingProvider initialPax={DEFAULT_PAX} months={months}>
-            <div className={styles.bookingIntro}>
-              <div className={pub.container}>
-                <h2 className={pub.sectionTitle}>{pkg.title}</h2>
+          <section id="tempah" className={styles.bookingIntro}>
+            <div className={`${pub.container} ${styles.bookCta}`}>
+              <div>
+                <h2 className={pub.sectionTitle}>Book Your Boat</h2>
                 <p className={pub.sectionLead}>
-                  Pilih malam, isi butiran group, dan lock slot dengan deposit. Bertolak dari{" "}
+                  Pilih saiz group, pilih bot, dan lock malam anda dengan deposit. Bertolak dari{" "}
                   {JETTY.address}.
                 </p>
               </div>
+              <Link href="/#tempah" className={styles.bookCtaBtn}>
+                Search Available Boats
+              </Link>
             </div>
-            <BookingExperience
-              packageId={pkg.id}
-              pricePerPax={Number(pkg.price_per_pax)}
-              depositPerBoat={Number(pkg.deposit_per_boat)}
-              initialPax={DEFAULT_PAX}
-              initialAvailability={availability}
-              unavailable={unavailable}
-              waHref={waHref}
-            />
-          </BookingProvider>
+          </section>
         ) : (
           <BookingNotice kind={unavailable ? "down" : "closed"} waHref={waHref} />
         )}

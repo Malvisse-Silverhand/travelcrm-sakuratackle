@@ -31,7 +31,7 @@ export default async function CustomerPage({ params }: { params: Promise<{ key: 
   const { data } = await supabase
     .from("bookings")
     .select(
-      "id, ref, full_name, phone, email, status, night_date, pax, price_per_pax, deposit_amount, deposit_paid, created_at, boats(code)"
+      "id, ref, full_name, phone, email, status, night_date, pax, price_per_pax, total_amount, deposit_amount, deposit_paid, pay_plan, created_at, boats(code)"
     )
     .in("phone", phoneVariants(key))
     .order("night_date", { ascending: false });
@@ -138,7 +138,7 @@ export default async function CustomerPage({ params }: { params: Promise<{ key: 
                     </td>
                     <td>{b.boats?.code ?? "—"}</td>
                     <td className={styles.dtNum}>{b.pax}</td>
-                    <td className={styles.dtNum}>{formatRM(b.pax * Number(b.price_per_pax))}</td>
+                    <td className={styles.dtNum}>{formatRM(Number(b.total_amount))}</td>
                     <td>{b.deposit_paid ? "Paid" : "—"}</td>
                     <td>
                       <span className={statusPill(b.status)}>{STATUS_LABEL[b.status] ?? b.status}</span>
