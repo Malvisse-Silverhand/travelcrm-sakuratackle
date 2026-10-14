@@ -243,9 +243,3 @@ export default function DataTable<T>({
     </div>
   );
 }
-
-/** Digits only, with Malaysia's 60 prefix, for a wa.me link. */
-export function waNumber(phone: string): string {
-  const d = phone.replace(/[^0-9]/g, "");
-  return d.startsWith("60") ? d : d.startsWith("0") ? `6${d}` : d;
-}

@@ -15,3 +15,9 @@ export function normalizePhoneLocal(input: string): string {
   }
   return digits;
 }
+
+/** Digits for a wa.me link: Malaysia's 60 prefix, no leading 0. */
+export function waNumber(input: string): string {
+  const local = normalizePhoneLocal(input);
+  return local.startsWith("0") ? `6${local}` : local;
+}

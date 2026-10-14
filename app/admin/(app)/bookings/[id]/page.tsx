@@ -5,6 +5,7 @@ import { getOperatorProfile } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import BookingDetailActions from "@/components/admin/BookingDetailActions";
 import { formatLongDate } from "@/lib/season";
+import { customerKey } from "@/lib/admin/customers";
 import { formatRM } from "@/lib/date";
 import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
 import styles from "../../../admin.module.css";
@@ -75,7 +76,12 @@ export default async function BookingDetailPage({
                 </div>
                 <div>
                   <span className={styles.detailStatLabel}>Phone</span>
-                  <span className={styles.detailStatValue}>{booking.phone}</span>
+                  <Link
+                    href={`/admin/customers/${customerKey(booking.phone)}`}
+                    className={styles.detailStatValue}
+                  >
+                    {booking.phone} &#8599;
+                  </Link>
                 </div>
                 <div>
                   <span className={styles.detailStatLabel}>Email</span>

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
-import DataTable, { waNumber, type Column, type Filter, type Tab } from "./DataTable";
+import DataTable, { type Column, type Filter, type Tab } from "./DataTable";
 import { STATUS_LABEL, statusPill } from "./bookingStatus";
+import { waNumber } from "@/lib/phone";
 import styles from "../../app/admin/admin.module.css";
 
 export type BookingListRow = {
