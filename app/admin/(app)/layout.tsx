@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getOperatorProfile } from "@/lib/admin/operator";
+import { createClient } from "@/lib/supabase/server";
 import Sidebar from "@/components/admin/Sidebar";
 import BottomNav from "@/components/admin/BottomNav";
 import styles from "../admin.module.css";
@@ -15,9 +16,16 @@ export default async function AdminLayout({
   const profile = await getOperatorProfile();
   if (!profile) redirect("/admin/login");
 
+  // Sidebar badge: new leads still waiting for the operator.
+  const supabase = await createClient();
+  const { count: pendingCount } = await supabase
+    .from("bookings")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "pending");
+
   return (
     <div className={styles.shell}>
-      <Sidebar />
+      <Sidebar pendingCount={pendingCount ?? 0} />
       <div className={styles.contentColumn}>
         {children}
         <BottomNav />

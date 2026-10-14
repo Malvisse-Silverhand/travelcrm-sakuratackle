@@ -28,6 +28,32 @@ export const SIDE_NAV: NavItem[] = [
   { href: "/admin/settings", label: "Settings", icon: "⚙" },
 ];
 
+/** Phase 4 grouped sidebar. Only screens that exist are listed; groups gain
+ *  entries as their screens are built (Payments, Customers, Fleet, Users,
+ *  Activity log, Help). `badge` names a count the layout supplies. */
+export type NavGroup = {
+  label: string;
+  icon: string;
+  /** A group that is one direct link with no children (e.g. Dashboard). */
+  href?: string;
+  items?: Array<{ href: string; label: string; badge?: "pending" }>;
+};
+
+export const NAV_GROUPS: NavGroup[] = [
+  { label: "Dashboard", icon: "D", href: "/admin" },
+  {
+    label: "Bookings",
+    icon: "B",
+    items: [
+      { href: "/admin/bookings", label: "All bookings", badge: "pending" },
+      { href: "/admin/calendar", label: "Calendar" },
+    ],
+  },
+  { label: "Trips", icon: "T", items: [{ href: "/admin/packages", label: "Packages" }] },
+  { label: "Reports", icon: "R", items: [{ href: "/admin/reports", label: "Insights" }] },
+  { label: "Admin", icon: "A", items: [{ href: "/admin/settings", label: "Settings" }] },
+];
+
 /** Mobile bottom nav — 5 items only, matching the design's `bottom` array. */
 export const BOTTOM_NAV: NavItem[] = [
   { href: "/admin", label: "Home", icon: "◉" },

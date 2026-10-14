@@ -124,7 +124,7 @@
 /* ---------- sidebar (desktop) ---------- */
 
 .sidebar {
-  background: var(--purple);
+  background: #1f1a2e;
   padding: 22px 16px;
   display: flex;
   flex-direction: column;
@@ -827,7 +827,7 @@
 }
 
 .filterChipActive {
-  background: var(--purple);
+  background: #1f1a2e;
   color: #ffffff;
   border-color: var(--purple);
 }
@@ -1830,6 +1830,289 @@
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+/* ================= Phase 4: grouped sidebar ================= */
+
+.navGroupWrap {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding-bottom: 4px;
+}
+
+.navGroup {
+  cursor: pointer;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  color: #d9d4ea;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  text-decoration: none;
+}
+
+.navGroup:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.navGroupActive,
+.navGroupActive:hover {
+  color: var(--gold);
+}
+
+.navGroupIcon {
+  width: 28px;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.navCaret {
+  margin-left: auto;
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.navItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 2px 0 6px 36px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #b9b2d0;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.navItem:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.navItemActive,
+.navItemActive:hover {
+  color: #1f1a2e;
+  background: var(--gold);
+  font-weight: 650;
+}
+
+.navBadge {
+  min-width: 20px;
+  height: 20px;
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #1f1a2e;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navGroup .navBadge {
+  margin-left: 6px;
+}
+
+.navItemActive .navBadge {
+  background: #1f1a2e;
+  color: var(--gold);
+}
+
+/* ================= Phase 4: data table ================= */
+
+.dtTabs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.dtTab {
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-mid);
+  background: #fff;
+  color: var(--text-muted-2);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dtTabOn {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #1f1a2e;
+}
+
+.dtCard {
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid var(--border-mid);
+  overflow: hidden;
+}
+
+.dtBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-muted-2);
+}
+
+.dtSelect,
+.dtSearch {
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.dtSearch {
+  flex: 1;
+  min-width: 200px;
+}
+
+.dtScroll {
+  overflow-x: auto;
+}
+
+.dtTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.dtTable th {
+  text-align: left;
+  padding: 11px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--input-bg);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.dtTable td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.dtTable tbody tr:hover {
+  background: #faf8ff;
+}
+
+.dtStrong {
+  font-weight: 650;
+}
+
+.dtSub {
+  display: block;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.dtNum {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.dtActions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.dtBtn {
+  padding: 5px 11px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dtBtnView,
+.dtBtnView:hover {
+  background: #17a2b8;
+  color: #fff;
+}
+
+.dtBtnWa,
+.dtBtnWa:hover {
+  background: var(--whatsapp);
+  color: #fff;
+}
+
+.dtFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  color: var(--text-muted-2);
+}
+
+.dtPager {
+  display: flex;
+  gap: 4px;
+}
+
+.dtPager button {
+  cursor: pointer;
+  min-width: 32px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  color: var(--purple);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.dtPager button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.dtPager .dtPageOn {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: #fff;
+}
+
+.dtEmpty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13.5px;
 }
 
 /* ================= 820px container breakpoint ================= */
