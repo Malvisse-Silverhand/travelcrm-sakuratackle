@@ -1354,6 +1354,14 @@
   color: var(--warn-text-2);
 }
 
+.dayHeld:not(:disabled) {
+  cursor: pointer;
+}
+
+.dayHeld:hover:not(:disabled) {
+  border-color: var(--gold-dark);
+}
+
 .dayFull {
   background: rgba(239, 68, 68, 0.1);
   border-color: rgba(239, 68, 68, 0.28);
