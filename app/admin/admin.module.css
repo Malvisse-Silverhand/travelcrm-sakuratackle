@@ -2254,6 +2254,193 @@ button.dtBtn:disabled {
   inset: 0;
 }
 
+/* ================= Phase 4: Harbour HQ ================= */
+
+.hqCard {
+  margin-bottom: 22px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #1f1a2e;
+  color: #fff;
+  box-shadow: 0 24px 50px rgba(31, 26, 46, 0.22);
+}
+
+.hqHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 20px;
+}
+
+.hqKicker {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.hqTitle {
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hqDemo {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 184, 0, 0.18);
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.hqControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hqClock {
+  min-width: 64px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  font-family: ui-monospace, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  color: #5dff9c;
+}
+
+.hqBtn {
+  cursor: pointer;
+  padding: 7px 13px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: #e8e1ff;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.hqBtnOn {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #1f1a2e;
+}
+
+.hqDemoToggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: #d9d4ea;
+  cursor: pointer;
+}
+
+.hqStage {
+  position: relative;
+  height: min(56vh, 520px);
+  background: #0f2236;
+}
+
+.hqPanel {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: min(320px, calc(100% - 28px));
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+}
+
+.hqPanelHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.hqClose {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text-muted);
+}
+
+.hqManifest {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hqManifest li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.hqManifest a {
+  color: var(--ink);
+}
+
+.hqTimeline {
+  padding: 12px 20px 16px;
+}
+
+.hqTimeline input {
+  width: 100%;
+  accent-color: var(--gold);
+}
+
+.hqTicks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #b9b2d0;
+}
+
+.hqFallback {
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  align-content: center;
+  gap: 10px;
+  padding: 20px;
+}
+
+.hqFallbackBoat {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  text-align: left;
+  font-size: 12.5px;
+}
+
 /* ================= 820px container breakpoint ================= */
 
 @container (max-width: 820px) {

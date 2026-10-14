@@ -3,6 +3,10 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getOperatorProfile } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
+import HarbourHQ, { type ManifestRow } from "@/components/admin/HarbourHQ";
+import type { HarbourBoat } from "@/components/three/harbour/HarbourScene";
+import { myMinutes, tripNightISO } from "@/lib/harbour";
+import { formatLongDate } from "@/lib/season";
 import {
   addDaysISO,
   firstOfMonthISO,
@@ -37,6 +41,49 @@ export default async function DashboardPage() {
   const in30 = addDaysISO(today, 29);
   const monthStart = firstOfMonthISO(today);
   const { start: prevMonthStart, end: prevMonthEnd } = previousMonthRangeISO(today);
+
+  // Harbour HQ shows the trip that is under way, so before 07:30 it is
+  // still last night's boats out at sea.
+  const tripNight = tripNightISO(today, myMinutes());
+
+  const [harbourBoats, harbourBookings, harbourBlocks] = await Promise.all([
+    supabase
+      .from("boats")
+      .select("id, code, length_ft, beam, capacity")
+      .eq("active", true)
+      .order("sort_order")
+      .order("code"),
+    supabase
+      .from("bookings")
+      .select("id, ref, full_name, pax, status, boat_id")
+      .eq("night_date", tripNight)
+      .neq("status", "cancelled")
+      .order("created_at"),
+    supabase.from("trip_nights").select("boat_id").eq("night_date", tripNight).eq("blocked", true),
+  ]);
+
+  const manifests: Record<string, ManifestRow[]> = {};
+  for (const b of harbourBookings.data ?? []) (manifests[b.boat_id] ??= []).push(b);
+  const blocked = new Set((harbourBlocks.data ?? []).map((t) => t.boat_id));
+  const hqBoats: HarbourBoat[] = (harbourBoats.data ?? []).map((b) => {
+    const list = manifests[b.id] ?? [];
+    const weather = list.some((m) => m.status === "weather_hold");
+    const pax = list
+      .filter((m) => m.status !== "weather_hold")
+      .reduce((n, m) => n + m.pax, 0);
+    return {
+      id: b.id,
+      code: b.code,
+      lengthFt: b.length_ft,
+      beam: b.beam,
+      capacity: b.capacity,
+      pax,
+      sailing: pax > 0 && !weather && !blocked.has(b.id),
+      weather,
+      blocked: blocked.has(b.id),
+    };
+  });
+  const nightLabel = `${tripNight === today ? "Tonight" : "Last night"}, ${formatLongDate(tripNight)}`;
 
   const [tonightRes, depositDueRes, nightsRes, collectedRes, prevCollectedRes] =
     await Promise.all([
@@ -140,6 +187,8 @@ export default async function DashboardPage() {
       />
 
       <div className={styles.main}>
+        <HarbourHQ boats={hqBoats} manifests={manifests} nightLabel={nightLabel} />
+
         <div className={styles.dashTop}>
           <div className={styles.dashCardPurple}>
             <span className={styles.dashKicker}>Sailing tonight</span>
