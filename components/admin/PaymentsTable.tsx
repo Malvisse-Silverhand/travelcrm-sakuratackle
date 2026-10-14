@@ -97,8 +97,8 @@ export default function PaymentsTable({ rows }: { rows: PaymentRow[] }) {
       header: "Customer",
       render: (r) => (
         <>
-          <span className={styles.dtStrong}>{r.full_name}</span>
-          <span className={styles.dtSub}>{r.phone}</span>
+          <span className={styles.dtStrong} data-pii="name">{r.full_name}</span>
+          <span className={styles.dtSub} data-pii="phone">{r.phone}</span>
         </>
       ),
     },

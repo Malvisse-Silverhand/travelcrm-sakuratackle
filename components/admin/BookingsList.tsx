@@ -50,8 +50,8 @@ const COLUMNS: Column<BookingListRow>[] = [
     header: "Customer",
     render: (b) => (
       <>
-        <span className={styles.dtStrong}>{b.full_name}</span>
-        <span className={styles.dtSub}>{b.phone}</span>
+        <span className={styles.dtStrong} data-pii="name">{b.full_name}</span>
+        <span className={styles.dtSub} data-pii="phone">{b.phone}</span>
       </>
     ),
   },

@@ -38,6 +38,7 @@ export const NAV_GROUPS: NavGroup[] = [
   { label: "Trips", icon: "T", items: [{ href: "/admin/packages", label: "Packages" }] },
   { label: "Reports", icon: "R", items: [{ href: "/admin/reports", label: "Insights" }] },
   { label: "Admin", icon: "A", items: [{ href: "/admin/settings", label: "Settings" }] },
+  { label: "Help", icon: "?", href: "/admin/help" },
 ];
 
 /** Mobile bottom nav — 5 items only, matching the design's `bottom` array. */

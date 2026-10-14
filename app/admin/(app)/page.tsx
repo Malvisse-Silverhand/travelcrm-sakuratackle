@@ -243,7 +243,7 @@ export default async function DashboardPage() {
                   </span>
                 </div>
                 <div className={styles.manifestInfo}>
-                  <span className={styles.manifestName}>{b.full_name}</span>
+                  <span className={styles.manifestName} data-pii="name">{b.full_name}</span>
                   <span className={styles.manifestMeta}>
                     {b.boats?.code ?? "?"}, {b.pax} pax, {formatRM(b.pax * b.price_per_pax)}
                   </span>

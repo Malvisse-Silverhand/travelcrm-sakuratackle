@@ -27,10 +27,15 @@ const COLUMNS: Column<Customer>[] = [
     header: "Customer",
     render: (c) => (
       <>
-        <span className={styles.dtStrong}>{c.name}</span>
+        <span className={styles.dtStrong} data-pii="name">{c.name}</span>
         <span className={styles.dtSub}>
-          {c.key}
-          {c.email ? ` · ${c.email}` : ""}
+          <span data-pii="phone">{c.key}</span>
+          {c.email && (
+            <>
+              {" · "}
+              <span data-pii="email">{c.email}</span>
+            </>
+          )}
         </span>
       </>
     ),

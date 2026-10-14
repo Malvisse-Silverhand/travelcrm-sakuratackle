@@ -159,7 +159,7 @@ export default function HarbourHQ({ boats, manifests, nightLabel }: Props) {
                 {manifests[pick.id].map((m) => (
                   <li key={m.id}>
                     <Link href={`/admin/bookings/${m.id}`}>
-                      <b>{m.full_name}</b> · {m.pax} pax
+                      <b data-pii="name">{m.full_name}</b> · {m.pax} pax
                     </Link>
                     <span className={statusPill(m.status)}>{STATUS_LABEL[m.status] ?? m.status}</span>
                   </li>

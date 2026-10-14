@@ -1,0 +1,148 @@
+{
+  "_note": "Admin Help center content. scripts/help-shots.mjs opens each topic's path, runs its steps, masks customer details ([data-pii]) and saves public/help/<slug>.jpg plus marker positions (lib/admin/help-markers.json) for each callout's selector. Edit text freely; re-run the script after changing a selector or the screen itself.",
+  "topics": [
+    {
+      "slug": "getting-started",
+      "group": "Getting started",
+      "title": "Getting around the admin",
+      "path": "/admin",
+      "intro": "Everything is reached from the dark menu on the left. Groups open and close; the page you are on is highlighted in gold.",
+      "callouts": [
+        { "selector": "aside nav", "title": "Main menu", "body": "Dashboard, Bookings, Customers, Fleet, Trips, Reports and Admin. Click a group with an arrow to open it." },
+        { "selector": "[class*='navBadge']", "title": "Badges", "body": "Gold numbers count work waiting for you: new pending bookings, and uploaded receipts to verify." },
+        { "selector": "[class*='headerActionBtn']", "title": "New booking", "body": "Opens the Calendar, where you pick a boat and night and assign a booking for a customer who called or messaged." },
+        { "selector": "[class*='sidebarSignOut']", "title": "Sign out", "body": "Always sign out on a shared phone or computer." }
+      ]
+    },
+    {
+      "slug": "dashboard",
+      "group": "Getting started",
+      "title": "Dashboard and Harbour HQ",
+      "path": "/admin",
+      "steps": ["demo", "slider:590"],
+      "intro": "Harbour HQ shows tonight's trip at Jeti Marang, played out on the real clock: boats with bookings board at 15:30, sail from 16:45, fish at the lubuk through the night and come home at 06:00. This picture uses Demo mode at 17:20.",
+      "callouts": [
+        { "selector": "[class*='hqHead'] > div:first-child", "title": "Tonight at a glance", "body": "Which trip night is showing and how many boats sail. Before 07:30 it is still last night's trip." },
+        { "selector": "[class*='hqControls']", "title": "Live, Play day, Demo", "body": "Live follows the clock. Play day runs the whole trip in under a minute. Demo books every boat so you can watch it on a quiet night; it never changes real bookings." },
+        { "selector": "[class*='hqStage']", "title": "The harbour", "body": "Click a boat or its name tag to see who is on board tonight. A storm cloud means a weather hold." },
+        { "selector": "[class*='hqTimeline'] input", "title": "Time slider", "body": "Drag to any time of the trip day to see where the boats will be." },
+        { "selector": "[class*='kpiGrid']", "title": "Today's numbers", "body": "Deposits due, nights sold this week, money collected this month and open slots in the next 30 nights." }
+      ]
+    },
+    {
+      "slug": "bookings",
+      "group": "Bookings",
+      "title": "All bookings",
+      "path": "/admin/bookings",
+      "intro": "Every booking, newest night first. Use the tabs, filters and search to find one, then View to open it.",
+      "callouts": [
+        { "selector": "[class*='dtTabs']", "title": "Status tabs", "body": "Pending, Deposit due, Confirmed, Weather hold and Cancelled. The numbers count every booking and do not change when you search." },
+        { "selector": "[class*='dtBar'] label", "title": "Show", "body": "How many bookings per page: 10, 20, 50 or All." },
+        { "selector": "[class*='dtBar'] select[aria-label='All boats']", "title": "Boat filter", "body": "Only one boat's bookings." },
+        { "selector": "[class*='dtSearch']", "title": "Search", "body": "Type part of a name, a booking reference (CS-…) or a phone number in any format." },
+        { "selector": "[class*='dtBtnView']", "title": "View", "body": "Opens the booking: pax list, deposit, receipt, notes and Cancel." },
+        { "selector": "[class*='dtBtnWa']", "title": "WhatsApp", "body": "Opens a WhatsApp chat with the customer." },
+        { "selector": "[class*='dtFoot']", "title": "Pages", "body": "How many are shown, and page numbers when there are more." }
+      ]
+    },
+    {
+      "slug": "payments",
+      "group": "Bookings",
+      "title": "Payments",
+      "path": "/admin/payments",
+      "intro": "Deposits: receipts customers uploaded, waiting for you to check against the bank, and bookings still waiting to pay.",
+      "callouts": [
+        { "selector": "[class*='dtTabs']", "title": "To verify first", "body": "To verify lists uploaded receipts not yet accepted. Awaiting deposit lists bookings with no receipt yet." },
+        { "selector": "[class*='dtTable'] th:nth-child(5)", "title": "Receipt", "body": "View receipt opens the customer's upload for two minutes. Receipts are private and never public links." },
+        { "selector": "[class*='dtTable'] th:nth-child(7)", "title": "Verify", "body": "When the money is in the bank, Verify marks the deposit paid and confirms the booking. It asks before saving." }
+      ]
+    },
+    {
+      "slug": "calendar",
+      "group": "Bookings",
+      "title": "Calendar",
+      "path": "/admin/calendar",
+      "intro": "One boat's nights, month by month. Assign a booking for a customer, or block a night for weather or maintenance.",
+      "callouts": [
+        { "selector": "[class*='adminBoatChips']", "title": "Choose a boat", "body": "The calendar shows one boat at a time." },
+        { "selector": "[class*='adminMonthNav']", "title": "Month", "body": "Move between the months of the season." },
+        { "selector": "[class*='adminGrid']", "title": "Nights", "body": "Green is open, gold is filling up, red is full or blocked. Click a night to select it." },
+        { "selector": "[class*='selNightCard']", "title": "Selected night", "body": "Assign booking adds a booking for a customer. Block night stops sales for weather or repairs; Unblock opens it again." }
+      ]
+    },
+    {
+      "slug": "customers",
+      "group": "Customers",
+      "title": "Customers",
+      "path": "/admin/customers",
+      "intro": "Everyone who has booked, grouped by phone number. 0123…, 60123… and +60 12-3… are the same customer.",
+      "callouts": [
+        { "selector": "[class*='dtTabs']", "title": "Who to look at", "body": "Upcoming trip, Repeat customers (2 or more trips) and One-trip customers." },
+        { "selector": "[class*='dtSearch']", "title": "Search", "body": "By name, email or phone number." },
+        { "selector": "[class*='dtTable'] thead", "title": "Customer value", "body": "Trips taken, last and next trip, the value of their bookings and the deposits they have paid." },
+        { "selector": "[class*='dtBtnView']", "title": "Profile", "body": "Every booking this customer has made, with a WhatsApp button." }
+      ]
+    },
+    {
+      "slug": "fleet",
+      "group": "Fleet",
+      "title": "Fleet",
+      "path": "/admin/fleet",
+      "intro": "Your boats as customers see them on the website.",
+      "callouts": [
+        { "selector": "[class*='dtTabs']", "title": "Active and inactive", "body": "Inactive boats are not offered on the website or in the calendar. Boats are never deleted, because bookings point at them." },
+        { "selector": "[class*='dtAddBtn']", "title": "Add boat", "body": "A new boat needs its nights opened in Settings → Season before customers can book it." },
+        { "selector": "[class*='dtTable'] th:nth-child(8)", "title": "Upcoming", "body": "Bookings on this boat for nights still to come." },
+        { "selector": "[class*='dtBtnEdit']", "title": "Edit", "body": "Change any detail: name, skipper, capacity, size, rate, photo link and description." }
+      ]
+    },
+    {
+      "slug": "boat-editor",
+      "group": "Fleet",
+      "title": "Editing a boat",
+      "path": "/admin/fleet",
+      "steps": ["click:[class*='dtBtnEdit']"],
+      "intro": "Every detail the website shows about a boat.",
+      "callouts": [
+        { "selector": "[class*='formGrid2']", "title": "Details", "body": "Code is the number on the hull plate. Kind, description, capacity, size and rate are shown to customers." },
+        { "selector": "[class*='checkRow']", "title": "Active", "body": "Untick to take the boat off sale. Bookings already on it stay." },
+        { "selector": "[class*='boatEditStage']", "title": "Preview", "body": "The photo and 3D model update as you type, so you can check before saving." },
+        { "selector": "[class*='boatEditGrid'] button[class*='markPaidBtn']", "title": "Save", "body": "Changes show on the website on its next load." }
+      ]
+    },
+    {
+      "slug": "packages",
+      "group": "Trips",
+      "title": "Packages",
+      "path": "/admin/packages",
+      "intro": "The trip customers book: its title, photo, itinerary and FAQ.",
+      "callouts": [
+        { "selector": "[class*='packageCard']", "title": "Package", "body": "The price per pax and the season shown on the website." },
+        { "selector": "[class*='packageActionBtn']", "title": "Edit page", "body": "The page builder for the title, subtitle, cover photo, itinerary and FAQ." }
+      ]
+    },
+    {
+      "slug": "reports",
+      "group": "Reports",
+      "title": "Insights",
+      "path": "/admin/reports",
+      "intro": "Money collected over the season and how each boat is doing.",
+      "callouts": [
+        { "selector": "[class*='reportsCard']", "title": "Collected this season", "body": "Deposits received, month by month, for the season set in Settings." },
+        { "selector": "[class*='byBoatCard']", "title": "By boat", "body": "Nights sold and deposits collected for each boat." }
+      ]
+    },
+    {
+      "slug": "settings",
+      "group": "Admin",
+      "title": "Settings: season and deposit",
+      "path": "/admin/settings",
+      "intro": "The season dates drive every calendar on the website and in the admin.",
+      "callouts": [
+        { "selector": "[class*='seasonFields']", "title": "Season and deposit", "body": "Start and end dates of the season, and the deposit per boat for new bookings. Saving is refused if a live booking would fall outside the new dates." },
+        { "selector": "[class*='seasonMonthList']", "title": "Nights on sale", "body": "Open adds every upcoming night for every active boat (use it after adding a boat). Close takes a month off sale; bookings already taken stay." },
+        { "selector": "[class*='settingsGrid'] input:not([type])", "title": "WhatsApp number", "body": "The number customers reach from the website's WhatsApp buttons." }
+      ]
+    }
+  ]
+}
