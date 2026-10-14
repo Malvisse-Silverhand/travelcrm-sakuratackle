@@ -1,6 +1,6 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getOperatorProfile } from "@/lib/admin/operator";
+import { requireAdmin } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import BoatEditor, { type BoatRecord } from "@/components/admin/BoatEditor";
 import { LIVE_STATUSES } from "@/components/admin/bookingStatus";
@@ -31,8 +31,7 @@ export default async function BoatPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ created?: string }>;
 }) {
-  const profile = await getOperatorProfile();
-  if (!profile) redirect("/admin/login");
+  const profile = await requireAdmin();
 
   const { id } = await params;
   const { created } = await searchParams;

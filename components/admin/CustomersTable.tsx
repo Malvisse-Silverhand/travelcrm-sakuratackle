@@ -4,7 +4,7 @@ import Link from "next/link";
 import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import type { Customer } from "@/lib/admin/customers";
-import DataTable, { type Column, type Tab } from "./DataTable";
+import DataTable, { type Column, type Filter, type Tab } from "./DataTable";
 import { waNumber } from "@/lib/phone";
 import styles from "../../app/admin/admin.module.css";
 
@@ -14,6 +14,8 @@ const TABS: Tab<Customer>[] = [
   { key: "repeat", label: "Repeat (2+ trips)", test: (c) => c.trips >= 2 },
   { key: "once", label: "One trip", test: (c) => c.trips === 1 },
 ];
+
+const FILTERS: Filter<Customer>[] = [{ key: "tag", allLabel: "All tags", value: (c) => c.tags }];
 
 const SEARCH = {
   placeholder: "Search name, phone or email…",
@@ -28,6 +30,15 @@ const COLUMNS: Column<Customer>[] = [
     render: (c) => (
       <>
         <span className={styles.dtStrong} data-pii="name">{c.name}</span>
+        {c.tags && c.tags.length > 0 && (
+          <span className={styles.tagRow}>
+            {c.tags.map((t) => (
+              <span key={t} className={`${styles.tagChip} ${t === "Do not book" ? styles.tagChipWarn : ""}`}>
+                {t}
+              </span>
+            ))}
+          </span>
+        )}
         <span className={styles.dtSub}>
           <span data-pii="phone">{c.key}</span>
           {c.email && (
@@ -84,6 +95,7 @@ export default function CustomersTable({ rows }: { rows: Customer[] }) {
       rowKey={(c) => c.key}
       columns={COLUMNS}
       tabs={TABS}
+      filters={FILTERS}
       search={SEARCH}
       emptyText="No customers match."
     />

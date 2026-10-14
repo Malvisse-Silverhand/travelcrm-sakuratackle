@@ -57,7 +57,8 @@ const toForm = (b: BoatRecord): Form => ({
   active: b.active,
 });
 
-/** Edit (or create) a boat: every column the public fleet showcase reads. */
+/** Edit (or create) a boat: every column the public fleet showcase reads,
+ *  including an uploaded photo. */
 export default function BoatEditor({ boat, upcoming }: { boat: BoatRecord; upcoming: number }) {
   const supabase = useMemo(() => createClient(), []);
   const router = useRouter();
@@ -67,6 +68,28 @@ export default function BoatEditor({ boat, upcoming }: { boat: BoatRecord; upcom
 
   const set = (k: keyof Form) => (e: { target: { value: string } }) =>
     setF((cur) => ({ ...cur, [k]: e.target.value }));
+
+  const [uploading, setUploading] = useState(false);
+
+  // Photos go to the public boat-photos bucket; the link fills in the field
+  // and is saved with the rest of the boat.
+  const upload = async (file: File) => {
+    const ext = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" }[file.type];
+    if (!ext) return setMsg({ ok: false, text: "Use a JPG, PNG or WebP photo." });
+    if (file.size > 5 * 1024 * 1024) return setMsg({ ok: false, text: "The photo is over 5 MB." });
+    setUploading(true);
+    setMsg(null);
+    const folder = (f.code.trim() || "boat").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const path = `${folder}/${Date.now()}.${ext}`;
+    const { error } = await supabase.storage
+      .from("boat-photos")
+      .upload(path, file, { contentType: file.type, cacheControl: "31536000" });
+    setUploading(false);
+    if (error) return setMsg({ ok: false, text: "Upload failed. Try again." });
+    const { data } = supabase.storage.from("boat-photos").getPublicUrl(path);
+    setF((cur) => ({ ...cur, photo_url: data.publicUrl }));
+    setMsg({ ok: true, text: "Photo uploaded. Save the boat to use it." });
+  };
 
   const isNew = boat.id === null;
   const capacity = Number(f.capacity);
@@ -192,13 +215,29 @@ export default function BoatEditor({ boat, upcoming }: { boat: BoatRecord; upcom
           <Field label="Order on the website">
             <input className={styles.input} type="number" value={f.sort_order} onChange={set("sort_order")} />
           </Field>
-          <Field label="Photo link (https://…)" wide>
-            <input
-              className={styles.input}
-              value={f.photo_url}
-              onChange={set("photo_url")}
-              placeholder="https://sakuratackle.com/wp-content/uploads/…"
-            />
+          <Field label="Photo" wide>
+            <div className={styles.photoRow}>
+              <input
+                className={styles.input}
+                value={f.photo_url}
+                onChange={set("photo_url")}
+                placeholder="Upload a photo, or paste a https:// link"
+              />
+              <label className={`${styles.dtBtn} ${styles.dtBtnGhost} ${styles.uploadBtn}`}>
+                {uploading ? "Uploading…" : "Upload photo"}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  hidden
+                  disabled={uploading}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) upload(file);
+                    e.target.value = "";
+                  }}
+                />
+              </label>
+            </div>
           </Field>
           <Field label="Description (shown to customers)" wide>
             <textarea className={styles.textarea} rows={4} value={f.description} onChange={set("description")} />
@@ -231,6 +270,7 @@ export default function BoatEditor({ boat, upcoming }: { boat: BoatRecord; upcom
         </div>
         <p className={styles.seasonHint} style={{ marginTop: 12 }}>
           Boats are never deleted: bookings point at them. Untick Active to take one off sale.
+          Photos: JPG, PNG or WebP up to 5 MB, landscape works best.
           {isNew && " After adding a boat, open its nights in Settings → Season (Open on each month)."}
         </p>
       </div>

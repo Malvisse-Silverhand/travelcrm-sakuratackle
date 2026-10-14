@@ -1,6 +1,5 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getOperatorProfile } from "@/lib/admin/operator";
+import { requireAdmin } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import FleetTable, { type FleetRow } from "@/components/admin/FleetTable";
 import { LIVE_STATUSES } from "@/components/admin/bookingStatus";
@@ -8,8 +7,7 @@ import { todayISO } from "@/lib/date";
 import styles from "../../admin.module.css";
 
 export default async function FleetPage() {
-  const profile = await getOperatorProfile();
-  if (!profile) redirect("/admin/login");
+  const profile = await requireAdmin();
 
   const supabase = await createClient();
   const [{ data: boats }, { data: upcoming }] = await Promise.all([

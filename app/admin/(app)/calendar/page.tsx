@@ -20,9 +20,11 @@ export default async function CalendarPage() {
   const supabase = await createClient();
 
   const [{ data: boats }, { data: pkg }] = await Promise.all([
-    supabase
-      .from("boats")
-      .select("id, code, skipper_name, capacity")
+    // Vendors manage only their own boats' nights.
+    (profile.role === "vendor"
+      ? supabase.from("boats").select("id, code, skipper_name, capacity").eq("vendor_id", profile.userId)
+      : supabase.from("boats").select("id, code, skipper_name, capacity")
+    )
       .eq("active", true)
       .order("code"),
     supabase

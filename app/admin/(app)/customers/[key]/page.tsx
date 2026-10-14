@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getOperatorProfile } from "@/lib/admin/operator";
+import { requireAdmin } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
+import CustomerNotes from "@/components/admin/CustomerNotes";
 import { waNumber } from "@/lib/phone";
 import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
 import {
@@ -16,13 +17,17 @@ import { formatRM, todayISO } from "@/lib/date";
 import styles from "../../../admin.module.css";
 
 export default async function CustomerPage({ params }: { params: Promise<{ key: string }> }) {
-  const profile = await getOperatorProfile();
-  if (!profile) redirect("/admin/login");
+  const profile = await requireAdmin();
 
   const key = customerKey(decodeURIComponent((await params).key));
   if (key.length < 9) notFound();
 
   const supabase = await createClient();
+  const { data: note } = await supabase
+    .from("customer_notes")
+    .select("notes, tags")
+    .eq("phone_key", key)
+    .maybeSingle();
   const { data } = await supabase
     .from("bookings")
     .select(
@@ -99,6 +104,12 @@ export default async function CustomerPage({ params }: { params: Promise<{ key: 
           </div>
         </div>
 
+        <CustomerNotes
+          phoneKey={c.key}
+          initialNotes={note?.notes ?? ""}
+          initialTags={(note?.tags as string[] | undefined) ?? []}
+        />
+
         <span className={styles.manifestKicker}>Booking history</span>
         <div className={styles.dtCard}>
           <div className={styles.dtScroll}>
@@ -148,10 +159,6 @@ export default async function CustomerPage({ params }: { params: Promise<{ key: 
             </table>
           </div>
         </div>
-
-        <p className={styles.filterCount} style={{ marginTop: 14 }}>
-          Notes and tags (VIP, repeat) arrive with the customer database update.
-        </p>
       </div>
     </>
   );

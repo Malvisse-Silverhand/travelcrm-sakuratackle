@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export function initialsFrom(fullName: string): string {
@@ -6,7 +7,15 @@ export function initialsFrom(fullName: string): string {
   return letters.join("") || "OP";
 }
 
-export type OperatorProfile = { userId: string; fullName: string; initials: string };
+/** "admin" is the database role 'operator'; vendors see only their boats. */
+export type AdminRole = "admin" | "vendor";
+
+export type OperatorProfile = {
+  userId: string;
+  fullName: string;
+  initials: string;
+  role: AdminRole;
+};
 
 /** Null when there's no signed-in active operator. The layout already
  *  redirects in that case, so pages under app/admin/* can treat this as
@@ -20,11 +29,26 @@ export async function getOperatorProfile(): Promise<OperatorProfile | null> {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, is_active")
+    .select("full_name, is_active, role")
     .eq("id", userId)
     .maybeSingle();
 
   if (!profile?.is_active) return null;
 
-  return { userId, fullName: profile.full_name, initials: initialsFrom(profile.full_name) };
+  return {
+    userId,
+    fullName: profile.full_name,
+    initials: initialsFrom(profile.full_name),
+    role: profile.role === "vendor" ? "vendor" : "admin",
+  };
+}
+
+/** For admin-only screens (money, customers, fleet, settings, users):
+ *  signed-out visitors go to login, vendors back to their dashboard. RLS
+ *  already hides the data; this keeps them off pages that would be empty. */
+export async function requireAdmin(): Promise<OperatorProfile> {
+  const profile = await getOperatorProfile();
+  if (!profile) redirect("/admin/login");
+  if (profile.role !== "admin") redirect("/admin");
+  return profile;
 }

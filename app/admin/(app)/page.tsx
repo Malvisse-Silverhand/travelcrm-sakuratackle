@@ -47,9 +47,10 @@ export default async function DashboardPage() {
   const tripNight = tripNightISO(today, myMinutes());
 
   const [harbourBoats, harbourBookings, harbourBlocks] = await Promise.all([
-    supabase
-      .from("boats")
-      .select("id, code, length_ft, beam, capacity")
+    (profile.role === "vendor"
+      ? supabase.from("boats").select("id, code, length_ft, beam, capacity").eq("vendor_id", profile.userId)
+      : supabase.from("boats").select("id, code, length_ft, beam, capacity")
+    )
       .eq("active", true)
       .order("sort_order")
       .order("code"),

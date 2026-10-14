@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { NAV_GROUPS, type BadgeKey, type NavGroup } from "./navItems";
+import { navFor, type BadgeKey, type NavGroup } from "./navItems";
 import SignOutButton from "./SignOutButton";
 import styles from "../../app/admin/admin.module.css";
 
@@ -18,10 +18,17 @@ function groupActive(pathname: string, g: NavGroup) {
 
 /** Grouped, collapsible sidebar. The group holding the current page starts
  *  open; the others open and close freely. */
-export default function Sidebar({ badges = {} }: { badges?: Partial<Record<BadgeKey, number>> }) {
+export default function Sidebar({
+  badges = {},
+  role = "admin",
+}: {
+  badges?: Partial<Record<BadgeKey, number>>;
+  role?: "admin" | "vendor";
+}) {
   const pathname = usePathname();
+  const groups = navFor(role);
   const [open, setOpen] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(NAV_GROUPS.map((g) => [g.label, groupActive(pathname, g)]))
+    Object.fromEntries(groups.map((g) => [g.label, groupActive(pathname, g)]))
   );
 
   return (
@@ -31,12 +38,14 @@ export default function Sidebar({ badges = {} }: { badges?: Partial<Record<Badge
         <img src="/brand/logo-badge.webp" alt="Sakura Tackle" width={34} height={34} className={styles.sidebarLogo} />
         <div className={styles.sidebarBrandText}>
           <span className={styles.sidebarBrandName}>SAKURA TACKLE</span>
-          <span className={styles.sidebarBrandSub}>Admin dashboard</span>
+          <span className={styles.sidebarBrandSub}>
+            {role === "vendor" ? "Vendor dashboard" : "Admin dashboard"}
+          </span>
         </div>
       </div>
 
       <nav className={styles.sidebarNav}>
-        {NAV_GROUPS.map((g) => {
+        {groups.map((g) => {
           const active = groupActive(pathname, g);
           // A closed group shows the sum of its items' badges.
           const groupCount = (g.items ?? []).reduce(

@@ -1,6 +1,5 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getOperatorProfile } from "@/lib/admin/operator";
+import { requireAdmin } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import { FALLBACK_SEASON, monthKey, monthsBetween } from "@/lib/season";
 import { formatRM } from "@/lib/date";
@@ -18,8 +17,7 @@ type Row = {
 const SOLD_STATUSES = new Set(["confirmed", "deposit_due", "weather_hold"]);
 
 export default async function ReportsPage() {
-  const profile = await getOperatorProfile();
-  if (!profile) redirect("/admin/login");
+  const profile = await requireAdmin();
 
   const supabase = await createClient();
 

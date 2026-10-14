@@ -111,24 +111,35 @@ export default async function BookingDetailPage({
             </div>
           </div>
 
-          <BookingDetailActions
-            booking={{
-              id: booking.id,
-              ref: booking.ref,
-              fullName: booking.full_name,
-              phone: booking.phone,
-              status: booking.status,
-              nightDate: booking.night_date,
-              boatCode: boat?.code ?? "?",
-              pax: booking.pax,
-              totalAmount,
-              balanceDue,
-              depositAmount: Number(booking.deposit_amount),
-              depositPaid: booking.deposit_paid,
-              depositPaidAt: booking.deposit_paid_at,
-              receiptUrl: booking.receipt_url,
-            }}
-          />
+          {/* Vendors read their boats' bookings; money and cancellation stay
+              with the admins (RLS would refuse those writes anyway). */}
+          {profile.role === "vendor" ? (
+            <div className={styles.detailCard}>
+              <span className={styles.detailCardLabel}>Payment</span>
+              <p className={styles.emptyCardBody}>
+                Deposits, receipts and cancellations are handled by Sakura Tackle&apos;s admins.
+              </p>
+            </div>
+          ) : (
+            <BookingDetailActions
+              booking={{
+                id: booking.id,
+                ref: booking.ref,
+                fullName: booking.full_name,
+                phone: booking.phone,
+                status: booking.status,
+                nightDate: booking.night_date,
+                boatCode: boat?.code ?? "?",
+                pax: booking.pax,
+                totalAmount,
+                balanceDue,
+                depositAmount: Number(booking.deposit_amount),
+                depositPaid: booking.deposit_paid,
+                depositPaidAt: booking.deposit_paid_at,
+                receiptUrl: booking.receipt_url,
+              }}
+            />
+          )}
         </div>
       </div>
     </>

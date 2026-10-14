@@ -302,7 +302,9 @@
   display: none;
   position: sticky;
   bottom: 0;
-  grid-template-columns: repeat(5, 1fr);
+  /* One column per item: vendors see fewer than admins. */
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: 2px;
   padding: 9px 10px 16px;
   border-top: 1px solid var(--border-mid);
@@ -2584,6 +2586,79 @@ button.dtBtn:disabled {
   border-bottom: 0;
 }
 
+/* ================= Phase 4c: users & roles ================= */
+
+.usersGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+  align-items: start;
+}
+
+.boatPicker {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* ================= Phase 4c: customer tags ================= */
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.tagChip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 184, 0, 0.2);
+  color: var(--warn-text);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.tagChipWarn {
+  background: rgba(239, 68, 68, 0.14);
+  color: var(--danger-text);
+}
+
+.tagToggle {
+  cursor: pointer;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  color: var(--text-muted-2);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.tagToggleOn {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #1f1a2e;
+}
+
+.photoRow {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.photoRow .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.uploadBtn {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 14px;
+}
+
 /* ================= 820px container breakpoint ================= */
 
 @container (max-width: 820px) {
@@ -2591,7 +2666,8 @@ button.dtBtn:disabled {
   .seasonMonthList,
   .boatEditGrid,
   .formGrid2,
-  .helpGrid {
+  .helpGrid,
+  .usersGrid {
     grid-template-columns: minmax(0, 1fr);
   }
 

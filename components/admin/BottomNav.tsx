@@ -5,12 +5,13 @@ import { usePathname } from "next/navigation";
 import { BOTTOM_NAV } from "./navItems";
 import styles from "../../app/admin/admin.module.css";
 
-export default function BottomNav() {
+export default function BottomNav({ role = "admin" }: { role?: "admin" | "vendor" }) {
   const pathname = usePathname();
+  const items = BOTTOM_NAV.filter((i) => role === "admin" || !i.adminOnly);
 
   return (
     <nav className={styles.bottomNav}>
-      {BOTTOM_NAV.map((item) => {
+      {items.map((item) => {
         const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
         return (
           <Link

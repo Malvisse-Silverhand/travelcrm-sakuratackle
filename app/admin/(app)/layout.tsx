@@ -30,10 +30,10 @@ export default async function AdminLayout({
 
   return (
     <div className={styles.shell}>
-      <Sidebar badges={{ pending: pending ?? 0, receipts: receipts ?? 0 }} />
+      <Sidebar badges={{ pending: pending ?? 0, receipts: receipts ?? 0 }} role={profile.role} />
       <div className={styles.contentColumn}>
         {children}
-        <BottomNav />
+        <BottomNav role={profile.role} />
       </div>
     </div>
   );

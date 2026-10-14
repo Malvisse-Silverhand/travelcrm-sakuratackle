@@ -35,7 +35,12 @@ export type Customer = {
   value: number;
   depositsPaid: number;
   firstBooked: string;
+  /** From customer_notes, when the operator has tagged them. */
+  tags?: string[];
 };
+
+/** Tags offered on a customer's profile. */
+export const CUSTOMER_TAGS = ["VIP", "Repeat", "Corporate", "Family", "Needs follow-up", "Do not book"];
 
 /** One phone number, however it was typed: "+60 12-345 6789",
  *  "60123456789" and "0123456789" are the same customer. */

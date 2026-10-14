@@ -6,6 +6,8 @@ export type NavItem = {
   href: string;
   label: string;
   icon: string;
+  /** Hidden from vendors (who see only their boats' bookings). */
+  adminOnly?: boolean;
 };
 
 /** Counts the admin layout supplies for sidebar badges. */
@@ -19,7 +21,9 @@ export type NavGroup = {
   icon: string;
   /** A group that is one direct link with no children (e.g. Dashboard). */
   href?: string;
-  items?: Array<{ href: string; label: string; badge?: BadgeKey }>;
+  items?: Array<{ href: string; label: string; badge?: BadgeKey; adminOnly?: boolean }>;
+  /** Hidden from vendors. */
+  adminOnly?: boolean;
 };
 
 export const NAV_GROUPS: NavGroup[] = [
@@ -29,23 +33,40 @@ export const NAV_GROUPS: NavGroup[] = [
     icon: "B",
     items: [
       { href: "/admin/bookings", label: "All bookings", badge: "pending" },
-      { href: "/admin/payments", label: "Payments", badge: "receipts" },
+      { href: "/admin/payments", label: "Payments", badge: "receipts", adminOnly: true },
       { href: "/admin/calendar", label: "Calendar" },
     ],
   },
-  { label: "Customers", icon: "C", href: "/admin/customers" },
-  { label: "Fleet", icon: "F", href: "/admin/fleet" },
-  { label: "Trips", icon: "T", items: [{ href: "/admin/packages", label: "Packages" }] },
-  { label: "Reports", icon: "R", items: [{ href: "/admin/reports", label: "Insights" }] },
-  { label: "Admin", icon: "A", items: [{ href: "/admin/settings", label: "Settings" }] },
+  { label: "Customers", icon: "C", href: "/admin/customers", adminOnly: true },
+  { label: "Fleet", icon: "F", href: "/admin/fleet", adminOnly: true },
+  { label: "Trips", icon: "T", adminOnly: true, items: [{ href: "/admin/packages", label: "Packages" }] },
+  { label: "Reports", icon: "R", adminOnly: true, items: [{ href: "/admin/reports", label: "Insights" }] },
+  {
+    label: "Admin",
+    icon: "A",
+    adminOnly: true,
+    items: [
+      { href: "/admin/users", label: "Users & roles" },
+      { href: "/admin/activity", label: "Activity log" },
+      { href: "/admin/settings", label: "Settings" },
+    ],
+  },
   { label: "Help", icon: "?", href: "/admin/help" },
 ];
+
+/** The menu as a role sees it. */
+export function navFor(role: "admin" | "vendor"): NavGroup[] {
+  if (role === "admin") return NAV_GROUPS;
+  return NAV_GROUPS.filter((g) => !g.adminOnly).map((g) =>
+    g.items ? { ...g, items: g.items.filter((i) => !i.adminOnly) } : g
+  );
+}
 
 /** Mobile bottom nav — 5 items only, matching the design's `bottom` array. */
 export const BOTTOM_NAV: NavItem[] = [
   { href: "/admin", label: "Home", icon: "◉" },
   { href: "/admin/calendar", label: "Calendar", icon: "▦" },
   { href: "/admin/bookings", label: "Bookings", icon: "≡" },
-  { href: "/admin/reports", label: "Reports", icon: "◧" },
-  { href: "/admin/settings", label: "More", icon: "⚙" },
+  { href: "/admin/reports", label: "Reports", icon: "◧", adminOnly: true },
+  { href: "/admin/settings", label: "More", icon: "⚙", adminOnly: true },
 ];

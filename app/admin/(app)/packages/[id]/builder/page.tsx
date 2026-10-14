@@ -1,6 +1,6 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getOperatorProfile } from "@/lib/admin/operator";
+import { requireAdmin } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import PackageBuilder from "@/components/admin/PackageBuilder";
 import styles from "../../../../admin.module.css";
@@ -10,8 +10,7 @@ export default async function PackageBuilderPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const profile = await getOperatorProfile();
-  if (!profile) redirect("/admin/login");
+  const profile = await requireAdmin();
 
   const { id } = await params;
   const supabase = await createClient();

@@ -1,13 +1,11 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getOperatorProfile } from "@/lib/admin/operator";
+import { requireAdmin } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import SettingsPanel from "@/components/admin/SettingsPanel";
 import styles from "../../admin.module.css";
 
 export default async function SettingsPage() {
-  const profile = await getOperatorProfile();
-  if (!profile) redirect("/admin/login");
+  const profile = await requireAdmin();
 
   const supabase = await createClient();
   const [{ data: boats }, { data: org }, { data: pkg }] = await Promise.all([

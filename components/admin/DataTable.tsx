@@ -17,7 +17,9 @@ export type Filter<T> = {
   key: string;
   /** Option shown first, meaning "no filter", e.g. "All boats". */
   allLabel: string;
-  value: (row: T) => string | null | undefined;
+  /** A row's value, or several (e.g. tags): the row matches if any equals
+   *  the picked option. */
+  value: (row: T) => string | string[] | null | undefined;
 };
 
 type Props<T> = {
@@ -73,7 +75,9 @@ export default function DataTable<T>({
       Object.fromEntries(
         filters.map((f) => [
           f.key,
-          Array.from(new Set(rows.map(f.value).filter((v): v is string => !!v))).sort(),
+          Array.from(
+            new Set(rows.flatMap((r) => [f.value(r)].flat()).filter((v): v is string => !!v))
+          ).sort(),
         ])
       ),
     [rows, filters]
@@ -87,7 +91,7 @@ export default function DataTable<T>({
       if (activeTab && !activeTab.test(r)) return false;
       for (const f of filters) {
         const want = picked[f.key];
-        if (want && f.value(r) !== want) return false;
+        if (want && ![f.value(r)].flat().includes(want)) return false;
       }
       if (!q || !search) return true;
       if (search.text(r).toLowerCase().includes(q)) return true;

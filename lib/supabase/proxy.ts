@@ -54,8 +54,10 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAdminRoute = pathname.startsWith("/admin");
   const isLoginRoute = pathname === LOGIN_PATH;
+  // Invitation links are opened before the invitee has an account.
+  const isInviteRoute = pathname.startsWith("/admin/invite/");
 
-  if (isAdminRoute && !isLoginRoute && !isOperator) {
+  if (isAdminRoute && !isLoginRoute && !isInviteRoute && !isOperator) {
     const url = request.nextUrl.clone();
     url.pathname = LOGIN_PATH;
     return NextResponse.redirect(url);
