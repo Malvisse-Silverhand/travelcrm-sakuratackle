@@ -14,7 +14,7 @@ export default async function CustomersPage() {
     supabase
       .from("bookings")
       .select(
-        "id, ref, full_name, phone, email, status, night_date, pax, price_per_pax, deposit_amount, deposit_paid, created_at, boats(code)"
+        "id, ref, full_name, phone, email, status, night_date, pax, price_per_pax, total_amount, deposit_amount, deposit_paid, pay_plan, created_at, boats(code)"
       ),
     supabase.from("customer_notes").select("phone_key, tags"),
   ]);

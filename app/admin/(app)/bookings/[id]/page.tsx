@@ -7,6 +7,7 @@ import BookingDetailActions from "@/components/admin/BookingDetailActions";
 import { formatLongDate } from "@/lib/season";
 import { customerKey } from "@/lib/admin/customers";
 import { formatRM } from "@/lib/date";
+import { balanceDue as balanceDueOf, bookingTotal, payPlanLabel, upfrontAmount } from "@/lib/booking/amounts";
 import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
 import styles from "../../../admin.module.css";
 
@@ -25,7 +26,7 @@ export default async function BookingDetailPage({
     supabase
       .from("bookings")
       .select(
-        "id, ref, full_name, phone, email, pax, note, status, night_date, price_per_pax, deposit_amount, deposit_paid, deposit_paid_at, receipt_url, created_at, boats(code, skipper_name)"
+        "id, ref, full_name, phone, email, pax, note, status, night_date, pricing, price_per_pax, total_amount, deposit_amount, deposit_paid, pay_plan, deposit_paid_at, receipt_url, created_at, boats(code, skipper_name)"
       )
       .eq("id", id)
       .maybeSingle(),
@@ -39,8 +40,8 @@ export default async function BookingDetailPage({
   if (!booking) notFound();
 
   const boat = Array.isArray(booking.boats) ? booking.boats[0] : booking.boats;
-  const totalAmount = booking.pax * Number(booking.price_per_pax);
-  const balanceDue = totalAmount - (booking.deposit_paid ? Number(booking.deposit_amount) : 0);
+  const totalAmount = bookingTotal(booking);
+  const balanceDue = balanceDueOf(booking);
   const bookedDate = formatLongDate(booking.created_at.slice(0, 10));
 
   return (
@@ -86,6 +87,20 @@ export default async function BookingDetailPage({
                 <div>
                   <span className={styles.detailStatLabel}>Email</span>
                   <span className={styles.detailStatValue}>{booking.email ?? "—"}</span>
+                </div>
+                <div>
+                  <span className={styles.detailStatLabel}>Pricing</span>
+                  <span className={styles.detailStatValue}>
+                    {booking.pricing === "charter"
+                      ? `Whole-boat charter, ${formatRM(totalAmount)}`
+                      : `${booking.pax} pax × ${formatRM(Number(booking.price_per_pax))}`}
+                  </span>
+                </div>
+                <div>
+                  <span className={styles.detailStatLabel}>Payment plan</span>
+                  <span className={styles.detailStatValue}>
+                    {payPlanLabel(booking.pay_plan)}, {formatRM(upfrontAmount(booking))} up front
+                  </span>
                 </div>
               </div>
             </div>
@@ -133,7 +148,7 @@ export default async function BookingDetailPage({
                 pax: booking.pax,
                 totalAmount,
                 balanceDue,
-                depositAmount: Number(booking.deposit_amount),
+                depositAmount: upfrontAmount(booking),
                 depositPaid: booking.deposit_paid,
                 depositPaidAt: booking.deposit_paid_at,
                 receiptUrl: booking.receipt_url,

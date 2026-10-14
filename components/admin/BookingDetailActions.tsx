@@ -126,7 +126,7 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
         <span className={styles.detailCardLabel}>Payment</span>
         <div className={styles.paymentRow}>
           <div>
-            <span className={styles.paymentLabel}>Deposit received</span>
+            <span className={styles.paymentLabel}>Paid up front</span>
             <span className={styles.paymentValueGreen}>
               {b.depositPaid ? formatRM(b.depositAmount) : "Belum diterima"}
             </span>

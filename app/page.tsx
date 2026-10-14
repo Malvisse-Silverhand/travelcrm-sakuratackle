@@ -1,8 +1,6 @@
-import type { CSSProperties } from "react";
 import { createClient } from "@/lib/supabase/server";
-import BookingExperience from "@/components/public/BookingExperience";
 import { BookingProvider } from "@/components/public/BookingState";
-import HeroSearch from "@/components/public/HeroSearch";
+import HeroBooking from "@/components/public/book/HeroBooking";
 import FaqAccordion from "@/components/public/FaqAccordion";
 import MobileTabBar from "@/components/public/MobileTabBar";
 import BookingNotice from "@/components/public/BookingNotice";
@@ -31,16 +29,13 @@ import {
 import styles from "./public.module.css";
 import home from "./home.module.css";
 
-/** Stagger for the hero's CSS entrance, read by `.rise` / `.riseKeep`. */
-const delay = (s: number) => ({ "--d": `${s}s` }) as CSSProperties;
-
 export default async function Home() {
   const supabase = await createClient();
 
   // Package, org and opening-month availability come from the loader the
   // destination guide shares, so both pages tell a database outage apart from
   // an unpublished season the same way. Only the fleet is homepage-specific.
-  const [{ months, pkg, org, availability, unavailable }, { data: boats }] =
+  const [{ months, pkg, org, unavailable }, { data: boats }] =
     await Promise.all([
       loadBookingData(),
       supabase
@@ -75,15 +70,6 @@ export default async function Home() {
   )}`;
   const businessName = org?.business_name ?? "Sakura Tackle";
   const location = org?.location ?? "Jeti Marang, Terengganu";
-  const depositLabel = `RM${Number(pkg.deposit_per_boat).toLocaleString("en-MY")}`;
-
-  // Derived from the fleet rather than hardcoded, so deactivating a boat in
-  // Settings does not leave the trust strip advertising a boat that is gone.
-  const capacities = fleet.map((b) => b.capacity);
-  const capacityRange =
-    capacities.length > 0
-      ? `Kapasiti ${Math.min(...capacities)}–${Math.max(...capacities)} pax`
-      : null;
 
   return (
     <BookingProvider initialPax={DEFAULT_PAX} months={months}>
@@ -117,57 +103,16 @@ export default async function Home() {
           </header>
 
           <main>
-            {/* 1 — Utama. Both hero photos are portrait (9:16), so a wide
-                frame could only ever show a slice of them. On a wide screen the
-                photo is shown whole beside the copy, over a blurred copy of
-                itself that fills the full width; on a phone, which is portrait
-                too, it fills the screen with the copy over its foot. */}
-            <section id="top" className={`${home.screen} ${home.hero}`}>
-              <picture className={home.heroBackdrop}>
-                <source media="(max-width: 620px)" srcSet={HERO.photoMobile} />
-                <img src={HERO.photo} alt="" className={home.heroBackdropImg} fetchPriority="high" />
-              </picture>
-              <div className={home.heroShade} aria-hidden="true" />
-              <div className={home.heroGlow} aria-hidden="true" />
-
-              <div className={`${styles.container} ${home.heroInner}`}>
-                <div className={home.heroCopy}>
-                  <span className={`${styles.heroBadge} ${home.rise}`}>{HERO.eyebrow}</span>
-                  <h1 className={`${styles.heroTitle} ${home.heroTitle} ${home.riseKeep}`} style={delay(0.08)}>
-                    {pkg.title}
-                  </h1>
-                  {pkg.subtitle && (
-                    <p className={`${styles.heroLead} ${home.heroLead} ${home.rise}`} style={delay(0.2)}>
-                      “{pkg.subtitle}”
-                    </p>
-                  )}
-                  <div className={`${home.heroSearch} ${home.rise}`} style={delay(0.3)}>
-                    <HeroSearch />
-                  </div>
-                  <div className={`${home.heroTrust} ${home.rise}`} style={delay(0.4)}>
-                    <span>{fleet.length} bot dalam armada</span>
-                    {capacityRange && <span>{capacityRange}</span>}
-                    <span>Deposit {depositLabel} untuk lock slot</span>
-                  </div>
-                </div>
-
-                <picture className={`${home.heroFigure} ${home.rise}`} style={delay(0.15)}>
-                  <source media="(max-width: 620px)" srcSet={HERO.photoMobile} />
-                  <img src={HERO.photo} alt={HERO.photoAlt} className={home.heroFigureImg} />
-                </picture>
-              </div>
-            </section>
-
-            {/* 2 — Tempah: the three-step booking flow */}
-            <BookingExperience
-              packageId={pkg.id}
-              pricePerPax={Number(pkg.price_per_pax)}
+            {/* 1 — Utama: the Agoda-style search card (where, how many),
+                then the boats that fit once the customer searches. The rest
+                of the booking happens on /book. */}
+            <HeroBooking
+              boats={fleet}
               depositPerBoat={Number(pkg.deposit_per_boat)}
-              initialPax={DEFAULT_PAX}
-              initialAvailability={availability}
-              unavailable={unavailable}
+              subtitle={pkg.subtitle}
+              heroPhoto={HERO.photo}
               waHref={waHref}
-              className={`${home.screen} ${home.bookingScreen}`}
+              screenClass={home.screen}
             />
 
             {/* 3 — Armada */}

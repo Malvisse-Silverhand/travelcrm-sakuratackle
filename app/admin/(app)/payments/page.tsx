@@ -11,7 +11,7 @@ export default async function PaymentsPage() {
   const { data } = await supabase
     .from("bookings")
     .select(
-      "id, ref, full_name, phone, status, night_date, deposit_amount, deposit_paid, deposit_paid_at, receipt_url, boats(code)"
+      "id, ref, full_name, phone, status, night_date, deposit_amount, total_amount, pay_plan, deposit_paid, deposit_paid_at, receipt_url, boats(code)"
     )
     .neq("status", "cancelled")
     .order("night_date");

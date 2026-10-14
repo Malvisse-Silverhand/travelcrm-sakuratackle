@@ -161,7 +161,6 @@ export const BANK = {
 /** The homepage's screens, in order, for the desktop section rail. */
 export const SCREENS = [
   { id: "top", label: "Utama" },
-  { id: "tempah", label: "Tempah" },
   { id: "armada", label: "Armada" },
   { id: "fasiliti", label: "Fasiliti" },
   { id: "perjalanan", label: "Perjalanan" },
@@ -173,7 +172,7 @@ export const SCREENS = [
 
 export const NAV = [
   { label: "Armada", href: "#armada" },
-  { label: "Kalendar", href: "#tempah" },
+  { label: "Tempah", href: "#tempah" },
   { label: "Galeri", href: "#galeri" },
   { label: "FAQ", href: "#faq" },
   { label: "Peta Terengganu", href: "/destinasi/terengganu" },

@@ -12,7 +12,7 @@ export default async function BookingsPage() {
   const supabase = await createClient();
   const { data: bookings } = await supabase
     .from("bookings")
-    .select("id, ref, full_name, phone, status, night_date, pax, price_per_pax, deposit_paid, boats(code)")
+    .select("id, ref, full_name, phone, status, night_date, pax, price_per_pax, total_amount, deposit_paid, boats(code)")
     .order("night_date", { ascending: false });
 
   const rows = (bookings ?? []) as unknown as BookingListRow[];
