@@ -1,0 +1,11 @@
+{
+  "name": "squid-jig-motion",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.8.155 preview",
+    "check": "npx --yes hyperframes@0.8.155 check",
+    "render": "npx --yes hyperframes@0.8.155 render",
+    "publish": "npx --yes hyperframes@0.8.155 publish"
+  }
+}

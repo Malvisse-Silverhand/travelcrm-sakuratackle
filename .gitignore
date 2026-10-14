@@ -51,3 +51,8 @@ skills-lock.json
 
 .vercel
 .env*
+
+# HyperFrames working files (sources are committed; renders and caches are not)
+videos/*/renders/
+videos/*/.hyperframes/
+videos/*/node_modules/

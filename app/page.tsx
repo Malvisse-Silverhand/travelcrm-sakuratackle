@@ -12,6 +12,7 @@ import TripTimeline from "@/components/public/home/TripTimeline";
 import TestimonialStrip from "@/components/public/home/TestimonialStrip";
 import SnapRail from "@/components/public/home/SnapRail";
 import FacilityIcon from "@/components/public/home/FacilityIcon";
+import SquidWelcome from "@/components/public/home/SquidWelcome";
 import { MotionRoot, Reveal, RevealGroup, RevealItem } from "@/components/public/home/Reveal";
 import { DEFAULT_PAX, loadBookingData } from "@/lib/booking/publicData";
 import {
@@ -379,6 +380,8 @@ export default async function Home() {
           />
 
           <MobileTabBar waHref={waHref} />
+
+          <SquidWelcome />
         </div>
       </MotionRoot>
     </BookingProvider>
