@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import NotificationBell from "./NotificationBell";
 import styles from "../../app/admin/admin.module.css";
 
 type Props = {
@@ -17,6 +18,7 @@ export default function PageHeader({ title, subtitle, avatarInitials, actions }:
       </div>
       <div className={styles.headerActions}>
         {actions}
+        <NotificationBell />
         <div className={styles.avatar}>{avatarInitials}</div>
       </div>
     </div>

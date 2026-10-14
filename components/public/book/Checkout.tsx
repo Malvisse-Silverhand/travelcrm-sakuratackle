@@ -222,7 +222,9 @@ export default function Checkout({
       const st = status.get(iso);
       const holiday = HOLIDAYS_BY_DATE[iso];
       const sel = date === iso;
-      const bookable = st === "open";
+      // "Selling Fast" (another group booked but has not paid) stays on sale:
+      // the night goes to whichever group's payment is confirmed first.
+      const bookable = st === "open" || st === "held";
       const cls = sel
         ? styles.daySel
         : st === "open"
@@ -410,6 +412,12 @@ export default function Checkout({
                     WhatsApp kami
                   </a>{" "}
                   untuk tanya tarikh.
+                </p>
+              )}
+              {date && status.get(date) === "held" && (
+                <p className={styles.noteWarn}>
+                  Ada group lain dah tempah malam ini tapi belum bayar. Bot jadi milik group yang
+                  bayaran disahkan dulu, jadi buat bayaran secepat mungkin selepas tempah.
                 </p>
               )}
               {date && HOLIDAYS_BY_DATE[date] && (
