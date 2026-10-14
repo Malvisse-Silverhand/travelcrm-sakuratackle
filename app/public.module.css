@@ -824,6 +824,11 @@
     display: grid;
   }
 
+  /* Pages with the tab bar carry WhatsApp in its centre instead. */
+  .whatsappFloatPhoneHidden {
+    display: none;
+  }
+
   /* Both floats sit above the tab bar rather than behind it. */
   .whatsappFloat {
     right: 14px;

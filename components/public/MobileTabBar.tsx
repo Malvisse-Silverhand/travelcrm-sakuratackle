@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { MOBILE_NAV } from "@/lib/content/site";
 import styles from "@/app/public.module.css";
 
@@ -10,10 +11,20 @@ import styles from "@/app/public.module.css";
  *  One tab is highlighted for the section on screen. The bar is hidden above
  *  the 620px breakpoint, but it still mounts there — the observer is cheap and
  *  the alternative, branching on a width read, would not survive a resize. */
-export default function MobileTabBar({ waHref }: { waHref: string }) {
-  const [active, setActive] = useState(MOBILE_NAV[0].href);
+export default function MobileTabBar({
+  waHref,
+  onHome = true,
+}: {
+  waHref: string;
+  /** False on other pages (e.g. Peta): section tabs then link back to the
+   *  homepage, and the tab for the current page is the active one. */
+  onHome?: boolean;
+}) {
+  const pathname = usePathname();
+  const [active, setActive] = useState(onHome ? MOBILE_NAV[0].href : pathname);
 
   useEffect(() => {
+    if (!onHome) return;
     const targets = MOBILE_NAV.filter((n) => n.href.startsWith("#"))
       .map((n) => document.getElementById(n.href.slice(1)))
       .filter((el): el is HTMLElement => el !== null);
@@ -35,13 +46,13 @@ export default function MobileTabBar({ waHref }: { waHref: string }) {
 
     targets.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [onHome]);
 
   const half = Math.ceil(MOBILE_NAV.length / 2);
   const link = (n: (typeof MOBILE_NAV)[number]) => (
     <a
       key={n.href}
-      href={n.href}
+      href={!onHome && n.href.startsWith("#") ? `/${n.href}` : n.href}
       className={`${styles.tabBarLink} ${active === n.href ? styles.tabBarLinkActive : ""}`}
       aria-current={active === n.href ? "true" : undefined}
     >

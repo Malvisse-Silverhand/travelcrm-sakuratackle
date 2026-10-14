@@ -6,6 +6,7 @@ import FaqAccordion from "@/components/public/FaqAccordion";
 import CoastMap from "@/components/public/CoastMap";
 import BookingNotice from "@/components/public/BookingNotice";
 import FloatingWhatsApp from "@/components/public/FloatingWhatsApp";
+import MobileTabBar from "@/components/public/MobileTabBar";
 import { DEFAULT_PAX, loadBookingData } from "@/lib/booking/publicData";
 import { HERO, JETTY } from "@/lib/content/site";
 import {
@@ -236,7 +237,13 @@ export default async function TerengganuGuide() {
         </div>
       </footer>
 
-      <FloatingWhatsApp href={waHref} label={`WhatsApp ${businessName}`} />
+      <FloatingWhatsApp
+        href={waHref}
+        label={`WhatsApp ${businessName}`}
+        className={pub.whatsappFloatPhoneHidden}
+      />
+
+      <MobileTabBar waHref={waHref} onHome={false} />
     </div>
   );
 }
