@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { NAV_GROUPS, type NavGroup } from "./navItems";
+import { NAV_GROUPS, type BadgeKey, type NavGroup } from "./navItems";
 import SignOutButton from "./SignOutButton";
 import styles from "../../app/admin/admin.module.css";
 
@@ -18,7 +18,7 @@ function groupActive(pathname: string, g: NavGroup) {
 
 /** Grouped, collapsible sidebar. The group holding the current page starts
  *  open; the others open and close freely. */
-export default function Sidebar({ pendingCount = 0 }: { pendingCount?: number }) {
+export default function Sidebar({ badges = {} }: { badges?: Partial<Record<BadgeKey, number>> }) {
   const pathname = usePathname();
   const [open, setOpen] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(NAV_GROUPS.map((g) => [g.label, groupActive(pathname, g)]))
@@ -38,7 +38,11 @@ export default function Sidebar({ pendingCount = 0 }: { pendingCount?: number })
       <nav className={styles.sidebarNav}>
         {NAV_GROUPS.map((g) => {
           const active = groupActive(pathname, g);
-          const hasPending = (g.items ?? []).some((i) => i.badge === "pending");
+          // A closed group shows the sum of its items' badges.
+          const groupCount = (g.items ?? []).reduce(
+            (n, i) => n + (i.badge ? badges[i.badge] ?? 0 : 0),
+            0
+          );
 
           if (g.href) {
             return (
@@ -64,8 +68,8 @@ export default function Sidebar({ pendingCount = 0 }: { pendingCount?: number })
               >
                 <span className={styles.navGroupIcon}>[{g.icon}]</span>
                 {g.label}
-                {!isOpen && hasPending && pendingCount > 0 && (
-                  <span className={styles.navBadge}>{pendingCount}</span>
+                {!isOpen && groupCount > 0 && (
+                  <span className={styles.navBadge}>{groupCount}</span>
                 )}
                 <span className={styles.navCaret} aria-hidden="true">
                   {isOpen ? "▴" : "▾"}
@@ -82,8 +86,8 @@ export default function Sidebar({ pendingCount = 0 }: { pendingCount?: number })
                       }`}
                     >
                       {i.label}
-                      {i.badge === "pending" && pendingCount > 0 && (
-                        <span className={styles.navBadge}>{pendingCount}</span>
+                      {i.badge && (badges[i.badge] ?? 0) > 0 && (
+                        <span className={styles.navBadge}>{badges[i.badge]}</span>
                       )}
                     </Link>
                   ))}

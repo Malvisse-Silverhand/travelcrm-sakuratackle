@@ -2058,10 +2058,68 @@
   white-space: nowrap;
 }
 
+button.dtBtn {
+  cursor: pointer;
+  border: 0;
+  font-family: inherit;
+}
+
+button.dtBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .dtBtnView,
 .dtBtnView:hover {
   background: #17a2b8;
   color: #fff;
+}
+
+.dtBtnEdit,
+.dtBtnEdit:hover {
+  background: var(--gold);
+  color: #1f1a2e;
+}
+
+.dtBtnOk,
+.dtBtnOk:hover {
+  background: var(--success);
+  color: #fff;
+}
+
+.dtBtnDanger,
+.dtBtnDanger:hover {
+  background: var(--danger-bg);
+  color: #fff;
+}
+
+.dtBtnGhost,
+.dtBtnGhost:hover {
+  background: #fff;
+  color: var(--purple);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+.dtThumb {
+  width: 56px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  background: var(--surface-tint);
+}
+
+.dtAddBtn,
+.dtAddBtn:hover {
+  margin-left: auto;
+  padding: 9px 16px;
+  border-radius: 10px;
+  background: var(--gold);
+  color: #1f1a2e;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .dtBtnWa,

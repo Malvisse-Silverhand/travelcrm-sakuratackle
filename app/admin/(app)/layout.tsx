@@ -16,16 +16,21 @@ export default async function AdminLayout({
   const profile = await getOperatorProfile();
   if (!profile) redirect("/admin/login");
 
-  // Sidebar badge: new leads still waiting for the operator.
+  // Sidebar badges: new leads, and uploaded receipts nobody has checked.
   const supabase = await createClient();
-  const { count: pendingCount } = await supabase
-    .from("bookings")
-    .select("id", { count: "exact", head: true })
-    .eq("status", "pending");
+  const [{ count: pending }, { count: receipts }] = await Promise.all([
+    supabase.from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    supabase
+      .from("bookings")
+      .select("id", { count: "exact", head: true })
+      .not("receipt_url", "is", null)
+      .eq("deposit_paid", false)
+      .neq("status", "cancelled"),
+  ]);
 
   return (
     <div className={styles.shell}>
-      <Sidebar pendingCount={pendingCount ?? 0} />
+      <Sidebar badges={{ pending: pending ?? 0, receipts: receipts ?? 0 }} />
       <div className={styles.contentColumn}>
         {children}
         <BottomNav />

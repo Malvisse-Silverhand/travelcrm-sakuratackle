@@ -6,23 +6,8 @@ import PageHeader from "@/components/admin/PageHeader";
 import BookingDetailActions from "@/components/admin/BookingDetailActions";
 import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
+import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
 import styles from "../../../admin.module.css";
-
-const STATUS_LABEL: Record<string, string> = {
-  pending: "Pending",
-  confirmed: "Confirmed",
-  deposit_due: "Deposit due",
-  weather_hold: "Weather hold",
-  cancelled: "Cancelled",
-};
-
-const STATUS_CLASS: Record<string, string> = {
-  pending: styles.statusPending,
-  confirmed: styles.statusConfirmed,
-  deposit_due: styles.statusDepositDue,
-  weather_hold: styles.statusWeatherHold,
-  cancelled: styles.statusCancelled,
-};
 
 export default async function BookingDetailPage({
   params,
@@ -70,7 +55,7 @@ export default async function BookingDetailPage({
             <div className={styles.detailCard}>
               <div className={styles.detailCardHead}>
                 <span className={styles.detailName}>{booking.full_name}</span>
-                <span className={`${styles.manifestStatus} ${STATUS_CLASS[booking.status] ?? ""}`}>
+                <span className={statusPill(booking.status)}>
                   {STATUS_LABEL[booking.status] ?? booking.status}
                 </span>
               </div>

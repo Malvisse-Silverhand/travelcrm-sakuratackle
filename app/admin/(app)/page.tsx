@@ -13,6 +13,7 @@ import {
   previousMonthRangeISO,
   todayISO,
 } from "@/lib/date";
+import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
 import styles from "../admin.module.css";
 
 type BookingRow = {
@@ -24,22 +25,6 @@ type BookingRow = {
   status: string;
   night_date: string;
   boats: { code: string } | null;
-};
-
-const STATUS_LABEL: Record<string, string> = {
-  pending: "Pending",
-  confirmed: "Confirmed",
-  deposit_due: "Deposit due",
-  weather_hold: "Weather hold",
-  cancelled: "Cancelled",
-};
-
-const STATUS_CLASS: Record<string, string> = {
-  pending: styles.statusPending,
-  confirmed: styles.statusConfirmed,
-  deposit_due: styles.statusDepositDue,
-  weather_hold: styles.statusWeatherHold,
-  cancelled: styles.statusCancelled,
 };
 
 export default async function DashboardPage() {
@@ -214,7 +199,7 @@ export default async function DashboardPage() {
                     {b.boats?.code ?? "?"}, {b.pax} pax, {formatRM(b.pax * b.price_per_pax)}
                   </span>
                 </div>
-                <span className={`${styles.manifestStatus} ${STATUS_CLASS[b.status] ?? ""}`}>
+                <span className={statusPill(b.status)}>
                   {STATUS_LABEL[b.status] ?? b.status}
                 </span>
               </Link>

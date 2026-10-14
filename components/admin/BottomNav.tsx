@@ -11,11 +11,11 @@ export default function BottomNav() {
   return (
     <nav className={styles.bottomNav}>
       {BOTTOM_NAV.map((item) => {
-        const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href!);
+        const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
         return (
           <Link
             key={item.href}
-            href={item.href!}
+            href={item.href}
             className={`${styles.bottomNavItem} ${active ? styles.bottomNavItemActive : ""}`}
           >
             <span className={styles.bottomNavIcon}>{item.icon}</span>
