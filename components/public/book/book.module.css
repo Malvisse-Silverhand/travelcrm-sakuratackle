@@ -1108,13 +1108,13 @@
   container-type: inline-size;
   max-width: 1160px;
   margin: 0 auto;
-  padding: 24px 24px 64px;
+  padding: 16px 24px 48px;
 }
 
 .stepper {
   list-style: none;
-  margin: 0 0 22px;
-  padding: 14px 18px;
+  margin: 0 0 14px;
+  padding: 10px 18px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px 8px;
@@ -1198,10 +1198,10 @@
   background: #fff;
   border: 1px solid rgba(46, 29, 107, 0.09);
   border-radius: 20px;
-  padding: 24px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
 }
 
 .panelTitle {
@@ -1235,7 +1235,7 @@
 .calBox {
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 16px;
+  padding: 12px 16px;
 }
 
 .calHead {
@@ -1270,10 +1270,10 @@
 }
 
 .calGrid {
-  margin-top: 14px;
+  margin-top: 8px;
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 6px;
+  gap: 5px;
   transition: opacity 0.2s ease;
 }
 
@@ -1290,10 +1290,11 @@
   padding-bottom: 4px;
 }
 
+/* Fixed height, not square: six week rows must fit beside the summary on a
+   768px-tall laptop. */
 .day {
   position: relative;
-  aspect-ratio: 1 / 0.9;
-  min-height: 44px;
+  height: 46px;
   border-radius: 10px;
   border: 1px solid transparent;
   display: flex;
@@ -1344,8 +1345,8 @@
 }
 
 .dayHeld {
-  background: rgba(255, 184, 0, 0.12);
-  border-color: rgba(255, 184, 0, 0.4);
+  background: rgba(255, 184, 0, 0.2);
+  border-color: rgba(255, 184, 0, 0.5);
   color: var(--warn-text);
 }
 
@@ -1354,8 +1355,13 @@
 }
 
 .dayFull {
-  background: #f1eef8;
-  color: var(--text-on-dark-2);
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.28);
+  color: var(--danger-text);
+}
+
+.dayFull .daySub {
+  color: var(--danger-text);
 }
 
 .dayFull .dayNum {
@@ -1378,7 +1384,7 @@
 }
 
 .legend {
-  margin-top: 12px;
+  margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
@@ -1406,12 +1412,13 @@
 }
 
 .lgHeld {
-  background: rgba(255, 184, 0, 0.2);
-  border: 1px solid rgba(255, 184, 0, 0.5);
+  background: rgba(255, 184, 0, 0.3);
+  border: 1px solid rgba(255, 184, 0, 0.6);
 }
 
 .lgFull {
-  background: #f1eef8;
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.4);
 }
 
 .lgHol {
@@ -1703,9 +1710,28 @@
   }
 }
 
-.summary {
+.side {
   position: sticky;
-  top: 86px;
+  top: 82px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.navSide {
+  flex-direction: row;
+}
+
+.navSide .btnPrimary {
+  flex: 1;
+}
+
+.navMain {
+  display: none;
+}
+
+.summary {
   min-width: 0;
   background: #fff;
   border: 1px solid rgba(46, 29, 107, 0.09);
@@ -1716,15 +1742,15 @@
 
 .summaryPhoto {
   width: 100%;
-  height: 170px;
+  height: 140px;
   background: #e9e3fb center / cover no-repeat;
 }
 
 .summaryBody {
-  padding: 18px 20px;
+  padding: 14px 20px 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .summaryName {
@@ -1806,10 +1832,21 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .side {
+    position: static;
+  }
+
+  .navSide {
+    display: none;
+  }
+
+  .navMain {
+    display: flex;
+  }
+
   /* Below the steps, beside its photo: the step and its Continue button
      stay at the top of the screen. */
   .summary {
-    position: static;
     display: grid;
     grid-template-columns: 140px minmax(0, 1fr);
   }
@@ -1859,11 +1896,15 @@
   }
 
   .day {
-    min-height: 40px;
+    height: 48px;
   }
 
+  /* "Selling Fast" wraps to two lines in a 44px cell. */
   .daySub {
-    font-size: 8.5px;
+    font-size: 8px;
+    line-height: 1.05;
+    white-space: normal;
+    text-align: center;
   }
 
   .itinItem {

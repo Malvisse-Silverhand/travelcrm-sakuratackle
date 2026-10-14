@@ -79,14 +79,23 @@ export default function Checkout({
   const [pax, setPax] = useState(initialPax);
   const [monthIdx, setMonthIdx] = useState(0);
   const [byMonth, setByMonth] = useState<Record<string, BoatNight[]>>(() =>
-    months[0] ? { [monthKey(months[0])]: initialNights } : {}
+    months[0] ? { [monthKey(months[0])]: initialNights } : {},
   );
   const [date, setDate] = useState<string | null>(null);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", note: "" });
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    note: "",
+  });
   const [plan, setPlan] = useState<Plan>("deposit");
   const [err, setErr] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [booked, setBooked] = useState<{ ref: string; phone: string; plan: Plan } | null>(null);
+  const [booked, setBooked] = useState<{
+    ref: string;
+    phone: string;
+    plan: Plan;
+  } | null>(null);
 
   const month = months[monthIdx] as SeasonMonth | undefined;
   const key = month ? monthKey(month) : "";
@@ -106,7 +115,10 @@ export default function Checkout({
       })
       .then(({ data, error }) => {
         if (cancelled) return;
-        setByMonth((prev) => ({ ...prev, [key]: error || !data ? [] : (data as BoatNight[]) }));
+        setByMonth((prev) => ({
+          ...prev,
+          [key]: error || !data ? [] : (data as BoatNight[]),
+        }));
       });
     return () => {
       cancelled = true;
@@ -203,7 +215,8 @@ export default function Checkout({
   const cells: ReactNode[] = [];
   if (month) {
     const first = (new Date(month.year, month.m, 1).getDay() + 6) % 7;
-    for (let i = 0; i < first; i++) cells.push(<span key={`b${i}`} aria-hidden="true" />);
+    for (let i = 0; i < first; i++)
+      cells.push(<span key={`b${i}`} aria-hidden="true" />);
     for (let d = 1; d <= month.days; d++) {
       const iso = monthISO(month, d);
       const st = status.get(iso);
@@ -219,7 +232,15 @@ export default function Checkout({
             : st === "full"
               ? styles.dayFull
               : styles.dayNone;
-      const sub = sel ? "Selected" : st === "open" ? "Open" : st === "held" ? "On hold" : st === "full" ? "Full" : "";
+      const sub = sel
+        ? "Selected"
+        : st === "open"
+          ? "Open"
+          : st === "held"
+            ? "Selling Fast"
+            : st === "full"
+              ? "Full"
+              : "";
       cells.push(
         <button
           key={iso}
@@ -237,10 +258,33 @@ export default function Checkout({
           <span className={styles.dayNum}>{d}</span>
           <span className={styles.daySub}>{sub}</span>
           {holiday && <span className={styles.dayHol} aria-hidden="true" />}
-        </button>
+        </button>,
       );
     }
   }
+
+  const nav = (placement: string) => (
+    <div className={`${styles.navRow} ${placement}`}>
+      <button type="button" className={styles.btnGhost} onClick={back}>
+        <Icon name="arrowLeft" size={16} />
+        {step === 1 ? "Change Boat" : "Back"}
+      </button>
+      <button
+        type="button"
+        className={styles.btnPrimary}
+        onClick={next}
+        disabled={submitting || (step === 1 && loading)}
+      >
+        {submitting && <span className={styles.spinner} aria-hidden="true" />}
+        {step === 3
+          ? submitting
+            ? "Confirming..."
+            : "Confirm Booking"
+          : "Continue"}
+        {!submitting && <Icon name="arrowRight" size={16} />}
+      </button>
+    </div>
+  );
 
   return (
     <main className={styles.checkout}>
@@ -250,13 +294,23 @@ export default function Checkout({
           const done = n < step;
           const cur = n === step;
           return (
-            <li key={label} className={styles.stepItem} aria-current={cur ? "step" : undefined}>
-              <span className={`${styles.stepDot} ${done ? styles.stepDone : cur ? styles.stepCur : ""}`}>
+            <li
+              key={label}
+              className={styles.stepItem}
+              aria-current={cur ? "step" : undefined}
+            >
+              <span
+                className={`${styles.stepDot} ${done ? styles.stepDone : cur ? styles.stepCur : ""}`}
+              >
                 {done ? "✓" : n}
               </span>
-              <span className={cur ? styles.stepLabelCur : styles.stepLabel}>{label}</span>
+              <span className={cur ? styles.stepLabelCur : styles.stepLabel}>
+                {label}
+              </span>
               {n < STEPS.length && (
-                <span className={`${styles.stepLine} ${done ? styles.stepLineDone : ""}`} />
+                <span
+                  className={`${styles.stepLine} ${done ? styles.stepLineDone : ""}`}
+                />
               )}
             </li>
           );
@@ -270,11 +324,14 @@ export default function Checkout({
               <div>
                 <h1 className={styles.panelTitle}>Choose a date for {name}</h1>
                 <p className={styles.muted}>
-                  Bertolak selepas Waktu Asar. Pulang pukul 7:00 pagi keesokannya.
+                  Bertolak selepas Waktu Asar. Pulang pukul 7:00 pagi
+                  keesokannya.
                 </p>
               </div>
               <div className={styles.stack8}>
-                <span className={styles.fieldLabel}>Group size (max {boat.capacity} pax)</span>
+                <span className={styles.fieldLabel}>
+                  Group size (max {boat.capacity} pax)
+                </span>
                 <div className={styles.chips}>
                   {paxChoices.map((p) => (
                     <button
@@ -308,14 +365,18 @@ export default function Checkout({
                     <button
                       type="button"
                       className={styles.calNav}
-                      onClick={() => setMonthIdx((i) => Math.min(months.length - 1, i + 1))}
+                      onClick={() =>
+                        setMonthIdx((i) => Math.min(months.length - 1, i + 1))
+                      }
                       disabled={monthIdx === months.length - 1}
                       aria-label="Next month"
                     >
                       <Icon name="caretRight" size={18} />
                     </button>
                   </div>
-                  <div className={`${styles.calGrid} ${loading ? styles.calLoading : ""}`}>
+                  <div
+                    className={`${styles.calGrid} ${loading ? styles.calLoading : ""}`}
+                  >
                     {DOW_EN.map((d) => (
                       <span key={d} className={styles.dow}>
                         {d}
@@ -324,10 +385,22 @@ export default function Checkout({
                     {cells}
                   </div>
                   <div className={styles.legend}>
-                    <span><i className={styles.lgOpen} />Available</span>
-                    <span><i className={styles.lgHeld} />On hold (awaiting payment)</span>
-                    <span><i className={styles.lgFull} />Full</span>
-                    <span><i className={styles.lgHol} />Public holiday</span>
+                    <span>
+                      <i className={styles.lgOpen} />
+                      Available
+                    </span>
+                    <span>
+                      <i className={styles.lgHeld} />
+                      Selling Fast
+                    </span>
+                    <span>
+                      <i className={styles.lgFull} />
+                      Full
+                    </span>
+                    <span>
+                      <i className={styles.lgHol} />
+                      Public holiday
+                    </span>
                   </div>
                 </div>
               ) : (
@@ -341,8 +414,8 @@ export default function Checkout({
               )}
               {date && HOLIDAYS_BY_DATE[date] && (
                 <p className={styles.holNote}>
-                  {formatLongDate(date)} ialah {HOLIDAYS_BY_DATE[date]}. Jeti lebih sesak, sila
-                  sampai lebih awal.
+                  {formatLongDate(date)} ialah {HOLIDAYS_BY_DATE[date]}. Jeti
+                  lebih sesak, sila sampai lebih awal.
                 </p>
               )}
             </section>
@@ -367,7 +440,9 @@ export default function Checkout({
                   <input
                     className={styles.input}
                     value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, phone: e.target.value })
+                    }
                     inputMode="tel"
                     autoComplete="tel"
                     placeholder="0123456789"
@@ -381,7 +456,9 @@ export default function Checkout({
                   <input
                     className={styles.input}
                     value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, email: e.target.value })
+                    }
                     type="email"
                     inputMode="email"
                     autoComplete="email"
@@ -436,7 +513,9 @@ export default function Checkout({
                     >
                       <Icon name={m.icon} size={18} />
                       {m.label}
-                      {!m.live && <span className={styles.soonPill}>Coming soon</span>}
+                      {!m.live && (
+                        <span className={styles.soonPill}>Coming soon</span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -447,9 +526,9 @@ export default function Checkout({
                   <BankRow label="Amount" value={rm(payNow)} />
                 </div>
                 <p className={styles.muted}>
-                  Tekan Confirm Booking dulu untuk dapat nombor rujukan. Guna nombor itu sebagai
-                  rujukan pindahan, kemudian muat naik resit. Malam ini ditahan untuk anda sementara
-                  kami sahkan bayaran.
+                  Tekan Confirm Booking dulu untuk dapat nombor rujukan. Guna
+                  nombor itu sebagai rujukan pindahan, kemudian muat naik resit.
+                  Malam ini ditahan untuk anda sementara kami sahkan bayaran.
                 </p>
               </div>
               <span className={styles.secure}>
@@ -465,11 +544,13 @@ export default function Checkout({
                 <span className={styles.doneTick}>
                   <Icon name="checkCircle" size={30} />
                 </span>
-                <h1 className={styles.panelTitle}>Thank you! Your booking is in.</h1>
+                <h1 className={styles.panelTitle}>
+                  Thank you! Your booking is in.
+                </h1>
                 <p className={styles.muted}>
-                  {name} pada {dateTxt} sudah ditahan untuk group anda. Pindahkan {rm(payNow)} ke
-                  akaun di bawah dan muat naik resit untuk lock slot. Kami WhatsApp anda dalam masa
-                  24 jam.
+                  {name} pada {dateTxt} sudah ditahan untuk group anda.
+                  Pindahkan {rm(payNow)} ke akaun di bawah dan muat naik resit
+                  untuk lock slot. Kami WhatsApp anda dalam masa 24 jam.
                 </p>
                 <div className={styles.refBox}>
                   <div>
@@ -492,7 +573,10 @@ export default function Checkout({
                   <BankRow label="Reference" value={booked.ref} />
                 </div>
                 <h2 className={styles.subTitle}>Upload Payment Receipt</h2>
-                <ReceiptUpload initialRef={booked.ref} initialPhone={booked.phone} />
+                <ReceiptUpload
+                  initialRef={booked.ref}
+                  initialPhone={booked.phone}
+                />
               </section>
 
               <section className={styles.panel}>
@@ -506,11 +590,21 @@ export default function Checkout({
                     <Icon name="pin" size={18} />
                     {JETTY.address}
                   </span>
-                  <a href={JETTY.mapsUrl} target="_blank" rel="noopener noreferrer" className={styles.btnGhost}>
+                  <a
+                    href={JETTY.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.btnGhost}
+                  >
                     <Icon name="map" size={16} />
                     Google Maps
                   </a>
-                  <a href={WAZE_URL} target="_blank" rel="noopener noreferrer" className={styles.btnGhost}>
+                  <a
+                    href={WAZE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.btnGhost}
+                  >
                     <Icon name="nav" size={16} />
                     Waze
                   </a>
@@ -531,7 +625,12 @@ export default function Checkout({
                   <p>{PREPARATION}</p>
                 </div>
                 <div className={styles.actionsRow}>
-                  <a href={waHref} target="_blank" rel="noopener noreferrer" className={styles.btnWa}>
+                  <a
+                    href={waHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.btnWa}
+                  >
                     <Icon name="whatsapp" size={18} />
                     WhatsApp Us
                   </a>
@@ -549,58 +648,61 @@ export default function Checkout({
             </p>
           )}
 
-          {step < 4 && (
-            <div className={styles.navRow}>
-              <button type="button" className={styles.btnGhost} onClick={back}>
-                <Icon name="arrowLeft" size={16} />
-                {step === 1 ? "Change Boat" : "Back"}
-              </button>
-              <button
-                type="button"
-                className={styles.btnPrimary}
-                onClick={next}
-                disabled={submitting || (step === 1 && loading)}
-              >
-                {submitting && <span className={styles.spinner} aria-hidden="true" />}
-                {step === 3 ? (submitting ? "Confirming..." : "Confirm Booking") : "Continue"}
-                {!submitting && <Icon name="arrowRight" size={16} />}
-              </button>
-            </div>
-          )}
+          {step < 4 && nav(styles.navMain)}
         </div>
 
-        <aside className={styles.summary} aria-label="Booking summary">
-          <div
-            role="img"
-            aria-label={`Foto bot ${name}`}
-            className={styles.summaryPhoto}
-            style={boat.photo_url ? { backgroundImage: `url("${boat.photo_url}")` } : undefined}
-          />
-          <div className={styles.summaryBody}>
-            <div>
-              {boat.kind && <span className={styles.kindBadge}>{boat.kind}</span>}
-              <h2 className={styles.summaryName}>{name}</h2>
-              <span className={styles.boatLoc}>
-                <Icon name="pin" size={15} />
-                Jeti Marang, Terengganu
-              </span>
+        <div className={styles.side}>
+          <aside className={styles.summary} aria-label="Booking summary">
+            <div
+              role="img"
+              aria-label={`Foto bot ${name}`}
+              className={styles.summaryPhoto}
+              style={
+                boat.photo_url
+                  ? { backgroundImage: `url("${boat.photo_url}")` }
+                  : undefined
+              }
+            />
+            <div className={styles.summaryBody}>
+              <div>
+                {boat.kind && (
+                  <span className={styles.kindBadge}>{boat.kind}</span>
+                )}
+                <h2 className={styles.summaryName}>{name}</h2>
+                <span className={styles.boatLoc}>
+                  <Icon name="pin" size={15} />
+                  Jeti Marang, Terengganu
+                </span>
+              </div>
+              <div className={styles.summaryRows}>
+                <SumRow icon="calendar" label="Date" value={dateTxt} />
+                <SumRow icon="users" label="Group" value={`${pax} pax`} />
+                <SumRow icon="clock" label="Time" value={TRIP_TIME} />
+              </div>
+              <div className={styles.summaryMoney}>
+                <div>
+                  <span>Boat charter (per night)</span>
+                  <span>{rm(rate)}</span>
+                </div>
+                <div>
+                  <span>Pay now</span>
+                  <b>{rm(payNow)}</b>
+                </div>
+                <div>
+                  <span>Balance at jetty</span>
+                  <span>{rm(balance)}</span>
+                </div>
+              </div>
+              <div className={styles.summaryTotal}>
+                <span>Total</span>
+                <span className={styles.summaryTotalValue}>{rm(rate)}</span>
+              </div>
             </div>
-            <div className={styles.summaryRows}>
-              <SumRow icon="calendar" label="Date" value={dateTxt} />
-              <SumRow icon="users" label="Group" value={`${pax} pax`} />
-              <SumRow icon="clock" label="Time" value={TRIP_TIME} />
-            </div>
-            <div className={styles.summaryMoney}>
-              <div><span>Boat charter (per night)</span><span>{rm(rate)}</span></div>
-              <div><span>Pay now</span><b>{rm(payNow)}</b></div>
-              <div><span>Balance at jetty</span><span>{rm(balance)}</span></div>
-            </div>
-            <div className={styles.summaryTotal}>
-              <span>Total</span>
-              <span className={styles.summaryTotalValue}>{rm(rate)}</span>
-            </div>
-          </div>
-        </aside>
+          </aside>
+          {/* On a wide screen the step's buttons sit under the summary, so the
+            whole step fits one screen; narrower, they follow the step. */}
+          {step < 4 && nav(styles.navSide)}
+        </div>
       </div>
     </main>
   );
@@ -614,8 +716,10 @@ function bookingErrorCopy(m: string): string {
   }
   if (m.includes("invalid name")) return "Sila semak nama penuh.";
   if (m.includes("invalid phone")) return "Sila semak nombor telefon.";
-  if (m.includes("invalid group size")) return "Saiz group melebihi kapasiti bot ini.";
-  if (m.includes("boat not available")) return "Bot ini tidak lagi dibuka untuk tempahan. Pilih bot lain.";
+  if (m.includes("invalid group size"))
+    return "Saiz group melebihi kapasiti bot ini.";
+  if (m.includes("boat not available"))
+    return "Bot ini tidak lagi dibuka untuk tempahan. Pilih bot lain.";
   return "Maaf, tempahan tidak berjaya dihantar. Cuba lagi atau WhatsApp kami terus.";
 }
 
@@ -660,7 +764,15 @@ function BankRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function SumRow({ icon, label, value }: { icon: string; label: string; value: string }) {
+function SumRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: string;
+  label: string;
+  value: string;
+}) {
   return (
     <div className={styles.sumRow}>
       <span className={styles.sumLabel}>
