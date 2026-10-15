@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getOperatorProfile } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import BookingDetailActions from "@/components/admin/BookingDetailActions";
+import BookingRequests, { type RequestRow } from "@/components/admin/BookingRequests";
 import { formatLongDate } from "@/lib/season";
 import { customerKey } from "@/lib/admin/customers";
 import { formatRM } from "@/lib/date";
@@ -22,11 +23,11 @@ export default async function BookingDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const [{ data: booking }, { data: paxList }] = await Promise.all([
+  const [{ data: booking }, { data: paxList }, { data: requests }] = await Promise.all([
     supabase
       .from("bookings")
       .select(
-        "id, ref, full_name, phone, email, pax, note, status, night_date, pricing, price_per_pax, total_amount, deposit_amount, deposit_paid, pay_plan, deposit_paid_at, receipt_url, created_at, boats(code, skipper_name)"
+        "id, ref, full_name, phone, email, pax, note, status, night_date, pricing, price_per_pax, total_amount, deposit_amount, deposit_paid, pay_plan, deposit_paid_at, receipt_url, created_at, boat_id, boats(code, skipper_name)"
       )
       .eq("id", id)
       .maybeSingle(),
@@ -35,6 +36,12 @@ export default async function BookingDetailPage({
       .select("id, full_name")
       .eq("booking_id", id)
       .order("sort_order"),
+    supabase
+      .from("booking_requests")
+      .select("id, kind, new_date, note, refund_amount, status, created_at")
+      .eq("booking_id", id)
+      .order("created_at", { ascending: false })
+      .returns<RequestRow[]>(),
   ]);
 
   if (!booking) notFound();
@@ -119,6 +126,10 @@ export default async function BookingDetailPage({
                 <p className={styles.emptyCardBody}>No guest names recorded yet.</p>
               )}
             </div>
+
+            {profile.role !== "vendor" && (
+              <BookingRequests bookingId={booking.id} boatId={booking.boat_id} bookingStatus={booking.status} requests={requests ?? []} />
+            )}
 
             <div className={styles.detailCard}>
               <span className={styles.detailCardLabel}>Skipper note</span>

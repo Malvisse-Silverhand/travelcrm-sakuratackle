@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendTripReminders } from "@/lib/email/bookingEmails";
+import { sendReviewRequests, sendTripReminders } from "@/lib/email/bookingEmails";
 import { addDaysISO, todayISO } from "@/lib/date";
 
 // Daily ping from Vercel Cron (vercel.json) that keeps the free-tier Supabase
@@ -57,12 +57,16 @@ export async function GET(request: Request) {
 
   // Day-before trip reminders (emails), for tomorrow in Malaysia time. The
   // cron runs at 06:00 MYT.
+  // And "How was your trip?" for the night before last (the boats return at
+  // 07:00, after this runs).
   let reminders = 0;
+  let reviewAsks = 0;
   try {
     reminders = await sendTripReminders(addDaysISO(todayISO(), 1));
+    reviewAsks = await sendReviewRequests(addDaysISO(todayISO(), -2));
   } catch (e) {
     Sentry.captureException(e, { tags: { area: "keepalive" } });
   }
 
-  return NextResponse.json({ ok: true, expired: expired ?? null, reminders, at: new Date().toISOString() });
+  return NextResponse.json({ ok: true, expired: expired ?? null, reminders, reviewAsks, at: new Date().toISOString() });
 }

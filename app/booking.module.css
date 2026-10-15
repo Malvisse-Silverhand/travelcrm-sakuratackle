@@ -875,6 +875,14 @@
   color: var(--warn-text-2);
 }
 
+.manageLink {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--purple);
+}
+
 .emptyState {
   margin-top: 20px;
   padding: 22px;

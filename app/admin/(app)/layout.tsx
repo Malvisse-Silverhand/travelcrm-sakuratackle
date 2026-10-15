@@ -18,7 +18,7 @@ export default async function AdminLayout({
 
   // Sidebar badges: new leads, and uploaded receipts nobody has checked.
   const supabase = await createClient();
-  const [{ count: pending }, { count: receipts }] = await Promise.all([
+  const [{ count: pending }, { count: receipts }, { count: reviews }] = await Promise.all([
     supabase.from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabase
       .from("bookings")
@@ -26,11 +26,12 @@ export default async function AdminLayout({
       .not("receipt_url", "is", null)
       .eq("deposit_paid", false)
       .neq("status", "cancelled"),
+    supabase.from("reviews").select("id", { count: "exact", head: true }).eq("status", "pending"),
   ]);
 
   return (
     <div className={styles.shell}>
-      <Sidebar badges={{ pending: pending ?? 0, receipts: receipts ?? 0 }} role={profile.role} />
+      <Sidebar badges={{ pending: pending ?? 0, receipts: receipts ?? 0, reviews: reviews ?? 0 }} role={profile.role} />
       <div className={styles.contentColumn}>
         {children}
         <BottomNav role={profile.role} />

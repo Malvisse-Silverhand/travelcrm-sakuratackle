@@ -3,6 +3,7 @@ import { BookingProvider } from "@/components/public/BookingState";
 import HeroBooking from "@/components/public/book/HeroBooking";
 import { JETTY_SELECT, type Jetty } from "@/lib/content/booking";
 import { homeJsonLd, jsonLdHtml } from "@/lib/structured-data";
+import { summarise, type PublicReview } from "@/lib/booking/reviews";
 import { waGeneral, waLink, waUnavailable } from "@/lib/whatsapp";
 import FaqAccordion from "@/components/public/FaqAccordion";
 import MobileTabBar from "@/components/public/MobileTabBar";
@@ -41,7 +42,7 @@ export default async function Home() {
   // Package, org and opening-month availability come from the loader the
   // destination guide shares, so both pages tell a database outage apart from
   // an unpublished season the same way. Only the fleet is homepage-specific.
-  const [{ months, pkg, org, unavailable }, { data: boats }, { data: jetties }] =
+  const [{ months, pkg, org, unavailable }, { data: boats }, { data: jetties }, { data: reviews }] =
     await Promise.all([
       loadBookingData(),
       supabase
@@ -54,6 +55,7 @@ export default async function Home() {
         .order("code")
         .returns<FleetBoat[]>(),
       supabase.from("jetties").select(JETTY_SELECT).order("sort_order").returns<Jetty[]>(),
+      supabase.rpc("get_published_reviews"),
     ]);
 
   if (!pkg) {
@@ -112,6 +114,7 @@ export default async function Home() {
             <HeroBooking
               boats={fleet}
               jetties={jetties ?? []}
+              ratings={summarise((reviews ?? []) as PublicReview[])}
               depositPerBoat={Number(pkg.deposit_per_boat)}
               subtitle={pkg.subtitle}
               heroPhoto={HERO.photo}

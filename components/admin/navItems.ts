@@ -11,7 +11,7 @@ export type NavItem = {
 };
 
 /** Counts the admin layout supplies for sidebar badges. */
-export type BadgeKey = "pending" | "receipts";
+export type BadgeKey = "pending" | "receipts" | "reviews";
 
 /** Phase 4 grouped sidebar. Only screens that exist are listed; groups gain
  *  entries as their screens are built. `badge` names a count the layout
@@ -37,7 +37,15 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: "/admin/calendar", label: "Calendar" },
     ],
   },
-  { label: "Customers", icon: "C", href: "/admin/customers", adminOnly: true },
+  {
+    label: "Customers",
+    icon: "C",
+    adminOnly: true,
+    items: [
+      { href: "/admin/customers", label: "Customers" },
+      { href: "/admin/reviews", label: "Reviews", badge: "reviews" },
+    ],
+  },
   { label: "Fleet", icon: "F", href: "/admin/fleet", adminOnly: true },
   { label: "Trips", icon: "T", adminOnly: true, items: [{ href: "/admin/packages", label: "Packages" }] },
   { label: "Reports", icon: "R", adminOnly: true, items: [{ href: "/admin/reports", label: "Insights" }] },

@@ -129,6 +129,9 @@ export default function CheckBooking() {
                 </span>
               </div>
             </div>
+            <a href={`/my-booking?ref=${encodeURIComponent(r.ref)}`} className={styles.manageLink}>
+              Manage booking: pay, guest names, change date or cancel &rarr;
+            </a>
           </div>
         ))}
 
