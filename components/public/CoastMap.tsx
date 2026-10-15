@@ -12,6 +12,7 @@ import {
   type Spot,
   type SpotCategory,
 } from "@/lib/content/terengganu";
+import { SITE_URL } from "@/lib/site-url";
 import styles from "@/app/destinasi/destinasi.module.css";
 
 const ALL_CATEGORIES = Object.keys(CATEGORIES) as SpotCategory[];
@@ -186,9 +187,17 @@ export default function CoastMap({ waNumber }: { waNumber: string }) {
     .map((id) => SPOTS.find((s) => s.id === id))
     .filter((s): s is Spot => Boolean(s));
   const waPlanHref = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(
-    `Salam, saya nak tempah trip candat sotong dari Jeti Marang.\n\nPelan saya di Terengganu:\n${planSpots
-      .map((s, i) => `${i + 1}. ${s.name}`)
-      .join("\n")}`
+    [
+      "Hai Sakura Tackle! Saya nak tempah trip candat sotong dari Jeti Marang dan gabungkan dengan percutian di Terengganu.",
+      "",
+      "Pelan saya di Terengganu:",
+      ...planSpots.map((s, i) => `${i + 1}. ${s.name}`),
+      "",
+      "Saiz group: ___ orang",
+      "Tarikh pilihan: ___",
+      "",
+      `Saya rancang di: ${SITE_URL}/destinasi/terengganu`,
+    ].join("\n")
   )}`;
 
   return (

@@ -212,7 +212,12 @@
           "body": "A new boat needs its nights opened in Settings → Season before customers can book it."
         },
         {
-          "selector": "[class*='dtTable'] th:nth-child(8)",
+          "selector": "[class*='dtTable'] th:nth-child(4)",
+          "title": "Jetty",
+          "body": "Where each boat sails from. Use the jetty filter above the table to see one jetty's boats."
+        },
+        {
+          "selector": "[class*='dtTable'] th:nth-child(9)",
           "title": "Upcoming",
           "body": "Bookings on this boat for nights still to come."
         },
@@ -237,6 +242,11 @@
           "selector": "[class*='formGrid2']",
           "title": "Details",
           "body": "Code is the number on the hull plate. Kind, description, capacity, size and rate are shown to customers."
+        },
+        {
+          "selector": "[class*='formGrid2'] select",
+          "title": "Jetty",
+          "body": "The jetty this boat sails from. The homepage search shows it only under that jetty. A boat at a Coming Soon jetty cannot be booked."
         },
         {
           "selector": "[class*='checkRow']",
@@ -314,6 +324,60 @@
           "selector": "[class*='settingsGrid'] input:not([type])",
           "title": "WhatsApp number",
           "body": "The number customers reach from the website's WhatsApp buttons."
+        }
+      ]
+    },
+    {
+      "slug": "unpaid-holds",
+      "group": "Admin",
+      "title": "Unpaid bookings",
+      "path": "/admin/settings",
+      "steps": [
+        "focus:input[max='720']"
+      ],
+      "intro": "How long an unpaid booking keeps its night before it is released automatically.",
+      "callouts": [
+        {
+          "selector": "input[max='720']",
+          "title": "Hold time",
+          "body": "Hours a booking with no payment and no receipt holds the boat-night. After that it is cancelled, the night goes back on sale and the bell shows \"Hold expired\". The terms page shows the same number."
+        },
+        {
+          "selector": "input[max='720']",
+          "title": "Not retroactive",
+          "body": "Bookings made before this was switched on (15 Oct 2026) never expire on their own; cancel them by hand if they will not pay."
+        }
+      ]
+    },
+    {
+      "slug": "jetties",
+      "group": "Admin",
+      "title": "Jetties",
+      "path": "/admin/settings",
+      "steps": [
+        "focus:[class*='jettyGrid']"
+      ],
+      "intro": "The jetty list on the homepage search and map.",
+      "callouts": [
+        {
+          "selector": "[class*='jettyGrid'] input[aria-label='Name']",
+          "title": "Name and subtitle",
+          "body": "The name appears in the search menu; the subtitle under it and on each boat card, e.g. \"Jeti Marang, Terengganu\"."
+        },
+        {
+          "selector": "[class*='jettyGrid'] input[aria-label='Latitude']",
+          "title": "Map position",
+          "body": "Right-click the jetty in Google Maps and copy the two numbers: latitude first, then longitude."
+        },
+        {
+          "selector": "[class*='jettyOpen']",
+          "title": "Open or Coming Soon",
+          "body": "Only open jetties take bookings. Coming Soon jetties show on the map and in the menu so customers know they are on the way."
+        },
+        {
+          "selector": "[class*='jettyGrid'] [class*='dtBtn']",
+          "title": "Save and boats",
+          "body": "Saves the row. The number shows how many active boats sail from it; assign boats in Fleet → Edit."
         }
       ]
     },

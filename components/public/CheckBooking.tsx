@@ -29,10 +29,12 @@ function statusPillClass(status: string) {
   return styles.statusHold;
 }
 
-/** "Semak Booking Saya": look up a customer's bookings by the phone number
- *  they booked with. Phase 3's client portal replaces this. */
+/** "Check My Booking": the booking reference plus the phone number it was
+ *  made with (check_booking). A phone number alone no longer lists bookings:
+ *  anyone who knows a number could otherwise see someone else's trips. */
 export default function CheckBooking() {
   const supabase = useMemo(() => createClient(), []);
+  const [ref, setRef] = useState("");
   const [phone, setPhone] = useState("");
   const [checking, setChecking] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -42,7 +44,8 @@ export default function CheckBooking() {
   const runCheck = async () => {
     setError(null);
     setChecking(true);
-    const { data, error } = await supabase.rpc("check_booking_by_phone", {
+    const { data, error } = await supabase.rpc("check_booking", {
+      p_ref: ref.trim(),
       p_phone: phone.replace(/[^0-9]/g, ""),
     });
     setChecking(false);
@@ -58,10 +61,21 @@ export default function CheckBooking() {
   return (
     <div>
       <p className={styles.checkLead}>
-        Masukkan nombor telefon yang digunakan semasa tempahan untuk semak status booking
-        anda.
+        Masukkan nombor rujukan (cth: CS-2703-014) dan nombor telefon yang digunakan semasa
+        tempahan untuk semak status booking anda.
       </p>
       <div className={styles.checkRow}>
+        <input
+          className={styles.checkInput}
+          value={ref}
+          onChange={(e) => {
+            setRef(e.target.value);
+            setChecked(false);
+          }}
+          placeholder="Booking reference"
+          aria-label="Booking reference"
+          autoCapitalize="characters"
+        />
         <input
           className={styles.checkInput}
           value={phone}
@@ -69,14 +83,15 @@ export default function CheckBooking() {
             setPhone(e.target.value);
             setChecked(false);
           }}
-          placeholder="Nombor telefon (cth: 0123456789)"
+          placeholder="Phone (cth: 0123456789)"
+          aria-label="Phone number"
           inputMode="tel"
         />
         <button
           type="button"
           className={styles.checkBtn}
           onClick={runCheck}
-          disabled={checking || !phone.trim()}
+          disabled={checking || !phone.trim() || !ref.trim()}
         >
           {checking ? "Checking..." : "Check"}
         </button>
@@ -119,9 +134,9 @@ export default function CheckBooking() {
 
       {checked && !error && results.length === 0 && (
         <div className={styles.emptyState}>
-          <p className={styles.emptyTitle}>Tiada tempahan untuk nombor itu</p>
+          <p className={styles.emptyTitle}>Tiada tempahan sepadan</p>
           <p className={styles.emptyBody}>
-            Cuba nombor lain, atau WhatsApp kami dan kami semak manual.
+            Semak semula nombor rujukan dan telefon, atau WhatsApp kami dan kami semak manual.
           </p>
         </div>
       )}

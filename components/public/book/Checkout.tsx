@@ -25,8 +25,12 @@ import {
   PREPARATION,
   TRIP_TIME,
   WAZE_URL,
+  jettyLabel,
+  perPax,
   rm,
+  type Jetty,
 } from "@/lib/content/booking";
+import { waBoat, waBooked, waLink } from "@/lib/whatsapp";
 import styles from "./book.module.css";
 
 export type BoatNight = {
@@ -38,11 +42,13 @@ export type BoatNight = {
 type Props = {
   packageId: string;
   boat: FleetBoat;
+  jetty: Jetty;
   depositPerBoat: number;
   months: SeasonMonth[];
   initialPax: number;
   initialNights: BoatNight[];
-  waHref: string;
+  /** Operator's WhatsApp number. */
+  waNumber: string;
 };
 
 type Plan = "deposit" | "full";
@@ -63,11 +69,12 @@ const METHODS = [
 export default function Checkout({
   packageId,
   boat,
+  jetty,
   depositPerBoat,
   months,
   initialPax,
   initialNights,
-  waHref,
+  waNumber,
 }: Props) {
   const supabase = useMemo(() => createClient(), []);
   const router = useRouter();
@@ -264,6 +271,22 @@ export default function Checkout({
       );
     }
   }
+
+  // WhatsApp: about this boat until booked, then about the booking itself.
+  const waHref = booked
+    ? waLink(
+        waNumber,
+        waBooked({
+          ref: booked.ref,
+          boat: name,
+          date: dateTxt,
+          pax,
+          plan: booked.plan,
+          payNow: rm(payNow),
+          total: rm(rate),
+        })
+      )
+    : waLink(waNumber, waBoat({ id: boat.id, name }, pax, date ? dateTxt : null));
 
   const nav = (placement: string) => (
     <div className={`${styles.navRow} ${placement}`}>
@@ -543,6 +566,13 @@ export default function Checkout({
                 <Icon name="lock" size={16} />
                 Kami tidak simpan butiran bank atau kad anda.
               </span>
+              <p className={styles.terms}>
+                Dengan tekan Confirm Booking, anda setuju dengan{" "}
+                <Link href="/polisi" target="_blank">
+                  Booking Terms &amp; Privacy
+                </Link>{" "}
+                kami, termasuk polisi pembatalan dan cuaca.
+              </p>
             </section>
           )}
 
@@ -632,6 +662,14 @@ export default function Checkout({
                   <div className={styles.prepTitle}>Before You Sail</div>
                   <p>{PREPARATION}</p>
                 </div>
+                <p className={styles.terms}>
+                  Cuaca tak elok? Kapten batalkan demi keselamatan dan anda boleh tukar tarikh atau
+                  dapat bayaran balik penuh. Baca{" "}
+                  <Link href="/polisi#cuaca" target="_blank">
+                    polisi cuaca &amp; pembatalan
+                  </Link>
+                  .
+                </p>
                 <div className={styles.actionsRow}>
                   <a
                     href={waHref}
@@ -679,7 +717,7 @@ export default function Checkout({
                 <h2 className={styles.summaryName}>{name}</h2>
                 <span className={styles.boatLoc}>
                   <Icon name="pin" size={15} />
-                  Jeti Marang, Terengganu
+                  {jettyLabel(jetty)}
                 </span>
               </div>
               <div className={styles.summaryRows}>
@@ -705,6 +743,7 @@ export default function Checkout({
                 <span>Total</span>
                 <span className={styles.summaryTotalValue}>{rm(rate)}</span>
               </div>
+              <span className={styles.summaryPerPax}>{perPax(rate, pax)} untuk {pax} pax</span>
             </div>
           </aside>
           {/* On a wide screen the step's buttons sit under the summary, so the

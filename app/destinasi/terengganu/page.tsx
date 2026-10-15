@@ -6,6 +6,7 @@ import BookingNotice from "@/components/public/BookingNotice";
 import FloatingWhatsApp from "@/components/public/FloatingWhatsApp";
 import MobileTabBar from "@/components/public/MobileTabBar";
 import { loadBookingData } from "@/lib/booking/publicData";
+import { waGuide, waLink } from "@/lib/whatsapp";
 import { HERO, JETTY } from "@/lib/content/site";
 import {
   AREAS,
@@ -36,9 +37,7 @@ export default async function TerengganuGuide() {
 
   const businessName = org?.business_name ?? "Sakura Tackle";
   const waNumber = org?.whatsapp_number ?? "601153598055";
-  const waHref = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(
-    "Saya berminat trip candat sotong di Terengganu"
-  )}`;
+  const waHref = waLink(waNumber, waGuide());
 
   return (
     <div className={pub.shell}>

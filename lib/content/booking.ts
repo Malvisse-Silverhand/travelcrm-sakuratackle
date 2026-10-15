@@ -2,23 +2,29 @@
 // boat results and the /book checkout. Titles, labels and buttons are English
 // (Mal's rule for this flow); body copy stays bahasa rojak.
 
-export type JettyLocation = {
+/** A jetty boats sail from (table `jetties`, edited in admin Settings).
+ *  The homepage search lists them; only `open` ones take bookings. */
+export type Jetty = {
   id: string;
   name: string;
-  sub: string;
+  subtitle: string;
   lat: number;
   lng: number;
   open: boolean;
 };
 
-/** Where trips leave from. Only Marang sails today; the others are on the
- *  map so customers from the north and south can see they are coming. */
-export const LOCATIONS: JettyLocation[] = [
-  { id: "marang", name: "Marang", sub: "Jeti Marang, Terengganu", lat: 5.2066, lng: 103.2058, open: true },
-  { id: "kt", name: "Kuala Terengganu", sub: "Akan dibuka", lat: 5.3302, lng: 103.1408, open: false },
-  { id: "dungun", name: "Dungun", sub: "Akan dibuka", lat: 4.7566, lng: 103.415, open: false },
-  { id: "besut", name: "Besut", sub: "Akan dibuka", lat: 5.8306, lng: 102.5583, open: false },
-];
+export const JETTY_SELECT = "id,name,subtitle,lat,lng,open";
+
+/** "Jeti Marang, Terengganu" for a boat's jetty, falling back to its name. */
+export function jettyLabel(j: Pick<Jetty, "name" | "subtitle" | "open"> | null | undefined): string {
+  if (!j) return "Terengganu";
+  return j.open && j.subtitle ? j.subtitle : j.name;
+}
+
+/** Price per head for a whole-boat charter, for the "≈ RM150/pax" hint. */
+export function perPax(rate: number, pax: number): string {
+  return "≈ " + rm(Math.round(rate / Math.max(1, pax))) + "/pax";
+}
 
 export const HERO_BOOKING = {
   badge: "Squid Jigging Season Is Open",

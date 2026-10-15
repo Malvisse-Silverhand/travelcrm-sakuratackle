@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { formatRM } from "@/lib/date";
-import DataTable, { type Column, type Tab } from "./DataTable";
+import DataTable, { type Column, type Filter, type Tab } from "./DataTable";
 import styles from "../../app/admin/admin.module.css";
 
 export type FleetRow = {
@@ -17,6 +17,8 @@ export type FleetRow = {
   photo_url: string | null;
   active: boolean;
   sort_order: number;
+  /** Name of the jetty it sails from. */
+  jetty: string;
   /** Live bookings on upcoming nights. */
   upcoming: number;
 };
@@ -25,6 +27,10 @@ const TABS: Tab<FleetRow>[] = [
   { key: "active", label: "Active", test: (b) => b.active },
   { key: "inactive", label: "Inactive", test: (b) => !b.active },
   { key: "all", label: "All", test: () => true },
+];
+
+const FILTERS: Filter<FleetRow>[] = [
+  { key: "jetty", allLabel: "All jetties", value: (b) => b.jetty },
 ];
 
 const SEARCH = {
@@ -58,6 +64,7 @@ const COLUMNS: Column<FleetRow>[] = [
       </>
     ),
   },
+  { key: "jetty", header: "Jetty", render: (b) => b.jetty },
   { key: "skipper", header: "Skipper", render: (b) => b.skipper_name },
   { key: "cap", header: "Capacity", align: "right", render: (b) => `${b.capacity} pax` },
   { key: "len", header: "Length", align: "right", render: (b) => (b.length_ft ? `${b.length_ft} ft` : "—") },
@@ -96,6 +103,7 @@ const COLUMNS: Column<FleetRow>[] = [
 export default function FleetTable({ rows }: { rows: FleetRow[] }) {
   return (
     <DataTable
+      filters={FILTERS}
       rows={rows}
       rowKey={(b) => b.id}
       columns={COLUMNS}

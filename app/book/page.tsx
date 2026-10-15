@@ -7,11 +7,13 @@ import BookingNotice from "@/components/public/BookingNotice";
 import Checkout, { type BoatNight } from "@/components/public/book/Checkout";
 import type { FleetBoat } from "@/components/public/home/FleetShowcase";
 import { monthFirstISO, monthLastISO } from "@/lib/season";
+import { JETTY_SELECT, type Jetty } from "@/lib/content/booking";
+import { waLink, waUnavailable } from "@/lib/whatsapp";
 import pub from "@/app/public.module.css";
 
 export const metadata: Metadata = {
   title: "Book Your Boat | Sakura Tackle",
-  description: "Pilih tarikh, isi butiran dan lock bot candat sotong anda di Jeti Marang.",
+  description: "Pilih tarikh, isi butiran dan lock bot candat sotong anda di Terengganu.",
 };
 
 /** Checkout for one boat: date, details, payment, done. The homepage search
@@ -34,7 +36,7 @@ export default async function BookPage({
     supabase
       .from("boats")
       .select(
-        "id,code,display_name,kind,length_ft,beam,material,capacity,daily_rate,description,photo_url"
+        "id,code,display_name,kind,length_ft,beam,material,capacity,daily_rate,description,photo_url,jetty_id"
       )
       .eq("id", boatId)
       .eq("active", true)
@@ -42,9 +44,7 @@ export default async function BookPage({
   ]);
 
   const wa = org?.whatsapp_number ?? "601153598055";
-  const waHref = `https://api.whatsapp.com/send?phone=${wa}&text=${encodeURIComponent(
-    "Saya berminat trip candat sotong"
-  )}`;
+  const waHref = waLink(wa, waUnavailable());
 
   if (!pkg) {
     return (
@@ -54,6 +54,15 @@ export default async function BookPage({
     );
   }
   if (!boat || !(Number(boat.daily_rate) > 0)) redirect("/#tempah");
+
+  const { data: jetty } = await supabase
+    .from("jetties")
+    .select(JETTY_SELECT)
+    .eq("id", boat.jetty_id)
+    .maybeSingle<Jetty>();
+  // A boat at a jetty that has not opened yet cannot be booked (the booking
+  // function refuses it too); send the customer back to the search.
+  if (!jetty?.open) redirect("/#tempah");
 
   // The boat's nights for the opening month; the calendar fetches the rest.
   let initial: BoatNight[] = [];
@@ -91,11 +100,12 @@ export default async function BookPage({
       <Checkout
         packageId={pkg.id}
         boat={boat}
+        jetty={jetty}
         depositPerBoat={Number(pkg.deposit_per_boat)}
         months={months}
         initialPax={pax}
         initialNights={initial}
-        waHref={waHref}
+        waNumber={wa}
       />
     </div>
   );

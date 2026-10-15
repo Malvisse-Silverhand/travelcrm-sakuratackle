@@ -117,6 +117,16 @@ for (const topic of topics) {
         Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set.call(r, ${JSON.stringify(step.slice(7))});
         r.dispatchEvent(new Event("input", { bubbles: true }));
       })()`);
+    } else if (step.startsWith("focus:")) {
+      // Show only the card holding this element, so one Settings section
+      // gets its own picture instead of being lost at the foot of the page.
+      await js(`(() => {
+        const card = document.querySelector(${JSON.stringify(step.slice(6))})?.closest("[class*='detailCard']");
+        if (!card) return;
+        document.querySelectorAll("[class*='detailCard']").forEach((c) => {
+          if (c !== card && !c.contains(card) && !card.contains(c)) c.style.display = "none";
+        });
+      })()`);
     } else if (step.startsWith("click:")) {
       await js(`document.querySelector(${JSON.stringify(step.slice(6))})?.click()`);
     }

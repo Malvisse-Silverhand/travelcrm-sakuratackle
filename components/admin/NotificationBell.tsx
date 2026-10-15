@@ -13,6 +13,7 @@ const KINDS: Record<string, { label: string; tone: "red" | "gold" | "green" | "p
   "receipt.uploaded": { label: "Receipt to verify", tone: "gold" },
   "booking.created": { label: "New booking", tone: "green" },
   "booking.cancelled": { label: "Cancelled", tone: "red" },
+  "booking.expired": { label: "Hold expired", tone: "gold" },
   "user.joined": { label: "New team member", tone: "purple" },
 };
 

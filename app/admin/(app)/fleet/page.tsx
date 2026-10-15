@@ -14,7 +14,7 @@ export default async function FleetPage() {
     supabase
       .from("boats")
       .select(
-        "id, code, display_name, kind, skipper_name, capacity, length_ft, daily_rate, photo_url, active, sort_order"
+        "id, code, display_name, kind, skipper_name, capacity, length_ft, daily_rate, photo_url, active, sort_order, jetties(name)"
       )
       .order("sort_order")
       .order("code"),
@@ -28,7 +28,10 @@ export default async function FleetPage() {
   const perBoat = new Map<string, number>();
   for (const b of upcoming ?? []) perBoat.set(b.boat_id, (perBoat.get(b.boat_id) ?? 0) + 1);
 
-  const rows: FleetRow[] = (boats ?? []).map((b) => ({ ...b, upcoming: perBoat.get(b.id) ?? 0 }));
+  const rows: FleetRow[] = (boats ?? []).map(({ jetties, ...b }) => {
+    const j = Array.isArray(jetties) ? jetties[0] : jetties;
+    return { ...b, jetty: j?.name ?? "—", upcoming: perBoat.get(b.id) ?? 0 };
+  });
   const active = rows.filter((b) => b.active).length;
 
   return (

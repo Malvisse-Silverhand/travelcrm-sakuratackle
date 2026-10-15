@@ -146,6 +146,7 @@ export const FOOTER = {
     { label: "Shop", href: "https://sakuratackle.com/shop/", external: true },
     { label: "Armada", href: "#armada", external: false },
     { label: "FAQ", href: "#faq", external: false },
+    { label: "Terms & Privacy", href: "/polisi", external: false },
   ],
 };
 

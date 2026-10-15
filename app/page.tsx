@@ -1,6 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { BookingProvider } from "@/components/public/BookingState";
 import HeroBooking from "@/components/public/book/HeroBooking";
+import { JETTY_SELECT, type Jetty } from "@/lib/content/booking";
+import { homeJsonLd, jsonLdHtml } from "@/lib/structured-data";
+import { waGeneral, waLink, waUnavailable } from "@/lib/whatsapp";
 import FaqAccordion from "@/components/public/FaqAccordion";
 import MobileTabBar from "@/components/public/MobileTabBar";
 import BookingNotice from "@/components/public/BookingNotice";
@@ -29,24 +32,28 @@ import {
 import styles from "./public.module.css";
 import home from "./home.module.css";
 
+/** Fallback trip description for structured data when the package has no subtitle. */
+const HERO_DESCRIPTION = "Trip candat sotong semalaman di Marang, Terengganu.";
+
 export default async function Home() {
   const supabase = await createClient();
 
   // Package, org and opening-month availability come from the loader the
   // destination guide shares, so both pages tell a database outage apart from
   // an unpublished season the same way. Only the fleet is homepage-specific.
-  const [{ months, pkg, org, unavailable }, { data: boats }] =
+  const [{ months, pkg, org, unavailable }, { data: boats }, { data: jetties }] =
     await Promise.all([
       loadBookingData(),
       supabase
         .from("boats")
         .select(
-          "id,code,display_name,kind,length_ft,beam,material,capacity,daily_rate,description,photo_url"
+          "id,code,display_name,kind,length_ft,beam,material,capacity,daily_rate,description,photo_url,jetty_id"
         )
         .eq("active", true)
         .order("sort_order")
         .order("code")
         .returns<FleetBoat[]>(),
+      supabase.from("jetties").select(JETTY_SELECT).order("sort_order").returns<Jetty[]>(),
     ]);
 
   if (!pkg) {
@@ -55,9 +62,7 @@ export default async function Home() {
       <div className={styles.shell}>
         <BookingNotice
           kind={unavailable ? "down" : "closed"}
-          waHref={`https://api.whatsapp.com/send?phone=${wa}&text=${encodeURIComponent(
-            "Saya berminat trip candat sotong"
-          )}`}
+          waHref={waLink(wa, waUnavailable())}
         />
       </div>
     );
@@ -65,9 +70,7 @@ export default async function Home() {
 
   const fleet = boats ?? [];
   const waNumber = org?.whatsapp_number ?? "601153598055";
-  const waHref = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(
-    "Saya berminat trip candat sotong"
-  )}`;
+  const waHref = waLink(waNumber, waGeneral("/"));
   const businessName = org?.business_name ?? "Sakura Tackle";
   const location = org?.location ?? "Jeti Marang, Terengganu";
 
@@ -108,10 +111,12 @@ export default async function Home() {
                 of the booking happens on /book. */}
             <HeroBooking
               boats={fleet}
+              jetties={jetties ?? []}
               depositPerBoat={Number(pkg.deposit_per_boat)}
               subtitle={pkg.subtitle}
               heroPhoto={HERO.photo}
               waHref={waHref}
+              waNumber={waNumber}
               screenClass={home.screen}
             />
 
@@ -327,6 +332,22 @@ export default async function Home() {
           <MobileTabBar waHref={waHref} />
 
           <SquidWelcome />
+
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: jsonLdHtml(
+                homeJsonLd({
+                  businessName,
+                  phone: waNumber,
+                  tripTitle: pkg.title,
+                  description: pkg.subtitle ?? HERO_DESCRIPTION,
+                  rates: fleet.map((b) => Number(b.daily_rate)).filter((r) => r > 0),
+                  faqs: pkg.faqs,
+                })
+              ),
+            }}
+          />
         </div>
       </MotionRoot>
     </BookingProvider>

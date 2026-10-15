@@ -9,7 +9,8 @@ import type { FleetBoat } from "../home/FleetShowcase";
 import ReceiptUpload from "./ReceiptUpload";
 import Icon from "./Icon";
 import { PAX_OPTIONS } from "@/lib/season";
-import { BOAT_FEATURES, HERO_BOOKING, LOCATIONS, rm } from "@/lib/content/booking";
+import { waBoat, waLink } from "@/lib/whatsapp";
+import { BOAT_FEATURES, HERO_BOOKING, jettyLabel, perPax, rm, type Jetty } from "@/lib/content/booking";
 import styles from "./book.module.css";
 
 // Leaflet is ~40KB and needs `window`; the card renders its frame first.
@@ -28,10 +29,14 @@ const SORTS: Array<[Sort, string]> = [
 
 type Props = {
   boats: FleetBoat[];
+  /** From the jetties table, in display order. */
+  jetties: Jetty[];
   depositPerBoat: number;
   subtitle: string | null;
   heroPhoto: string;
   waHref: string;
+  /** Operator's WhatsApp, for messages about one boat. */
+  waNumber: string;
   /** Class that makes a section one homepage screen. */
   screenClass?: string;
 };
@@ -40,17 +45,21 @@ type Props = {
  *  the boats that fit, each one a whole-boat charter for the night. Picking a
  *  boat continues to /book. */
 export default function HeroBooking({
-  boats,
+  boats: allBoats,
+  jetties,
   depositPerBoat,
   subtitle,
   heroPhoto,
   waHref,
+  waNumber,
   screenClass = "",
 }: Props) {
   const { pax, setPax } = useBooking();
   const [tab, setTab] = useState<"search" | "check">("search");
-  const [loc, setLoc] = useState("marang");
-  const [focus, setFocus] = useState("marang");
+  // Opens on the first open jetty (Marang today).
+  const firstOpen = jetties.find((j) => j.open)?.id ?? jetties[0]?.id ?? "";
+  const [loc, setLoc] = useState(firstOpen);
+  const [focus, setFocus] = useState(firstOpen);
   const [open, setOpen] = useState<"loc" | "pax" | null>(null);
   const [note, setNote] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
@@ -59,7 +68,10 @@ export default function HeroBooking({
 
   const resultsRef = useRef<HTMLElement>(null);
 
-  const location = LOCATIONS.find((l) => l.id === loc) ?? LOCATIONS[0];
+  const location = jetties.find((l) => l.id === loc) ?? jetties[0];
+  const openNames = jetties.filter((j) => j.open).map((j) => j.name).join(", ");
+  // Only the boats that sail from the jetty picked.
+  const boats = allBoats.filter((b) => b.jetty_id === loc);
 
   // Close a dropdown on Escape or a click anywhere else.
   useEffect(() => {
@@ -84,13 +96,13 @@ export default function HeroBooking({
   }, [scrollTick]);
 
   const pickLoc = (id: string) => {
-    const l = LOCATIONS.find((x) => x.id === id);
+    const l = jetties.find((x) => x.id === id);
     if (!l) return;
     setFocus(id);
     setOpen(null);
     if (!l.open) {
       setNote(
-        `Trip dari ${l.name} akan dibuka tidak lama lagi. Buat masa ini semua trip bertolak dari Jeti Marang.`
+        `Trip dari ${l.name} akan dibuka tidak lama lagi. Buat masa ini trip bertolak dari ${openNames || "Jeti Marang"}.`
       );
       return;
     }
@@ -182,14 +194,14 @@ export default function HeroBooking({
                         <Icon name="pin" size={26} className={styles.controlIcon} />
                         <span className={styles.controlText}>
                           <span className={styles.controlLabel}>Jetty location</span>
-                          <span className={styles.controlValue}>{location.name}</span>
-                          <span className={styles.controlSub}>{location.sub}</span>
+                          <span className={styles.controlValue}>{location?.name}</span>
+                          <span className={styles.controlSub}>{location?.subtitle}</span>
                         </span>
                         <Icon name="caret" size={18} className={styles.controlCaret} />
                       </button>
                       {open === "loc" && (
                         <div className={styles.menu} role="listbox" aria-label="Jetty location">
-                          {LOCATIONS.map((l) => (
+                          {jetties.map((l) => (
                             <button
                               key={l.id}
                               type="button"
@@ -207,7 +219,7 @@ export default function HeroBooking({
                                 <span className={l.open ? styles.menuName : styles.menuNameSoon}>
                                   {l.name}
                                 </span>
-                                <span className={styles.menuSub}>{l.sub}</span>
+                                <span className={styles.menuSub}>{l.open ? l.subtitle : l.subtitle || "Akan dibuka"}</span>
                               </span>
                               {!l.open && <span className={styles.soonPill}>Coming Soon</span>}
                               {l.id === loc && (
@@ -287,7 +299,7 @@ export default function HeroBooking({
                     </div>
                   </div>
 
-                  <JettyMap selected={loc} focus={focus} onPick={pickLoc} />
+                  <JettyMap jetties={jetties} selected={loc} focus={focus} onPick={pickLoc} />
                 </div>
 
                 <div className={styles.searchBtnWrap}>
@@ -328,7 +340,7 @@ export default function HeroBooking({
             <div className={styles.resultsHead}>
               <div>
                 <h2 className={styles.resultsTitle}>
-                  Available boats at {location.name} for {pax} pax
+                  Available boats at {location?.name} for {pax} pax
                 </h2>
                 <p className={styles.muted}>
                   {sorted.length} bot sesuai. Harga sewa sebot penuh untuk satu malam.
@@ -372,7 +384,7 @@ export default function HeroBooking({
                       <h3 className={styles.boatName}>{name}</h3>
                       <span className={styles.boatLoc}>
                         <Icon name="pin" size={15} />
-                        Jeti Marang, Terengganu
+                        {jettyLabel(location)}
                       </span>
                       <dl className={styles.specs}>
                         <Spec label="Length" value={b.length_ft ? `${b.length_ft} Kaki` : "—"} />
@@ -395,6 +407,9 @@ export default function HeroBooking({
                         <>
                           <span className={styles.priceLabel}>per night, whole boat</span>
                           <span className={styles.priceValue}>{rm(Number(b.daily_rate))}</span>
+                          <span className={styles.pricePax}>
+                            {perPax(Number(b.daily_rate), pax)} untuk {pax} pax
+                          </span>
                           <span className={styles.priceNote}>
                             Deposit {rm(depositPerBoat)} untuk lock slot
                           </span>
@@ -406,7 +421,7 @@ export default function HeroBooking({
                         <>
                           <span className={styles.priceLabel}>Harga atas permintaan</span>
                           <a
-                            href={waHref}
+                            href={waLink(waNumber, waBoat({ id: b.id, name }, pax))}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.btnGhost}
