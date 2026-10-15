@@ -2799,3 +2799,55 @@ button.dtBtn:disabled {
   flex-direction: column;
   gap: 8px;
 }
+
+/* Booking page: customer requests from Manage My Booking. */
+.requestList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.requestItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  font-size: 13.5px;
+}
+
+.requestMeta {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.requestActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Reviews */
+.reviewStars {
+  color: var(--gold);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.reviewStars span {
+  color: #ddd6f0;
+}
+
+.reviewText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 420px;
+  white-space: normal;
+}

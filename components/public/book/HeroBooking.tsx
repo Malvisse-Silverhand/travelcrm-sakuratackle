@@ -10,6 +10,7 @@ import ReceiptUpload from "./ReceiptUpload";
 import Icon from "./Icon";
 import { PAX_OPTIONS } from "@/lib/season";
 import { waBoat, waLink } from "@/lib/whatsapp";
+import { ratingText, type RatingSummary } from "@/lib/booking/reviews";
 import { BOAT_FEATURES, HERO_BOOKING, jettyLabel, perPax, rm, type Jetty } from "@/lib/content/booking";
 import styles from "./book.module.css";
 
@@ -31,6 +32,8 @@ type Props = {
   boats: FleetBoat[];
   /** From the jetties table, in display order. */
   jetties: Jetty[];
+  /** Published review ratings, overall and per boat. */
+  ratings: RatingSummary;
   depositPerBoat: number;
   subtitle: string | null;
   heroPhoto: string;
@@ -47,6 +50,7 @@ type Props = {
 export default function HeroBooking({
   boats: allBoats,
   jetties,
+  ratings,
   depositPerBoat,
   subtitle,
   heroPhoto,
@@ -296,6 +300,12 @@ export default function HeroBooking({
                         <Icon name="check" size={15} strokeWidth={2.6} />
                         Deposit {rm(depositPerBoat)} untuk lock slot
                       </span>
+                      {ratings.overall && (
+                        <Link href="/reviews" className={styles.ratingBadge}>
+                          <b>★</b>
+                          {ratingText(ratings.overall)}
+                        </Link>
+                      )}
                     </div>
                   </div>
 
@@ -379,6 +389,12 @@ export default function HeroBooking({
                         {b.kind && <span className={styles.kindBadge}>{b.kind}</span>}
                         {b.capacity === bestCap && (
                           <span className={styles.bestBadge}>Best fit for your group</span>
+                        )}
+                        {ratings.byBoat[b.id] && (
+                          <Link href="/reviews" className={styles.ratingBadge}>
+                            <b>★</b>
+                            {ratingText(ratings.byBoat[b.id])}
+                          </Link>
                         )}
                       </div>
                       <h3 className={styles.boatName}>{name}</h3>

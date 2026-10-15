@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       // The operator console, the API, checkout pages (one per boat and
       // group size) and the 3D review page are not for search results.
-      disallow: ["/admin", "/api/", "/book", "/preview/"],
+      disallow: ["/admin", "/api/", "/book", "/preview/", "/my-booking", "/resit"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };

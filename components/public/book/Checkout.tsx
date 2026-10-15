@@ -657,6 +657,9 @@ export default function Checkout({
                     <Icon name="calendar" size={16} />
                     Add to Calendar
                   </button>
+                  <Link href={`/my-booking?ref=${encodeURIComponent(booked.ref)}`} className={styles.btnGhost}>
+                    Manage Booking
+                  </Link>
                 </div>
                 <h2 className={styles.subTitle}>Upload Payment Receipt</h2>
                 <ReceiptUpload

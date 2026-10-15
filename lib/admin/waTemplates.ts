@@ -27,6 +27,7 @@ export const WA_TEMPLATES = [
   { key: "paid", label: "Payment received, confirmed" },
   { key: "reminder", label: "Trip reminder" },
   { key: "weather", label: "Weather cancellation" },
+  { key: "review", label: "Ask for a review" },
   { key: "general", label: "General follow-up" },
 ] as const;
 
@@ -92,6 +93,15 @@ export function waTemplate(key: WaTemplateKey, b: WaBooking): string {
         b.balanceDue > 0 ? `Baki untuk dibayar di jeti: ${formatRM(b.balanceDue)}.` : "Tiada baki tertunggak.",
         "",
         `Persediaan: ${PREPARATION}`,
+      ].join("\n");
+    case "review":
+      return [
+        `Salam ${first}, terima kasih kerana candat bersama Sakura Tackle pada ${date}! Harap tangkapan lumayan.`,
+        "",
+        "Boleh luangkan seminit untuk beri bintang dan ulasan? Ulasan anda bantu group lain pilih bot.",
+        `${SITE_URL}/my-booking?ref=${encodeURIComponent(b.ref)}#review`,
+        "",
+        "Masukkan nombor telefon tempahan anda bila diminta. Terima kasih!",
       ].join("\n");
     case "weather":
       return [

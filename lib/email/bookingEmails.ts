@@ -15,12 +15,16 @@ import { waLink } from "@/lib/whatsapp";
 // cleared again if Resend refuses, so a failure can be retried but nothing is
 // ever sent twice. Copy is bahasa rojak with English headings, like the site.
 
-export type EmailKind = "confirmation" | "paid" | "reminder";
+export type EmailKind = "confirmation" | "paid" | "reminder" | "review";
 
-const SENT_COLUMN: Record<EmailKind, "confirmation_sent_at" | "paid_email_sent_at" | "reminder_sent_at"> = {
+const SENT_COLUMN: Record<
+  EmailKind,
+  "confirmation_sent_at" | "paid_email_sent_at" | "reminder_sent_at" | "review_request_sent_at"
+> = {
   confirmation: "confirmation_sent_at",
   paid: "paid_email_sent_at",
   reminder: "reminder_sent_at",
+  review: "review_request_sent_at",
 };
 
 type Row = {
@@ -108,6 +112,25 @@ export async function sendTripReminders(tomorrowISO: string): Promise<number> {
   return sent;
 }
 
+/** "How was your trip?" for trips that ended, from the daily cron. The cron
+ *  runs at 06:00, before the boats are back, so it asks about the night
+ *  before last. Returns how many were sent. */
+export async function sendReviewRequests(nightISO: string): Promise<number> {
+  if (!emailConfigured()) return 0;
+  const { data } = await createAdminClient()
+    .from("bookings")
+    .select("id")
+    .eq("night_date", nightISO)
+    .eq("status", "confirmed")
+    .not("email", "is", null)
+    .is("review_request_sent_at", null);
+  let sent = 0;
+  for (const row of data ?? []) {
+    if ((await sendBookingEmail("review", row.id)).sent) sent += 1;
+  }
+  return sent;
+}
+
 // ------------------------------------------------------------------ copy --
 
 type Ctx = { business: string; wa: string; holdHours: number };
@@ -126,6 +149,8 @@ export function composeBookingEmail(kind: EmailKind, b: Row, ctx: Ctx) {
     ctx.wa,
     `Hai ${ctx.business}! Saya ${b.full_name}, tempahan ${b.ref} (${boat}, ${date}).\n\nSoalan saya: ___\n\n${SITE_URL}/`
   );
+
+  const manageHref = `${SITE_URL}/my-booking?ref=${encodeURIComponent(b.ref)}`;
 
   const details: Array<[string, string]> = [
     ["Booking reference", b.ref],
@@ -161,6 +186,7 @@ export function composeBookingEmail(kind: EmailKind, b: Row, ctx: Ctx) {
       ],
       waHref,
       business: ctx.business,
+      manageHref,
     });
   }
 
@@ -189,6 +215,7 @@ export function composeBookingEmail(kind: EmailKind, b: Row, ctx: Ctx) {
         ],
         waHref,
         business: ctx.business,
+        manageHref,
       }),
       attachments: [
         {
@@ -206,6 +233,33 @@ export function composeBookingEmail(kind: EmailKind, b: Row, ctx: Ctx) {
         },
       ],
     };
+  }
+
+  if (kind === "review") {
+    const reviewHref = `${manageHref}#review`;
+    return build({
+      subject: `How was your trip, ${firstName}?`,
+      heading: "How was your trip?",
+      intro: `Hai ${firstName}, terima kasih kerana candat bersama ${ctx.business} pada ${date}! Harap tangkapan lumayan. Boleh luangkan seminit untuk beri bintang dan ulasan?`,
+      details: [
+        ["Booking reference", b.ref],
+        ["Boat", boat],
+        ["Date", date],
+      ],
+      sections: [
+        {
+          title: "Rate your trip",
+          lines: [
+            "Ulasan anda bantu group lain pilih bot dan bantu kami jadi lebih baik.",
+            `Masukkan nombor telefon tempahan anda di sini: ${reviewHref}`,
+          ],
+          button: { label: "Rate My Trip", href: reviewHref },
+        },
+      ],
+      waHref,
+      business: ctx.business,
+      manageHref,
+    });
   }
 
   // reminder
@@ -228,6 +282,7 @@ export function composeBookingEmail(kind: EmailKind, b: Row, ctx: Ctx) {
     ],
     waHref,
     business: ctx.business,
+    manageHref,
   });
 }
 
@@ -258,6 +313,7 @@ function build(m: {
   sections: Section[];
   waHref: string;
   business: string;
+  manageHref?: string;
 }) {
   const rows = m.details
     .map(
@@ -285,7 +341,11 @@ function build(m: {
 <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#4a3f6e">${esc(m.intro)}</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #ede7fb;border-bottom:1px solid #ede7fb">${rows}</table>
 ${sections}
-<p style="margin:24px 0 0"><a href="${esc(m.waHref)}" style="display:inline-block;padding:11px 20px;border-radius:12px;background:#128c7e;color:#fff;font-weight:700;text-decoration:none">WhatsApp Us</a></p>
+<p style="margin:24px 0 0"><a href="${esc(m.waHref)}" style="display:inline-block;padding:11px 20px;border-radius:12px;background:#128c7e;color:#fff;font-weight:700;text-decoration:none">WhatsApp Us</a>${
+    m.manageHref
+      ? ` &nbsp; <a href="${esc(m.manageHref)}" style="display:inline-block;padding:10px 18px;border-radius:12px;border:1px solid #c9c0e6;color:#2e1d6b;font-weight:700;text-decoration:none">Manage Booking</a>`
+      : ""
+  }</p>
 </td></tr>
 <tr><td style="padding:16px 24px;background:#fbfaff;font-size:12px;color:#7a6fa0">${esc(m.business)} · Jeti Marang, Terengganu · <a href="${SITE_URL}/polisi" style="color:#7a6fa0">Booking terms &amp; privacy</a></td></tr>
 </table></td></tr></table></body></html>`;
@@ -299,6 +359,7 @@ ${sections}
     ...m.sections.flatMap((s) => ["", s.title.toUpperCase(), ...s.lines]),
     "",
     `WhatsApp: ${m.waHref}`,
+    ...(m.manageHref ? [`Urus tempahan (bayar, nama ahli, tukar tarikh, batal): ${m.manageHref}`] : []),
     `Terma tempahan: ${SITE_URL}/polisi`,
   ].join("\n");
 
