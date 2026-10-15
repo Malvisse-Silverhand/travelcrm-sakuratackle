@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
+import { WA_TEMPLATES, waTemplate, waToCustomer, type WaTemplateKey } from "@/lib/admin/waTemplates";
+import { sendPaidEmail } from "./sendPaidEmail";
 import styles from "../../app/admin/admin.module.css";
 
 type Booking = {
@@ -32,13 +34,14 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
   const [busy, setBusy] = useState(false);
   const [uploadMsg, setUploadMsg] = useState<string | null>(null);
   const [actionErr, setActionErr] = useState<string | null>(null);
+  const [mailMsg, setMailMsg] = useState<string | null>(null);
 
   const pct = b.depositPaid ? Math.round((b.depositAmount / b.totalAmount) * 100) : 0;
 
   // RLS lets an UPDATE silently match zero rows with no error at all — checking
   // only `error` would treat that as success. Requiring the row back via
   // .select() catches it.
-  const NOT_UPDATED = "Tiada perubahan disimpan. Cuba muat semula halaman.";
+  const NOT_UPDATED = "Nothing was saved. Reload the page and try again.";
 
   const markDepositReceived = async () => {
     setBusy(true);
@@ -55,6 +58,8 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
       setActionErr(NOT_UPDATED);
       return;
     }
+    setTpl("paid");
+    setMailMsg(await sendPaidEmail(b.id));
     router.refresh();
   };
 
@@ -67,7 +72,7 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
       .upload(path, file, { upsert: true });
     if (uploadError) {
       setBusy(false);
-      setUploadMsg("Gagal muat naik. Cuba lagi.");
+      setUploadMsg("Upload failed. Try again.");
       return;
     }
     const { data, error: updateError } = await supabase
@@ -77,7 +82,7 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
       .select("id");
     setBusy(false);
     if (updateError || !data?.length) {
-      setUploadMsg("Resit dimuat naik tapi gagal simpan rujukan.");
+      setUploadMsg("Receipt uploaded but not linked to the booking. Try again.");
       return;
     }
     router.refresh();
@@ -110,15 +115,8 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
     router.refresh();
   };
 
-  const waMessage = encodeURIComponent(
-    `Salam ${b.fullName}, ini pihak Sakura Tackle berkenaan tempahan ${b.ref} ` +
-      `(${b.boatCode}, ${formatLongDate(b.nightDate)}, ${b.pax} pax). ` +
-      (b.balanceDue > 0
-        ? `Baki tertunggak: ${formatRM(b.balanceDue)}. `
-        : "Tempahan anda sudah lengkap. ") +
-      `Ada apa-apa yang kami boleh bantu?`
-  );
-  const waHref = `https://wa.me/${b.phone.replace(/[^0-9]/g, "")}?text=${waMessage}`;
+  const [tpl, setTpl] = useState<WaTemplateKey>(b.depositPaid ? "paid" : "received");
+  const waHref = waToCustomer(b.phone, waTemplate(tpl, b));
 
   return (
     <div className={styles.detailSide}>
@@ -128,7 +126,7 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
           <div>
             <span className={styles.paymentLabel}>Paid up front</span>
             <span className={styles.paymentValueGreen}>
-              {b.depositPaid ? formatRM(b.depositAmount) : "Belum diterima"}
+              {b.depositPaid ? formatRM(b.depositAmount) : "Not received"}
             </span>
           </div>
           <div style={{ textAlign: "right" }}>
@@ -142,7 +140,7 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
 
         {b.depositPaid ? (
           <p className={styles.depositMeta}>
-            Diterima {b.depositPaidAt ? formatLongDate(b.depositPaidAt.slice(0, 10)) : ""}
+            Received {b.depositPaidAt ? formatLongDate(b.depositPaidAt.slice(0, 10)) : ""}
           </p>
         ) : (
           <button
@@ -151,7 +149,7 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
             disabled={busy}
             onClick={markDepositReceived}
           >
-            Tandakan deposit diterima
+            Mark payment received
           </button>
         )}
 
@@ -159,8 +157,8 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
           <button type="button" className={styles.receiptRow} onClick={viewReceipt}>
             <div className={styles.receiptIcon}>IMG</div>
             <div className={styles.receiptInfo}>
-              <span className={styles.receiptName}>Resit dimuat naik</span>
-              <span className={styles.receiptMeta}>Tekan untuk lihat</span>
+              <span className={styles.receiptName}>Receipt uploaded</span>
+              <span className={styles.receiptMeta}>Click to view</span>
             </div>
             <span className={styles.receiptView}>View</span>
           </button>
@@ -173,8 +171,8 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
           >
             <div className={styles.receiptIcon}>+</div>
             <div className={styles.receiptInfo}>
-              <span className={styles.receiptName}>Muat naik resit</span>
-              <span className={styles.receiptMeta}>{uploadMsg ?? "JPG atau PNG"}</span>
+              <span className={styles.receiptName}>Upload receipt</span>
+              <span className={styles.receiptMeta}>{uploadMsg ?? "JPG or PNG"}</span>
             </div>
           </button>
         )}
@@ -192,9 +190,24 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
 
       {actionErr && <div className={styles.errorNote}>{actionErr}</div>}
 
-      <a href={waHref} target="_blank" rel="noreferrer" className={styles.waCustomerBtn}>
-        WhatsApp customer
-      </a>
+      <div className={styles.waTemplateRow}>
+        <select
+          className={styles.input}
+          value={tpl}
+          onChange={(e) => setTpl(e.target.value as WaTemplateKey)}
+          aria-label="WhatsApp message"
+        >
+          {WA_TEMPLATES.map((t) => (
+            <option key={t.key} value={t.key}>
+              {t.label}
+            </option>
+          ))}
+        </select>
+        <a href={waHref} target="_blank" rel="noreferrer" className={styles.waCustomerBtn}>
+          WhatsApp customer
+        </a>
+      </div>
+      {mailMsg && <div className={styles.formOk}>{mailMsg}</div>}
       {b.status !== "cancelled" && (
         <button type="button" className={styles.cancelBtn} disabled={busy} onClick={cancelBooking}>
           Cancel booking
