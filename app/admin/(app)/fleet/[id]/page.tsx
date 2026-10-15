@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
-import BoatEditor, { type BoatRecord } from "@/components/admin/BoatEditor";
+import BoatEditor, { type BoatRecord, type JettyOption } from "@/components/admin/BoatEditor";
 import { LIVE_STATUSES } from "@/components/admin/bookingStatus";
 import { todayISO } from "@/lib/date";
 import styles from "../../../admin.module.css";
@@ -22,6 +22,7 @@ const NEW_BOAT: BoatRecord = {
   photo_url: null,
   sort_order: 0,
   active: true,
+  jetty_id: "marang",
 };
 
 export default async function BoatPage({
@@ -36,15 +37,21 @@ export default async function BoatPage({
   const { id } = await params;
   const { created } = await searchParams;
 
+  const supabase = await createClient();
+  const { data: jetties } = await supabase
+    .from("jetties")
+    .select("id, name, open")
+    .order("sort_order")
+    .returns<JettyOption[]>();
+
   let boat = NEW_BOAT;
   let upcoming = 0;
   if (id !== "new") {
-    const supabase = await createClient();
     const [{ data }, { count }] = await Promise.all([
       supabase
         .from("boats")
         .select(
-          "id, code, display_name, kind, skipper_name, capacity, length_ft, beam, material, daily_rate, description, photo_url, sort_order, active"
+          "id, code, display_name, kind, skipper_name, capacity, length_ft, beam, material, daily_rate, description, photo_url, sort_order, active, jetty_id"
         )
         .eq("id", id)
         .maybeSingle<BoatRecord>(),
@@ -74,7 +81,7 @@ export default async function BoatPage({
           </p>
         )}
         {/* Keyed so saving a new boat (which navigates here) starts a fresh form. */}
-        <BoatEditor key={boat.id ?? "new"} boat={boat} upcoming={upcoming} />
+        <BoatEditor key={boat.id ?? "new"} boat={boat} upcoming={upcoming} jetties={jetties ?? []} />
       </div>
     </>
   );

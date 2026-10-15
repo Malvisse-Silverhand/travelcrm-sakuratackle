@@ -965,6 +965,12 @@
   letter-spacing: -0.02em;
 }
 
+.pricePax {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted-2);
+}
+
 .priceNote {
   font-size: 12.5px;
   font-weight: 600;
@@ -1090,7 +1096,8 @@
     text-align: left;
   }
 
-  .priceNote {
+  .priceNote,
+  .pricePax {
     flex-basis: 100%;
     text-align: left;
     order: 3;
@@ -1560,6 +1567,19 @@
   overflow-wrap: anywhere;
 }
 
+.terms {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-muted-2);
+}
+
+.terms a {
+  color: var(--purple);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .secure {
   display: flex;
   align-items: center;
@@ -1826,6 +1846,13 @@
   border-top: 1px solid rgba(46, 29, 107, 0.09);
   font-size: 13px;
   font-weight: 600;
+}
+
+.summaryPerPax {
+  margin-top: -6px;
+  text-align: right;
+  font-size: 12.5px;
+  color: var(--text-muted-2);
 }
 
 .summaryTotalValue {

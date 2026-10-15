@@ -3,10 +3,10 @@
 import { useEffect, useRef } from "react";
 import type { Map as LeafletMap, Marker } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { LOCATIONS, type JettyLocation } from "@/lib/content/booking";
+import type { Jetty } from "@/lib/content/booking";
 import styles from "./book.module.css";
 
-function pinHtml(l: JettyLocation, on: boolean): string {
+function pinHtml(l: Jetty, on: boolean): string {
   const bg = !l.open ? "#d9d3ec" : on ? "#ffb800" : "#fff";
   const bd = !l.open ? "#9c93bc" : "#2e1d6b";
   const sz = on ? 30 : 22;
@@ -16,10 +16,12 @@ function pinHtml(l: JettyLocation, on: boolean): string {
 /** The jetties on a small map. Picking a pin does the same as picking the
  *  location in the dropdown, and the map flies to whichever was picked. */
 export default function JettyMap({
+  jetties,
   selected,
   focus,
   onPick,
 }: {
+  jetties: Jetty[];
   /** The location trips are being searched from (always an open one). */
   selected: string;
   /** The location last looked at, open or not: where the map flies to. */
@@ -51,10 +53,10 @@ export default function JettyMap({
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
         { maxZoom: 18, attribution: "Tiles &copy; Esri" }
       ).addTo(map);
-      for (const l of LOCATIONS) {
+      for (const l of jetties) {
         const on = l.id === selected;
         const sz = on ? 30 : 22;
-        const mk = L.marker([l.lat, l.lng], {
+        const mk = L.marker([Number(l.lat), Number(l.lng)], {
           icon: L.divIcon({ className: "", iconSize: [sz, sz], iconAnchor: [sz / 2, sz], html: pinHtml(l, on) }),
           title: l.name,
           keyboard: true,
@@ -64,7 +66,7 @@ export default function JettyMap({
         pins.set(l.id, mk);
       }
       map.fitBounds(
-        LOCATIONS.map((l) => [l.lat, l.lng] as [number, number]),
+        jetties.map((l) => [Number(l.lat), Number(l.lng)] as [number, number]),
         { padding: [24, 24], animate: false }
       );
       mapRef.current = map;
@@ -87,22 +89,22 @@ export default function JettyMap({
   useEffect(() => {
     const L = leaflet.current;
     if (!L || !mapRef.current) return;
-    for (const l of LOCATIONS) {
+    for (const l of jetties) {
       const on = l.id === selected;
       const sz = on ? 30 : 22;
       markers.current
         .get(l.id)
         ?.setIcon(L.divIcon({ className: "", iconSize: [sz, sz], iconAnchor: [sz / 2, sz], html: pinHtml(l, on) }));
     }
-  }, [selected]);
+  }, [selected, jetties]);
 
   useEffect(() => {
     const map = mapRef.current;
-    const l = LOCATIONS.find((x) => x.id === focus);
+    const l = jetties.find((x) => x.id === focus);
     if (!map || !l) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    map.flyTo([l.lat, l.lng], l.open ? 11 : 10, { duration: reduce ? 0 : 0.8, animate: !reduce });
-  }, [focus]);
+    map.flyTo([Number(l.lat), Number(l.lng)], l.open ? 11 : 10, { duration: reduce ? 0 : 0.8, animate: !reduce });
+  }, [focus, jetties]);
 
   return (
     <div className={styles.mapBox}>

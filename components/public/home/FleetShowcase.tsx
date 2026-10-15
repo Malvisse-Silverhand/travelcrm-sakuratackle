@@ -20,6 +20,8 @@ export type FleetBoat = {
   daily_rate: number | null;
   description: string | null;
   photo_url: string | null;
+  /** Jetty the boat sails from (jetties.id). */
+  jetty_id: string;
 };
 
 const slide = {

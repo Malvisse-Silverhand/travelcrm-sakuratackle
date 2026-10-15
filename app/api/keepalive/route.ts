@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import * as Sentry from "@sentry/nextjs";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 // Daily ping from Vercel Cron (vercel.json) that keeps the free-tier Supabase
 // project from auto-pausing. Free projects pause after about a week without
@@ -9,6 +10,11 @@ import * as Sentry from "@sentry/nextjs";
 //
 // Stopgap by the operator's choice. Supabase Pro removes the need for it; when
 // that happens, delete this route and the cron entry together.
+//
+// It also releases unpaid holds: pending bookings with no payment or receipt
+// after org_settings.hold_hours are cancelled (expire_unpaid_holds, service
+// role only). The booking function runs the same expiry before every new
+// booking, so this daily run only tidies nights nobody has tried to book.
 //
 // It doubles as a daily health check: if the read fails, Sentry gets an event,
 // so a pause (or any other outage) is noticed within a day instead of when a
@@ -40,5 +46,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, error: error.message }, { status: 503 });
   }
 
-  return NextResponse.json({ ok: true, at: new Date().toISOString() });
+  const { data: expired, error: expireError } = await createAdminClient().rpc("expire_unpaid_holds");
+  if (expireError) {
+    Sentry.captureException(new Error(`Hold expiry failed: ${expireError.message}`), {
+      tags: { area: "keepalive" },
+    });
+  }
+
+  return NextResponse.json({ ok: true, expired: expired ?? null, at: new Date().toISOString() });
 }

@@ -23,7 +23,10 @@ export type BoatRecord = {
   photo_url: string | null;
   sort_order: number;
   active: boolean;
+  jetty_id: string;
 };
+
+export type JettyOption = { id: string; name: string; open: boolean };
 
 type Form = Record<
   | "code"
@@ -37,7 +40,8 @@ type Form = Record<
   | "daily_rate"
   | "description"
   | "photo_url"
-  | "sort_order",
+  | "sort_order"
+  | "jetty_id",
   string
 > & { active: boolean };
 
@@ -54,12 +58,21 @@ const toForm = (b: BoatRecord): Form => ({
   description: b.description ?? "",
   photo_url: b.photo_url ?? "",
   sort_order: String(b.sort_order ?? 0),
+  jetty_id: b.jetty_id,
   active: b.active,
 });
 
 /** Edit (or create) a boat: every column the public fleet showcase reads,
  *  including an uploaded photo. */
-export default function BoatEditor({ boat, upcoming }: { boat: BoatRecord; upcoming: number }) {
+export default function BoatEditor({
+  boat,
+  upcoming,
+  jetties,
+}: {
+  boat: BoatRecord;
+  upcoming: number;
+  jetties: JettyOption[];
+}) {
   const supabase = useMemo(() => createClient(), []);
   const router = useRouter();
   const [f, setF] = useState<Form>(() => toForm(boat));
@@ -103,6 +116,7 @@ export default function BoatEditor({ boat, upcoming }: { boat: BoatRecord; upcom
     if (f.daily_rate && (!Number.isFinite(Number(f.daily_rate)) || Number(f.daily_rate) < 0)) return "Daily rate must be a positive number.";
     if (f.photo_url && !/^https:\/\/\S+$/.test(f.photo_url.trim())) return "The photo link must start with https://";
     if (!Number.isInteger(Number(f.sort_order))) return "Order must be a whole number.";
+    if (!jetties.some((j) => j.id === f.jetty_id)) return "Choose the jetty this boat sails from.";
     return null;
   };
 
@@ -147,6 +161,7 @@ export default function BoatEditor({ boat, upcoming }: { boat: BoatRecord; upcom
       description: nullable(f.description),
       photo_url: nullable(f.photo_url),
       sort_order: Number(f.sort_order) || 0,
+      jetty_id: f.jetty_id,
       active: f.active,
     };
 
@@ -211,6 +226,16 @@ export default function BoatEditor({ boat, upcoming }: { boat: BoatRecord; upcom
           </Field>
           <Field label="Daily rate (RM)">
             <input className={styles.input} type="number" min={0} step={50} value={f.daily_rate} onChange={set("daily_rate")} />
+          </Field>
+          <Field label="Jetty (where it sails from)">
+            <select className={styles.input} value={f.jetty_id} onChange={set("jetty_id")}>
+              {jetties.map((j) => (
+                <option key={j.id} value={j.id}>
+                  {j.name}
+                  {j.open ? "" : " (coming soon: not bookable yet)"}
+                </option>
+              ))}
+            </select>
           </Field>
           <Field label="Order on the website">
             <input className={styles.input} type="number" value={f.sort_order} onChange={set("sort_order")} />

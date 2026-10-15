@@ -17,6 +17,8 @@ type Boat = {
 type Props = {
   boats: Boat[];
   whatsappNumber: string;
+  /** Hours an unpaid booking holds its boat-night before it expires. */
+  holdHours: number;
   /** The published package the season and deposit belong to. */
   packageId: string | null;
   depositPerBoat: number;
@@ -27,6 +29,7 @@ type Props = {
 export default function SettingsPanel({
   boats,
   whatsappNumber,
+  holdHours,
   packageId,
   depositPerBoat,
   seasonStart,
@@ -50,6 +53,27 @@ export default function SettingsPanel({
       .select("id");
     setWaBusy(false);
     setWaMsg(error || !data?.length ? "Save failed." : "Saved.");
+  };
+
+  const [hold, setHold] = useState(String(holdHours));
+  const [holdBusy, setHoldBusy] = useState(false);
+  const [holdMsg, setHoldMsg] = useState<string | null>(null);
+
+  const saveHold = async () => {
+    const n = Number(hold);
+    if (!Number.isInteger(n) || n < 1 || n > 720) {
+      setHoldMsg("Enter whole hours from 1 to 720.");
+      return;
+    }
+    setHoldBusy(true);
+    setHoldMsg(null);
+    const { data, error } = await supabase
+      .from("org_settings")
+      .update({ hold_hours: n })
+      .eq("id", 1)
+      .select("id");
+    setHoldBusy(false);
+    setHoldMsg(error || !data?.length ? "Save failed." : "Saved.");
   };
 
   const active = boats.filter((b) => b.active);
@@ -98,6 +122,40 @@ export default function SettingsPanel({
               onClick={saveWa}
             >
               {waBusy ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.detailCard} style={{ margin: 0 }}>
+        <span className={styles.detailCardLabel}>Unpaid bookings</span>
+        <div className={styles.builderFields}>
+          <label className={styles.field}>
+            <span className={styles.fieldLabel}>Hold the night for (hours)</span>
+            <input
+              className={styles.input}
+              type="number"
+              min={1}
+              max={720}
+              value={hold}
+              onChange={(e) => setHold(e.target.value)}
+            />
+          </label>
+          <p className={styles.emptyCardBody} style={{ margin: 0 }}>
+            A booking with no payment and no receipt after this long is cancelled
+            automatically and the night goes back on sale. You get a bell notification.
+            Bookings made before this was switched on are not affected.
+          </p>
+          <div className={styles.builderSaveRow}>
+            {holdMsg && <span className={styles.filterCount}>{holdMsg}</span>}
+            <button
+              type="button"
+              className={styles.markPaidBtn}
+              style={{ width: "auto", margin: 0 }}
+              disabled={holdBusy || hold === String(holdHours)}
+              onClick={saveHold}
+            >
+              {holdBusy ? "Saving..." : "Save"}
             </button>
           </div>
         </div>

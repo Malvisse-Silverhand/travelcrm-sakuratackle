@@ -2743,3 +2743,52 @@ button.dtBtn:disabled {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ---------------------------------------------------- settings: jetties */
+
+.jettyGrid {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) minmax(160px, 1.6fr) minmax(90px, 0.7fr) minmax(90px, 0.7fr) auto auto;
+  gap: 8px 10px;
+  align-items: center;
+}
+
+/* Each row's cells sit in the grid's columns. */
+.jettyRow {
+  display: contents;
+}
+
+.jettyHead {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.jettyOpen {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@container (max-width: 820px) {
+  .jettyGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .jettyHead {
+    display: none;
+  }
+
+  .jettyRow {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+}
