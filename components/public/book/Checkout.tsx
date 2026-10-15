@@ -31,6 +31,7 @@ import {
   type Jetty,
 } from "@/lib/content/booking";
 import { waBoat, waBooked, waLink } from "@/lib/whatsapp";
+import { tripIcs } from "@/lib/booking/ics";
 import styles from "./book.module.css";
 
 export type BoatNight = {
@@ -103,6 +104,8 @@ export default function Checkout({
     phone: string;
     plan: Plan;
   } | null>(null);
+  /** Whether the confirmation email went out (null while unknown). */
+  const [emailed, setEmailed] = useState<boolean | null>(null);
 
   const month = months[monthIdx] as SeasonMonth | undefined;
   const key = month ? monthKey(month) : "";
@@ -207,6 +210,18 @@ export default function Checkout({
       return;
     }
     setBooked({ ref: row.ref as string, phone, plan });
+    // Confirmation email (skipped server-side when there is no address or
+    // email is not set up). The booking stands either way.
+    if (form.email.trim()) {
+      fetch("/api/booking/confirmation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ref: row.ref, phone }),
+      })
+        .then((r) => r.json())
+        .then((j: { sent?: boolean }) => setEmailed(Boolean(j.sent)))
+        .catch(() => setEmailed(false));
+    }
     goStep(4);
   };
 
@@ -287,6 +302,25 @@ export default function Checkout({
         })
       )
     : waLink(waNumber, waBoat({ id: boat.id, name }, pax, date ? dateTxt : null));
+
+  // The trip as an .ics file the phone's calendar opens.
+  const addToCalendar = () => {
+    if (!booked || !date) return;
+    const ics = tripIcs({
+      ref: booked.ref,
+      nightDate: date,
+      boat: name,
+      pax,
+      location: `${jettyLabel(jetty)} (${JETTY.address})`,
+      details: `Tempahan ${booked.ref}, ${pax} orang. Bayar ${rm(payNow)}, baki di jeti ${rm(balance)}. Google Maps: ${JETTY.mapsUrl}`,
+    });
+    const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `trip-candat-${booked.ref}.ics`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  };
 
   const nav = (placement: string) => (
     <div className={`${styles.navRow} ${placement}`}>
@@ -495,6 +529,9 @@ export default function Checkout({
                     autoComplete="email"
                     placeholder="email@anda.com"
                   />
+                  <span className={styles.fieldHint}>
+                    Kami emel butiran tempahan, resit dan peringatan trip ke sini.
+                  </span>
                 </label>
                 <label className={styles.field}>
                   <span className={styles.fieldLabel}>Remarks (optional)</span>
@@ -590,6 +627,11 @@ export default function Checkout({
                   Pindahkan {rm(payNow)} ke akaun di bawah dan muat naik resit
                   untuk lock slot. Kami WhatsApp anda dalam masa 24 jam.
                 </p>
+                {emailed && (
+                  <p className={styles.noteOk}>
+                    Butiran tempahan dan cara bayaran dah dihantar ke {form.email.trim()}.
+                  </p>
+                )}
                 <div className={styles.refBox}>
                   <div>
                     <div className={styles.refLabel}>Booking reference</div>
@@ -609,6 +651,12 @@ export default function Checkout({
                   <BankRow label="Account name" value={BANK.accountName} />
                   <BankRow label="Account no." value={BANK.accountNumber} />
                   <BankRow label="Reference" value={booked.ref} />
+                </div>
+                <div className={styles.actionsRow}>
+                  <button type="button" className={styles.btnGhost} onClick={addToCalendar}>
+                    <Icon name="calendar" size={16} />
+                    Add to Calendar
+                  </button>
                 </div>
                 <h2 className={styles.subTitle}>Upload Payment Receipt</h2>
                 <ReceiptUpload

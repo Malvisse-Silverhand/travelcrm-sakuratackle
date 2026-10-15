@@ -2792,3 +2792,10 @@ button.dtBtn:disabled {
     border-bottom: 1px solid var(--border);
   }
 }
+
+/* Booking page: WhatsApp message picker above the send button. */
+.waTemplateRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import { upfrontAmount } from "@/lib/booking/amounts";
+import { sendPaidEmail } from "./sendPaidEmail";
 import DataTable, { type Column, type Filter, type Tab } from "./DataTable";
 import { STATUS_LABEL, statusPill } from "./bookingStatus";
 import styles from "../../app/admin/admin.module.css";
@@ -89,7 +90,11 @@ export default function PaymentsTable({ rows }: { rows: PaymentRow[] }) {
       setMsg({ ok: false, text: `${r.ref} was not updated. Refresh — it may already be paid.` });
       return;
     }
-    setMsg({ ok: true, text: `${r.ref}: deposit received, booking ${STATUS_LABEL[nextStatus].toLowerCase()}.` });
+    const mailed = await sendPaidEmail(r.id);
+    setMsg({
+      ok: true,
+      text: `${r.ref}: payment received, booking ${STATUS_LABEL[nextStatus].toLowerCase()}.${mailed ? " " + mailed : ""}`,
+    });
     router.refresh();
   };
 

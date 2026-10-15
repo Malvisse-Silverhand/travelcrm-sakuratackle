@@ -116,13 +116,13 @@ export default async function BookingDetailPage({
                   ))}
                 </div>
               ) : (
-                <p className={styles.emptyCardBody}>Tiada senarai nama direkodkan setakat ini.</p>
+                <p className={styles.emptyCardBody}>No guest names recorded yet.</p>
               )}
             </div>
 
             <div className={styles.detailCard}>
               <span className={styles.detailCardLabel}>Skipper note</span>
-              <p className={styles.skipperNote}>{booking.note ?? "Tiada nota."}</p>
+              <p className={styles.skipperNote}>{booking.note ?? "No note."}</p>
             </div>
           </div>
 
