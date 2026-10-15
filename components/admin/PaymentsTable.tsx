@@ -8,7 +8,7 @@ import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import { upfrontAmount } from "@/lib/booking/amounts";
 import { sendPaidEmail } from "./sendPaidEmail";
-import DataTable, { type Column, type Filter, type Tab } from "./DataTable";
+import DataTable, { type Column, type CsvSpec, type Filter, type Tab } from "./DataTable";
 import { STATUS_LABEL, statusPill } from "./bookingStatus";
 import styles from "../../app/admin/admin.module.css";
 
@@ -38,6 +38,24 @@ const TABS: Tab<PaymentRow>[] = [
   { key: "paid", label: "Paid", test: (r) => r.deposit_paid },
   { key: "all", label: "All", test: () => true },
 ];
+
+const CSV: CsvSpec<PaymentRow> = {
+  filename: "payments",
+  columns: [
+    { header: "Reference", value: (r) => r.ref },
+    { header: "Customer", value: (r) => r.full_name },
+    { header: "Phone", value: (r) => r.phone },
+    { header: "Night", value: (r) => r.night_date },
+    { header: "Boat", value: (r) => r.boats?.code },
+    { header: "Plan", value: (r) => (r.pay_plan === "full" ? "Full" : "Deposit") },
+    { header: "Due up front (RM)", value: (r) => upfrontAmount(r) },
+    { header: "Total (RM)", value: (r) => Number(r.total_amount) },
+    { header: "Paid", value: (r) => (r.deposit_paid ? "Yes" : "No") },
+    { header: "Paid at", value: (r) => r.deposit_paid_at?.slice(0, 10) },
+    { header: "Receipt uploaded", value: (r) => (r.receipt_url ? "Yes" : "No") },
+    { header: "Status", value: (r) => STATUS_LABEL[r.status] ?? r.status },
+  ],
+};
 
 const FILTERS: Filter<PaymentRow>[] = [
   { key: "boat", allLabel: "All boats", value: (r) => r.boats?.code },
@@ -192,6 +210,7 @@ export default function PaymentsTable({ rows }: { rows: PaymentRow[] }) {
         tabs={TABS}
         filters={FILTERS}
         search={SEARCH}
+        csv={CSV}
         emptyText="Nothing here. New receipts appear as customers upload them."
       />
     </>

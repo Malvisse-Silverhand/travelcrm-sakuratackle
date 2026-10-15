@@ -41,7 +41,40 @@ type Props<T> = {
   defaultPageSize?: number;
   /** Extra controls at the right of the toolbar, e.g. an "Add" button. */
   toolbarEnd?: ReactNode;
+  /** Adds "Export CSV": the rows currently shown by the tab, filters and
+   *  search (all pages), with these columns. */
+  csv?: CsvSpec<T>;
 };
+
+export type CsvSpec<T> = {
+  /** File name without extension, e.g. "bookings". Today's date is added. */
+  filename: string;
+  columns: Array<{ header: string; value: (row: T) => string | number | boolean | null | undefined }>;
+};
+
+/** RFC 4180 quoting; a leading = + - @ is prefixed so a spreadsheet does
+ *  not run a customer-typed value as a formula. */
+function csvCell(v: string | number | boolean | null | undefined): string {
+  if (v === null || v === undefined) return "";
+  let s = String(v);
+  if (/^[=+\-@]/.test(s)) s = `'${s}`;
+  return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+function downloadCsv<T>(spec: CsvSpec<T>, rows: T[]) {
+  const lines = [
+    spec.columns.map((c) => csvCell(c.header)).join(","),
+    ...rows.map((r) => spec.columns.map((c) => csvCell(c.value(r))).join(",")),
+  ];
+  // BOM so Excel opens UTF-8 (names, "—") correctly.
+  const blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${spec.filename}-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
 
 const PAGE_SIZES = [10, 20, 50, 0]; // 0 = all
 
@@ -58,6 +91,7 @@ export default function DataTable<T>({
   emptyText,
   defaultPageSize = 20,
   toolbarEnd,
+  csv,
 }: Props<T>) {
   const [tab, setTab] = useState(tabs?.[0]?.key ?? "");
   const [picked, setPicked] = useState<Record<string, string>>({});
@@ -181,6 +215,17 @@ export default function DataTable<T>({
                 toFirstPage();
               }}
             />
+          )}
+          {csv && (
+            <button
+              type="button"
+              className={`${styles.dtBtn} ${styles.dtBtnGhost}`}
+              onClick={() => downloadCsv(csv, filtered)}
+              disabled={filtered.length === 0}
+              title="Download the rows shown (all pages) as a spreadsheet"
+            >
+              Export CSV
+            </button>
           )}
           {toolbarEnd}
         </div>

@@ -32,6 +32,7 @@ import {
 } from "@/lib/content/booking";
 import { waBoat, waBooked, waLink } from "@/lib/whatsapp";
 import { tripIcs } from "@/lib/booking/ics";
+import { track } from "@/lib/funnel";
 import styles from "./book.module.css";
 
 export type BoatNight = {
@@ -135,6 +136,11 @@ export default function Checkout({
     };
   }, [supabase, month, key, byMonth, boat.id]);
 
+  // Funnel: this boat's checkout was opened.
+  useEffect(() => {
+    track("boat_view", { boatId: boat.id, pax: initialPax });
+  }, [boat.id, initialPax]);
+
   const status = useMemo(() => {
     const map = new Map<string, BoatNight["status"]>();
     for (const n of nights ?? []) map.set(n.night_date, n.status);
@@ -158,6 +164,7 @@ export default function Checkout({
   const next = async () => {
     if (step === 1) {
       if (!date) return setErr("Sila pilih tarikh trip.");
+      track("details", { boatId: boat.id, pax });
       return goStep(2);
     }
     if (step === 2) {
@@ -168,6 +175,7 @@ export default function Checkout({
       if (form.email.trim() && !/^\S+@\S+\.\S+$/.test(form.email.trim())) {
         return setErr("Sila semak alamat emel.");
       }
+      track("payment", { boatId: boat.id, pax });
       return goStep(3);
     }
     if (step === 3) await submit();
@@ -210,6 +218,7 @@ export default function Checkout({
       return;
     }
     setBooked({ ref: row.ref as string, phone, plan });
+    track("booked", { boatId: boat.id, pax });
     // Confirmation email (skipped server-side when there is no address or
     // email is not set up). The booking stands either way.
     if (form.email.trim()) {
@@ -276,6 +285,7 @@ export default function Checkout({
           title={holiday}
           onClick={() => {
             setDate(iso);
+            track("date_picked", { boatId: boat.id, pax });
             setErr(null);
           }}
         >

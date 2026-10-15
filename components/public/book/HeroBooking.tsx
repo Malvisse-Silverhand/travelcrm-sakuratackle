@@ -10,6 +10,7 @@ import ReceiptUpload from "./ReceiptUpload";
 import Icon from "./Icon";
 import { PAX_OPTIONS } from "@/lib/season";
 import { waBoat, waLink } from "@/lib/whatsapp";
+import { track } from "@/lib/funnel";
 import { ratingText, type RatingSummary } from "@/lib/booking/reviews";
 import { BOAT_FEATURES, HERO_BOOKING, jettyLabel, perPax, rm, type Jetty } from "@/lib/content/booking";
 import styles from "./book.module.css";
@@ -118,7 +119,13 @@ export default function HeroBooking({
     setOpen(null);
     setSearched(true);
     setScrollTick((n) => n + 1);
+    track("search", { pax, jetty: loc });
   };
+
+  // Funnel: the homepage was seen (once per session, deduplicated server-side).
+  useEffect(() => {
+    track("home_view");
+  }, []);
 
   const rated = (b: FleetBoat) => (b.daily_rate ?? 0) > 0;
   const fitsRaw = boats.filter((b) => b.capacity >= pax);

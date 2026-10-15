@@ -9,6 +9,7 @@ import {
   monthLabel,
   monthsBetween,
   seasonRangeError,
+  yearsWithoutHolidays,
   type SeasonMonth,
 } from "@/lib/season";
 import { todayISO } from "@/lib/date";
@@ -181,6 +182,12 @@ export default function SeasonSettings({
           />
         </label>
       </div>
+      {start && end && yearsWithoutHolidays(start, end).length > 0 && (
+        <p className={styles.holidayWarn}>
+          No public holidays are listed for {yearsWithoutHolidays(start, end).join(", ")}, so the
+          calendars will show none. Ask your developer to add them in lib/season.ts.
+        </p>
+      )}
       <div className={styles.builderSaveRow} style={{ marginTop: 14 }}>
         {msg && <span className={msg.ok ? styles.formOk : styles.formErr}>{msg.text}</span>}
         <button
