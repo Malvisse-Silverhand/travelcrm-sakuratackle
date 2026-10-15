@@ -1,7 +1,7 @@
 // Booking terms and privacy notice for /polisi. Full English (Mal's call
 // for this page; the rest of the customer site stays bahasa rojak).
 //
-// DRAFT until Mal confirms the numbers (cancellation windows, refund rules).
+// Terms as given by Mal on 15 Oct 2026.
 // The hold time is not written here: the page reads org_settings.hold_hours
 // so it always matches what the system actually does.
 
@@ -38,9 +38,10 @@ export const POLICY: PolicySection[] = [
     title: "Cancellation by You",
     body: ["To cancel, WhatsApp us with your booking reference."],
     bullets: [
-      "14 days or more before the trip: your deposit can be moved to another date in the same season, or refunded.",
-      "Less than 14 days before the trip: the deposit is not refundable, but it can be moved once to another date if a slot is available.",
-      "If you paid in full: everything above the deposit is refunded when you cancel 7 days or more before the trip.",
+      "7 days or more before the trip: your deposit is refunded.",
+      "4 to 6 days before the trip: the deposit is not refunded, but it can be moved to another date in the same season.",
+      "Less than 4 days before the trip: the deposit is forfeited, but it can be moved to another date once, if a slot is available.",
+      "If you paid in full: everything above the deposit is refunded when you cancel 3 days or more before the trip.",
     ],
   },
   {
@@ -48,7 +49,7 @@ export const POLICY: PolicySection[] = [
     title: "Weather & Safety",
     body: [
       "Safety comes first. The captain will cancel or postpone a trip if the weather, the sea or an official warning (MetMalaysia, the Maritime Agency) makes it unsafe.",
-      "If we cancel for weather or safety, you choose: move to another date at no charge, or get a full refund.",
+      "If we cancel for weather or safety, you may get a full refund or move to another date at no charge.",
       "If the boat breaks down, we will try to replace it with another suitable boat. If we cannot, you get a full refund.",
     ],
   },

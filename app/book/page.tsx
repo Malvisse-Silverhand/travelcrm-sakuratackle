@@ -8,6 +8,7 @@ import Checkout, { type BoatNight } from "@/components/public/book/Checkout";
 import type { FleetBoat } from "@/components/public/home/FleetShowcase";
 import { monthFirstISO, monthLastISO } from "@/lib/season";
 import { JETTY_SELECT, type Jetty } from "@/lib/content/booking";
+import { waLink, waUnavailable } from "@/lib/whatsapp";
 import pub from "@/app/public.module.css";
 
 export const metadata: Metadata = {
@@ -43,9 +44,7 @@ export default async function BookPage({
   ]);
 
   const wa = org?.whatsapp_number ?? "601153598055";
-  const waHref = `https://api.whatsapp.com/send?phone=${wa}&text=${encodeURIComponent(
-    "Saya berminat trip candat sotong"
-  )}`;
+  const waHref = waLink(wa, waUnavailable());
 
   if (!pkg) {
     return (
@@ -106,7 +105,7 @@ export default async function BookPage({
         months={months}
         initialPax={pax}
         initialNights={initial}
-        waHref={waHref}
+        waNumber={wa}
       />
     </div>
   );

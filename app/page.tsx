@@ -3,6 +3,7 @@ import { BookingProvider } from "@/components/public/BookingState";
 import HeroBooking from "@/components/public/book/HeroBooking";
 import { JETTY_SELECT, type Jetty } from "@/lib/content/booking";
 import { homeJsonLd, jsonLdHtml } from "@/lib/structured-data";
+import { waGeneral, waLink, waUnavailable } from "@/lib/whatsapp";
 import FaqAccordion from "@/components/public/FaqAccordion";
 import MobileTabBar from "@/components/public/MobileTabBar";
 import BookingNotice from "@/components/public/BookingNotice";
@@ -61,9 +62,7 @@ export default async function Home() {
       <div className={styles.shell}>
         <BookingNotice
           kind={unavailable ? "down" : "closed"}
-          waHref={`https://api.whatsapp.com/send?phone=${wa}&text=${encodeURIComponent(
-            "Saya berminat trip candat sotong"
-          )}`}
+          waHref={waLink(wa, waUnavailable())}
         />
       </div>
     );
@@ -71,9 +70,7 @@ export default async function Home() {
 
   const fleet = boats ?? [];
   const waNumber = org?.whatsapp_number ?? "601153598055";
-  const waHref = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(
-    "Saya berminat trip candat sotong"
-  )}`;
+  const waHref = waLink(waNumber, waGeneral("/"));
   const businessName = org?.business_name ?? "Sakura Tackle";
   const location = org?.location ?? "Jeti Marang, Terengganu";
 
@@ -119,6 +116,7 @@ export default async function Home() {
               subtitle={pkg.subtitle}
               heroPhoto={HERO.photo}
               waHref={waHref}
+              waNumber={waNumber}
               screenClass={home.screen}
             />
 

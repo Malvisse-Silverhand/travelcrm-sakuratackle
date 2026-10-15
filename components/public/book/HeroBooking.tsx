@@ -9,6 +9,7 @@ import type { FleetBoat } from "../home/FleetShowcase";
 import ReceiptUpload from "./ReceiptUpload";
 import Icon from "./Icon";
 import { PAX_OPTIONS } from "@/lib/season";
+import { waBoat, waLink } from "@/lib/whatsapp";
 import { BOAT_FEATURES, HERO_BOOKING, jettyLabel, perPax, rm, type Jetty } from "@/lib/content/booking";
 import styles from "./book.module.css";
 
@@ -34,6 +35,8 @@ type Props = {
   subtitle: string | null;
   heroPhoto: string;
   waHref: string;
+  /** Operator's WhatsApp, for messages about one boat. */
+  waNumber: string;
   /** Class that makes a section one homepage screen. */
   screenClass?: string;
 };
@@ -48,6 +51,7 @@ export default function HeroBooking({
   subtitle,
   heroPhoto,
   waHref,
+  waNumber,
   screenClass = "",
 }: Props) {
   const { pax, setPax } = useBooking();
@@ -417,7 +421,7 @@ export default function HeroBooking({
                         <>
                           <span className={styles.priceLabel}>Harga atas permintaan</span>
                           <a
-                            href={waHref}
+                            href={waLink(waNumber, waBoat({ id: b.id, name }, pax))}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.btnGhost}

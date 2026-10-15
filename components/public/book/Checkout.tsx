@@ -30,6 +30,7 @@ import {
   rm,
   type Jetty,
 } from "@/lib/content/booking";
+import { waBoat, waBooked, waLink } from "@/lib/whatsapp";
 import styles from "./book.module.css";
 
 export type BoatNight = {
@@ -46,7 +47,8 @@ type Props = {
   months: SeasonMonth[];
   initialPax: number;
   initialNights: BoatNight[];
-  waHref: string;
+  /** Operator's WhatsApp number. */
+  waNumber: string;
 };
 
 type Plan = "deposit" | "full";
@@ -72,7 +74,7 @@ export default function Checkout({
   months,
   initialPax,
   initialNights,
-  waHref,
+  waNumber,
 }: Props) {
   const supabase = useMemo(() => createClient(), []);
   const router = useRouter();
@@ -269,6 +271,22 @@ export default function Checkout({
       );
     }
   }
+
+  // WhatsApp: about this boat until booked, then about the booking itself.
+  const waHref = booked
+    ? waLink(
+        waNumber,
+        waBooked({
+          ref: booked.ref,
+          boat: name,
+          date: dateTxt,
+          pax,
+          plan: booked.plan,
+          payNow: rm(payNow),
+          total: rm(rate),
+        })
+      )
+    : waLink(waNumber, waBoat({ id: boat.id, name }, pax, date ? dateTxt : null));
 
   const nav = (placement: string) => (
     <div className={`${styles.navRow} ${placement}`}>

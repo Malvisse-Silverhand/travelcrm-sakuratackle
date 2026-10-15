@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { POLICY, POLICY_UPDATED } from "@/lib/content/policy";
+import { waLink, waTerms } from "@/lib/whatsapp";
 import pub from "@/app/public.module.css";
 import styles from "./polisi.module.css";
 
@@ -76,7 +77,7 @@ export default async function PolicyPage() {
           <h2>Contact</h2>
           <p>
             Questions about these terms or your data?{" "}
-            <a href={`https://api.whatsapp.com/send?phone=${wa}`} target="_blank" rel="noopener noreferrer">
+            <a href={waLink(wa, waTerms())} target="_blank" rel="noopener noreferrer">
               WhatsApp {businessName}
             </a>
             .
