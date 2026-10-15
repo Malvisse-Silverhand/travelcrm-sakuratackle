@@ -4,7 +4,7 @@ import Link from "next/link";
 import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import type { Customer } from "@/lib/admin/customers";
-import DataTable, { type Column, type Filter, type Tab } from "./DataTable";
+import DataTable, { type Column, type CsvSpec, type Filter, type Tab } from "./DataTable";
 import { waNumber } from "@/lib/phone";
 import styles from "../../app/admin/admin.module.css";
 
@@ -21,6 +21,23 @@ const SEARCH = {
   placeholder: "Search name, phone or email…",
   text: (c: Customer) => `${c.name} ${c.email ?? ""}`,
   digits: (c: Customer) => c.key,
+};
+
+const CSV: CsvSpec<Customer> = {
+  filename: "customers",
+  columns: [
+    { header: "Name", value: (c) => c.name },
+    { header: "Phone", value: (c) => c.key },
+    { header: "Email", value: (c) => c.email },
+    { header: "Trips", value: (c) => c.trips },
+    { header: "Cancelled", value: (c) => c.cancelled },
+    { header: "Last trip", value: (c) => c.lastTrip },
+    { header: "Next trip", value: (c) => c.nextTrip },
+    { header: "Booking value (RM)", value: (c) => c.value },
+    { header: "Paid (RM)", value: (c) => c.depositsPaid },
+    { header: "First booked", value: (c) => c.firstBooked?.slice(0, 10) },
+    { header: "Tags", value: (c) => (c.tags ?? []).join("; ") },
+  ],
 };
 
 const COLUMNS: Column<Customer>[] = [
@@ -97,6 +114,7 @@ export default function CustomersTable({ rows }: { rows: Customer[] }) {
       tabs={TABS}
       filters={FILTERS}
       search={SEARCH}
+      csv={CSV}
       emptyText="No customers match."
     />
   );

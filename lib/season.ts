@@ -57,7 +57,33 @@ export const HOLIDAYS_BY_DATE: Record<string, string> = {
   "2027-08-31": "Hari Kebangsaan",
   "2027-09-06": "Maulidur Rasul",
   "2027-09-16": "Hari Malaysia",
+  // 2028. Islamic dates (Aidilfitri, Aidiladha, Awal Muharram, Maulidur
+  // Rasul) and Wesak are estimates until gazetted after moon sighting; check
+  // the official list when it is published and correct them here.
+  "2028-02-27": "Hari Raya Aidilfitri",
+  "2028-02-28": "Hari Raya Aidilfitri",
+  "2028-05-01": "Hari Pekerja",
+  "2028-05-05": "Hari Raya Aidiladha",
+  "2028-05-06": "Hari Raya Aidiladha",
+  "2028-05-09": "Hari Wesak",
+  "2028-05-25": "Awal Muharram",
+  "2028-06-05": "Keputeraan Agong",
+  "2028-08-03": "Maulidur Rasul",
+  "2028-08-31": "Hari Kebangsaan",
+  "2028-09-16": "Hari Malaysia",
 };
+
+/** Years in [start, end] with no public holidays listed above, so the
+ *  operator is told to add them before the calendars go quiet. */
+export function yearsWithoutHolidays(start: string, end: string): number[] {
+  const known = new Set(Object.keys(HOLIDAYS_BY_DATE).map((d) => Number(d.slice(0, 4))));
+  const from = Number(start.slice(0, 4));
+  const to = Number(end.slice(0, 4));
+  if (!from || !to || to < from || to - from > 5) return [];
+  const out: number[] = [];
+  for (let y = from; y <= to; y++) if (!known.has(y)) out.push(y);
+  return out;
+}
 
 export type Holiday = { d: number; n: string };
 

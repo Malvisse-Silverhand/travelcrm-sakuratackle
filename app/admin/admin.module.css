@@ -2851,3 +2851,67 @@ button.dtBtn:disabled {
   max-width: 420px;
   white-space: normal;
 }
+
+/* Reports: revenue by vendor, booking funnel. */
+.revGroup td {
+  background: var(--input-bg);
+  font-weight: 700;
+}
+
+.revBoat {
+  padding-left: 28px !important;
+}
+
+.funnel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.funnelRow {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 80px;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.funnelLabel {
+  color: var(--text-muted-2);
+}
+
+.funnelTrack {
+  height: 14px;
+  border-radius: 7px;
+  background: var(--input-bg);
+  overflow: hidden;
+}
+
+.funnelFill {
+  display: block;
+  height: 100%;
+  border-radius: 7px;
+  background: linear-gradient(90deg, var(--purple), #6a54c9);
+}
+
+.funnelNum {
+  text-align: right;
+  font-weight: 700;
+}
+
+.funnelNum small {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* Settings: season covers a year with no public-holiday data. */
+.holidayWarn {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 184, 0, 0.14);
+  border: 1px solid rgba(255, 184, 0, 0.4);
+  color: var(--warn-text);
+  font-size: 12.5px;
+}

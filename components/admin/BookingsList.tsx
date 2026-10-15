@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
-import DataTable, { type Column, type Filter, type Tab } from "./DataTable";
+import DataTable, { type Column, type CsvSpec, type Filter, type Tab } from "./DataTable";
 import { STATUS_LABEL, statusPill } from "./bookingStatus";
 import { waNumber } from "@/lib/phone";
 import styles from "../../app/admin/admin.module.css";
@@ -25,6 +25,21 @@ export type BookingListRow = {
 // "All" plus every real booking_status value. Bookings genuinely start as
 // `pending` (the public form and "Assign booking" both default to it), so
 // the tab that reaches them must always be there.
+const CSV: CsvSpec<BookingListRow> = {
+  filename: "bookings",
+  columns: [
+    { header: "Reference", value: (b) => b.ref },
+    { header: "Customer", value: (b) => b.full_name },
+    { header: "Phone", value: (b) => b.phone },
+    { header: "Night", value: (b) => b.night_date },
+    { header: "Boat", value: (b) => b.boats?.code },
+    { header: "Pax", value: (b) => b.pax },
+    { header: "Total (RM)", value: (b) => Number(b.total_amount) },
+    { header: "Status", value: (b) => STATUS_LABEL[b.status] ?? b.status },
+    { header: "Paid up front", value: (b) => (b.deposit_paid ? "Yes" : "No") },
+  ],
+};
+
 const TABS: Tab<BookingListRow>[] = [
   { key: "all", label: "All", test: () => true },
   ...["pending", "deposit_due", "confirmed", "weather_hold", "cancelled"].map((s) => ({
@@ -97,6 +112,7 @@ export default function BookingsList({ rows }: { rows: BookingListRow[] }) {
       tabs={TABS}
       filters={FILTERS}
       search={SEARCH}
+      csv={CSV}
       emptyText="No bookings match. Try another tab or clear the search."
     />
   );
