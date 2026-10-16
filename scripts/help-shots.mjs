@@ -81,7 +81,10 @@ await viewport(900);
 
 // Sign in through the real form.
 await send("Page.navigate", { url: `${base}/admin/login` });
-await sleep(4000);
+// The form is server-rendered: wait for it, then for React to hydrate,
+// or typed values are reset (a cold dev server can take a while).
+for (let i = 0; i < 120 && !(await js(`!!document.querySelector("form button[type=submit]")`)); i++) await sleep(500);
+await sleep(9000);
 await js(`(() => {
   const set = (el, v) => {
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set.call(el, v);
@@ -92,7 +95,8 @@ await js(`(() => {
   set(inputs[1], ${JSON.stringify(password)});
   document.querySelector("form button[type=submit]").click();
 })()`);
-await sleep(6000);
+for (let i = 0; i < 120 && (await js("location.pathname")) === "/admin/login"; i++) await sleep(500);
+await sleep(2000);
 if (!(await js("location.pathname")).startsWith("/admin") || (await js("location.pathname")) === "/admin/login") {
   console.error("Sign-in failed.");
   ws.close();

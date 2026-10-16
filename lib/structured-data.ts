@@ -26,6 +26,7 @@ export function homeJsonLd({
     name: businessName,
     url: SITE_URL,
     image: HERO.photo,
+    logo: `${SITE_URL}/brand/sakura-tackle-logo.png`,
     telephone: `+${phone.replace(/[^0-9]/g, "")}`,
     address: {
       "@type": "PostalAddress",
