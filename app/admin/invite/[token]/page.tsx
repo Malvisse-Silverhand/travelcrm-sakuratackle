@@ -30,7 +30,7 @@ export default async function InvitePage({ params }: { params: Promise<{ token: 
     <div className={styles.loginWrap}>
       <div className={styles.loginCard}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/logo-badge.webp" alt="Sakura Tackle" width={56} height={56} className={styles.logoMark} />
+        <img src="/brand/logo.webp" alt="Sakura Tackle" width={56} height={56} className={styles.logoMark} />
         {problem || !invite ? (
           <>
             <h2 className={styles.title}>Invitation</h2>

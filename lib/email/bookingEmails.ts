@@ -335,7 +335,7 @@ function build(m: {
   const html = `<!doctype html><html><body style="margin:0;background:#f5f2fe;font-family:Inter,Arial,sans-serif">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f2fe;padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fff;border-radius:18px;overflow:hidden">
-<tr><td style="background:#241a4d;padding:22px 24px;color:#fff;font-family:Poppins,Arial,sans-serif;font-weight:700;font-size:18px;letter-spacing:.02em">SAKURA TACKLE<div style="font-size:12px;font-weight:500;color:#ffe39a;letter-spacing:.1em">TRIP CANDAT SOTONG</div></td></tr>
+<tr><td style="background:#241a4d;padding:18px 24px;color:#fff;font-family:Poppins,Arial,sans-serif;font-weight:700;font-size:18px;letter-spacing:.02em"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="padding-right:12px"><img src="${SITE_URL}/brand/logo-email.png" width="56" height="56" alt="Sakura Tackle" style="display:block;border:0"></td><td style="color:#fff;font-family:Poppins,Arial,sans-serif;font-weight:700;font-size:18px">SAKURA TACKLE<div style="font-size:12px;font-weight:500;color:#ffe39a;letter-spacing:.1em">TRIP CANDAT SOTONG</div></td></tr></table></td></tr>
 <tr><td style="padding:24px">
 <h2 style="margin:0 0 8px;font-family:Poppins,Arial,sans-serif;font-size:22px;color:#1b1436">${esc(m.heading)}</h2>
 <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#4a3f6e">${esc(m.intro)}</p>

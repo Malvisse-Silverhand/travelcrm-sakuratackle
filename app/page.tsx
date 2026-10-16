@@ -86,7 +86,7 @@ export default async function Home() {
             <div className={styles.headerInner}>
               <a href="#top" className={styles.brand}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/logo-badge.webp" alt="Sakura Tackle" width={34} height={34} className={styles.logoMark} />
+                <img src="/brand/logo.webp" alt="Sakura Tackle" width={34} height={34} className={styles.logoMark} />
                 <span className={styles.brandText}>
                   <span className={styles.brandName}>SAKURA TACKLE</span>
                   <span className={styles.brandSub}>Trip Candat Sotong</span>

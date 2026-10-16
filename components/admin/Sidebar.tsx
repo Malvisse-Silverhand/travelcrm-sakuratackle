@@ -35,7 +35,7 @@ export default function Sidebar({
     <aside className={styles.sidebar}>
       <div className={styles.sidebarBrand}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/logo-badge.webp" alt="Sakura Tackle" width={34} height={34} className={styles.sidebarLogo} />
+        <img src="/brand/logo.webp" alt="Sakura Tackle" width={34} height={34} className={styles.sidebarLogo} />
         <div className={styles.sidebarBrandText}>
           <span className={styles.sidebarBrandName}>SAKURA TACKLE</span>
           <span className={styles.sidebarBrandSub}>
