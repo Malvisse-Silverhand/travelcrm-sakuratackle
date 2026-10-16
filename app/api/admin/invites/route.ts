@@ -13,6 +13,7 @@ import {
   originOf,
   requireAdminApi,
   whatsappLink,
+  roleWithArticle,
   type InviteRole,
 } from "@/lib/admin/invites";
 
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
   const fullName = String(body.fullName ?? "").trim();
   const email = String(body.email ?? "").trim().toLowerCase();
   const phone = body.phone ? normalizePhoneLocal(String(body.phone)) : "";
-  const role: InviteRole = body.role === "vendor" ? "vendor" : "admin";
+  const role: InviteRole = body.role === "vendor" ? "vendor" : body.role === "editor" ? "editor" : "admin";
   const boatIds = role === "vendor" && Array.isArray(body.boatIds) ? body.boatIds.map(String) : [];
 
   if (fullName.length < 2) return NextResponse.json({ error: "Enter their name." }, { status: 400 });
@@ -85,7 +86,7 @@ export async function POST(request: Request) {
     subject: "You're invited to Sakura Tackle",
     text: message,
     html: `<p>Salam ${escapeHtml(fullName)},</p><p>You're invited to the Sakura Tackle booking system as ${
-      role === "admin" ? "an admin" : "a vendor"
+      roleWithArticle(role)
     }.</p><p><a href="${link}">Set your password</a> — the link works for ${INVITE_DAYS} days.</p>`,
   });
 

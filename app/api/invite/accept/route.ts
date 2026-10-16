@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { hashInviteToken, logActivity } from "@/lib/admin/invites";
+import { fromDbRole, hashInviteToken, logActivity } from "@/lib/admin/invites";
 
 // Accept an invitation: the invitee sets a password, and the account,
 // profile (role) and, for a vendor, boat ownership are created. Public — the
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
     "user.joined",
     "user",
     userId!,
-    `${invite.full_name} accepted the invitation (${invite.role === "vendor" ? "vendor" : "admin"})`
+    `${invite.full_name} accepted the invitation (${fromDbRole(invite.role)})`
   );
 
   return NextResponse.json({ email: invite.email });

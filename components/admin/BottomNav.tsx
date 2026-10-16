@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BOTTOM_NAV } from "./navItems";
+import { bottomNavFor } from "./navItems";
+import type { AdminRole } from "@/lib/admin/operator";
 import styles from "../../app/admin/admin.module.css";
 
-export default function BottomNav({ role = "admin" }: { role?: "admin" | "vendor" }) {
+export default function BottomNav({ role = "admin" }: { role?: AdminRole }) {
   const pathname = usePathname();
-  const items = BOTTOM_NAV.filter((i) => role === "admin" || !i.adminOnly);
+  const items = bottomNavFor(role);
 
   return (
     <nav className={styles.bottomNav}>

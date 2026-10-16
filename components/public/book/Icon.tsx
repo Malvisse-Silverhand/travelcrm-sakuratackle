@@ -32,6 +32,9 @@ const PATHS: Record<string, string> = {
   whatsapp: "M4 20l1.4-4.2A8 8 0 1 1 8.4 18.7zM9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.6-2-1-1 .9c-1.2-.5-2.3-1.6-2.8-2.8l.9-1-1-2z",
 };
 
+/** Every icon name, for pickers (e.g. the page builder). */
+export const ICON_NAMES = Object.keys(PATHS);
+
 export default function Icon({
   name,
   size = 20,

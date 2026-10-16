@@ -1,0 +1,697 @@
+/* Page builder blocks (lib/builder/config.tsx). Brand tokens only, so any
+   page built in the editor stays on-brand. Container queries at 980 / 620:
+   the page wrapper is the container, which also makes the editor's
+   phone/tablet preview behave like the real device. */
+
+.page {
+  container-type: inline-size;
+  color: var(--ink);
+  font-family: var(--font-body);
+  background: var(--bg-page);
+}
+
+/* ---------------------------------------------------------------- layout */
+
+.section {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
+
+.sectionInner {
+  position: relative;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.wNarrow {
+  max-width: 760px;
+}
+
+.wNormal {
+  max-width: 1160px;
+}
+
+.wFull {
+  max-width: none;
+}
+
+.padSm {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.padMd {
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+
+.padLg {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+/* Section backgrounds */
+.bgPage {
+  background-color: var(--bg-page);
+}
+
+.bgWhite {
+  background-color: #fff;
+}
+
+.bgTint {
+  background-color: var(--surface-tint);
+}
+
+.bgPurple {
+  background-color: var(--purple);
+  color: #fff;
+}
+
+.bgInk {
+  background-color: var(--hero-ink);
+  color: #fff;
+}
+
+.bgGold {
+  background-color: #fff4d6;
+}
+
+/* A photo background gets a shade so text stays readable. */
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(27, 20, 54, 0.55), rgba(27, 20, 54, 0.8));
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.columns {
+  display: grid;
+  gap: 24px;
+  align-items: start;
+}
+
+.cols2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cols3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cols4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.alignMiddle {
+  align-items: center;
+}
+
+.col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.spacer {
+  display: block;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--border-mid);
+  margin: 8px 0;
+}
+
+/* ----------------------------------------------------------------- basic */
+
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.hXl {
+  font-size: clamp(32px, 5cqw, 52px);
+}
+
+.hLg {
+  font-size: clamp(26px, 3.6cqw, 38px);
+}
+
+.hMd {
+  font-size: clamp(21px, 2.6cqw, 28px);
+}
+
+.hSm {
+  font-size: 18px;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.text {
+  margin: 0;
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+.tSm {
+  font-size: 14px;
+}
+
+.tMd {
+  font-size: 16px;
+}
+
+.tLg {
+  font-size: 18.5px;
+}
+
+/* Colour of headings and text */
+.cInk {
+  color: var(--ink);
+}
+
+.cMuted {
+  color: var(--text-muted-2);
+}
+
+.cPurple {
+  color: var(--purple);
+}
+
+.cGold {
+  color: var(--gold-dark);
+}
+
+.cWhite {
+  color: #fff;
+}
+
+.rich {
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+.rich p {
+  margin: 0 0 12px;
+}
+
+.rich h2,
+.rich h3,
+.rich h4 {
+  font-family: var(--font-display);
+  margin: 18px 0 8px;
+}
+
+.rich a {
+  color: var(--purple);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.rich ul,
+.rich ol {
+  margin: 0 0 12px;
+  padding-left: 22px;
+}
+
+.rich blockquote {
+  margin: 12px 0;
+  padding: 8px 16px;
+  border-left: 4px solid var(--gold);
+  color: var(--text-muted-2);
+}
+
+.btnRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btnRowCenter {
+  justify-content: center;
+}
+
+.btnRowRight {
+  justify-content: flex-end;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btnPrimary {
+  background: var(--gold);
+  color: var(--purple);
+  box-shadow: 0 12px 26px rgba(255, 184, 0, 0.34);
+}
+
+.btnSecondary {
+  background: #fff;
+  color: var(--purple);
+  border: 1px solid var(--border-strong);
+}
+
+.btnDark {
+  background: var(--purple);
+  color: #fff;
+}
+
+.btnWhatsapp {
+  background: var(--whatsapp);
+  color: #fff;
+  box-shadow: 0 12px 26px rgba(18, 140, 126, 0.32);
+}
+
+.figure {
+  margin: 0;
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.rounded {
+  border-radius: 18px;
+}
+
+.caption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.imgPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  border-radius: 18px;
+  border: 2px dashed var(--border-strong);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+}
+
+.video iframe,
+.video video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.iconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------- blocks */
+
+.iconBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid var(--border);
+  height: 100%;
+}
+
+.iconBoxIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-tint);
+  color: var(--purple);
+}
+
+.iconBoxTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 650;
+  color: var(--ink);
+}
+
+.iconBoxText {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text-muted-2);
+}
+
+.checkList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkList li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 15.5px;
+  line-height: 1.5;
+}
+
+.checkList svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--success-text);
+}
+
+.testimonial {
+  margin: 0;
+  padding: 24px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+
+.stars {
+  color: var(--gold);
+  letter-spacing: 2px;
+  font-size: 18px;
+}
+
+.quote {
+  margin: 10px 0 14px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.who {
+  font-size: 13.5px;
+  color: var(--text-muted-2);
+}
+
+.who b {
+  color: var(--ink);
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.badgeGold {
+  background: rgba(255, 184, 0, 0.18);
+  color: var(--warn-text);
+}
+
+/* On dark sections the badges need light text to stay readable. */
+.bgInk .badgeGold,
+.bgPurple .badgeGold {
+  background: rgba(255, 184, 0, 0.2);
+  color: var(--amber-light);
+}
+
+.bgInk .badgePurple,
+.bgPurple .badgePurple {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.badgePurple {
+  background: rgba(46, 29, 107, 0.1);
+  color: var(--purple);
+}
+
+.badgeGreen {
+  background: rgba(47, 191, 113, 0.16);
+  color: var(--success-text);
+}
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faqItem {
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+
+.faqItem summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 16px 18px;
+  font-weight: 650;
+  font-size: 15.5px;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.faqItem summary::-webkit-details-marker {
+  display: none;
+}
+
+.faqItem summary::after {
+  content: "+";
+  font-size: 20px;
+  line-height: 1;
+  color: var(--purple);
+}
+
+.faqItem[open] summary::after {
+  content: "−";
+}
+
+.faqItem p {
+  margin: 0;
+  padding: 0 18px 16px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text-muted-2);
+  white-space: pre-line;
+}
+
+/* ---------------------------------------------------------- Sakura blocks */
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 28px;
+  border-radius: 22px;
+  background: var(--hero-ink);
+  color: #fff;
+}
+
+.ctaLight {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--border);
+}
+
+.ctaTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.6cqw, 26px);
+  font-weight: 700;
+}
+
+.ctaText {
+  margin: 6px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.boatGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.boatCard {
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.boatPhoto {
+  aspect-ratio: 4 / 3;
+  background: #e9e3fb center / cover no-repeat;
+}
+
+.boatBody {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.boatName {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.boatMeta {
+  font-size: 13px;
+  color: var(--text-muted-2);
+}
+
+.boatRate {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+.boatRate small {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* -------------------------------------------------------------- tablet */
+
+@container (max-width: 980px) {
+  .cols3,
+  .cols4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .boatGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .padLg {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+}
+
+/* --------------------------------------------------------------- phone */
+
+@container (max-width: 620px) {
+  .sectionInner {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .cols2,
+  .cols3,
+  .cols4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .boatGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .padMd {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .padLg {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .cta {
+    padding: 22px;
+  }
+
+  .btnRow .btn {
+    flex: 1 1 auto;
+  }
+
+  /* Hidden on phones / desktop when the block asks for it. */
+  .hidePhone {
+    display: none !important;
+  }
+}
+
+@container (min-width: 621px) {
+  .hideDesktop {
+    display: none !important;
+  }
+}
+
+/* Phones: the tab bar's centre button is the WhatsApp entry, so the floating
+   pill (PageShell) steps aside, as on the homepage. */
+@container (max-width: 620px) {
+  .waFloat {
+    display: none;
+  }
+}

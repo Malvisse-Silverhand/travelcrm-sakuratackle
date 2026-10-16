@@ -11,7 +11,7 @@ export type UserRow = {
   name: string;
   email: string;
   phone: string | null;
-  role: "admin" | "vendor";
+  role: "admin" | "vendor" | "editor";
   active: boolean;
   me: boolean;
   boatIds: string[];
@@ -22,7 +22,7 @@ export type InviteRow = {
   name: string;
   email: string;
   phone: string | null;
-  role: "admin" | "vendor";
+  role: "admin" | "vendor" | "editor";
   boats: string[];
   expiresAt: string;
 };
@@ -35,6 +35,7 @@ const TABS: Tab<UserRow>[] = [
   { key: "active", label: "Active", test: (u) => u.active },
   { key: "admins", label: "Admins", test: (u) => u.role === "admin" },
   { key: "vendors", label: "Vendors", test: (u) => u.role === "vendor" },
+  { key: "editors", label: "Editors", test: (u) => u.role === "editor" },
   { key: "off", label: "Switched off", test: (u) => !u.active },
   { key: "all", label: "All", test: () => true },
 ];
@@ -68,7 +69,7 @@ export default function UsersPanel({
   const [editing, setEditing] = useState<UserRow | null>(null);
   const [editBoats, setEditBoats] = useState<string[]>([]);
 
-  const [form, setForm] = useState({ fullName: "", email: "", phone: "", role: "admin" as "admin" | "vendor" });
+  const [form, setForm] = useState({ fullName: "", email: "", phone: "", role: "admin" as "admin" | "vendor" | "editor" });
   const [formBoats, setFormBoats] = useState<string[]>([]);
 
   const codeOf = new Map(boats.map((b) => [b.id, b.code]));
@@ -143,14 +144,19 @@ export default function UsersPanel({
       header: "Role",
       render: (u) => (
         <span className={`${styles.manifestStatus} ${u.role === "admin" ? styles.statusConfirmed : styles.statusDepositDue}`}>
-          {u.role === "admin" ? "Admin" : "Vendor"}
+          {u.role === "admin" ? "Admin" : u.role === "editor" ? "Editor" : "Vendor"}
         </span>
       ),
     },
     {
       key: "boats",
       header: "Boats",
-      render: (u) => (u.role === "vendor" ? u.boatIds.map((id) => codeOf.get(id)).join(", ") || "None" : "All"),
+      render: (u) =>
+        u.role === "vendor"
+          ? u.boatIds.map((id) => codeOf.get(id)).join(", ") || "None"
+          : u.role === "editor"
+            ? "Website pages only"
+            : "All",
     },
     {
       key: "status",
@@ -257,7 +263,7 @@ export default function UsersPanel({
                         </span>
                       </td>
                       <td>
-                        {i.role === "admin" ? "Admin" : `Vendor (${i.boats.join(", ")})`}
+                        {i.role === "admin" ? "Admin" : i.role === "editor" ? "Editor" : `Vendor (${i.boats.join(", ")})`}
                       </td>
                       <td>{formatLongDate(i.expiresAt.slice(0, 10))}</td>
                       <td>
@@ -320,10 +326,11 @@ export default function UsersPanel({
               <select
                 className={styles.input}
                 value={form.role}
-                onChange={(e) => setForm({ ...form, role: e.target.value as "admin" | "vendor" })}
+                onChange={(e) => setForm({ ...form, role: e.target.value as "admin" | "vendor" | "editor" })}
               >
                 <option value="admin">Admin: everything</option>
                 <option value="vendor">Vendor: their boats&apos; bookings and calendar</option>
+                <option value="editor">Editor: website pages only (no bookings or money)</option>
               </select>
             </label>
             {form.role === "vendor" && (

@@ -5,6 +5,7 @@ import {
   INVITE_DAYS,
   inviteLink,
   inviteMessage,
+  fromDbRole,
   logActivity,
   newInviteToken,
   originOf,
@@ -57,7 +58,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       .eq("id", id)
       .select("id");
     if (!data?.length) return NextResponse.json({ error: "Not updated." }, { status: 500 });
-    const role = invite.role === "vendor" ? "vendor" : "admin";
+    const role = fromDbRole(invite.role);
     const link = inviteLink(originOf(request), token);
     const message = inviteMessage(invite.full_name, role, link);
     const sent = await sendEmail({
