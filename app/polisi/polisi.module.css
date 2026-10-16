@@ -73,3 +73,13 @@
 .section li + li {
   margin-top: 6px;
 }
+
+/* Phone: the section shortcuts are tap targets. */
+@media (max-width: 620px) {
+  .toc a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 14px;
+  }
+}

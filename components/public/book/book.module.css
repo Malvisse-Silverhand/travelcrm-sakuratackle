@@ -2078,3 +2078,106 @@
   font-weight: 500;
   color: var(--text-muted-2);
 }
+
+/* ------------------------------------------------- phone: above the fold */
+
+/* Shown instead of the floating button on phones (query below). */
+.searchBtnInline {
+  display: none;
+}
+
+/* Compact hero so the jetty, group size and search button all fit above
+   the fold on a mid-range Android: about 640px of page below the header,
+   with the tab bar over the bottom. The map moves under the button. */
+@container (max-width: 620px) {
+  .heroBand {
+    padding: 18px 16px 112px;
+  }
+
+  .heroCopy {
+    gap: 8px;
+  }
+
+  .heroBadge {
+    padding: 5px 12px;
+    font-size: 9.5px;
+  }
+
+  .heroTitle {
+    font-size: clamp(23px, 7cqw, 28px);
+  }
+
+  .heroLead {
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  .cardWrap {
+    margin-top: -100px;
+  }
+
+  .card {
+    padding: 14px 14px 16px;
+  }
+
+  .cardControls {
+    gap: 10px;
+  }
+
+  .control {
+    padding: 11px 14px;
+    gap: 12px;
+  }
+
+  .controlIcon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .controlValue {
+    font-size: 15.5px;
+  }
+
+  .controlSub {
+    font-size: 12px;
+  }
+
+  .searchBtnWrap {
+    display: none;
+  }
+
+  .searchBtnInline {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--gold);
+    color: var(--purple);
+    font-family: var(--font-display);
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(255, 184, 0, 0.34);
+  }
+
+  .searchBtnInline:active {
+    transform: translateY(1px);
+  }
+}
+
+@container (max-width: 620px) {
+  .calNav {
+    width: 42px;
+    height: 42px;
+  }
+
+  /* "Selling Fast" wraps to two lines; 8px was too small to read. */
+  .daySub {
+    font-size: 9px;
+  }
+}

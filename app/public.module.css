@@ -839,3 +839,30 @@
     padding-bottom: calc(26px + 62px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* ------------------------------------------------- phone: touch targets */
+
+/* Fingers need about 44px. On phones the header button, the tab bar and
+   footer links grow to that; desktop keeps the denser layout. */
+.tabBarLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+}
+
+@container (max-width: 620px) {
+  .headerCta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+
+  .footerLink {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+  }
+}
