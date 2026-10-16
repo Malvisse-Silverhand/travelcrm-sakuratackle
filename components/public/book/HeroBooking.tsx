@@ -286,6 +286,13 @@ export default function HeroBooking({
                       )}
                     </div>
 
+                    {/* Phones: the search button sits right under the two
+                        controls, so it is above the fold; the map follows. */}
+                    <button type="button" className={styles.searchBtnInline} onClick={search}>
+                      <Icon name="search" size={18} strokeWidth={2.2} />
+                      SEARCH AVAILABLE BOATS
+                    </button>
+
                     {note && (
                       <p role="status" className={styles.noteWarn}>
                         {note}

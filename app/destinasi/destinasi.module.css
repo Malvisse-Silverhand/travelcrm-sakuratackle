@@ -814,3 +814,11 @@
     flex: 1 1 100%;
   }
 }
+
+/* Phone: category chips and buttons large enough to tap. */
+@container (max-width: 620px) {
+  .catChip {
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+}
