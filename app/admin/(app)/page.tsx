@@ -19,6 +19,16 @@ import {
 } from "@/lib/date";
 import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
 import { upfrontAmount } from "@/lib/booking/amounts";
+import BookingStrip, { type StripCell } from "@/components/admin/schedule/BookingStrip";
+import { cellNote } from "@/components/admin/schedule/ScheduleViews";
+import {
+  cellFor,
+  loadSchedule,
+  loadScheduleBoats,
+  loadSeason,
+  nightsBetween,
+} from "@/lib/booking/schedule";
+import { FALLBACK_SEASON } from "@/lib/season";
 import styles from "../admin.module.css";
 
 type BookingRow = {
@@ -87,6 +97,26 @@ export default async function DashboardPage() {
     };
   });
   const nightLabel = `${tripNight === today ? "Tonight" : "Last night"}, ${formatLongDate(tripNight)}`;
+
+  // Booking strip: the next 30 nights, one row per boat.
+  const stripNights = nightsBetween(today, in30);
+  const [stripBoats, season] = await Promise.all([
+    loadScheduleBoats(supabase, profile),
+    loadSeason(supabase, FALLBACK_SEASON),
+  ]);
+  const stripData = await loadSchedule(
+    supabase,
+    stripBoats.map((b) => b.id),
+    today,
+    in30
+  );
+  const stripCells: Record<string, StripCell[]> = {};
+  for (const b of stripBoats) {
+    stripCells[b.id] = stripNights.map((n) => {
+      const c = cellFor(stripData, b, n, season);
+      return { status: c.status, pax: c.pax, note: cellNote(c) };
+    });
+  }
 
   const [tonightRes, depositDueRes, nightsRes, collectedRes, prevCollectedRes] =
     await Promise.all([
@@ -191,6 +221,18 @@ export default async function DashboardPage() {
 
       <div className={styles.main}>
         <HarbourHQ boats={hqBoats} manifests={manifests} nightLabel={nightLabel} />
+
+        <BookingStrip
+          boats={stripBoats.map((b) => ({
+            id: b.id,
+            code: b.code,
+            capacity: b.capacity,
+            jettyName: b.jettyName,
+          }))}
+          nights={stripNights}
+          today={today}
+          cells={stripCells}
+        />
 
         <div className={styles.dashTop}>
           <div className={styles.dashCardPurple}>
