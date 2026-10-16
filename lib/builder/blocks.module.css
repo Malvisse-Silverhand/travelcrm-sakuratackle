@@ -695,3 +695,99 @@
     display: none;
   }
 }
+
+/* ------------------------------------------------------ vendor signup form */
+
+.vendorForm {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 26px;
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid var(--border-mid);
+  box-shadow: var(--shadow-card);
+}
+
+.vfGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.vfField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted-2);
+}
+
+.vfField input,
+.vfField select,
+.vfField textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border-mid);
+  background: var(--input-bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.vfField textarea {
+  resize: vertical;
+}
+
+.vfHoney {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.vfConsent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  color: var(--text-muted-2);
+}
+
+.vfConsent input {
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  flex: none;
+  accent-color: var(--purple);
+}
+
+.vfError {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--danger-text);
+}
+
+.vendorForm .btn {
+  align-self: flex-start;
+  border: 0;
+}
+
+@container (max-width: 620px) {
+  .vendorForm {
+    padding: 18px;
+  }
+  .vfGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .vendorForm .btn {
+    align-self: stretch;
+  }
+}

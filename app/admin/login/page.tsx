@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -111,7 +112,13 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className={styles.footNote}>Access is limited to registered boat operators.</p>
+        <p className={styles.footNote}>
+          <Link href="/admin/forgot">Forgot password?</Link>
+        </p>
+        <p className={styles.footNote}>
+          Access is limited to registered boat operators.{" "}
+          <Link href="/jadi-vendor">Own a boat? Register as a vendor</Link>
+        </p>
       </div>
     </div>
   );

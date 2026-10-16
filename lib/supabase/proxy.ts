@@ -54,10 +54,13 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAdminRoute = pathname.startsWith("/admin");
   const isLoginRoute = pathname === LOGIN_PATH;
-  // Invitation links are opened before the invitee has an account.
-  const isInviteRoute = pathname.startsWith("/admin/invite/");
+  // Invitation and password-reset links are opened without a session.
+  const isPublicRoute =
+    pathname.startsWith("/admin/invite/") ||
+    pathname === "/admin/forgot" ||
+    pathname === "/admin/reset";
 
-  if (isAdminRoute && !isLoginRoute && !isInviteRoute && !isOperator) {
+  if (isAdminRoute && !isLoginRoute && !isPublicRoute && !isOperator) {
     const url = request.nextUrl.clone();
     url.pathname = LOGIN_PATH;
     return NextResponse.redirect(url);

@@ -2913,3 +2913,59 @@ button.dtBtn:disabled {
   color: var(--warn-text);
   font-size: 12.5px;
 }
+
+.footNote a {
+  color: var(--purple);
+  font-weight: 700;
+}
+
+/* ================= vendor applications ================= */
+
+.vendorNotice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: #fff4d1;
+  border: 1px solid rgba(255, 184, 0, 0.5);
+  color: var(--warn-text);
+  font-size: 14px;
+  text-decoration: none;
+}
+.vendorNotice span {
+  font-weight: 700;
+  color: var(--purple);
+}
+
+.appDetails {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 8px 14px;
+  margin: 12px 0 0;
+  font-size: 14px;
+}
+.appDetails dt {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.appDetails dd {
+  margin: 0;
+  color: var(--ink);
+}
+.appDetails a {
+  color: var(--whatsapp);
+  font-weight: 700;
+}
+
+@container (max-width: 620px) {
+  .appDetails {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .appDetails dd {
+    margin-bottom: 8px;
+  }
+}

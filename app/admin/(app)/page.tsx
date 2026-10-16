@@ -118,6 +118,11 @@ export default async function DashboardPage() {
     });
   }
 
+  const { count: vendorApps } =
+    profile.role === "admin"
+      ? await supabase.from("vendor_applications").select("id", { count: "exact", head: true }).eq("status", "new")
+      : { count: 0 };
+
   const [tonightRes, depositDueRes, nightsRes, collectedRes, prevCollectedRes] =
     await Promise.all([
       supabase
@@ -220,6 +225,15 @@ export default async function DashboardPage() {
       />
 
       <div className={styles.main}>
+        {(vendorApps ?? 0) > 0 && (
+          <Link href="/admin/vendor-applications" className={styles.vendorNotice}>
+            <b>
+              {vendorApps} new vendor application{vendorApps === 1 ? "" : "s"}
+            </b>
+            <span>Review them →</span>
+          </Link>
+        )}
+
         <HarbourHQ boats={hqBoats} manifests={manifests} nightLabel={nightLabel} />
 
         <BookingStrip

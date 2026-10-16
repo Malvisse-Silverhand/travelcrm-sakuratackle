@@ -15,7 +15,7 @@ export type NavItem = {
 };
 
 /** Counts the admin layout supplies for sidebar badges. */
-export type BadgeKey = "pending" | "receipts" | "reviews";
+export type BadgeKey = "pending" | "receipts" | "reviews" | "vendorApps";
 
 /** Phase 4 grouped sidebar. Only screens that exist are listed; groups gain
  *  entries as their screens are built. `badge` names a count the layout
@@ -71,6 +71,7 @@ export const NAV_GROUPS: NavGroup[] = [
     adminOnly: true,
     items: [
       { href: "/admin/users", label: "Users & roles" },
+      { href: "/admin/vendor-applications", label: "Vendor applications", badge: "vendorApps" },
       { href: "/admin/activity", label: "Activity log" },
       { href: "/admin/settings", label: "Settings" },
     ],
