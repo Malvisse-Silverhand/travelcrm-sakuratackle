@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { waNumber } from "@/lib/phone";
+import { sendEmail } from "@/lib/email/resend";
 
 /** How long an invitation link works. */
 export const INVITE_DAYS = 7;
@@ -104,3 +105,81 @@ export async function logActivity(
 }
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export function escapeHtml(s: string) {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+}
+
+export type IssuedInvite = {
+  id: string;
+  link: string;
+  whatsapp: string;
+  emailed: boolean;
+  emailError: string | null;
+};
+
+/** Create an invitation (revoking older open ones for the email), email it
+ *  when Resend is set up, and log it. Inputs must already be validated. */
+export async function issueInvite(input: {
+  fullName: string;
+  email: string;
+  phone: string | null;
+  role: InviteRole;
+  boatIds: string[];
+  actor: { id: string; name: string };
+  origin: string;
+}): Promise<IssuedInvite | { error: string; status: number }> {
+  const { fullName, email, phone, role, boatIds, actor, origin } = input;
+  const admin = createAdminClient();
+
+  // Already on the team?
+  const { data: existing } = await admin.from("profiles").select("id").eq("email", email).maybeSingle();
+  if (existing) return { error: "That email already has an account.", status: 409 };
+
+  // One live invite per email: older unaccepted ones are revoked.
+  await admin
+    .from("invites")
+    .update({ revoked_at: new Date().toISOString() })
+    .eq("email", email)
+    .is("accepted_at", null)
+    .is("revoked_at", null)
+    .select("id");
+
+  const { token, hash } = newInviteToken();
+  const { data: invite, error } = await admin
+    .from("invites")
+    .insert({
+      full_name: fullName,
+      email,
+      phone,
+      role: dbRole(role),
+      boat_ids: boatIds,
+      token_hash: hash,
+      created_by: actor.id,
+      expires_at: new Date(Date.now() + INVITE_DAYS * 86_400_000).toISOString(),
+    })
+    .select("id")
+    .single();
+  if (error || !invite) return { error: "Could not create the invitation.", status: 500 };
+
+  const link = inviteLink(origin, token);
+  const message = inviteMessage(fullName, role, link);
+  const mail = await sendEmail({
+    to: email,
+    subject: "You're invited to Sakura Tackle",
+    text: message,
+    html: `<p>Salam ${escapeHtml(fullName)},</p><p>You're invited to the Sakura Tackle booking system as ${roleWithArticle(
+      role
+    )}.</p><p><a href="${link}">Set your password</a> — the link works for ${INVITE_DAYS} days.</p>`,
+  });
+
+  await logActivity(actor, "user.invited", "user", invite.id, `Invited ${fullName} (${email}) as ${role}`);
+
+  return {
+    id: invite.id,
+    link,
+    whatsapp: whatsappLink(phone, message),
+    emailed: mail.sent,
+    emailError: mail.error ?? null,
+  };
+}

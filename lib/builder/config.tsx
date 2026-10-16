@@ -4,6 +4,7 @@ import type { ComponentConfig, Config, Data, Slot } from "@puckeditor/core";
 import Icon, { ICON_NAMES } from "@/components/public/book/Icon";
 import { waLink, DEFAULT_WA } from "@/lib/whatsapp";
 import BoatCards from "./BoatCards";
+import VendorSignupForm from "./VendorSignupForm";
 import MediaField, { type MediaValue } from "./MediaField";
 import styles from "./blocks.module.css";
 
@@ -699,6 +700,37 @@ const Boats: ComponentConfig<{ pax: number; limit: number }> = {
   render: ({ pax, limit }) => <BoatCards pax={pax || 8} limit={limit} />,
 };
 
+const VendorSignup: ComponentConfig<{ title: string; text: string; button: string; success: string }> = {
+  label: "Vendor signup form",
+  fields: {
+    title: { type: "text", label: "Title" },
+    text: { type: "textarea", label: "Text" },
+    button: { type: "text", label: "Button label" },
+    success: { type: "textarea", label: "Message after sending" },
+  },
+  defaultProps: {
+    title: "Daftar sebagai vendor",
+    text: "Isi borang ni, team kami akan WhatsApp anda dalam 2 hari bekerja.",
+    button: "Hantar permohonan",
+    success: "Permohonan anda dah sampai. Team kami akan WhatsApp anda dalam 2 hari bekerja.",
+  },
+  // The fields themselves are fixed; applications appear in Admin → Vendor applications.
+  render: ({ title, text, button, success, puck }) => {
+    const meta = (puck?.metadata ?? {}) as Meta;
+    const source = meta.pageUrl?.split("/").filter(Boolean).pop();
+    return (
+      <VendorSignupForm
+        title={title}
+        text={text}
+        button={button}
+        success={success}
+        editing={puck?.isEditing}
+        source={source}
+      />
+    );
+  },
+};
+
 // ------------------------------------------------------------------ config
 
 /** A page's content as Puck 1it ({ root, content, zones }). */
@@ -709,7 +741,7 @@ export const builderConfig: Config = {
     layout: { title: "Layout", components: ["Section", "Columns", "Spacer", "Divider"] },
     basic: { title: "Basic", components: ["Heading", "Text", "RichText", "Button", "Image", "Video", "Icon"] },
     blocks: { title: "Blocks", components: ["IconBox", "CheckList", "Faq", "Testimonial", "Badge"] },
-    sakura: { title: "Sakura", components: ["BookNow", "WhatsAppCta", "Boats"] },
+    sakura: { title: "Sakura", components: ["BookNow", "WhatsAppCta", "Boats", "VendorSignup"] },
   },
   components: {
     Section,
@@ -731,6 +763,7 @@ export const builderConfig: Config = {
     BookNow,
     WhatsAppCta,
     Boats,
+    VendorSignup,
   } as Config["components"],
   root: {
     // Title, address and SEO live in Page settings, not here.

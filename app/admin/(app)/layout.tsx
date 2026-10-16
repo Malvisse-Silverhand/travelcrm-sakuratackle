@@ -16,13 +16,14 @@ export default async function AdminLayout({
   const profile = await getOperatorProfile();
   if (!profile) redirect("/admin/login");
 
-  // Sidebar badges: new leads, uploaded receipts nobody has checked, and
-  // reviews to approve. Editors see no booking screens, so skip the queries.
+  // Sidebar badges: new leads, uploaded receipts nobody has checked,
+  // reviews to approve and (admins) vendor applications. Editors see no booking screens, so skip the queries.
   const supabase = await createClient();
   const none = { count: 0 };
   const isEditor = profile.role === "editor";
-  const [{ count: pending }, { count: receipts }, { count: reviews }] = isEditor
-    ? [none, none, none]
+  const isAdmin = profile.role === "admin";
+  const [{ count: pending }, { count: receipts }, { count: reviews }, { count: vendorApps }] = isEditor
+    ? [none, none, none, none]
     : await Promise.all([
     supabase.from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabase
@@ -32,11 +33,14 @@ export default async function AdminLayout({
       .eq("deposit_paid", false)
       .neq("status", "cancelled"),
     supabase.from("reviews").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    isAdmin
+      ? supabase.from("vendor_applications").select("id", { count: "exact", head: true }).eq("status", "new")
+      : Promise.resolve(none),
   ]);
 
   return (
     <div className={styles.shell}>
-      <Sidebar badges={{ pending: pending ?? 0, receipts: receipts ?? 0, reviews: reviews ?? 0 }} role={profile.role} />
+      <Sidebar badges={{ pending: pending ?? 0, receipts: receipts ?? 0, reviews: reviews ?? 0, vendorApps: vendorApps ?? 0 }} role={profile.role} />
       <div className={styles.contentColumn}>
         {children}
         <BottomNav role={profile.role} />
