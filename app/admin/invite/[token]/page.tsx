@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { hashInviteToken } from "@/lib/admin/invites";
+import { hashInviteToken, fromDbRole, roleWithArticle } from "@/lib/admin/invites";
 import AcceptInviteForm from "@/components/admin/AcceptInviteForm";
 import styles from "../../admin.module.css";
 
@@ -43,7 +43,7 @@ export default async function InvitePage({ params }: { params: Promise<{ token: 
           <>
             <h2 className={styles.title}>Welcome, {invite.full_name}</h2>
             <p className={styles.subtitle}>
-              You&apos;re joining Sakura Tackle as {invite.role === "vendor" ? "a vendor" : "an admin"}.
+              You&apos;re joining Sakura Tackle as {roleWithArticle(fromDbRole(invite.role))}.
               Choose a password for {invite.email}.
             </p>
             <AcceptInviteForm token={token} email={invite.email} />

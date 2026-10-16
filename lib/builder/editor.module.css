@@ -1,0 +1,371 @@
+/* Page builder editor UI: media picker field, the editor's header actions,
+   the page settings panel and the media library. Admin UI, so it follows
+   the admin palette (purple/gold) but is self-contained. */
+
+.btn,
+.btnGhost,
+.btnPrimary,
+.btnDanger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn {
+  border: 0;
+  background: var(--purple);
+  color: #fff;
+}
+
+.btnGhost {
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  color: var(--purple);
+}
+
+.btnPrimary {
+  border: 0;
+  background: var(--gold);
+  color: var(--purple);
+}
+
+.btnDanger {
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  background: #fff;
+  color: var(--danger-text);
+}
+
+.btn:disabled,
+.btnGhost:disabled,
+.btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.err {
+  color: var(--danger-text);
+  font-size: 12.5px;
+}
+
+.ok {
+  color: var(--success-text);
+  font-size: 12.5px;
+}
+
+/* ------------------------------------------------------------ media field */
+
+.mediaField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mediaThumb {
+  width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: var(--input-bg);
+}
+
+.mediaEmpty {
+  padding: 22px;
+  border-radius: 8px;
+  border: 1px dashed var(--border-strong);
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.mediaRow {
+  display: flex;
+  gap: 6px;
+}
+
+.mediaAlt {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-muted-2);
+}
+
+.mediaAlt input,
+.mediaUpload input:not([type="file"]),
+.field input,
+.field textarea {
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13.5px;
+}
+
+.mediaPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--input-bg);
+}
+
+.mediaUpload {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+  font-size: 12px;
+}
+
+.mediaPick {
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.mediaPick:hover {
+  border-color: var(--gold);
+}
+
+.mediaPick img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------------------------------------------------------------- editor */
+
+.editorShell {
+  height: 100dvh;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.saveState {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+
+.statusPill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.statusLive {
+  background: rgba(47, 191, 113, 0.16);
+  color: var(--success-text);
+}
+
+.statusDraft {
+  background: rgba(255, 184, 0, 0.2);
+  color: var(--warn-text);
+}
+
+/* ---------------------------------------------------------- settings panel */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(27, 20, 54, 0.45);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.panel {
+  width: min(440px, 100vw);
+  height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: -20px 0 50px rgba(27, 20, 54, 0.2);
+}
+
+.panelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panelTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted-2);
+}
+
+.hint {
+  font-weight: 400;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.panelFoot {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.seoPreview {
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--input-bg);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.seoPreview b {
+  display: block;
+  color: #1a0dab;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.seoPreview span {
+  color: #006621;
+  font-size: 12px;
+}
+
+/* ------------------------------------------------------- media library page */
+
+.libGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.libItem {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+
+.libItem img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--input-bg);
+}
+
+.libMeta {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted-2);
+}
+
+.libAlt {
+  color: var(--ink);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.libUpload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+
+.libUpload input:not([type="file"]) {
+  flex: 1 1 240px;
+  padding: 9px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  font: inherit;
+}
+
+/* --------------------------------------------------------- new page form */
+
+.newForm {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 1.6fr) auto;
+  gap: 10px;
+  align-items: end;
+  padding: 16px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+
+.newForm select {
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13.5px;
+}
+
+@media (max-width: 820px) {
+  .newForm {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

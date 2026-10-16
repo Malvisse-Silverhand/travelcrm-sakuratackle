@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { navFor, type BadgeKey, type NavGroup } from "./navItems";
 import SignOutButton from "./SignOutButton";
+import type { AdminRole } from "@/lib/admin/operator";
 import styles from "../../app/admin/admin.module.css";
 
 function matches(pathname: string, href: string) {
@@ -23,7 +24,7 @@ export default function Sidebar({
   role = "admin",
 }: {
   badges?: Partial<Record<BadgeKey, number>>;
-  role?: "admin" | "vendor";
+  role?: AdminRole;
 }) {
   const pathname = usePathname();
   const groups = navFor(role);
@@ -39,7 +40,7 @@ export default function Sidebar({
         <div className={styles.sidebarBrandText}>
           <span className={styles.sidebarBrandName}>SAKURA TACKLE</span>
           <span className={styles.sidebarBrandSub}>
-            {role === "vendor" ? "Vendor dashboard" : "Admin dashboard"}
+            {role === "vendor" ? "Vendor dashboard" : role === "editor" ? "Website editor" : "Admin dashboard"}
           </span>
         </div>
       </div>

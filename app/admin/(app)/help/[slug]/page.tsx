@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getOperatorProfile } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
-import { helpGroups, helpMarkers, helpTopic } from "@/lib/admin/help";
+import { helpGroups, helpMarkers, helpTopic, topicVisibleTo } from "@/lib/admin/help";
 import styles from "../../../admin.module.css";
 
 export default async function HelpTopicPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -11,7 +11,7 @@ export default async function HelpTopicPage({ params }: { params: Promise<{ slug
 
   const { slug } = await params;
   const topic = helpTopic(slug);
-  if (!topic) notFound();
+  if (!topic || !topicVisibleTo(topic, profile.role)) notFound();
   const markers = helpMarkers(slug);
   const image = `/help/${slug}.jpg`;
 
@@ -21,7 +21,7 @@ export default async function HelpTopicPage({ params }: { params: Promise<{ slug
       <div className={styles.main}>
         <div className={styles.helpGrid}>
           <nav className={styles.helpNav} aria-label="Help topics">
-            {helpGroups().map((g) => (
+            {helpGroups(profile.role).map((g) => (
               <div key={g.group}>
                 <span className={styles.helpNavGroup}>{g.group}</span>
                 {g.topics.map((t) => (

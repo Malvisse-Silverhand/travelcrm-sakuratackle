@@ -304,6 +304,49 @@
       ]
     },
     {
+      "slug": "pages",
+      "group": "Website",
+      "title": "Pages (page builder)",
+      "path": "/admin/pages",
+      "intro": "Build campaign and information pages yourself, at their own address on the website.",
+      "callouts": [
+        {
+          "selector": "input[placeholder^='e.g. Promo']",
+          "title": "New page",
+          "body": "Type a title; the address fills itself in (change it if you like). Start from Campaign for a ready-made promo page, or Blank."
+        },
+        {
+          "selector": "[class*='dtTabs']",
+          "title": "Live and drafts",
+          "body": "Drafts are never visible to customers. A page goes live only when you press Publish in the editor."
+        },
+        {
+          "selector": "[class*='dtTable'] th:nth-child(5)",
+          "title": "Edit, view, duplicate",
+          "body": "Edit opens the drag-and-drop editor: blocks on the left, the page in the middle, settings on the right, with phone/tablet/desktop preview, Save draft, Preview, Settings (address, Google title and description, share image) and Publish."
+        }
+      ]
+    },
+    {
+      "slug": "media",
+      "group": "Website",
+      "title": "Media library",
+      "path": "/admin/media",
+      "intro": "Images for your pages. Upload once, use on any page.",
+      "callouts": [
+        {
+          "selector": "[class*='libUpload'] input[type=file]",
+          "title": "Upload",
+          "body": "JPG, PNG or WebP up to 5MB. Images are resized and compressed automatically, so phone photos load fast."
+        },
+        {
+          "selector": "[class*='libUpload'] input:not([type=file])",
+          "title": "Alt text",
+          "body": "Describe the image (for Google and for blind visitors). It is required."
+        }
+      ]
+    },
+    {
       "slug": "settings",
       "group": "Admin",
       "title": "Settings: season and deposit",

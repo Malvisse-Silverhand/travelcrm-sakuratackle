@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getOperatorProfile } from "@/lib/admin/operator";
+import { requireStaff } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import CalendarManager from "@/components/admin/CalendarManager";
 import {
@@ -14,7 +14,7 @@ import { todayISO } from "@/lib/date";
 import styles from "../../admin.module.css";
 
 export default async function CalendarPage() {
-  const profile = await getOperatorProfile();
+  const profile = await requireStaff();
   if (!profile) redirect("/admin/login");
 
   const supabase = await createClient();

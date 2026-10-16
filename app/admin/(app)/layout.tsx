@@ -16,9 +16,14 @@ export default async function AdminLayout({
   const profile = await getOperatorProfile();
   if (!profile) redirect("/admin/login");
 
-  // Sidebar badges: new leads, and uploaded receipts nobody has checked.
+  // Sidebar badges: new leads, uploaded receipts nobody has checked, and
+  // reviews to approve. Editors see no booking screens, so skip the queries.
   const supabase = await createClient();
-  const [{ count: pending }, { count: receipts }, { count: reviews }] = await Promise.all([
+  const none = { count: 0 };
+  const isEditor = profile.role === "editor";
+  const [{ count: pending }, { count: receipts }, { count: reviews }] = isEditor
+    ? [none, none, none]
+    : await Promise.all([
     supabase.from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabase
       .from("bookings")

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getOperatorProfile } from "@/lib/admin/operator";
+import { requireStaff } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import BookingDetailActions from "@/components/admin/BookingDetailActions";
 import BookingRequests, { type RequestRow } from "@/components/admin/BookingRequests";
@@ -17,7 +17,7 @@ export default async function BookingDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const profile = await getOperatorProfile();
+  const profile = await requireStaff();
   if (!profile) redirect("/admin/login");
 
   const { id } = await params;

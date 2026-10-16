@@ -8,10 +8,22 @@ import { waNumber } from "@/lib/phone";
 /** How long an invitation link works. */
 export const INVITE_DAYS = 7;
 
-export type InviteRole = "admin" | "vendor";
+export type InviteRole = "admin" | "vendor" | "editor";
 
 /** The database calls admins 'operator' (the original single role). */
-export const dbRole = (r: InviteRole) => (r === "admin" ? "operator" : "vendor");
+export const dbRole = (r: InviteRole) => (r === "admin" ? "operator" : r);
+
+/** Database role -> invite/console role. Unknown values are not admin. */
+export function fromDbRole(r: string | null | undefined): InviteRole {
+  if (r === "operator") return "admin";
+  if (r === "editor") return "editor";
+  return "vendor";
+}
+
+/** "an admin", "a vendor", "an editor". */
+export function roleWithArticle(r: InviteRole): string {
+  return r === "admin" ? "an admin" : r === "editor" ? "an editor" : "a vendor";
+}
 
 /** A new link token and the hash that is stored. The token itself is shown
  *  once (to the inviting admin, in the email and WhatsApp text) and never
@@ -30,7 +42,12 @@ export function inviteLink(origin: string, token: string): string {
 }
 
 export function inviteMessage(name: string, role: InviteRole, link: string): string {
-  const what = role === "admin" ? "an admin" : "a vendor (your boats' bookings and calendar)";
+  const what =
+    role === "admin"
+      ? "an admin"
+      : role === "editor"
+        ? "an editor (you build and edit the website's pages)"
+        : "a vendor (your boats' bookings and calendar)";
   return `Salam ${name}, you're invited to the Sakura Tackle booking system as ${what}. Set your password here (link works for ${INVITE_DAYS} days): ${link}`;
 }
 

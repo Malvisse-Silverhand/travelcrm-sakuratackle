@@ -36,10 +36,18 @@ export function helpMarkers(slug: string): HelpMarkers | undefined {
   return MARKERS[slug];
 }
 
+/** Which topics a role sees: editors only the website ones (and getting
+ *  started); vendors everything except the website; admins everything. */
+export function topicVisibleTo(t: HelpTopic, role: "admin" | "vendor" | "editor"): boolean {
+  if (role === "admin") return true;
+  if (role === "editor") return t.group === "Website" || t.slug === "getting-started";
+  return t.group !== "Website";
+}
+
 /** Topics grouped by menu section, in file order. */
-export function helpGroups(): Array<{ group: string; topics: HelpTopic[] }> {
+export function helpGroups(role: "admin" | "vendor" | "editor" = "admin"): Array<{ group: string; topics: HelpTopic[] }> {
   const out: Array<{ group: string; topics: HelpTopic[] }> = [];
-  for (const t of HELP_TOPICS) {
+  for (const t of HELP_TOPICS.filter((x) => topicVisibleTo(x, role))) {
     const g = out.find((x) => x.group === t.group);
     if (g) g.topics.push(t);
     else out.push({ group: t.group, topics: [t] });

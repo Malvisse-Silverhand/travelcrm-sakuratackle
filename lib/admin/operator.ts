@@ -7,8 +7,23 @@ export function initialsFrom(fullName: string): string {
   return letters.join("") || "OP";
 }
 
-/** "admin" is the database role 'operator'; vendors see only their boats. */
-export type AdminRole = "admin" | "vendor";
+/** "admin" is the database role 'operator'; vendors see only their boats;
+ *  editors build website pages and see nothing of bookings or money. */
+export type AdminRole = "admin" | "vendor" | "editor";
+
+/** Database role -> console role. Explicit, so a new database role never
+ *  falls through to admin. */
+function consoleRole(dbRole: string | null | undefined): AdminRole | null {
+  if (dbRole === "operator") return "admin";
+  if (dbRole === "vendor") return "vendor";
+  if (dbRole === "editor") return "editor";
+  return null;
+}
+
+/** Where each role lands when a screen is not theirs. */
+export function homeFor(role: AdminRole): string {
+  return role === "editor" ? "/admin/pages" : "/admin";
+}
 
 export type OperatorProfile = {
   userId: string;
@@ -33,13 +48,14 @@ export async function getOperatorProfile(): Promise<OperatorProfile | null> {
     .eq("id", userId)
     .maybeSingle();
 
-  if (!profile?.is_active) return null;
+  const role = consoleRole(profile?.role);
+  if (!profile?.is_active || !role) return null;
 
   return {
     userId,
     fullName: profile.full_name,
     initials: initialsFrom(profile.full_name),
-    role: profile.role === "vendor" ? "vendor" : "admin",
+    role,
   };
 }
 
@@ -49,6 +65,24 @@ export async function getOperatorProfile(): Promise<OperatorProfile | null> {
 export async function requireAdmin(): Promise<OperatorProfile> {
   const profile = await getOperatorProfile();
   if (!profile) redirect("/admin/login");
-  if (profile.role !== "admin") redirect("/admin");
+  if (profile.role !== "admin") redirect(homeFor(profile.role));
+  return profile;
+}
+
+/** Booking screens (dashboard, bookings, calendar): admins and vendors.
+ *  Editors have no bookings to see and go to their page list. */
+export async function requireStaff(): Promise<OperatorProfile> {
+  const profile = await getOperatorProfile();
+  if (!profile) redirect("/admin/login");
+  if (profile.role === "editor") redirect("/admin/pages");
+  return profile;
+}
+
+/** Page builder and media library: admins and editors. Vendors have no
+ *  access (Mal, 16 Oct 2026). */
+export async function requirePageEditor(): Promise<OperatorProfile> {
+  const profile = await getOperatorProfile();
+  if (!profile) redirect("/admin/login");
+  if (profile.role === "vendor") redirect("/admin");
   return profile;
 }

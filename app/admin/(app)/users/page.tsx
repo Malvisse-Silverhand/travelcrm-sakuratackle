@@ -1,3 +1,4 @@
+import { fromDbRole } from "@/lib/admin/invites";
 import { requireAdmin } from "@/lib/admin/operator";
 import { createAdminClient } from "@/lib/supabase/admin";
 import PageHeader from "@/components/admin/PageHeader";
@@ -28,7 +29,7 @@ export default async function UsersPage() {
     name: p.full_name,
     email: p.email,
     phone: p.phone,
-    role: p.role === "vendor" ? "vendor" : "admin",
+    role: fromDbRole(p.role),
     active: p.is_active,
     me: p.id === profile.userId,
     boatIds: (boats ?? []).filter((b) => b.vendor_id === p.id).map((b) => b.id),
@@ -38,7 +39,7 @@ export default async function UsersPage() {
     name: i.full_name,
     email: i.email,
     phone: i.phone,
-    role: i.role === "vendor" ? "vendor" : "admin",
+    role: fromDbRole(i.role),
     boats: (i.boat_ids as string[]).map((id) => codeOf.get(id) ?? "?"),
     expiresAt: i.expires_at,
   }));

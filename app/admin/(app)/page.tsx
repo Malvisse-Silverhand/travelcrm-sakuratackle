@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getOperatorProfile } from "@/lib/admin/operator";
+import { requireStaff } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import HarbourHQ, { type ManifestRow } from "@/components/admin/HarbourHQ";
 import type { HarbourBoat } from "@/components/three/harbour/HarbourScene";
@@ -34,7 +34,7 @@ type BookingRow = {
 };
 
 export default async function DashboardPage() {
-  const profile = await getOperatorProfile();
+  const profile = await requireStaff();
   if (!profile) redirect("/admin/login");
 
   const supabase = await createClient();

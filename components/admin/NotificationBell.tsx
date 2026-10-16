@@ -17,6 +17,7 @@ const KINDS: Record<string, { label: string; tone: "red" | "gold" | "green" | "p
   "request.reschedule": { label: "Date change request", tone: "gold" },
   "request.cancel": { label: "Cancelled by customer", tone: "red" },
   "review.created": { label: "New review", tone: "green" },
+  "page.published": { label: "Page published", tone: "purple" },
   "user.joined": { label: "New team member", tone: "purple" },
 };
 
@@ -150,6 +151,8 @@ export default function NotificationBell() {
                     ? `/admin/bookings/${it.entity_id}`
                     : it.entity === "review"
                       ? "/admin/reviews"
+                      : it.entity === "page" && it.entity_id
+                        ? `/admin/pages/${it.entity_id}`
                     : it.entity === "user"
                       ? "/admin/users"
                       : "/admin/activity";
