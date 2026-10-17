@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -31,7 +32,6 @@ type Props = {
   months: SeasonMonth[];
   initialMonthIdx: number;
   initialNights: NightRow[];
-  packageId: string | null;
 };
 
 export default function CalendarManager({
@@ -40,7 +40,6 @@ export default function CalendarManager({
   months,
   initialMonthIdx,
   initialNights,
-  packageId,
 }: Props) {
   const supabase = useMemo(() => createClient(), []);
 
@@ -50,10 +49,6 @@ export default function CalendarManager({
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<string | null>(initialNights[0]?.night_date ?? null);
 
-  const [showAssign, setShowAssign] = useState(false);
-  const [assignForm, setAssignForm] = useState({ name: "", phone: "", pax: "6", note: "" });
-  const [assignBusy, setAssignBusy] = useState(false);
-  const [assignMsg, setAssignMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const [showBlock, setShowBlock] = useState(false);
   const [blockReason, setBlockReason] = useState("");
@@ -141,40 +136,6 @@ export default function CalendarManager({
     }
   };
 
-  const submitAssign = async () => {
-    if (!boat || !selected || !packageId) return;
-    const pax = Number(assignForm.pax);
-    if (!assignForm.name.trim() || !assignForm.phone.trim() || !pax || pax < 1) {
-      setAssignMsg({ ok: false, text: "Sila isi nama, telefon dan bilangan pax." });
-      return;
-    }
-    setAssignBusy(true);
-    setAssignMsg(null);
-    const { data, error } = await supabase.rpc("create_public_booking", {
-      p_package_id: packageId,
-      p_boat_id: boat.id,
-      p_night_date: selected,
-      p_full_name: assignForm.name.trim(),
-      p_phone: assignForm.phone.replace(/[^0-9]/g, ""),
-      p_email: null,
-      p_pax: pax,
-      p_note: assignForm.note.trim() || null,
-    });
-    setAssignBusy(false);
-    if (error || !data) {
-      // The booking function says why it refused (night blocked, boat full…).
-      setAssignMsg({
-        ok: false,
-        text: `Booking not saved${error?.message ? `: ${error.message}` : ". Try again."}`,
-      });
-      return;
-    }
-    const ref = Array.isArray(data) ? data[0]?.ref : undefined;
-    setAssignMsg({ ok: true, text: `Tempahan disimpan${ref ? ` (${ref})` : ""}. Status: pending.` });
-    setAssignForm({ name: "", phone: "", pax: "6", note: "" });
-    await refreshSelectedNight();
-  };
-
   const toggleBlock = async () => {
     if (!boat || !selected) return;
     setBlockBusy(true);
@@ -212,7 +173,6 @@ export default function CalendarManager({
               className={`${styles.adminBoatChip} ${b.id === boatId ? styles.adminBoatChipActive : ""}`}
               onClick={() => {
                 setBoatId(b.id);
-                setShowAssign(false);
                 setShowBlock(false);
               }}
             >
@@ -259,9 +219,7 @@ export default function CalendarManager({
                 className={cellClass(c.iso)}
                 onClick={() => {
                   setSelected(c.iso);
-                  setShowAssign(false);
                   setShowBlock(false);
-                  setAssignMsg(null);
                 }}
               >
                 {c.day}
@@ -281,74 +239,24 @@ export default function CalendarManager({
           <div className={styles.selNightMeta}>{loading ? "Memuatkan..." : selMeta}</div>
 
           <div className={styles.selNightActions}>
-            <button
-              type="button"
+            <Link
+              href={selected ? `/admin/bookings/new?date=${selected}&boat=${boatId}` : "/admin/bookings/new"}
               className={styles.assignBtn}
-              disabled={!selected || !packageId}
-              onClick={() => {
-                setShowAssign((v) => !v);
-                setShowBlock(false);
-              }}
+              style={{ textDecoration: "none", textAlign: "center" }}
             >
-              Assign booking
-            </button>
+              Add booking
+            </Link>
             <button
               type="button"
               className={styles.blockBtn}
               disabled={!selected}
               onClick={() => {
                 setShowBlock((v) => !v);
-                setShowAssign(false);
               }}
             >
               {selectedRow?.blocked ? "Unblock night" : "Block night"}
             </button>
           </div>
-
-          {showAssign && (
-            <div className={styles.inlineForm}>
-              <input
-                className={styles.input}
-                placeholder="Nama penuh"
-                value={assignForm.name}
-                onChange={(e) => setAssignForm({ ...assignForm, name: e.target.value })}
-              />
-              <input
-                className={styles.input}
-                placeholder="No. telefon"
-                value={assignForm.phone}
-                onChange={(e) => setAssignForm({ ...assignForm, phone: e.target.value })}
-              />
-              <input
-                className={styles.input}
-                type="number"
-                min={1}
-                placeholder="Bilangan pax"
-                value={assignForm.pax}
-                onChange={(e) => setAssignForm({ ...assignForm, pax: e.target.value })}
-              />
-              <textarea
-                className={styles.textarea}
-                rows={2}
-                placeholder="Nota (pilihan)"
-                value={assignForm.note}
-                onChange={(e) => setAssignForm({ ...assignForm, note: e.target.value })}
-              />
-              <button
-                type="button"
-                className={styles.assignBtn}
-                disabled={assignBusy}
-                onClick={submitAssign}
-              >
-                {assignBusy ? "Menyimpan..." : "Simpan tempahan"}
-              </button>
-              {assignMsg && (
-                <span className={assignMsg.ok ? styles.formOk : styles.formErr}>
-                  {assignMsg.text}
-                </span>
-              )}
-            </div>
-          )}
 
           {showBlock && !selectedRow?.blocked && (
             <div className={styles.inlineForm}>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requireStaff } from "@/lib/admin/operator";
@@ -23,6 +24,11 @@ export default async function BookingsPage() {
         title="Bookings"
         subtitle={`${rows.length} booking${rows.length === 1 ? "" : "s"}`}
         avatarInitials={profile.initials}
+        actions={
+          <Link href="/admin/bookings/new" className={styles.headerActionBtn}>
+            New booking
+          </Link>
+        }
       />
       <div className={styles.main}>
         <BookingsList rows={rows} />

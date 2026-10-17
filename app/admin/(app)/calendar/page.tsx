@@ -72,7 +72,6 @@ export default async function CalendarPage() {
             months={months}
             initialMonthIdx={openMonthIdx}
             initialNights={nights ?? []}
-            packageId={pkg?.id ?? null}
           />
         ) : (
           <div className={styles.emptyCard}>
