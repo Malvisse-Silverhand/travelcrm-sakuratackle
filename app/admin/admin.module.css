@@ -2969,3 +2969,30 @@ button.dtBtn:disabled {
     margin-bottom: 8px;
   }
 }
+
+/* DataTable row selection and bulk bar. */
+.dtTick {
+  width: 36px;
+  text-align: center;
+}
+.dtTick input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--purple);
+  cursor: pointer;
+}
+.dtRowTicked td {
+  background: rgba(255, 184, 0, 0.08);
+}
+.dtBulk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-tint);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
