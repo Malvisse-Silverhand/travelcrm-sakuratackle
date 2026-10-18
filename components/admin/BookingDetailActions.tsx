@@ -6,7 +6,6 @@ import { createClient } from "@/lib/supabase/client";
 import { formatLongDate } from "@/lib/season";
 import { formatRM } from "@/lib/date";
 import { WA_TEMPLATES, waTemplate, waToCustomer, type WaTemplateKey } from "@/lib/admin/waTemplates";
-import { sendPaidEmail } from "./sendPaidEmail";
 import styles from "../../app/admin/admin.module.css";
 
 type Booking = {
@@ -33,36 +32,11 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
 
   const [busy, setBusy] = useState(false);
   const [uploadMsg, setUploadMsg] = useState<string | null>(null);
-  const [actionErr, setActionErr] = useState<string | null>(null);
-  const [mailMsg, setMailMsg] = useState<string | null>(null);
 
-  const pct = b.depositPaid ? Math.round((b.depositAmount / b.totalAmount) * 100) : 0;
+  const pct = b.totalAmount > 0 ? Math.round(((b.totalAmount - b.balanceDue) / b.totalAmount) * 100) : 0;
 
-  // RLS lets an UPDATE silently match zero rows with no error at all — checking
-  // only `error` would treat that as success. Requiring the row back via
-  // .select() catches it.
-  const NOT_UPDATED = "Nothing was saved. Reload the page and try again.";
-
-  const markDepositReceived = async () => {
-    setBusy(true);
-    setActionErr(null);
-    const nextStatus =
-      b.status === "pending" || b.status === "deposit_due" ? "confirmed" : b.status;
-    const { data, error } = await supabase
-      .from("bookings")
-      .update({ deposit_paid: true, deposit_paid_at: new Date().toISOString(), status: nextStatus })
-      .eq("id", b.id)
-      .select("id");
-    setBusy(false);
-    if (error || !data?.length) {
-      setActionErr(NOT_UPDATED);
-      return;
-    }
-    setTpl("paid");
-    setMailMsg(await sendPaidEmail(b.id));
-    router.refresh();
-  };
-
+  // RLS lets an UPDATE silently match zero rows with no error at all —
+  // requiring the row back via .select() catches it.
   const uploadReceipt = async (file: File) => {
     setBusy(true);
     setUploadMsg(null);
@@ -98,23 +72,6 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
     }
   };
 
-  const cancelBooking = async () => {
-    if (!window.confirm(`Batalkan tempahan ${b.ref}? Tindakan ini tidak boleh diundur.`)) return;
-    setBusy(true);
-    setActionErr(null);
-    const { data, error } = await supabase
-      .from("bookings")
-      .update({ status: "cancelled" })
-      .eq("id", b.id)
-      .select("id");
-    setBusy(false);
-    if (error || !data?.length) {
-      setActionErr(NOT_UPDATED);
-      return;
-    }
-    router.refresh();
-  };
-
   const [tpl, setTpl] = useState<WaTemplateKey>(b.depositPaid ? "paid" : "received");
   const waHref = waToCustomer(b.phone, waTemplate(tpl, b));
 
@@ -130,8 +87,8 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
             </span>
           </div>
           <div style={{ textAlign: "right" }}>
-            <span className={styles.paymentLabel}>Balance at jetty</span>
-            <span className={styles.paymentValueAmber}>{formatRM(b.balanceDue)}</span>
+            <span className={styles.paymentLabel}>{b.balanceDue > 0 ? "Balance at jetty" : "Balance"}</span>
+            <span className={styles.paymentValueAmber}>{b.balanceDue > 0 ? formatRM(b.balanceDue) : "Settled"}</span>
           </div>
         </div>
         <div className={styles.progressTrack}>
@@ -143,14 +100,7 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
             Received {b.depositPaidAt ? formatLongDate(b.depositPaidAt.slice(0, 10)) : ""}
           </p>
         ) : (
-          <button
-            type="button"
-            className={styles.markPaidBtn}
-            disabled={busy}
-            onClick={markDepositReceived}
-          >
-            Mark payment received
-          </button>
+          <p className={styles.depositMeta}>Not received yet. Use Mark deposit paid above when it arrives.</p>
         )}
 
         {b.receiptUrl ? (
@@ -188,8 +138,6 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
         />
       </div>
 
-      {actionErr && <div className={styles.errorNote}>{actionErr}</div>}
-
       <div className={styles.waTemplateRow}>
         <select
           className={styles.input}
@@ -207,12 +155,6 @@ export default function BookingDetailActions({ booking: b }: { booking: Booking 
           WhatsApp customer
         </a>
       </div>
-      {mailMsg && <div className={styles.formOk}>{mailMsg}</div>}
-      {b.status !== "cancelled" && (
-        <button type="button" className={styles.cancelBtn} disabled={busy} onClick={cancelBooking}>
-          Cancel booking
-        </button>
-      )}
     </div>
   );
 }
