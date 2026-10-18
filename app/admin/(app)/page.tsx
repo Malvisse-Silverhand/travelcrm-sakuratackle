@@ -218,7 +218,7 @@ export default async function DashboardPage() {
         subtitle={formatMalayFullDate(today)}
         avatarInitials={profile.initials}
         actions={
-          <Link href="/admin/calendar" className={styles.headerActionBtn}>
+          <Link href="/admin/bookings/new" className={styles.headerActionBtn}>
             New booking
           </Link>
         }

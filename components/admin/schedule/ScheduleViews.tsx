@@ -84,7 +84,7 @@ export function Legend({ year = false }: { year?: boolean }) {
 
 /* ---------------- Day ---------------- */
 
-export function DayView({ boats, cells, nights }: ViewProps) {
+export function DayView({ boats, cells, nights, today }: ViewProps) {
   const night = nights[0];
   return (
     <div className={styles.dayGrid}>
@@ -128,6 +128,14 @@ export function DayView({ boats, cells, nights }: ViewProps) {
                   : c.status === "off"
                   ? "Outside the season. No trips."
                   : "No bookings yet. Open for booking."}
+                {c.status !== "blocked" && night >= today && (
+                  <>
+                    {" "}
+                    <Link href={`/admin/bookings/new?date=${night}&boat=${boat.id}`} className={styles.addLink}>
+                      Add booking
+                    </Link>
+                  </>
+                )}
               </p>
             )}
           </section>

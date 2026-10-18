@@ -1,0 +1,304 @@
+/* Admin "New booking": the homepage booking card (components/public/book
+   book.module.css .card / .control / .searchBtn) restyled for staff use. */
+
+.wrap {
+  container: newbooking / inline-size;
+  max-width: 1080px;
+}
+
+.card {
+  position: relative;
+  margin: 0 0 44px;
+  padding: 26px 26px 56px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: 0 22px 50px rgba(46, 29, 107, 0.14);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.colTitle {
+  margin: 0 0 4px;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 650;
+  color: var(--ink);
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-mid);
+  border-radius: 14px;
+  background: #fff;
+  cursor: text;
+  min-width: 0;
+}
+.control:focus-within {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(46, 29, 107, 0.08);
+}
+
+.controlIcon {
+  flex: none;
+  color: var(--purple);
+}
+
+.controlText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.controlLabel,
+.groupLabel {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.controlInput {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+}
+.controlInput::placeholder {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.controlWarn {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--danger-text);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.groupHint {
+  font-size: 12.5px;
+  color: var(--text-muted-2);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-mid);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--text-muted-2);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.chip:hover {
+  border-color: var(--purple);
+  color: var(--purple);
+}
+.chipOn,
+.chipOn:hover {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: #fff;
+}
+.chip:focus-visible,
+.submit:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.noteField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.noteField textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border-mid);
+  border-radius: 14px;
+  background: var(--input-bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.check {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13.5px;
+  color: var(--text-muted-2);
+}
+.check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--purple);
+}
+
+.error {
+  margin: 18px 0 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--danger-text);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.submitWrap {
+  position: absolute;
+  left: 50%;
+  bottom: -26px;
+  transform: translateX(-50%);
+  width: min(440px, calc(100% - 48px));
+}
+
+.submit {
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--purple);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(255, 184, 0, 0.34);
+}
+.submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* ---------- saved ---------- */
+
+.doneBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 0;
+  text-align: center;
+}
+.card:has(.doneBox) {
+  padding-bottom: 30px;
+}
+.doneIcon {
+  color: var(--success);
+}
+.doneTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink);
+}
+.doneText {
+  margin: 0;
+  max-width: 56ch;
+  color: var(--text-muted-2);
+}
+.doneActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.waBtn,
+.ghostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.waBtn {
+  background: var(--whatsapp);
+  color: #fff;
+  border: 0;
+}
+.ghostBtn {
+  background: #fff;
+  color: var(--purple);
+  border: 1px solid var(--border-strong);
+}
+
+@container newbooking (max-width: 760px) {
+  .cardGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+}
+
+@container newbooking (max-width: 460px) {
+  .card {
+    padding: 18px 16px 52px;
+  }
+  .pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .control {
+    padding: 11px 14px;
+    gap: 12px;
+  }
+}
