@@ -39,6 +39,7 @@ export const NAV_GROUPS: NavGroup[] = [
     icon: "B",
     items: [
       { href: "/admin/bookings", label: "All bookings", badge: "pending" },
+      { href: "/admin/bookings?view=board", label: "Booking board" },
       { href: "/admin/payments", label: "Payments", badge: "receipts", adminOnly: true },
       { href: "/admin/schedule", label: "Booking calendar" },
       { href: "/admin/calendar", label: "Slot manager" },
