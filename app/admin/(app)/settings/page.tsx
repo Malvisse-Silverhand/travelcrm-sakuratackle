@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import SettingsPanel from "@/components/admin/SettingsPanel";
 import JettySettings, { type JettyRow } from "@/components/admin/JettySettings";
+import BusinessDetails from "@/components/admin/BusinessDetails";
 import styles from "../../admin.module.css";
 
 export default async function SettingsPage() {
@@ -16,7 +17,7 @@ export default async function SettingsPage() {
       .order("code"),
     supabase
       .from("org_settings")
-      .select("business_name, location, whatsapp_number, hold_hours")
+      .select("business_name, location, whatsapp_number, hold_hours, legal_name, ssm_no, sst_no, address, business_email")
       .eq("id", 1)
       .maybeSingle(),
     supabase
@@ -54,6 +55,18 @@ export default async function SettingsPage() {
           seasonStart={pkg?.season_start ?? null}
           seasonEnd={pkg?.season_end ?? null}
         />
+        <div style={{ marginTop: 18 }}>
+          <BusinessDetails
+            initial={{
+              business_name: org?.business_name ?? "Sakura Tackle",
+              legal_name: org?.legal_name ?? null,
+              ssm_no: org?.ssm_no ?? null,
+              sst_no: org?.sst_no ?? null,
+              address: org?.address ?? null,
+              business_email: org?.business_email ?? null,
+            }}
+          />
+        </div>
         <div style={{ marginTop: 18 }}>
           <JettySettings jetties={jettyRows} />
         </div>

@@ -1,0 +1,146 @@
+/* Payments & receipts card on the booking page. */
+
+.card {
+  margin-top: 14px;
+  padding: 18px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid var(--border-mid);
+  display: grid;
+  gap: 12px;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.label {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.net {
+  font-weight: 700;
+  color: var(--success-text);
+  font-variant-numeric: tabular-nums;
+}
+.empty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted-2);
+}
+.list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.list li {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 14px;
+  background: var(--surface-tint);
+}
+.voided {
+  opacity: 0.6;
+}
+.voided .amount {
+  text-decoration: line-through;
+}
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+}
+.icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: #fff;
+  color: var(--purple);
+}
+.main {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+.main b {
+  font-size: 13.5px;
+  color: var(--ink);
+}
+.main small {
+  font-size: 12px;
+  color: var(--text-muted-2);
+}
+.voidText {
+  color: var(--danger-text) !important;
+  font-weight: 600;
+}
+.amount {
+  font-size: 14px;
+  color: var(--ink);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-left: 40px;
+}
+.btn {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  color: var(--purple);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.btnWa {
+  background: var(--whatsapp);
+  border-color: var(--whatsapp);
+  color: #fff;
+}
+.btnDanger {
+  color: var(--danger-text);
+}
+.add {
+  justify-self: start;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px dashed var(--border-strong);
+  background: none;
+  color: var(--purple);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ok,
+.err {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ok {
+  color: var(--success-text);
+}
+.err {
+  color: var(--danger-text);
+}
