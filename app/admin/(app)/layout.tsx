@@ -22,8 +22,9 @@ export default async function AdminLayout({
   const none = { count: 0 };
   const isEditor = profile.role === "editor";
   const isAdmin = profile.role === "admin";
-  const [{ count: pending }, { count: receipts }, { count: reviews }, { count: vendorApps }] = isEditor
-    ? [none, none, none, none]
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kuala_Lumpur" }).format(new Date());
+  const [{ count: pending }, { count: receipts }, { count: reviews }, { count: vendorApps }, { count: followUps }] = isEditor
+    ? [none, none, none, none, none]
     : await Promise.all([
     supabase.from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabase
@@ -36,11 +37,18 @@ export default async function AdminLayout({
     isAdmin
       ? supabase.from("vendor_applications").select("id", { count: "exact", head: true }).eq("status", "new")
       : Promise.resolve(none),
+    isAdmin
+      ? supabase
+          .from("leads")
+          .select("id", { count: "exact", head: true })
+          .in("stage", ["new", "contacted", "quoted"])
+          .lte("next_follow_up", today)
+      : Promise.resolve(none),
   ]);
 
   return (
     <div className={styles.shell}>
-      <Sidebar badges={{ pending: pending ?? 0, receipts: receipts ?? 0, reviews: reviews ?? 0, vendorApps: vendorApps ?? 0 }} role={profile.role} />
+      <Sidebar badges={{ pending: pending ?? 0, receipts: receipts ?? 0, reviews: reviews ?? 0, vendorApps: vendorApps ?? 0, followUps: followUps ?? 0 }} role={profile.role} />
       <div className={styles.contentColumn}>
         {children}
         <BottomNav role={profile.role} />

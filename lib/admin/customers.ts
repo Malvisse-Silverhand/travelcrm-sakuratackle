@@ -40,7 +40,62 @@ export type Customer = {
   firstBooked: string;
   /** From customer_notes, when the operator has tagged them. */
   tags?: string[];
+  /** Where we know them from: bookings in the system, an import, or both. */
+  source?: "online" | "imported" | "both";
+  /** Trips from before the system (imported), included in trips and value. */
+  pastTrips?: number;
 };
+
+export type ImportedCustomer = { phone_key: string; name: string; email: string | null; tags: string[] | null };
+export type PastTrip = {
+  phone_key: string;
+  trip_date: string;
+  boat_label: string | null;
+  pax: number | null;
+  amount: number | string | null;
+  note: string | null;
+};
+
+/** Add imported customers and their past trips to the customers built from
+ *  bookings. Past trips count as trips and value (so Repeat and lifetime
+ *  value include history) but never as upcoming. */
+export function mergeHistory(list: Customer[], imported: ImportedCustomer[], past: PastTrip[]): Customer[] {
+  const byKey = new Map(list.map((c) => [c.key, { ...c, source: "online" as Customer["source"], pastTrips: 0 }]));
+  for (const ic of imported) {
+    const c = byKey.get(ic.phone_key);
+    if (c) {
+      c.source = "both";
+      c.email = c.email ?? ic.email;
+    } else {
+      byKey.set(ic.phone_key, {
+        key: ic.phone_key,
+        name: ic.name,
+        email: ic.email,
+        trips: 0,
+        cancelled: 0,
+        lastTrip: null,
+        nextTrip: null,
+        value: 0,
+        depositsPaid: 0,
+        firstBooked: "9999-12-31",
+        source: "imported",
+        pastTrips: 0,
+      });
+    }
+  }
+  for (const t of past) {
+    const c = byKey.get(t.phone_key);
+    if (!c) continue;
+    c.trips += 1;
+    c.pastTrips = (c.pastTrips ?? 0) + 1;
+    c.value += Number(t.amount ?? 0);
+    if (!c.lastTrip || t.trip_date > c.lastTrip) c.lastTrip = t.trip_date;
+    if (t.trip_date < c.firstBooked.slice(0, 10)) c.firstBooked = t.trip_date;
+  }
+  return Array.from(byKey.values())
+    .map((c) => (c.firstBooked === "9999-12-31" ? { ...c, firstBooked: new Date().toISOString() } : c))
+    .sort((a, b) => (b.nextTrip ?? b.lastTrip ?? "").localeCompare(a.nextTrip ?? a.lastTrip ?? ""));
+}
 
 /** Tags offered on a customer's profile. */
 export const CUSTOMER_TAGS = ["VIP", "Repeat", "Corporate", "Family", "Needs follow-up", "Do not book"];

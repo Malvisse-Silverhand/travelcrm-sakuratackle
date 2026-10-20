@@ -8,9 +8,13 @@ import { waNumber } from "@/lib/phone";
 import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
 import {
   customerKey,
+  mergeHistory,
   phoneVariants,
   summarise,
+  type Customer,
   type CustomerBooking,
+  type ImportedCustomer,
+  type PastTrip,
 } from "@/lib/admin/customers";
 import { formatLongDate } from "@/lib/season";
 import { formatRM, todayISO } from "@/lib/date";
@@ -36,11 +40,22 @@ export default async function CustomerPage({ params }: { params: Promise<{ key: 
     .in("phone", phoneVariants(key))
     .order("night_date", { ascending: false });
 
+  const [{ data: imported }, { data: pastRows }] = await Promise.all([
+    supabase.from("customers").select("phone_key, name, email, tags").eq("phone_key", key).maybeSingle(),
+    supabase
+      .from("past_trips")
+      .select("phone_key, trip_date, boat_label, pax, amount, note")
+      .eq("phone_key", key)
+      .order("trip_date", { ascending: false }),
+  ]);
+
   const bookings = (data ?? []) as unknown as CustomerBooking[];
-  if (bookings.length === 0) notFound();
+  if (bookings.length === 0 && !imported) notFound();
 
   const today = todayISO();
-  const c = summarise(key, bookings, today);
+  const past = (pastRows ?? []) as PastTrip[];
+  const base: Customer[] = bookings.length ? [summarise(key, bookings, today)] : [];
+  const c = mergeHistory(base, imported ? [imported as ImportedCustomer] : [], past)[0];
 
   return (
     <>
@@ -57,6 +72,7 @@ export default async function CustomerPage({ params }: { params: Promise<{ key: 
           </div>
           <div className={styles.detailRefLine}>
             Customer since {formatLongDate(c.firstBooked.slice(0, 10))}
+            {c.source === "imported" ? " · imported, no bookings in the system yet" : c.source === "both" ? " · includes imported history" : ""}
           </div>
           <div className={styles.detailStatsGrid}>
             <div>
@@ -98,7 +114,10 @@ export default async function CustomerPage({ params }: { params: Promise<{ key: 
             >
               WhatsApp {c.name.split(" ")[0]}
             </a>
-            <Link href="/admin/calendar" className={`${styles.dtBtn} ${styles.dtBtnGhost}`}>
+            <Link
+              href={`/admin/bookings/new?name=${encodeURIComponent(c.name)}&phone=${encodeURIComponent(c.key)}${c.email ? `&email=${encodeURIComponent(c.email)}` : ""}`}
+              className={`${styles.dtBtn} ${styles.dtBtnGhost}`}
+            >
               New booking
             </Link>
           </div>
@@ -110,7 +129,40 @@ export default async function CustomerPage({ params }: { params: Promise<{ key: 
           initialTags={(note?.tags as string[] | undefined) ?? []}
         />
 
-        <span className={styles.manifestKicker}>Booking history</span>
+        {past.length > 0 && (
+          <>
+            <span className={styles.manifestKicker}>Before the system ({past.length} imported trips)</span>
+            <div className={styles.dtCard} style={{ marginBottom: 22 }}>
+              <div className={styles.dtScroll}>
+                <table className={styles.dtTable}>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Boat</th>
+                      <th className={styles.dtNum}>Pax</th>
+                      <th className={styles.dtNum}>Amount</th>
+                      <th>Note</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {past.map((t, i) => (
+                      <tr key={`${t.trip_date}-${i}`}>
+                        <td className={styles.dtStrong}>{formatLongDate(t.trip_date)}</td>
+                        <td>{t.boat_label ?? "—"}</td>
+                        <td className={styles.dtNum}>{t.pax ?? "—"}</td>
+                        <td className={styles.dtNum}>{t.amount != null ? formatRM(Number(t.amount)) : "—"}</td>
+                        <td>{t.note ?? ""}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )}
+
+        {bookings.length > 0 && <span className={styles.manifestKicker}>Booking history</span>}
+        {bookings.length > 0 && (
         <div className={styles.dtCard}>
           <div className={styles.dtScroll}>
             <table className={styles.dtTable}>
@@ -159,6 +211,7 @@ export default async function CustomerPage({ params }: { params: Promise<{ key: 
             </table>
           </div>
         </div>
+        )}
       </div>
     </>
   );

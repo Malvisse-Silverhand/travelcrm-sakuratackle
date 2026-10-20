@@ -15,7 +15,12 @@ const TABS: Tab<Customer>[] = [
   { key: "once", label: "One trip", test: (c) => c.trips === 1 },
 ];
 
-const FILTERS: Filter<Customer>[] = [{ key: "tag", allLabel: "All tags", value: (c) => c.tags }];
+const SOURCE_LABEL = { online: "Booked online", imported: "Imported", both: "Imported + online" } as const;
+
+const FILTERS: Filter<Customer>[] = [
+  { key: "tag", allLabel: "All tags", value: (c) => c.tags },
+  { key: "source", allLabel: "All sources", value: (c) => SOURCE_LABEL[c.source ?? "online"] },
+];
 
 const SEARCH = {
   placeholder: "Search name, phone or email…",

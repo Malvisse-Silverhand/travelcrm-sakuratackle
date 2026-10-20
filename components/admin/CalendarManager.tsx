@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import BlockNightDialog from "./BlockNightDialog";
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -51,9 +52,6 @@ export default function CalendarManager({
 
 
   const [showBlock, setShowBlock] = useState(false);
-  const [blockReason, setBlockReason] = useState("");
-  const [blockBusy, setBlockBusy] = useState(false);
-  const [blockErr, setBlockErr] = useState<string | null>(null);
 
   const boat = boats.find((b) => b.id === boatId) ?? boats[0];
   const month = months[monthIdx];
@@ -113,15 +111,15 @@ export default function CalendarManager({
   const selMeta = (() => {
     if (!boat || !selectedRow) return "";
     if (selectedRow.blocked) {
-      return `${boat.code} disekat.${selectedRow.blocked_reason ? " " + selectedRow.blocked_reason : ""}`;
+      return `${boat.code} is blocked.${selectedRow.blocked_reason ? " " + selectedRow.blocked_reason : ""}`;
     }
     if (selectedRow.pax_held >= selectedRow.capacity) {
-      return `${boat.code} penuh ditempah.`;
+      return `${boat.code} is fully booked.`;
     }
     if (selectedRow.pax_held > 0) {
-      return `${boat.code} ada tempahan. ${selectedRow.pax_held}/${selectedRow.capacity} pax dipegang.`;
+      return `${boat.code} has bookings: ${selectedRow.pax_held}/${selectedRow.capacity} pax held.`;
     }
-    return `${boat.code} kosong. Tiada tempahan.`;
+    return `${boat.code} is open. No bookings.`;
   })();
 
   const refreshSelectedNight = async () => {
@@ -132,34 +130,13 @@ export default function CalendarManager({
       .eq("night_date", selected!)
       .maybeSingle();
     if (data) {
-      setNights((cur) => cur.map((n) => (n.night_date === data.night_date ? (data as NightRow) : n)));
+      // A night blocked outside the season is new to this list.
+      setNights((cur) =>
+        cur.some((n) => n.night_date === data.night_date)
+          ? cur.map((n) => (n.night_date === data.night_date ? (data as NightRow) : n))
+          : [...cur, data as NightRow]
+      );
     }
-  };
-
-  const toggleBlock = async () => {
-    if (!boat || !selected) return;
-    setBlockBusy(true);
-    setBlockErr(null);
-    const nowBlocked = !!selectedRow?.blocked;
-    // RLS lets this silently match zero rows with no error at all — .select()
-    // catches that instead of treating a no-op as success.
-    const { data, error } = await supabase
-      .from("trip_nights")
-      .update({
-        blocked: !nowBlocked,
-        blocked_reason: nowBlocked ? null : blockReason.trim() || "Disekat oleh operator",
-      })
-      .eq("boat_id", boat.id)
-      .eq("night_date", selected)
-      .select("id");
-    setBlockBusy(false);
-    if (error || !data?.length) {
-      setBlockErr("Gagal simpan. Cuba lagi.");
-      return;
-    }
-    setShowBlock(false);
-    setBlockReason("");
-    await refreshSelectedNight();
   };
 
   return (
@@ -234,9 +211,9 @@ export default function CalendarManager({
         <div className={styles.selNightCard}>
           <span className={styles.kpiLabel}>Selected night</span>
           <div className={styles.selNightLabel}>
-            {selected ? formatLongDate(selected) : "Tiada tarikh"}
+            {selected ? formatLongDate(selected) : "No date picked"}
           </div>
-          <div className={styles.selNightMeta}>{loading ? "Memuatkan..." : selMeta}</div>
+          <div className={styles.selNightMeta}>{loading ? "Loading…" : selMeta}</div>
 
           <div className={styles.selNightActions}>
             <Link
@@ -258,32 +235,18 @@ export default function CalendarManager({
             </button>
           </div>
 
-          {showBlock && !selectedRow?.blocked && (
-            <div className={styles.inlineForm}>
-              <textarea
-                className={styles.textarea}
-                rows={2}
-                placeholder="Sebab (cth: ramalan cuaca buruk)"
-                value={blockReason}
-                onChange={(e) => setBlockReason(e.target.value)}
-              />
-              <button type="button" className={styles.blockBtn} disabled={blockBusy} onClick={toggleBlock}>
-                {blockBusy ? "Menyimpan..." : "Sahkan sekat malam ini"}
-              </button>
-              {blockErr && <span className={styles.formErr}>{blockErr}</span>}
-            </div>
-          )}
-
-          {showBlock && selectedRow?.blocked && (
-            <div className={styles.inlineForm}>
-              <span className={styles.formErr}>
-                Disekat: {selectedRow.blocked_reason ?? "Tiada sebab dicatat"}
-              </span>
-              <button type="button" className={styles.blockBtn} disabled={blockBusy} onClick={toggleBlock}>
-                {blockBusy ? "Menyimpan..." : "Buka semula (unblock)"}
-              </button>
-              {blockErr && <span className={styles.formErr}>{blockErr}</span>}
-            </div>
+          {showBlock && selected && boat && (
+            <BlockNightDialog
+              boatId={boat.id}
+              boatCode={boat.code}
+              night={selected}
+              blocked={!!selectedRow?.blocked}
+              reason={selectedRow?.blocked_reason}
+              onClose={() => {
+                setShowBlock(false);
+                refreshSelectedNight();
+              }}
+            />
           )}
         </div>
 

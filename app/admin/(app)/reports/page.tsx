@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/admin/operator";
 import PageHeader from "@/components/admin/PageHeader";
 import { FALLBACK_SEASON, monthKey, monthsBetween } from "@/lib/season";
-import { addDaysISO, formatRM, todayISO } from "@/lib/date";
+import { addDaysISO, formatRM, todayISO, myMidnightUTC } from "@/lib/date";
 import { amountPaid, balanceDue, upfrontAmount } from "@/lib/booking/amounts";
 import styles from "../../admin.module.css";
 
@@ -49,6 +49,30 @@ export default async function ReportsPage() {
   const seasonStart = pkg?.season_start ?? FALLBACK_SEASON.start;
   const seasonEnd = pkg?.season_end ?? FALLBACK_SEASON.end;
   const since = addDaysISO(todayISO(), -30);
+
+  const { data: leadRows } = await supabase
+    .from("leads")
+    .select("source, stage, lost_reason, created_at, stage_changed_at, bookings!leads_booking_id_fkey(total_amount)")
+    .gte("created_at", myMidnightUTC(addDaysISO(todayISO(), -183)));
+  const leadMonths = new Map<string, { leads: number; won: number; lost: number; amount: number }>();
+  const lostWhy = new Map<string, number>();
+  for (const l of leadRows ?? []) {
+    const m = l.created_at.slice(0, 7);
+    const row = leadMonths.get(m) ?? { leads: 0, won: 0, lost: 0, amount: 0 };
+    row.leads += 1;
+    if (l.stage === "won") {
+      row.won += 1;
+      const bk = Array.isArray(l.bookings) ? l.bookings[0] : l.bookings;
+      row.amount += Number((bk as { total_amount?: number } | null)?.total_amount ?? 0);
+    }
+    if (l.stage === "lost") {
+      row.lost += 1;
+      lostWhy.set(l.lost_reason ?? "Other", (lostWhy.get(l.lost_reason ?? "Other") ?? 0) + 1);
+    }
+    leadMonths.set(m, row);
+  }
+  const leadTable = Array.from(leadMonths).sort((a, b) => b[0].localeCompare(a[0]));
+  const topLost = Array.from(lostWhy).sort((a, b) => b[1] - a[1]).slice(0, 3);
 
   const [{ data: bookings }, { data: boats }, { data: vendors }, { data: funnel }] = await Promise.all([
     supabase
@@ -254,6 +278,44 @@ export default async function ReportsPage() {
           <p className={styles.reportsNote}>
             Visitors (browser sessions) reaching each step; the percentage is from the step above.
             Anonymous: no names or phone numbers are recorded.
+          </p>
+        </div>
+
+        <div className={styles.detailCard} style={{ marginTop: 18 }}>
+          <span className={styles.detailCardLabel}>Leads funnel (last 6 months)</span>
+          {leadTable.length === 0 ? (
+            <p className={styles.reportsNote}>No leads yet. Add them on the Leads page, or import a sheet.</p>
+          ) : (
+            <div className={styles.dtScroll}>
+              <table className={styles.dtTable}>
+                <thead>
+                  <tr>
+                    <th>Month</th>
+                    <th className={styles.dtNum}>Leads</th>
+                    <th className={styles.dtNum}>Won</th>
+                    <th className={styles.dtNum}>Lost</th>
+                    <th className={styles.dtNum}>Win rate</th>
+                    <th className={styles.dtNum}>Booked from leads</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leadTable.map(([m, x]) => (
+                    <tr key={m}>
+                      <td>{new Date(`${m}-01T00:00:00Z`).toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" })}</td>
+                      <td className={styles.dtNum}>{x.leads}</td>
+                      <td className={styles.dtNum}>{x.won}</td>
+                      <td className={styles.dtNum}>{x.lost}</td>
+                      <td className={styles.dtNum}>{x.won + x.lost ? `${Math.round((x.won / (x.won + x.lost)) * 100)}%` : "—"}</td>
+                      <td className={styles.dtNum}>{formatRM(x.amount)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <p className={styles.reportsNote}>
+            By the month the lead came in. Win rate counts closed leads only.
+            {topLost.length > 0 && ` Top reasons lost: ${topLost.map(([r, n]) => `${r} (${n})`).join(", ")}.`}
           </p>
         </div>
       </div>

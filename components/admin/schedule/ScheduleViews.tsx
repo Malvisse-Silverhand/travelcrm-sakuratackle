@@ -16,6 +16,7 @@ import {
   monthOf,
   weekdayIdx,
 } from "./calendarDates";
+import { BlockNightButton } from "@/components/admin/BlockNightDialog";
 import styles from "./schedule.module.css";
 
 export const STATUS_CLASS: Record<CellStatus, string> = {
@@ -137,6 +138,18 @@ export function DayView({ boats, cells, nights, today }: ViewProps) {
                   </>
                 )}
               </p>
+            )}
+            {night >= today && (
+              <div className={styles.dayFoot}>
+                <BlockNightButton
+                  boatId={boat.id}
+                  boatCode={boat.code}
+                  night={night}
+                  blocked={c.status === "blocked"}
+                  reason={c.blockedReason}
+                  className={styles.dayFootBtn}
+                />
+              </div>
             )}
           </section>
         );
