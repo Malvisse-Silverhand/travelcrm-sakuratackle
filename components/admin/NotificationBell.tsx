@@ -14,6 +14,7 @@ const KINDS: Record<string, { label: string; tone: "red" | "gold" | "green" | "p
   "booking.created": { label: "New booking", tone: "green" },
   "booking.cancelled": { label: "Cancelled", tone: "red" },
   "booking.expired": { label: "Hold expired", tone: "gold" },
+  "night.blocked": { label: "Night blocked", tone: "red" },
   "request.reschedule": { label: "Date change request", tone: "gold" },
   "request.cancel": { label: "Cancelled by customer", tone: "red" },
   "review.created": { label: "New review", tone: "green" },
