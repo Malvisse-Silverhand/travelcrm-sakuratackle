@@ -29,6 +29,8 @@ import {
   nightsBetween,
 } from "@/lib/booking/schedule";
 import { FALLBACK_SEASON } from "@/lib/season";
+import DashboardInsights from "@/components/admin/insights/DashboardInsights";
+import { headlineInsights, pastTasks, upcomingTasks, type InsightBooking } from "@/lib/insights";
 import styles from "../admin.module.css";
 
 type BookingRow = {
@@ -122,6 +124,51 @@ export default async function DashboardPage() {
     profile.role === "admin"
       ? await supabase.from("vendor_applications").select("id", { count: "exact", head: true }).eq("status", "new")
       : { count: 0 };
+
+  // Insights and checklists: trips in the last 14 and next 30 nights.
+  const [{ data: insightRows }, { count: followUps }] = await Promise.all([
+    supabase
+      .from("bookings")
+      .select(
+        "id, ref, full_name, status, night_date, pax, email, total_amount, deposit_amount, deposit_paid, pay_plan, receipt_url, balance_paid, trip_outcome, refund_amount, refunded_at, review_request_sent_at, boat_id, boats(code), reviews(id), booking_pax(count)"
+      )
+      .gte("night_date", addDaysISO(today, -14))
+      .lte("night_date", in30),
+    profile.role === "admin"
+      ? supabase
+          .from("leads")
+          .select("id", { count: "exact", head: true })
+          .in("stage", ["new", "contacted", "quoted"])
+          .lte("next_follow_up", today)
+      : Promise.resolve({ count: 0 }),
+  ]);
+  const insightBookings: InsightBooking[] = (insightRows ?? []).map((r) => {
+    const pax = r.booking_pax as unknown as Array<{ count: number }> | null;
+    const rv = r.reviews as unknown as Array<{ id: string }> | { id: string } | null;
+    return {
+      ...(r as unknown as InsightBooking),
+      boats: (Array.isArray(r.boats) ? r.boats[0] : r.boats) as { code: string } | null,
+      guests: pax?.[0]?.count ?? 0,
+      reviewed: Array.isArray(rv) ? rv.length > 0 : !!rv,
+    };
+  });
+
+  // A boat blocked on a night that still has a live booking.
+  let blockedClash = 0;
+  for (const [k, list] of stripData.bookings) if (stripData.blocked.has(k)) blockedClash += list.length;
+  const isAdminView = profile.role === "admin";
+  const keepMoney = <T extends { money?: boolean }>(xs: T[]) => (isAdminView ? xs : xs.filter((x) => !x.money));
+  const insights = keepMoney(
+    headlineInsights(insightBookings, today, {
+      boatsActive: stripBoats.length,
+      seasonEnd: season.end,
+      followUps: followUps ?? 0,
+      blockedClash,
+    })
+  );
+  const upcoming = keepMoney(upcomingTasks(insightBookings, today));
+  const past = keepMoney(pastTasks(insightBookings, today));
+
 
   const [tonightRes, depositDueRes, nightsRes, collectedRes, prevCollectedRes] =
     await Promise.all([
@@ -247,6 +294,8 @@ export default async function DashboardPage() {
           today={today}
           cells={stripCells}
         />
+
+        <DashboardInsights insights={insights} upcoming={upcoming} past={past} />
 
         <div className={styles.dashTop}>
           <div className={styles.dashCardPurple}>
