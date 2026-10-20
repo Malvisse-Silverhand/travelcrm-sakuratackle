@@ -55,13 +55,14 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
+    // Vendors see Journey only (their boats, no money).
     label: "Customers",
     icon: "C",
-    adminOnly: true,
     items: [
-      { href: "/admin/customers", label: "Customers" },
-      { href: "/admin/customers/import", label: "Import customers" },
-      { href: "/admin/reviews", label: "Reviews", badge: "reviews" },
+      { href: "/admin/customers/journey", label: "Journey" },
+      { href: "/admin/customers", label: "Customers", adminOnly: true },
+      { href: "/admin/customers/import", label: "Import customers", adminOnly: true },
+      { href: "/admin/reviews", label: "Reviews", badge: "reviews", adminOnly: true },
     ],
   },
   { label: "Fleet", icon: "F", href: "/admin/fleet", adminOnly: true },
