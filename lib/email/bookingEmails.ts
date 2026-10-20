@@ -9,6 +9,8 @@ import { BANK, JETTY } from "@/lib/content/site";
 import { ITINERARY, PREPARATION, WAZE_URL, rm } from "@/lib/content/booking";
 import { SITE_URL } from "@/lib/site-url";
 import { waLink } from "@/lib/whatsapp";
+import { loadReceipt } from "@/lib/receipts/receipt";
+import { receiptAttachment } from "@/lib/receipts/send";
 
 // Customer emails for a booking. Each kind goes out at most once per booking:
 // the column below is claimed (set where it is null) before sending and
@@ -96,15 +98,38 @@ export async function sendBookingEmail(
     return { sent: false, reason: "No email address on this booking." };
   }
 
-  const mail = composeBookingEmail(kind, b, {
+  const mail: { subject: string; html: string; text: string; attachments?: Array<{ filename: string; content: string }> } =
+    composeBookingEmail(kind, b, {
     business: org?.business_name ?? "Sakura Tackle",
     wa: org?.whatsapp_number ?? "601153598055",
     holdHours: org?.hold_hours ?? 48,
   });
+  // "Payment received" carries the official receipt for that payment.
+  let receiptId: string | null = null;
+  if (kind === "paid") {
+    const { data: pay } = await db
+      .from("payments")
+      .select("id")
+      .eq("booking_id", bookingId)
+      .in("kind", ["deposit", "full"])
+      .is("voided_at", null)
+      .order("paid_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const receipt = pay ? await loadReceipt({ id: pay.id }) : null;
+    if (receipt) {
+      receiptId = receipt.id;
+      mail.attachments = [...(mail.attachments ?? []), await receiptAttachment(receipt)];
+      mail.text += `\n\nResit rasmi ${receipt.receiptNo}: ${receipt.url}`;
+    }
+  }
   const result = await sendEmail({ to: b.email, ...mail });
   if (!result.sent) {
     await release();
     return { sent: false, reason: result.error };
+  }
+  if (receiptId) {
+    await db.from("payments").update({ emailed_at: new Date().toISOString() }).eq("id", receiptId).select("id");
   }
   if (column && opts.force) {
     await db.from("bookings").update({ [column]: new Date().toISOString() }).eq("id", bookingId).select("id");
