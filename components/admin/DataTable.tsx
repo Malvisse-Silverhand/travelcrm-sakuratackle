@@ -44,6 +44,10 @@ type Props<T> = {
   /** Adds "Export CSV": the rows currently shown by the tab, filters and
    *  search (all pages), with these columns. */
   csv?: CsvSpec<T>;
+  /** Adds a tick box per row; when rows are ticked, `bulkBar` renders above
+   *  the table with them. */
+  selectable?: boolean;
+  bulkBar?: (selected: T[], clear: () => void) => ReactNode;
 };
 
 export type CsvSpec<T> = {
@@ -61,7 +65,7 @@ function csvCell(v: string | number | boolean | null | undefined): string {
   return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-function downloadCsv<T>(spec: CsvSpec<T>, rows: T[]) {
+export function downloadCsv<T>(spec: CsvSpec<T>, rows: T[]) {
   const lines = [
     spec.columns.map((c) => csvCell(c.header)).join(","),
     ...rows.map((r) => spec.columns.map((c) => csvCell(c.value(r))).join(",")),
@@ -92,7 +96,10 @@ export default function DataTable<T>({
   defaultPageSize = 20,
   toolbarEnd,
   csv,
+  selectable = false,
+  bulkBar,
 }: Props<T>) {
+  const [ticked, setTicked] = useState<Set<string>>(() => new Set());
   const [tab, setTab] = useState(tabs?.[0]?.key ?? "");
   const [picked, setPicked] = useState<Record<string, string>>({});
   const [query, setQuery] = useState("");
@@ -143,6 +150,27 @@ export default function DataTable<T>({
   const shown = size === 0 ? filtered : filtered.slice(start, start + size);
 
   const toFirstPage = () => setPage(0);
+
+  // Ticked rows that are still loaded (a refresh can drop some).
+  const selected = selectable ? rows.filter((r) => ticked.has(rowKey(r))) : [];
+  const clear = () => setTicked(new Set());
+  const allShownTicked = shown.length > 0 && shown.every((r) => ticked.has(rowKey(r)));
+  const toggle = (key: string) =>
+    setTicked((cur) => {
+      const next = new Set(cur);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  const toggleShown = () =>
+    setTicked((cur) => {
+      const next = new Set(cur);
+      for (const r of shown) {
+        if (allShownTicked) next.delete(rowKey(r));
+        else next.add(rowKey(r));
+      }
+      return next;
+    });
 
   return (
     <div>
@@ -230,10 +258,17 @@ export default function DataTable<T>({
           {toolbarEnd}
         </div>
 
+        {selected.length > 0 && bulkBar && <div className={styles.dtBulk}>{bulkBar(selected, clear)}</div>}
+
         <div className={styles.dtScroll}>
           <table className={styles.dtTable}>
             <thead>
               <tr>
+                {selectable && (
+                  <th className={styles.dtTick}>
+                    <input type="checkbox" aria-label="Tick all rows shown" checked={allShownTicked} onChange={toggleShown} />
+                  </th>
+                )}
                 {columns.map((c) => (
                   <th key={c.key} className={c.align === "right" ? styles.dtNum : undefined}>
                     {c.header}
@@ -243,7 +278,17 @@ export default function DataTable<T>({
             </thead>
             <tbody>
               {shown.map((r) => (
-                <tr key={rowKey(r)}>
+                <tr key={rowKey(r)} className={selectable && ticked.has(rowKey(r)) ? styles.dtRowTicked : undefined}>
+                  {selectable && (
+                    <td className={styles.dtTick}>
+                      <input
+                        type="checkbox"
+                        aria-label="Tick row"
+                        checked={ticked.has(rowKey(r))}
+                        onChange={() => toggle(rowKey(r))}
+                      />
+                    </td>
+                  )}
                   {columns.map((c) => (
                     <td key={c.key} className={c.align === "right" ? styles.dtNum : undefined}>
                       {c.render(r)}

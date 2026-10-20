@@ -8,9 +8,24 @@ import BookingRequests, { type RequestRow } from "@/components/admin/BookingRequ
 import { formatLongDate } from "@/lib/season";
 import { customerKey } from "@/lib/admin/customers";
 import { formatRM } from "@/lib/date";
-import { balanceDue as balanceDueOf, bookingTotal, payPlanLabel, upfrontAmount } from "@/lib/booking/amounts";
+import { bookingTotal, payPlanLabel, upfrontAmount } from "@/lib/booking/amounts";
 import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
+import BookingActions from "@/components/admin/bookingActions/BookingActions";
+import { jettyBalance } from "@/lib/booking/actions";
+import { formatRM as rm, todayISO } from "@/lib/date";
 import styles from "../../../admin.module.css";
+import ax from "@/components/admin/bookingActions/bookingActions.module.css";
+
+const SOURCE_LABEL: Record<string, string> = { whatsapp: "WhatsApp", phone: "phone", walk_in: "walk-in", other: "other" };
+
+const STEPS = ["Pending", "Deposit due", "Confirmed", "Completed"];
+
+/** Index of the current step, or -1 when the booking is off the main path. */
+function stepIndex(b: { status: string; trip_outcome: string | null }): number {
+  if (b.status === "cancelled" || b.status === "weather_hold") return -1;
+  if (b.trip_outcome === "completed") return 3;
+  return { pending: 0, deposit_due: 1, confirmed: 2 }[b.status] ?? -1;
+}
 
 export default async function BookingDetailPage({
   params,
@@ -23,11 +38,12 @@ export default async function BookingDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const [{ data: booking }, { data: paxList }, { data: requests }] = await Promise.all([
+  const today = todayISO();
+  const [{ data: booking }, { data: paxList }, { data: requests }, { data: boats }] = await Promise.all([
     supabase
       .from("bookings")
       .select(
-        "id, ref, full_name, phone, email, pax, note, status, night_date, pricing, price_per_pax, total_amount, deposit_amount, deposit_paid, pay_plan, deposit_paid_at, receipt_url, created_at, boat_id, boats(code, skipper_name)"
+        "id, ref, full_name, phone, email, pax, note, status, night_date, pricing, price_per_pax, total_amount, deposit_amount, deposit_paid, pay_plan, deposit_paid_at, receipt_url, created_at, boat_id, source, balance_paid, balance_paid_at, trip_outcome, cancel_reason, cancelled_at, refund_amount, refunded_at, boats(code, skipper_name)"
       )
       .eq("id", id)
       .maybeSingle(),
@@ -42,13 +58,15 @@ export default async function BookingDetailPage({
       .eq("booking_id", id)
       .order("created_at", { ascending: false })
       .returns<RequestRow[]>(),
+    supabase.from("boats").select("id, code, capacity").eq("active", true).order("sort_order").order("code"),
   ]);
 
   if (!booking) notFound();
 
   const boat = Array.isArray(booking.boats) ? booking.boats[0] : booking.boats;
   const totalAmount = bookingTotal(booking);
-  const balanceDue = balanceDueOf(booking);
+  const balanceDue = jettyBalance(booking);
+  const step = stepIndex(booking);
   const bookedDate = formatLongDate(booking.created_at.slice(0, 10));
 
   return (
@@ -70,7 +88,32 @@ export default async function BookingDetailPage({
               </div>
               <div className={styles.detailRefLine}>
                 {booking.ref} &#183; booked {bookedDate}
+                {booking.source && booking.source !== "website" ? ` via ${SOURCE_LABEL[booking.source] ?? booking.source}` : ""}
               </div>
+              {step >= 0 ? (
+                <ol className={ax.stepper} aria-label="Booking progress">
+                  {STEPS.map((s, i) => (
+                    <li key={s} className={`${ax.step} ${i < step ? ax.stepDone : ""} ${i === step ? ax.stepNow : ""}`} aria-current={i === step ? "step" : undefined}>
+                      {s}
+                    </li>
+                  ))}
+                </ol>
+              ) : booking.status === "cancelled" ? (
+                <p className={`${ax.banner} ${ax.bannerDanger}`}>
+                  Cancelled{booking.cancelled_at ? ` ${formatLongDate(booking.cancelled_at.slice(0, 10))}` : ""}
+                  {booking.cancel_reason ? `: ${booking.cancel_reason}` : ""}.
+                  {Number(booking.refund_amount ?? 0) > 0
+                    ? booking.refunded_at
+                      ? ` Refund ${rm(Number(booking.refund_amount))} paid ${formatLongDate(booking.refunded_at.slice(0, 10))}.`
+                      : ` Refund ${rm(Number(booking.refund_amount))} still to pay.`
+                    : ""}
+                </p>
+              ) : (
+                <p className={`${ax.banner} ${ax.bannerWarn}`}>On weather hold. Move it to a new date, or cancel with a full refund.</p>
+              )}
+              {booking.trip_outcome === "no_show" && (
+                <p className={`${ax.banner} ${ax.bannerDanger}`}>Marked as no-show.</p>
+              )}
               <div className={styles.detailStatsGrid}>
                 <div>
                   <span className={styles.detailStatLabel}>Boat</span>
@@ -147,6 +190,35 @@ export default async function BookingDetailPage({
               </p>
             </div>
           ) : (
+            <div>
+            <div className={styles.detailCard}>
+              <span className={styles.detailCardLabel}>Actions</span>
+              <BookingActions
+                variant="panel"
+                today={today}
+                boats={boats ?? []}
+                booking={{
+                  id: booking.id,
+                  ref: booking.ref,
+                  full_name: booking.full_name,
+                  phone: booking.phone,
+                  email: booking.email,
+                  pax: booking.pax,
+                  boat_id: booking.boat_id,
+                  boat_code: boat?.code ?? "?",
+                  status: booking.status,
+                  night_date: booking.night_date,
+                  total_amount: booking.total_amount,
+                  deposit_amount: booking.deposit_amount,
+                  deposit_paid: booking.deposit_paid,
+                  pay_plan: booking.pay_plan,
+                  balance_paid: booking.balance_paid,
+                  trip_outcome: booking.trip_outcome,
+                  refund_amount: booking.refund_amount,
+                  refunded_at: booking.refunded_at,
+                }}
+              />
+            </div>
             <BookingDetailActions
               booking={{
                 id: booking.id,
@@ -165,6 +237,7 @@ export default async function BookingDetailPage({
                 receiptUrl: booking.receipt_url,
               }}
             />
+            </div>
           )}
         </div>
       </div>

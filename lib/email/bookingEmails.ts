@@ -15,11 +15,12 @@ import { waLink } from "@/lib/whatsapp";
 // cleared again if Resend refuses, so a failure can be retried but nothing is
 // ever sent twice. Copy is bahasa rojak with English headings, like the site.
 
-export type EmailKind = "confirmation" | "paid" | "reminder" | "review";
+export type EmailKind = "confirmation" | "paid" | "reminder" | "review" | "cancelled" | "moved";
 
-const SENT_COLUMN: Record<
-  EmailKind,
-  "confirmation_sent_at" | "paid_email_sent_at" | "reminder_sent_at" | "review_request_sent_at"
+// "cancelled" and "moved" follow an admin's deliberate action and may repeat
+// (a booking can be moved twice), so they have no once-only column.
+const SENT_COLUMN: Partial<
+  Record<EmailKind, "confirmation_sent_at" | "paid_email_sent_at" | "reminder_sent_at" | "review_request_sent_at">
 > = {
   confirmation: "confirmation_sent_at",
   paid: "paid_email_sent_at",
@@ -39,6 +40,8 @@ type Row = {
   deposit_amount: number;
   deposit_paid: boolean;
   pay_plan: string | null;
+  cancel_reason?: string | null;
+  refund_amount?: number | null;
   boats: {
     code: string;
     display_name: string | null;
@@ -48,38 +51,49 @@ type Row = {
 
 export type SendResult = { sent: boolean; reason?: string };
 
-export async function sendBookingEmail(kind: EmailKind, bookingId: string): Promise<SendResult> {
+/** `force` sends again even if this kind already went out (an admin's
+ *  "Resend email"); the once-only column is then just updated. */
+export async function sendBookingEmail(
+  kind: EmailKind,
+  bookingId: string,
+  opts: { force?: boolean } = {}
+): Promise<SendResult> {
   if (!emailConfigured()) return { sent: false, reason: "Email is not set up yet (Resend)." };
   const db = createAdminClient();
   const column = SENT_COLUMN[kind];
+  const claim = column && !opts.force;
 
-  // Claim the send. No row back means: no email address, already sent, or
-  // no such booking; all three mean "do nothing".
-  const { data: claimed } = await db
-    .from("bookings")
-    .update({ [column]: new Date().toISOString() })
-    .eq("id", bookingId)
-    .is(column, null)
-    .not("email", "is", null)
-    .select("id");
-  if (!claimed?.length) return { sent: false, reason: "No email address, or already sent." };
+  if (claim) {
+    // Claim the send. No row back means: no email address, already sent, or
+    // no such booking; all three mean "do nothing".
+    const { data: claimed } = await db
+      .from("bookings")
+      .update({ [column]: new Date().toISOString() })
+      .eq("id", bookingId)
+      .is(column, null)
+      .not("email", "is", null)
+      .select("id");
+    if (!claimed?.length) return { sent: false, reason: "No email address, or already sent." };
+  }
 
   const [{ data: b }, { data: org }] = await Promise.all([
     db
       .from("bookings")
       .select(
-        "id, ref, full_name, email, night_date, pax, status, total_amount, deposit_amount, deposit_paid, pay_plan, boats(code, display_name, jetties(name, subtitle))"
+        "id, ref, full_name, email, night_date, pax, status, total_amount, deposit_amount, deposit_paid, pay_plan, cancel_reason, refund_amount, boats(code, display_name, jetties(name, subtitle))"
       )
       .eq("id", bookingId)
       .maybeSingle<Row>(),
     db.from("org_settings").select("business_name, whatsapp_number, hold_hours").eq("id", 1).maybeSingle(),
   ]);
 
-  const release = () => db.from("bookings").update({ [column]: null }).eq("id", bookingId).select("id");
+  const release = async () => {
+    if (claim) await db.from("bookings").update({ [column]: null }).eq("id", bookingId).select("id");
+  };
 
   if (!b?.email) {
     await release();
-    return { sent: false, reason: "Booking not found." };
+    return { sent: false, reason: "No email address on this booking." };
   }
 
   const mail = composeBookingEmail(kind, b, {
@@ -91,6 +105,9 @@ export async function sendBookingEmail(kind: EmailKind, bookingId: string): Prom
   if (!result.sent) {
     await release();
     return { sent: false, reason: result.error };
+  }
+  if (column && opts.force) {
+    await db.from("bookings").update({ [column]: new Date().toISOString() }).eq("id", bookingId).select("id");
   }
   return { sent: true };
 }
@@ -211,6 +228,72 @@ export function composeBookingEmail(kind: EmailKind, b: Row, ctx: Ctx) {
           {
             title: "Calendar",
             lines: ["Fail kalendar (.ics) dilampirkan. Buka untuk simpan trip ini dalam kalendar telefon anda."],
+          },
+        ],
+        waHref,
+        business: ctx.business,
+        manageHref,
+      }),
+      attachments: [
+        {
+          filename: `trip-candat-${b.ref}.ics`,
+          content: Buffer.from(
+            tripIcs({
+              ref: b.ref,
+              nightDate: b.night_date,
+              boat,
+              pax: b.pax,
+              location: `${jetty} (${JETTY.address})`,
+              details: `Tempahan ${b.ref}, ${b.pax} orang. Baki di jeti: ${rm(balance)}. Google Maps: ${JETTY.mapsUrl}`,
+            })
+          ).toString("base64"),
+        },
+      ],
+    };
+  }
+
+  if (kind === "cancelled") {
+    const refund = Number(b.refund_amount ?? 0);
+    return build({
+      subject: `Booking cancelled: ${b.ref}, ${date}`,
+      heading: "Booking cancelled",
+      intro: `Hai ${firstName}, tempahan ${b.ref} untuk ${date} telah dibatalkan.${b.cancel_reason ? ` Sebab: ${b.cancel_reason}.` : ""}`,
+      details: [
+        ["Booking reference", b.ref],
+        ["Boat", boat],
+        ["Date", date],
+        ["Paid", rm(paid)],
+        ["Refund", refund > 0 ? rm(refund) : "Tiada"],
+      ],
+      sections: [
+        refund > 0
+          ? {
+              title: "Refund",
+              lines: [
+                `Kami akan pulangkan ${rm(refund)} ke akaun anda. WhatsApp kami nombor akaun bank untuk pemulangan jika belum diberi.`,
+              ],
+            }
+          : { title: "Refund", lines: [`Ikut terma tempahan, tiada pemulangan untuk pembatalan ini. Terma: ${SITE_URL}/polisi`] },
+        { title: "Book again", lines: ["Nak pilih tarikh lain? Kami sedia bantu."], button: { label: "Search Available Boats", href: `${SITE_URL}/#tempah` } },
+      ],
+      waHref,
+      business: ctx.business,
+    });
+  }
+
+  if (kind === "moved") {
+    details.push(["Paid", rm(paid)], ["Balance at jetty", rm(balance)]);
+    return {
+      ...build({
+        subject: `New date for your trip: ${b.ref}, ${date}`,
+        heading: "Your trip has a new date",
+        intro: `Hai ${firstName}, tempahan ${b.ref} dah dipindahkan. Ini butiran terkini; bayaran anda dibawa ke tarikh baru.`,
+        details,
+        sections: [
+          jettySection(jetty),
+          {
+            title: "Calendar",
+            lines: ["Fail kalendar baru (.ics) dilampirkan. Padam tarikh lama dalam kalendar telefon anda."],
           },
         ],
         waHref,
