@@ -22,6 +22,10 @@ type Props = {
   initialDate: string;
   initialBoatId: string;
   depositPerBoat: number;
+  /** Prefill from a customer profile or a lead. */
+  initial?: { name?: string; phone?: string; email?: string; pax?: number };
+  /** When the booking comes from a lead: it is marked won and linked. */
+  leadId?: string;
 };
 
 type NightState = "free" | "taken" | "blocked";
@@ -58,14 +62,14 @@ function errorCopy(message: string): string {
 
 /** Key in a booking that did not come through the website. Styled like the
  *  homepage booking card so it reads as the same booking, just staff-side. */
-export default function NewBookingForm({ boats, today, initialDate, initialBoatId, depositPerBoat }: Props) {
+export default function NewBookingForm({ boats, today, initialDate, initialBoatId, depositPerBoat, initial, leadId }: Props) {
   const supabase = useMemo(() => createClient(), []);
   const [date, setDate] = useState(initialDate);
   const [boatId, setBoatId] = useState(initialBoatId || boats[0]?.id || "");
-  const [pax, setPax] = useState("8");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [pax, setPax] = useState(String(initial?.pax ?? 8));
+  const [name, setName] = useState(initial?.name ?? "");
+  const [phone, setPhone] = useState(initial?.phone ?? "");
+  const [email, setEmail] = useState(initial?.email ?? "");
   const [source, setSource] = useState<(typeof SOURCES)[number]["key"]>("whatsapp");
   const [payment, setPayment] = useState<(typeof PAYMENTS)[number]["key"]>("deposit_due");
   const [price, setPrice] = useState("");
@@ -159,6 +163,14 @@ export default function NewBookingForm({ boats, today, initialDate, initialBoatI
       } catch {
         emailed = false;
       }
+    }
+
+    if (leadId) {
+      await fetch(`/api/admin/leads/${leadId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stage: "won", bookingId: row.id }),
+      }).catch(() => null);
     }
 
     setBusy(false);

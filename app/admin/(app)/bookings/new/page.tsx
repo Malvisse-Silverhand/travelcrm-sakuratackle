@@ -14,7 +14,7 @@ const ISO = /^\d{4}-\d{2}-\d{2}$/;
 export default async function NewBookingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ date?: string; boat?: string }>;
+  searchParams: Promise<{ date?: string; boat?: string; name?: string; phone?: string; email?: string; pax?: string; lead?: string }>;
 }) {
   const profile = await requireStaff();
   const sp = await searchParams;
@@ -65,6 +65,13 @@ export default async function NewBookingPage({
             initialDate={date}
             initialBoatId={boatId}
             depositPerBoat={Number(pkg?.deposit_per_boat ?? 250)}
+            initial={{
+              name: sp.name?.slice(0, 120),
+              phone: sp.phone?.slice(0, 20),
+              email: sp.email?.slice(0, 254),
+              pax: sp.pax ? Math.min(Math.max(Number(sp.pax) || 8, 1), 50) : undefined,
+            }}
+            leadId={sp.lead && /^[0-9a-f-]{36}$/.test(sp.lead) ? sp.lead : undefined}
           />
         )}
       </div>
