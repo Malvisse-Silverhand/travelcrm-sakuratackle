@@ -69,6 +69,7 @@ export default function MobileTabBar({
         rel="noopener noreferrer"
         className={styles.tabBarWa}
         aria-label="WhatsApp Kami"
+        data-wa-optin
       >
         <WhatsAppGlyph />
       </a>
