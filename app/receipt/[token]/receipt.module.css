@@ -1,0 +1,217 @@
+/* Public receipt page: one A4-like sheet, prints cleanly. */
+
+.page {
+  min-height: 100dvh;
+  padding: 24px 16px 40px;
+  background: var(--bg-page);
+  font-family: var(--font-body);
+  color: var(--ink);
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 16px;
+}
+
+.sheet {
+  width: min(720px, 100%);
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 22px 50px rgba(46, 29, 107, 0.12);
+}
+
+.head {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 22px 28px;
+  background: #241a4d;
+  color: #d9d1f2;
+  font-size: 12.5px;
+}
+.head div {
+  display: grid;
+  gap: 2px;
+}
+.logo {
+  border-radius: 12px;
+  flex: none;
+}
+.biz {
+  font-family: var(--font-display);
+  font-size: 19px;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 26px 28px 0;
+}
+.titleRow h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--purple);
+}
+.no {
+  display: grid;
+  text-align: right;
+  font-size: 12.5px;
+  color: var(--text-muted-2);
+}
+.no b {
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.void {
+  margin: 14px 28px 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger-text);
+  font-weight: 700;
+}
+
+.from {
+  display: grid;
+  gap: 2px;
+  padding: 22px 28px 0;
+}
+.from small {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.from b {
+  font-size: 16px;
+}
+.from span {
+  font-size: 13px;
+  color: var(--text-muted-2);
+}
+
+.items {
+  width: calc(100% - 56px);
+  margin: 22px 28px 0;
+  border-collapse: collapse;
+}
+.items th {
+  padding: 8px 10px;
+  background: var(--surface-tint);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: left;
+}
+.items th:last-child,
+.amount {
+  text-align: right;
+}
+.items td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.items td b {
+  display: block;
+}
+.items td span {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-muted-2);
+}
+.amount {
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  gap: 6px 28px;
+  margin: 16px 38px 0;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.totals dt {
+  color: var(--text-muted-2);
+}
+.totals dd {
+  margin: 0;
+  text-align: right;
+}
+.strong {
+  font-weight: 700;
+  color: var(--purple) !important;
+}
+
+.note {
+  margin: 14px 28px 0;
+  font-size: 12px;
+  color: var(--text-muted-2);
+}
+
+.foot {
+  margin: 26px 0 0;
+  padding: 16px 28px 22px;
+  border-top: 3px solid var(--gold);
+  font-size: 12px;
+  color: var(--text-muted-2);
+}
+.foot p {
+  margin: 0 0 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+.btn {
+  padding: 11px 20px;
+  border-radius: 12px;
+  background: var(--gold);
+  color: var(--purple);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media print {
+  .page {
+    padding: 0;
+    background: #fff;
+  }
+  .sheet {
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .actions {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .head,
+  .titleRow,
+  .from {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .items {
+    width: calc(100% - 32px);
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  .totals {
+    margin-right: 26px;
+  }
+}

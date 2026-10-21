@@ -11,6 +11,7 @@ import { formatRM } from "@/lib/date";
 import { bookingTotal, payPlanLabel, upfrontAmount } from "@/lib/booking/amounts";
 import { STATUS_LABEL, statusPill } from "@/components/admin/bookingStatus";
 import BookingActions from "@/components/admin/bookingActions/BookingActions";
+import PaymentsCard, { type PaymentRow } from "@/components/admin/receipts/PaymentsCard";
 import { jettyBalance } from "@/lib/booking/actions";
 import { formatRM as rm, todayISO } from "@/lib/date";
 import styles from "../../../admin.module.css";
@@ -39,7 +40,7 @@ export default async function BookingDetailPage({
   const supabase = await createClient();
 
   const today = todayISO();
-  const [{ data: booking }, { data: paxList }, { data: requests }, { data: boats }] = await Promise.all([
+  const [{ data: booking }, { data: paxList }, { data: requests }, { data: boats }, { data: payments }] = await Promise.all([
     supabase
       .from("bookings")
       .select(
@@ -59,6 +60,12 @@ export default async function BookingDetailPage({
       .order("created_at", { ascending: false })
       .returns<RequestRow[]>(),
     supabase.from("boats").select("id, code, capacity").eq("active", true).order("sort_order").order("code"),
+    // RLS: admins only; vendors get no rows and see no money.
+    supabase
+      .from("payments")
+      .select("id, kind, amount, method, paid_at, proof_path, note, receipt_no, receipt_token, voided_at, void_reason, emailed_at, whatsapped_at")
+      .eq("booking_id", id)
+      .order("paid_at"),
   ]);
 
   if (!booking) notFound();
@@ -237,6 +244,7 @@ export default async function BookingDetailPage({
                 receiptUrl: booking.receipt_url,
               }}
             />
+            <PaymentsCard bookingId={booking.id} payments={(payments ?? []) as PaymentRow[]} hasEmail={!!booking.email} />
             </div>
           )}
         </div>
