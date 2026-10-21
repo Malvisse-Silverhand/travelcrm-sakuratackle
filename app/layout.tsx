@@ -3,6 +3,7 @@ import { SITE_URL } from "@/lib/site-url";
 import { HERO } from "@/lib/content/site";
 import { Poppins, Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import WhatsAppOptIn from "@/components/public/WhatsAppOptIn";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="ms" className={`${poppins.variable} ${inter.variable}`}>
       <body>
         {children}
+        <WhatsAppOptIn />
         <Analytics />
       </body>
     </html>

@@ -1,0 +1,187 @@
+/* "WhatsApp Kami" opt-in form: a bottom sheet on phones, a centred card on
+   wider screens. */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  align-items: end;
+  justify-items: center;
+  background: rgba(27, 20, 54, 0.55);
+  animation: fade 0.18s ease;
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: 100dvh;
+  overflow-y: auto;
+  display: grid;
+  gap: 14px;
+  padding: 26px 20px calc(22px + env(safe-area-inset-bottom, 0px));
+  border-radius: 24px 24px 0 0;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-body);
+  box-shadow: 0 -20px 50px rgba(27, 20, 54, 0.25);
+  animation: rise 0.22s ease;
+}
+
+@media (min-width: 621px) {
+  .overlay {
+    align-items: center;
+    padding: 16px;
+  }
+  .sheet {
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: 0 30px 70px rgba(27, 20, 54, 0.35);
+  }
+}
+
+.x {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-tint);
+  color: var(--purple);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.badge {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: rgba(18, 140, 126, 0.12);
+  color: var(--whatsapp);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.title {
+  margin: 0;
+  padding-right: 36px;
+  font-family: var(--font-display);
+  font-size: 21px;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.lead {
+  margin: -4px 0 0;
+  font-size: 14px;
+  color: var(--text-muted-2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 380px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.field span {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted-2);
+}
+.field input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border-mid);
+  background: var(--input-bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+.field input:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(46, 29, 107, 0.1);
+}
+
+.honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.error {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--danger-text);
+}
+
+.go {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--whatsapp);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(18, 140, 126, 0.32);
+}
+.go:hover {
+  filter: brightness(1.06);
+}
+.go:focus-visible,
+.x:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.fine {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+.fine a {
+  color: var(--purple);
+  font-weight: 600;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+}
+@keyframes rise {
+  from { transform: translateY(24px); opacity: 0.6; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .sheet {
+    animation: none;
+  }
+}

@@ -35,6 +35,20 @@ export function waGeneral(path = "/"): string {
   );
 }
 
+/** After the "WhatsApp Kami" opt-in form: the details they just gave. */
+export function waOptIn(d: { name: string; phone: string; date?: string | null; pax?: number | null }, path = "/"): string {
+  return lines(
+    `Hai Sakura Tackle! Saya ${d.name} (${d.phone}). Saya berminat dengan Trip Candat Sotong di Terengganu.`,
+    "",
+    `Tarikh trip: ${d.date || "belum pasti"}`,
+    `Saiz group: ${d.pax ? `${d.pax} orang` : "belum pasti"}`,
+    "",
+    "Boleh bantu saya semak bot yang available dan harga untuk group saya?",
+    "",
+    `Saya dari laman: ${url(path)}`
+  );
+}
+
 /** The Terengganu guide. */
 export function waGuide(): string {
   return lines(

@@ -34,7 +34,7 @@ export default function BookingNotice({
         <div className={styles.noticeCard}>
           <h2 className={styles.noticeTitle}>{copy.title}</h2>
           <p className={styles.noticeBody}>{copy.body}</p>
-          <a href={waHref} target="_blank" rel="noopener noreferrer" className={styles.ctaBtn}>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" className={styles.ctaBtn} data-wa-optin>
             WhatsApp Kami
           </a>
         </div>

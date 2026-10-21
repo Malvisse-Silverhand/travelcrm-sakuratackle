@@ -278,7 +278,7 @@ export default async function Home() {
                       <h2 className={home.ctaTitle}>{CTA_BAND.title}</h2>
                       <p className={home.ctaBody}>{CTA_BAND.body}</p>
                     </div>
-                    <a href={waHref} target="_blank" rel="noopener noreferrer" className={home.ctaBtn}>
+                    <a href={waHref} target="_blank" rel="noopener noreferrer" className={home.ctaBtn} data-wa-optin>
                       WhatsApp Kami
                     </a>
                   </Reveal>
