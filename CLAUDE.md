@@ -4,7 +4,8 @@
 
 Squid-jigging (candat sotong) night-trip booking site + operator CRM for
 Sakura Tackle, Jeti Marang, Terengganu. Single operator, single tenant.
-Live: https://sakuratacklebookingsystem.vercel.app (push to `main` deploys).
+Live: https://sakuratackle.com (push to `main` deploys; the old
+sakuratacklebookingsystem.vercel.app address redirects there, see proxy.ts).
 
 ## Stack
 Next.js 16 App Router (read `node_modules/next/dist/docs/` before using an
